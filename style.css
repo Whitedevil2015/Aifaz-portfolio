@@ -224,6 +224,38 @@ img {
     margin-bottom: 1.5rem;
 }
 
+.quote-container {
+    margin-bottom: 1.5rem;
+    padding: 1rem 1.5rem;
+    border-left: 3px solid var(--accent-color);
+    background: rgba(191, 161, 95, 0.05);
+    border-radius: 0 10px 10px 0;
+    max-width: 600px;
+}
+
+.quote-icon {
+    color: var(--accent-color);
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+    display: block;
+}
+
+.quote-text {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+.quote-reference {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    font-weight: 600;
+    text-align: right;
+}
+
 .stats {
     margin-top: 4rem;
     display: flex;

@@ -90,6 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
         '.section-subtitle',
         '.product-card',
         '.category-card',
+        '.testimonial-card',
         '.trust-item',
         '.contact-info',
         '.contact-form',

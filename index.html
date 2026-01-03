@@ -4,130 +4,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Aifaz Portal - Islamic Companion & Premium Store">
-    <title>Aifaz Islamic Portal</title>
-    <!-- Fonts -->
+    <meta name="description" content="Aifaz - The Ultimate Crystal Glass Islamic Portal & Premium Store">
+    <title>Aifaz | Crystal Glass Portal</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;1,400&family=Cinzel:wght@400;700&family=Amiri:wght@400;700&display=swap"
         rel="stylesheet">
-    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Styles -->
-    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <div class="app-container">
-        <!-- Sidebar Navigation -->
-        <nav class="sidebar">
-            <div class="logo">
-                <i class="fas fa-kaaba"></i>
-                <span>Aifaz</span>
+    <!-- Dynamic Background Slider -->
+    <div class="masjid-bg-container" id="mosque-slider">
+        <!-- Slides injected via JS -->
+    </div>
+    <div class="bg-overlay"></div>
+
+    <!-- Portal Entry Overlay -->
+    <div id="portal-overlay"
+        style="position: fixed; top:0; left:0; width:100%; height:100%; background:#00150f; z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
+        <div class="glass-container"
+            style="padding: 50px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); max-width: 90%;">
+            <i class="fa-solid fa-kaaba fa-4x" style="color: var(--gold); margin-bottom: 30px;"></i>
+            <h2 style="font-family:'Cinzel', serif; color: var(--gold); margin-bottom: 20px;">Divine Inspiration</h2>
+            <blockquote id="daily-quote"
+                style="font-family:'Playfair Display', serif; font-size: 1.5rem; font-style: italic; color: white;">
+                "Indeed, with hardship [will be] ease."</blockquote>
+            <p id="quote-author" style="color: var(--gold); margin-top:15px;">- Surah Ash-Sharh [94:6]</p>
+            <button id="enter-btn" class="play-btn"
+                style="width:auto; padding: 0 40px; height: 50px; margin-top: 40px; border-radius: 50px; font-weight:700;">Enter
+                Portal</button>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-logo">
+            <span
+                style="font-family:'Cinzel', serif; font-weight:700; color:var(--gold); letter-spacing:2px; font-size: 1.2rem;">AIFAZ</span>
+        </div>
+        <div class="lang-selector">
+            <button class="lang-btn active" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="ar">AR</button>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#store">Store</a></li>
+            <li><a href="#quran">Quran</a></li>
+            <li><a href="#prayer">Prayer</a></li>
+            <li><a href="#media">Media</a></li>
+            <li><a href="#profile">Profile</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="hero-section">
+            <div class="current-date-box reveal-bottom">
+                <div class="date-hijri" id="hero-hijri-date">Loading Hijri...</div>
+                <div class="date-gregorian" id="hero-greg-date">Loading date...</div>
             </div>
-            <ul class="nav-links">
-                <li class="active" data-tab="dashboard">
-                    <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
-                </li>
-                <li data-tab="store">
-                    <i class="fas fa-shopping-bag"></i>
-                    <span>Store</span>
-                </li>
-                <li data-tab="quran">
-                    <i class="fas fa-book-quran"></i>
-                    <span>Quran</span>
-                </li>
-                <li data-tab="prayer-times">
-                    <i class="fas fa-clock"></i>
-                    <span>Prayer Times</span>
-                </li>
-                <li data-tab="names">
-                    <i class="fas fa-star-and-crescent"></i>
-                    <span>99 Names</span>
-                </li>
-                <li data-tab="tasbih">
-                    <i class="fas fa-fingerprint"></i>
-                    <span>Tasbih</span>
-                </li>
-                <li data-tab="media">
-                    <i class="fas fa-play-circle"></i>
-                    <span>Media</span>
-                </li>
-                <li data-tab="profile">
-                    <i class="fas fa-user-tie"></i>
-                    <span>Profile</span>
-                </li>
-            </ul>
-            <div class="sidebar-footer">
-                <p>&copy; 2026 Aifaz Portal</p>
-            </div>
-        </nav>
-
-        <!-- Main Content Area -->
-        <main class="main-content">
-            <!-- Header -->
-            <header>
-                <div class="date-display">
-                    <span id="gregorian-date">Loading...</span>
-                    <!-- <span class="divider">|</span> -->
-                    <span id="hijri-date" class="highlight">Loading...</span>
-                </div>
-                <div class="user-actions">
-                    <button id="theme-toggle"><i class="fas fa-moon"></i></button>
-                    <div class="location-badge">
-                        <i class="fas fa-location-dot"></i> <span id="location-name">London, UK</span>
-                    </div>
-                </div>
-            </header>
-
-            <!-- DASHBOARD VIEW -->
-            <div id="dashboard" class="view active-view">
-                <div class="hero-section">
-                    <div class="daily-verse">
-                        <span class="badge">Verse of the Day</span>
-                        <h2 class="arabic-text" id="daily-verse-arabic">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</h2>
-                        <p class="translation" id="daily-verse-en">In the name of Allah, the Entirely Merciful, the
-                            Especially Merciful.</p>
-                        <p class="reference" id="daily-verse-ref">Surah Al-Fatiha [1:1]</p>
-                    </div>
-                </div>
-
-                <div class="dashboard-grid">
-                    <div class="card prayer-card">
-                        <h3>Next Prayer</h3>
-                        <div class="next-prayer-info">
-                            <span id="next-prayer-name">Fajr</span>
-                            <span id="next-prayer-time">04:30 AM</span>
-                        </div>
-                        <div class="countdown">
-                            <span>-</span><span id="time-remaining">00:00:00</span>
-                        </div>
-                    </div>
-
-                    <div class="card hadith-card">
-                        <h3>Hadith of the Day</h3>
-                        <p id="daily-hadith-text">"The best of you are those who learn the Quran and teach it."</p>
-                        <span id="daily-hadith-ref">Bukhari</span>
-                    </div>
-
-                    <div class="card dua-card">
-                        <h3>Daily Dua</h3>
-                        <p class="arabic-small" id="daily-dua-arabic">رَبِّ زِدْنِي عِلْمًا</p>
-                        <p class="translation-small">"My Lord, increase me in knowledge."</p>
-                    </div>
+            <div class="hero-glass-card glass-container reveal-bottom">
+                <span style="color: var(--gold); letter-spacing:4px; font-size:0.7rem; font-weight:700;">DIGITAL
+                    SANCTUARY v3.0</span>
+                <h1>Seek Divine Guidance</h1>
+                <p>An immersive crystal-glass experience for the modern seeker. Access the Holy Quran with audio,
+                    explore extensive Hadith volumes, and stay connected with your daily prayers.</p>
+                <div style="display: flex; gap: 20px; justify-content: center; margin-top: 30px;">
+                    <a href="#quran" class="play-btn"
+                        style="width:auto; padding:0 30px; height:50px; text-decoration:none; border-radius:50px; font-weight:700;">Open
+                        Quran</a>
                 </div>
             </div>
+        </section>
 
-            <!-- STORE VIEW (Merged from Portfolio/Store) -->
-            <div id="store" class="view">
+        <!-- STORE SECTION (Merged) -->
+        <section id="store" class="section">
+            <div class="container">
+                <h2 class="section-title">Aifaz Luxe Collection</h2>
                 <div class="store-hero">
                     <div class="store-hero-content">
-                        <span class="badge">Ramadan Exclusive</span>
+                        <span
+                            style="background: rgba(245, 158, 11, 0.2); color: var(--gold); padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; margin-bottom: 1rem; display: inline-block;">Ramadan
+                            Exclusive</span>
                         <h1>The Essence of <br><span class="text-gradient">Faith & Style</span></h1>
-                        <p>Discover our curated collection of premium Ouds, Islamic essentials, and modern apparel.</p>
-                        <button class="btn-primary">Shop Collection</button>
+                        <p style="margin-bottom: 2rem;">Discover our curated collection of premium Ouds, Islamic
+                            essentials, and modern apparel.</p>
+                        <button class="play-btn"
+                            style="width: auto; padding: 0 30px; border-radius: 50px; font-weight: 700;">Shop
+                            Collection</button>
                     </div>
                     <div class="store-hero-image">
                         <img src="https://images.unsplash.com/photo-1594135056399-da38bc0143f0?q=80&w=1000&auto=format&fit=crop"
@@ -135,22 +102,17 @@
                     </div>
                 </div>
 
-                <div class="section-header">
-                    <h2>Best Sellers</h2>
-                </div>
-
-                <div class="product-grid">
+                <div class="content-grid">
                     <!-- Perfume -->
                     <div class="product-card">
                         <div class="product-img">
                             <img src="https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=800&auto=format&fit=crop"
                                 alt="Perfume">
-                            <span class="product-tag">Fragrance</span>
                         </div>
-                        <div class="product-info">
+                        <div style="padding: 1.5rem;">
                             <h3>Royal Midnight Oud</h3>
                             <p class="price">$89.00</p>
-                            <button class="btn-secondary full-width">Add to Cart</button>
+                            <button class="btn-secondary">Add to Cart</button>
                         </div>
                     </div>
                     <!-- Prayer Mat -->
@@ -158,12 +120,11 @@
                         <div class="product-img">
                             <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=800&auto=format&fit=crop"
                                 alt="Mat">
-                            <span class="product-tag">Islamic</span>
                         </div>
-                        <div class="product-info">
+                        <div style="padding: 1.5rem;">
                             <h3>Velvet Memory Musallah</h3>
                             <p class="price">$45.00</p>
-                            <button class="btn-secondary full-width">Add to Cart</button>
+                            <button class="btn-secondary">Add to Cart</button>
                         </div>
                     </div>
                     <!-- Tasbih -->
@@ -172,136 +133,163 @@
                             <img src="https://images.unsplash.com/photo-1621319340428-144e04746654?q=80&w=800&auto=format&fit=crop"
                                 alt="Tasbih">
                         </div>
-                        <div class="product-info">
+                        <div style="padding: 1.5rem;">
                             <h3>Amethyst 99-Bead Tasbih</h3>
                             <p class="price">$29.00</p>
-                            <button class="btn-secondary full-width">Add to Cart</button>
+                            <button class="btn-secondary">Add to Cart</button>
                         </div>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- QURAN VIEW -->
-            <div id="quran" class="view">
-                <div class="section-header">
-                    <h1>The Noble Quran</h1>
-                    <div class="search-bar">
-                        <i class="fas fa-search"></i>
-                        <input type="text" id="quran-search" placeholder="Search Surah...">
+        <!-- Location & Prayer Times -->
+        <section id="prayer" class="section">
+            <div class="container">
+                <h2 class="section-title">Global Azaan Times</h2>
+                <div class="glass-container" style="padding: 40px; margin-bottom: 50px; text-align: center;">
+                    <div
+                        style="display:inline-flex; flex-wrap: wrap; justify-content: center; gap:15px; background: rgba(255,255,255,0.05); padding:15px 25px; border-radius:30px; border:1px solid rgba(255,255,255,0.1);">
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <i class="fa-solid fa-location-crosshairs" style="color:var(--gold);"></i>
+                            <input type="text" id="city-input" placeholder="City"
+                                style="background:transparent; border:none; color:white; outline:none; font-weight:600; width:120px; border-bottom:1px solid rgba(255,255,255,0.2);">
+                            <input type="text" id="country-input" placeholder="Country"
+                                style="background:transparent; border:none; color:white; outline:none; font-weight:600; width:100px; border-bottom:1px solid rgba(255,255,255,0.2);">
+                        </div>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <i class="fa-solid fa-calendar-day" style="color:var(--gold);"></i>
+                            <input type="date" id="date-picker"
+                                style="background:transparent; border:none; color:white; outline:none; font-weight:600; cursor:pointer; font-size:0.9rem;">
+                        </div>
+                        <button id="update-location-btn" class="play-btn"
+                            style="width:auto; padding:0 25px; height:40px; border-radius:50px; font-size:0.85rem; font-weight:700;">Update
+                            View</button>
+                    </div>
+                    <p id="location-display" style="margin-top:20px; color:var(--text-secondary);">Currently viewing:
+                        <strong style="color:var(--gold);">Mumbai, IN</strong> | <span
+                            id="current-view-date">Today</span>
+                    </p>
+                </div>
+
+                <div class="content-grid">
+                    <div class="prayer-box glass-container reveal-bottom">
+                        <span style="color:var(--text-secondary); font-size:0.8rem;">FAJR</span>
+                        <span id="time-fajr" class="prayer-time-val">--:--</span>
+                    </div>
+                    <div class="prayer-box glass-container reveal-bottom" style="transition-delay: 0.1s">
+                        <span style="color:var(--text-secondary); font-size:0.8rem;">DHUHR</span>
+                        <span id="time-dhuhr" class="prayer-time-val">--:--</span>
+                    </div>
+                    <div class="prayer-box glass-container reveal-bottom" style="transition-delay: 0.2s">
+                        <span style="color:var(--text-secondary); font-size:0.8rem;">ASR</span>
+                        <span id="time-asr" class="prayer-time-val">--:--</span>
+                    </div>
+                    <div class="prayer-box glass-container reveal-bottom" style="transition-delay: 0.3s">
+                        <span style="color:var(--text-secondary); font-size:0.8rem;">MAGHRIB</span>
+                        <span id="time-maghrib" class="prayer-time-val">--:--</span>
+                    </div>
+                    <div class="prayer-box glass-container reveal-bottom" style="transition-delay: 0.4s">
+                        <span style="color:var(--text-secondary); font-size:0.8rem;">ISHA</span>
+                        <span id="time-isha" class="prayer-time-val">--:--</span>
                     </div>
                 </div>
-                <div class="surah-grid" id="surah-list">
-                    <!-- Surahs populated here -->
-                </div>
-                <div id="surah-detail" class="hidden">
-                    <button class="btn-back" id="back-to-surahs"><i class="fas fa-arrow-left"></i> Back</button>
-                    <div id="surah-content"></div>
-                </div>
             </div>
+        </section>
 
-            <!-- PRAYER TIMES VIEW -->
-            <div id="prayer-times" class="view">
-                <h1>Prayer Times</h1>
-                <div class="prayer-times-list" id="prayer-times-container">
-                    <!-- Prayer times populated here -->
-                </div>
-            </div>
-
-            <!-- NAMES VIEW -->
-            <div id="names" class="view">
-                <h1>99 Names of Allah</h1>
-                <div class="names-grid" id="names-grid">
-                    <!-- Names populated here -->
-                </div>
-            </div>
-
-            <!-- TASBIH VIEW -->
-            <div id="tasbih" class="view">
-                <h1>Digital Tasbih</h1>
-                <div class="tasbih-container">
-                    <div class="tasbih-display">
-                        <span id="tasbih-count">0</span>
+        <!-- Hijri Calendar Section -->
+        <section id="calendar" class="section">
+            <div class="container">
+                <h2 class="section-title">Hijri Calendar</h2>
+                <div class="glass-container reveal-bottom" style="padding: 40px; text-align: center;">
+                    <div id="calendar-controls"
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                        <button id="prev-month" class="play-btn"
+                            style="width: 45px; height: 45px; border-radius: 50%;"><i
+                                class="fa-solid fa-chevron-left"></i></button>
+                        <div id="calendar-header">
+                            <h3 id="hijri-month-name"
+                                style="font-family:'Cinzel', serif; color: var(--gold); margin: 0; font-size: 1.8rem;">
+                                Loading...</h3>
+                            <p id="hijri-year"
+                                style="font-size: 1rem; color: var(--gold); opacity: 0.8; margin: 5px 0 0;">--</p>
+                            <p id="gregorian-date" style="font-size: 0.85rem; opacity: 0.6; margin: 0;">--</p>
+                        </div>
+                        <button id="next-month" class="play-btn"
+                            style="width: 45px; height: 45px; border-radius: 50%;"><i
+                                class="fa-solid fa-chevron-right"></i></button>
                     </div>
-                    <div class="tasbih-controls">
-                        <button id="tasbih-reset" class="btn-secondary">Reset</button>
-                        <button id="tasbih-count-btn" class="btn-primary-large">Count</button>
+                    <div id="hijri-calendar-grid" class="calendar-grid">
+                        <!-- Calendar days injected here -->
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- MEDIA VIEW -->
-            <div id="media" class="view">
-                <h1>My Library</h1>
+        <!-- Quran Reader (Glass Trigger Card) -->
+        <section id="quran" class="section">
+            <div class="container">
+                <div class="glass-container reveal-bottom"
+                    style="padding: 80px 40px; text-align: center; border: 2px solid var(--gold);">
+                    <i class="fa-solid fa-book-quran fa-4x" style="color: var(--gold); margin-bottom: 30px;"></i>
+                    <h2 style="font-family:'Cinzel', serif; font-size: 2.5rem; margin-bottom: 20px;">The Holy Quran</h2>
+                    <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto 40px;">Listen to beautiful
+                        recitations and read full translations of all 114 Surahs with our integrated audio-text
+                        synchronizer.</p>
+                    <button id="open-quran-reader" class="play-btn"
+                        style="width:auto; padding:0 50px; height:60px; border-radius:50px; font-size:1.1rem; font-weight:700;">Launch
+                        Reader</button>
+                </div>
+            </div>
+        </section>
 
-                <div class="media-section">
-                    <h3><i class="fas fa-music"></i> Audio Tracks</h3>
-                    <div class="media-grid">
-                        <div class="media-card">
-                            <div class="media-icon"><i class="fas fa-music"></i></div>
-                            <div class="media-info">
-                                <h4>Succession Piano Suite</h4>
-                                <audio controls
-                                    src="assets/Succession%20(HBO%20Series)%20-%20Epic%20Piano%20Suite.mp3"></audio>
-                            </div>
+        <!-- MEDIA SECTION (Merged) -->
+        <section id="media" class="section">
+            <div class="container">
+                <h2 class="section-title">My Media Library</h2>
+
+                <h3 style="color: var(--gold); margin-bottom: 20px;">Audio Tracks</h3>
+                <div class="media-grid" style="margin-bottom: 40px;">
+                    <div class="media-card">
+                        <div class="media-icon"><i class="fas fa-music"></i></div>
+                        <div class="media-info">
+                            <h4>Succession Piano Suite</h4>
+                            <audio controls
+                                src="assets/Succession%20(HBO%20Series)%20-%20Epic%20Piano%20Suite.mp3"></audio>
                         </div>
-                        <div class="media-card">
-                            <div class="media-icon"><i class="fas fa-music"></i></div>
-                            <div class="media-info">
-                                <h4>Frozen - Let It Go (Piano)</h4>
-                                <audio controls src="assets/Frozen%20-%20Let%20It%20Go%20(Piano%20Version).mp3"></audio>
-                            </div>
+                    </div>
+                    <div class="media-card">
+                        <div class="media-icon"><i class="fas fa-music"></i></div>
+                        <div class="media-info">
+                            <h4>Frozen - Let It Go</h4>
+                            <audio controls src="assets/Frozen%20-%20Let%20It%20Go%20(Piano%20Version).mp3"></audio>
                         </div>
-                        <div class="media-card">
-                            <div class="media-icon"><i class="fas fa-play"></i></div>
-                            <div class="media-info">
-                                <h4>Heeriye</h4>
-                                <audio controls src="assets/Heeriye_320(PagaiWorld.com).mp3"></audio>
-                            </div>
-                        </div>
-                        <div class="media-card">
-                            <div class="media-icon"><i class="fas fa-bolt"></i></div>
-                            <div class="media-info">
-                                <h4>Lost Sky - Fearless</h4>
-                                <audio controls
-                                    src="assets/Lost%20Sky%20-%20Fearless%20pt.II%20(feat.%20Chris%20Linton)%20%5BNCS%20Release%5D.mp3"></audio>
-                            </div>
-                        </div>
-                        <div class="media-card">
-                            <div class="media-icon"><i class="fas fa-volume-up"></i></div>
-                            <div class="media-info">
-                                <h4>Sword Sound Effect</h4>
-                                <audio controls src="assets/sword-slashing-game-sound-effect-2-379229.mp3"></audio>
-                            </div>
+                    </div>
+                    <div class="media-card">
+                        <div class="media-icon"><i class="fas fa-play"></i></div>
+                        <div class="media-info">
+                            <h4>Heeriye</h4>
+                            <audio controls src="assets/Heeriye_320(PagaiWorld.com).mp3"></audio>
                         </div>
                     </div>
                 </div>
 
-                <div class="media-section">
-                    <h3><i class="fas fa-video"></i> Videos</h3>
-                    <div class="media-grid">
-                        <div class="media-card video-card">
+                <h3 style="color: var(--gold); margin-bottom: 20px;">Videos</h3>
+                <div class="media-grid">
+                    <div class="media-card video-card">
+                        <div class="media-info" style="width: 100%;">
                             <video controls src="assets/videoplayback.webm"></video>
                             <h4>Video Playback</h4>
                         </div>
                     </div>
                 </div>
-
-                <div class="media-section">
-                    <h3><i class="fas fa-file-pdf"></i> Documents</h3>
-                    <div class="media-grid">
-                        <div class="media-card">
-                            <div class="media-icon"><i class="fas fa-file-alt"></i></div>
-                            <div class="media-info">
-                                <h4>New Document 78</h4>
-                                <a href="assets/NEW-78.DOC%20(1).pdf" target="_blank" class="btn-secondary">View PDF</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
+        </section>
 
-            <!-- PROFILE VIEW (Merged Portfolio) -->
-            <div id="profile" class="view">
+        <!-- PROFILE SECTION (Merged) -->
+        <section id="profile" class="section">
+            <div class="container">
+                <h2 class="section-title">Professional Profile</h2>
                 <div class="profile-card">
                     <div class="profile-header">
                         <img src="profile.png" alt="Aifaz" class="profile-img">
@@ -311,13 +299,13 @@
                         </div>
                     </div>
                     <div class="profile-body">
-                        <h3>About Me</h3>
-                        <p>Dedicated and experienced Customer Support professional with a proven track record of
-                            increasing customer satisfaction and resolving complex issues. Specialize in e-commerce and
-                            SaaS support.</p>
+                        <h3 style="color: var(--gold); margin-bottom: 1rem;">About Me</h3>
+                        <p style="margin-bottom: 2rem;">Dedicated and experienced Customer Support professional with a
+                            proven track record of increasing customer satisfaction and resolving complex issues.
+                            Specialize in e-commerce and SaaS support.</p>
 
                         <div class="skills-section">
-                            <h3>Core Skills</h3>
+                            <h3 style="color: var(--gold); margin-bottom: 1rem;">Core Skills</h3>
                             <div class="skills-tags">
                                 <span>Ticket Management</span>
                                 <span>CRMs (Zendesk, Salesforce)</span>
@@ -327,16 +315,90 @@
                             </div>
                         </div>
 
-                        <div class="profile-actions">
-                            <button class="btn-primary">Download Resume</button>
+                        <div class="profile-actions" style="margin-top: 3rem; display: flex; gap: 1rem;">
+                            <button class="play-btn"
+                                style="width: auto; padding: 0 30px; border-radius: 50px; font-weight: 700;">Download
+                                Resume</button>
                             <button class="btn-secondary">Contact Me</button>
                         </div>
                     </div>
                 </div>
             </div>
+        </section>
 
-        </main>
+        <!-- Asma-ul-Husna Section -->
+        <section id="asma" class="section">
+            <div class="container">
+                <h2 class="section-title">99 Names of Allah</h2>
+                <div id="asma-grid" class="content-grid"
+                    style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;">
+                    <!-- Names will be injected here via JS -->
+                    <div style="grid-column: 1/-1; text-align: center; padding: 50px;">
+                        <i class="fa-solid fa-circle-notch fa-spin fa-3x" style="color: var(--gold);"></i>
+                        <p style="margin-top: 15px;">Loading Sacred Names...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Crystal Reader Modal -->
+    <div id="quran-modal" class="reader-overlay">
+        <div class="reader-glass">
+            <div class="reader-header">
+                <div>
+                    <h2 id="reader-title" style="font-family:'Cinzel', serif; color:var(--gold); margin:0;">Surah
+                        Al-Fatiha</h2>
+                    <span id="surah-info" style="font-size:0.8rem; opacity:0.6;">7 Ayahs | Revealed in Makkah</span>
+                </div>
+                <div class="audio-controls" style="display:flex; align-items:center; gap:15px;">
+                    <button id="play-pause-btn" class="play-btn">
+                        <i class="fa-solid fa-play"></i>
+                    </button>
+                    <span style="font-size:0.75rem; font-weight:700; color:var(--gold); letter-spacing:1px;">READ &
+                        LISTEN</span>
+                </div>
+                <button id="close-quran-btn"
+                    style="background:transparent; border:none; color:white; font-size:1.5rem; cursor:pointer;">&times;</button>
+            </div>
+            <div class="reader-main">
+                <aside class="surah-sidebar">
+                    <div class="sidebar-tabs"
+                        style="display: flex; background: rgba(0,0,0,0.3); border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <button id="tab-surah" class="tab-btn active"
+                            style="flex:1; background:transparent; border:none; color:white; cursor:pointer; padding:15px 5px; font-weight:700; font-size: 0.75rem; text-transform:uppercase; letter-spacing:1px; border-bottom: 2px solid transparent;">Surah</button>
+                        <button id="tab-juz" class="tab-btn"
+                            style="flex:1; background:transparent; border:none; color:white; cursor:pointer; padding:15px 5px; font-weight:700; font-size: 0.75rem; text-transform:uppercase; letter-spacing:1px; border-bottom: 2px solid transparent;">Para
+                            (Juz)</button>
+                    </div>
+                    <div id="surah-list-container" style="overflow-y: auto; height: calc(100% - 50px);">
+                        <div id="surah-list">
+                            <!-- Surahs injected here -->
+                        </div>
+                    </div>
+                    <div id="juz-list-container" style="display:none; overflow-y: auto; height: calc(100% - 50px);">
+                        <div id="juz-list">
+                            <!-- 30 Juz injected here -->
+                        </div>
+                    </div>
+                </aside>
+                <section class="verse-view" id="quran-content">
+                    <!-- Verses injected here -->
+                </section>
+            </div>
+        </div>
     </div>
+
+    <!-- Hidden Audio Player -->
+    <audio id="quran-audio" preload="none"></audio>
+
+    <footer style="padding: 100px 8% 50px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05);">
+        <div class="glass-container" style="padding: 50px;">
+            <p style="color: var(--text-secondary);">&copy; 2026 Aifaz Portal. All Rights Reserved.</p>
+        </div>
+    </footer>
+
     <script src="script.js"></script>
 </body>
 

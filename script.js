@@ -1,4 +1,74 @@
+// --- 40 Hadith Nawawi Data ---
+const hadithNawawi = [
+    {
+        id: 1,
+        arabic: "عَنْ أَمِيرِ الْمُؤْمِنِينَ أَبِي حَفْصٍ عُمَرَ بْنِ الْخَطَّابِ رَضِيَ اللهُ عَنْهُ قَالَ: سَمِعْتُ رَسُولَ اللَّهِ صلى الله عليه وسلم يَقُولُ: \" إِنَّمَا الْأَعْمَالُ بِالنِّيَّاتِ، وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى، فَمَنْ كَانَتْ هِجْرَتُهُ إِلَى اللَّهِ وَرَسُولِهِ فَهِجْرَتُهُ إِلَى اللَّهِ وَرَسُولِهِ، وَمَنْ كَانَتْ هِجْرَتُهُ لِدُنْيَا يُصِيبُهَا أَوْ امْرَأَةٍ يَنْكِحُهَا فَهِجْرَتُهُ إِلَى مَا هَاجَرَ إِلَيْهِ \".",
+        english: "Amir al-Mu'minin, Abu Hafs 'Umar bin al-Khattab (ra) said: I heard the Messenger of Allah (ﷺ) saying: \"Actions are according to intentions, and everyone will get what was intended. Whoever migrates with an intention for Allah and His Messenger, the migration will be for the sake of Allah and His Messenger. And whoever migrates for worldly gain or to marry a woman, then his migration will be for the sake of whatever he migrated for.\"",
+        ref: "Bukhari & Muslim"
+    },
+    {
+        id: 2,
+        arabic: "بَيْنَمَا نَحْنُ جُلُوسٌ عِنْدَ رَسُولِ اللَّهِ صلى الله عليه وسلم ذَاتَ يَوْمٍ، إِذْ طَلَعَ عَلَيْنَا رَجُلٌ شَدِيدُ بَيَاضِ الثِّيَابِ، شَدِيدُ سَوَادِ الشَّعْرِ، لَا يُرَى عَلَيْهِ أَثَرُ السَّفَرِ، وَلَا يَعْرِفُهُ مِنَّا أَحَدٌ، حَتَّى جَلَسَ إِلَى النَّبِيِّ صلى الله عليه وسلم ...",
+        english: "Also on the authority of Umar, who said: One day while we were sitting with the Messenger of Allah (ﷺ) there appeared before us a man whose clothes were exceedingly white and whose hair was exceedingly black; no signs of travel were to be seen on him and none of us knew him...",
+        ref: "Muslim"
+    },
+    {
+        id: 3,
+        arabic: "عَنْ أَبِي عَبْدِ الرَّحْمَنِ عَبْدِ اللَّهِ بْنِ عُمَرَ بْنِ الْخَطَّابِ رَضِيَ اللَّهُ عَنْهُمَا قَالَ: سَمِعْتُ رَسُولَ اللَّهِ صلى الله عليه وسلم يَقُولُ: \" بُنِيَ الْإِسْلَامُ عَلَى خَمْسٍ: شَهَادَةِ أَنْ لَا إِلَهَ إِلَّا اللَّهُ وَأَنَّ مُحَمَّدًا رَسُولُ اللَّهِ، وَإِقَامِ الصَّلَاةِ، وَإِيتَاءِ الزَّكَاةِ، وَحَجِّ الْبَيْتِ، وَصَوْمِ رَمَضَانَ \".",
+        english: "On the authority of Abu 'Abd ar-Rahman 'Abdullah bin 'Umar bin al-Khattab (ra) who said: I heard the Messenger of Allah (ﷺ) say: \"Islam is built upon five [pillars]: testifying that there is no god but Allah and that Muhammad is the Messenger of Allah, establishing the prayer, giving the Zakah, making the pilgrimage to the House, and fasting in Ramadan.\"",
+        ref: "Bukhari & Muslim"
+    }
+];
+
 document.addEventListener('DOMContentLoaded', () => {
+
+    // --- Hadith Integation ---
+    window.openHadith = (collection) => {
+        const modal = document.getElementById('quran-modal');
+        const title = document.getElementById('reader-title');
+        const info = document.getElementById('surah-info');
+        const content = document.getElementById('quran-content');
+
+        // Hide specific Quran elements
+        document.querySelector('.reader-controls-center').style.opacity = '0'; // Hide lang toggle
+        document.querySelector('.audio-player-box').style.display = 'none';
+        document.querySelector('.surah-sidebar').style.display = 'none';
+        document.querySelector('.verse-view').style.width = '100%'; // Full width
+        document.querySelector('.verse-view').style.padding = '40px';
+
+        modal.style.display = 'flex';
+
+        if (collection === 'nawawi') {
+            title.textContent = "40 Hadith Nawawi";
+            info.textContent = "Imam An-Nawawi | 42 Authentic Hadith";
+
+            content.innerHTML = hadithNawawi.map(h => `
+                <div class="verse-block">
+                     <div class="verse-header" style="justify-content:center; border-bottom:none;">
+                        <span class="verse-num" style="width:auto; padding:0 15px; border-radius:15px;">Hadith ${h.id}</span>
+                     </div>
+                     <div class="arabic-txt" style="font-size:2rem; line-height:2;">${h.arabic}</div>
+                     <div class="translation-txt" style="text-align:center; max-width:900px;">
+                        ${h.english}
+                        <p style="margin-top:20px; color:var(--gold); font-size:0.9rem; font-weight:700;">Reference: ${h.ref}</p>
+                     </div>
+                </div>
+            `).join('');
+        }
+    };
+
+    // Reset Modal on Close (to fix Quran layout)
+    document.getElementById('close-quran-btn').addEventListener('click', () => {
+        document.getElementById('quran-modal').style.display = 'none';
+        // Restore Quran defaults
+        document.querySelector('.reader-controls-center').style.opacity = '1';
+        document.querySelector('.audio-player-box').style.display = 'flex';
+        document.querySelector('.surah-sidebar').style.display = 'block';
+        document.querySelector('.verse-view').style.width = '';
+        document.querySelector('.verse-view').style.padding = '';
+    });
+
+
 
     // --- Core UI Elements ---
     const overlay = document.getElementById('portal-overlay');

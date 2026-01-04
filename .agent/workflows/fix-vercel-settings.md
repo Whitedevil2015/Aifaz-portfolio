@@ -34,7 +34,7 @@ Ensure your `vercel.json` file controls caching correctly to prevent old version
 3. Go to **Settings** > **General**.
 4. Check **Build & Development Settings**:
    - **Framework Preset**: Should be `Other` (since this is a simple HTML/JS site).
-   - **Build Command**: Leave empty (override if necessary).
+   - **Build Command**: Leave blank (do NOT type "Empty" literally; simply disable the override or delete the text).
    - **Output Directory**: Leave empty or set to `.` if strictly needed.
    - **Root Directory**: Ensure this is `.` or left empty.
 

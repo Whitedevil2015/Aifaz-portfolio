@@ -4,226 +4,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Aifaz - The Ultimate Crystal Glass Islamic Portal & Premium Store">
-    <title>Aifaz | Crystal Glass Portal</title>
+    <title>Aifaz Portal | The Authentic Collections</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;1,400&family=Cinzel:wght@400;700&family=Amiri:wght@400;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Amiri:wght@400;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
-    <!-- Dynamic Background Slider -->
-    <div class="masjid-bg-container" id="mosque-slider">
-        <!-- Slides injected via JS -->
-    </div>
-    <div class="bg-overlay"></div>
 
-    <!-- Portal Entry Overlay -->
-    <div id="portal-overlay"
-        style="position: fixed; top:0; left:0; width:100%; height:100%; background:#00150f; z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
-        <div class="glass-container"
-            style="padding: 50px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); max-width: 90%;">
-            <i class="fa-solid fa-kaaba fa-4x" style="color: var(--gold); margin-bottom: 30px;"></i>
-            <h2 style="font-family:'Cinzel', serif; color: var(--gold); margin-bottom: 20px;">Divine Inspiration</h2>
-            <blockquote id="daily-quote"
-                style="font-family:'Playfair Display', serif; font-size: 1.5rem; font-style: italic; color: white;">
-                "Indeed, with hardship [will be] ease."</blockquote>
-            <p id="quote-author" style="color: var(--gold); margin-top:15px;">- Surah Ash-Sharh [94:6]</p>
-            <button id="enter-btn" class="play-btn"
-                style="width:auto; padding: 0 40px; height: 50px; margin-top: 40px; border-radius: 50px; font-weight:700;">Enter
-                Portal</button>
-        </div>
-    </div>
-
-    <!-- Navigation -->
+    <!-- Simple Reference Header -->
     <nav class="navbar">
-        <div class="nav-logo">
-            <span
-                style="font-family:'Cinzel', serif; font-weight:700; color:var(--gold); letter-spacing:2px; font-size: 1.2rem;">AIFAZ</span>
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h1>AIFAZ PORTAL</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#quran">Quran</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
         </div>
-        <div class="lang-selector">
-            <button class="lang-btn active" data-lang="en">EN</button>
-            <button class="lang-btn" data-lang="ar">AR</button>
-        </div>
-        <ul class="nav-links">
-            <li><a href="#hero">Home</a></li>
-            <li><a href="#quran">Quran</a></li>
-            <li><a href="#prayer">Prayer</a></li>
-        </ul>
     </nav>
 
+    <!-- Search Hero -->
+    <section class="search-hero">
+        <input type="text" class="search-input" placeholder="Search in Quran and Hadith (e.g. 'Patience', 'Fatiha')...">
+    </section>
 
-    <main>
-        <!-- Hero Section -->
-        <section id="hero" class="hero-section">
-            <div class="current-date-box reveal-bottom">
-                <div class="date-hijri" id="hero-hijri-date">Loading Hijri...</div>
-                <div class="date-gregorian" id="hero-greg-date">Loading date...</div>
-            </div>
-            <div class="hero-glass-card glass-container reveal-bottom">
-                <span style="color: var(--gold); letter-spacing:4px; font-size:0.7rem; font-weight:700;">DIGITAL
-                    SANCTUARY v3.0</span>
-                <h1>Seek Divine Guidance</h1>
-                <p>An immersive crystal-glass experience for the modern seeker. Access the Holy Quran with audio,
-                    explore extensive Hadith volumes, and stay connected with your daily prayers.</p>
-                <div style="display: flex; gap: 20px; justify-content: center; margin-top: 30px;">
-                    <a href="#quran" class="play-btn"
-                        style="width:auto; padding:0 30px; height:50px; text-decoration:none; border-radius:50px; font-weight:700;">Open
-                        Quran</a>
-                </div>
-            </div>
-        </section>
+    <!-- Main Content -->
+    <main class="container">
 
-        <!-- Location & Prayer Times -->
-        <section id="prayer" class="section">
-            <div class="container">
-                <h2 class="section-title">Global Azaan Times</h2>
-                <div class="glass-container" style="padding: 40px; margin-bottom: 50px; text-align: center;">
-                    <div
-                        style="display:inline-flex; flex-wrap: wrap; justify-content: center; gap:15px; background: rgba(255,255,255,0.05); padding:15px 25px; border-radius:30px; border:1px solid rgba(255,255,255,0.1);">
-                        <div style="display:flex; gap:10px; align-items:center;">
-                            <i class="fa-solid fa-location-crosshairs" style="color:var(--gold);"></i>
-                            <input type="text" id="city-input" placeholder="City"
-                                style="background:transparent; border:none; color:white; outline:none; font-weight:600; width:120px; border-bottom:1px solid rgba(255,255,255,0.2);">
-                            <input type="text" id="country-input" placeholder="Country"
-                                style="background:transparent; border:none; color:white; outline:none; font-weight:600; width:100px; border-bottom:1px solid rgba(255,255,255,0.2);">
-                        </div>
-                        <div style="display:flex; gap:10px; align-items:center;">
-                            <i class="fa-solid fa-calendar-day" style="color:var(--gold);"></i>
-                            <input type="date" id="date-picker"
-                                style="background:transparent; border:none; color:white; outline:none; font-weight:600; cursor:pointer; font-size:0.9rem;">
-                        </div>
-                        <button id="update-location-btn" class="play-btn"
-                            style="width:auto; padding:0 25px; height:40px; border-radius:50px; font-size:0.85rem; font-weight:700;">Update
-                            View</button>
+        <!-- Collections Section -->
+        <section id="collections">
+            <h2 class="section-title">The Collections</h2>
+            <div class="collections-grid">
+
+                <!-- Quran Card -->
+                <div class="collection-card" onclick="openQuranReader()">
+                    <div class="collection-header">
+                        <span class="english-title">The Noble Quran</span>
+                        <span class="arabic-title">القرآن الكريم</span>
                     </div>
-                    <p id="location-display" style="margin-top:20px; color:var(--text-secondary);">Currently viewing:
-                        <strong style="color:var(--gold);">Mumbai, IN</strong> | <span
-                            id="current-view-date">Today</span>
-                    </p>
+                    <div class="collection-meta">
+                        <span>114 Surahs</span>
+                        <span>Complete Recitation</span>
+                    </div>
                 </div>
 
-                <div class="content-grid">
-                    <div class="prayer-box glass-container reveal-bottom">
-                        <span style="color:var(--text-secondary); font-size:0.8rem;">FAJR</span>
-                        <span id="time-fajr" class="prayer-time-val">--:--</span>
+                <!-- 40 Hadith Card -->
+                <div class="collection-card" onclick="openHadithCollection('nawawi')">
+                    <div class="collection-header">
+                        <span class="english-title">40 Hadith Nawawi</span>
+                        <span class="arabic-title">الأربعون النووية</span>
                     </div>
-                    <div class="prayer-box glass-container reveal-bottom" style="transition-delay: 0.1s">
-                        <span style="color:var(--text-secondary); font-size:0.8rem;">DHUHR</span>
-                        <span id="time-dhuhr" class="prayer-time-val">--:--</span>
-                    </div>
-                    <div class="prayer-box glass-container reveal-bottom" style="transition-delay: 0.2s">
-                        <span style="color:var(--text-secondary); font-size:0.8rem;">ASR</span>
-                        <span id="time-asr" class="prayer-time-val">--:--</span>
-                    </div>
-                    <div class="prayer-box glass-container reveal-bottom" style="transition-delay: 0.3s">
-                        <span style="color:var(--text-secondary); font-size:0.8rem;">MAGHRIB</span>
-                        <span id="time-maghrib" class="prayer-time-val">--:--</span>
-                    </div>
-                    <div class="prayer-box glass-container reveal-bottom" style="transition-delay: 0.4s">
-                        <span style="color:var(--text-secondary); font-size:0.8rem;">ISHA</span>
-                        <span id="time-isha" class="prayer-time-val">--:--</span>
+                    <div class="collection-meta">
+                        <span>42 Hadiths</span>
+                        <span>Imam An-Nawawi</span>
                     </div>
                 </div>
+
+                <!-- Bukhari (Placeholder) -->
+                <div class="collection-card">
+                    <div class="collection-header">
+                        <span class="english-title">Sahih al-Bukhari</span>
+                        <span class="arabic-title">صحيح البخاري</span>
+                    </div>
+                    <div class="collection-meta">
+                        <span>Coming Soon</span>
+                    </div>
+                </div>
+
+                <!-- Muslim (Placeholder) -->
+                <div class="collection-card">
+                    <div class="collection-header">
+                        <span class="english-title">Sahih Muslim</span>
+                        <span class="arabic-title">صحيح مسلم</span>
+                    </div>
+                    <div class="collection-meta">
+                        <span>Coming Soon</span>
+                    </div>
+                </div>
+
             </div>
         </section>
 
-        <!-- Quran Reader (Glass Trigger Card) -->
-        <section id="quran" class="section">
-            <div class="container">
-                <div class="glass-container reveal-bottom"
-                    style="padding: 80px 40px; text-align: center; border: 2px solid var(--gold);">
-                    <i class="fa-solid fa-book-quran fa-4x" style="color: var(--gold); margin-bottom: 30px;"></i>
-                    <h2 style="font-family:'Cinzel', serif; font-size: 2.5rem; margin-bottom: 20px;">The Holy Quran</h2>
-                    <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto 40px;">Listen to beautiful
-                        recitations and read full translations of all 114 Surahs with our integrated audio-text
-                        synchronizer.</p>
-                    <button id="open-quran-reader" class="play-btn"
-                        style="width:auto; padding:0 50px; height:60px; border-radius:50px; font-size:1.1rem; font-weight:700;">Launch
-                        Reader</button>
-                </div>
+        <!-- Dynamic Reading Section (Injected via JS) -->
+        <section id="reader-view" style="display:none; margin-top: 50px;">
+            <div
+                style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #ddd; padding-bottom:15px; margin-bottom:20px;">
+                <h2 class="section-title" id="reader-heading" style="margin:0; border:none;">Reader</h2>
+                <button onclick="closeReader()"
+                    style="background:#eee; border:none; padding:10px 20px; cursor:pointer; border-radius:4px;">&times;
+                    Close</button>
             </div>
-        </section>
 
-
-
-        <!-- Asma-ul-Husna Section -->
-        <section id="asma" class="section">
-            <div class="container">
-                <h2 class="section-title">99 Names of Allah</h2>
-                <div id="asma-grid" class="content-grid"
-                    style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;">
-                    <!-- Names will be injected here via JS -->
-                    <div style="grid-column: 1/-1; text-align: center; padding: 50px;">
-                        <i class="fa-solid fa-circle-notch fa-spin fa-3x" style="color: var(--gold);"></i>
-                        <p style="margin-top: 15px;">Loading Sacred Names...</p>
-                    </div>
-                </div>
+            <div id="reader-content" class="reader-container">
+                <!-- Content goes here -->
             </div>
         </section>
 
     </main>
 
-    <!-- Crystal Reader Modal -->
-    <div id="quran-modal" class="reader-overlay">
-        <div class="reader-glass">
-            <div class="reader-header">
-                <div class="reader-controls-left">
-                    <h2 id="reader-title">Surah Al-Fatiha</h2>
-                    <span id="surah-info">7 Ayahs | Makkah</span>
-                </div>
-
-                <div class="reader-controls-center">
-                    <div class="lang-toggles">
-                        <button class="lang-btn active" data-lang="en">English</button>
-                        <button class="lang-btn" data-lang="hi">Hindi</button>
-                        <button class="lang-btn" data-lang="ur">Urdu</button>
-                    </div>
-                </div>
-
-                <div class="reader-controls-right">
-                    <div class="audio-player-box">
-                        <button id="play-pause-btn" class="play-btn-small" title="Play Recitation">
-                            <i class="fa-solid fa-play"></i>
-                        </button>
-                        <div class="audio-progress-container">
-                            <div id="audio-progress-bar"></div>
-                        </div>
-                    </div>
-                    <button id="close-quran-btn" class="close-btn">&times;</button>
-                </div>
-            </div>
-
-            <div class="reader-main">
-                <aside class="surah-sidebar">
-                    <div class="sidebar-search">
-                        <input type="text" id="surah-search-input" placeholder="Search Surah...">
-                    </div>
-                    <div id="surah-list-container">
-                        <div id="surah-list">
-                            <!-- Surahs injected here -->
-                        </div>
-                    </div>
-                </aside>
-
-                <section class="verse-view" id="quran-content">
-                    <!-- Verses injected here with Comments UI -->
-                </section>
-            </div>
-        </div>
-    </div>
-
-    <!-- Hidden Audio Player -->
-    <audio id="quran-audio" preload="none"></audio>
-
-    <footer style="padding: 100px 8% 50px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05);">
-        <div class="glass-container" style="padding: 50px;">
-            <p style="color: var(--text-secondary);">&copy; 2026 Aifaz Portal. All Rights Reserved.</p>
-        </div>
+    <footer
+        style="background:#f8f9fa; text-align:center; padding:40px; margin-top:50px; border-top:1px solid #e9ecef; color:#888; font-size:0.9rem;">
+        &copy; 2026 Aifaz Portal. Styled inspired by Sunnah.com
     </footer>
 
     <script src="script.js"></script>

@@ -144,6 +144,21 @@ document.addEventListener('DOMContentLoaded', () => {
         'pa': 'pa.ahmed'
     };
 
+    // --- Intersection Observer for Animations ---
+    const animatedElements = document.querySelectorAll('.testimonial-card, .value-card, .trust-item');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-in');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    animatedElements.forEach(el => {
+        observer.observe(el);
+    });
+
     document.querySelectorAll('.lang-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             // Visual toggle

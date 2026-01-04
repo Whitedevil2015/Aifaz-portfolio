@@ -4,162 +4,351 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aifaz Portal | The Authentic Collections</title>
-    <link rel="stylesheet" href="style.css?v=3.3">
-    <meta name="description" content="Aifaz - The Ultimate Crystal Glass Islamic Portal & Premium Store">
-    <title>Aifaz | Crystal Glass Portal</title>
-    <link rel="stylesheet" href="style.css?v=3.2">
+    <meta name="description"
+        content="AIFAZ ISLAMIC - Premium Sunnah & Lifestyle Essentials. Elevate your Deen and Dunya with our curated collection.">
+    <title>AIFAZ ISLAMIC | Premium Sunnah Store</title>
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;1,400&family=Cinzel:wght@400;700&family=Amiri:wght@400;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;600;700&display=swap"
         rel="stylesheet">
+
+    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <!-- Dynamic Background Slider -->
-    <div class="masjid-bg-container" id="mosque-slider">
-        <!-- Slides injected via JS -->
-    </div>
-    <div class="bg-overlay"></div>
+    <!-- Islamic Pattern Background -->
+    <div class="islamic-pattern-bg"></div>
 
-    <!-- Portal Entry Overlay -->
-    <div id="portal-overlay"
-        style="position: fixed; top:0; left:0; width:100%; height:100%; background:#00150f; z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
-        <div class="glass-container"
-            style="padding: 50px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); max-width: 90%;">
-            <i class="fa-solid fa-kaaba fa-4x" style="color: var(--gold); margin-bottom: 30px;"></i>
-            <h2 style="font-family:'Cinzel', serif; color: var(--gold); margin-bottom: 20px;">Divine Inspiration</h2>
-            <blockquote id="daily-quote"
-                style="font-family:'Playfair Display', serif; font-size: 1.5rem; font-style: italic; color: white;">
-                "Indeed, with hardship [will be] ease."</blockquote>
-            <p id="quote-author" style="color: var(--gold); margin-top:15px;">- Surah Ash-Sharh [94:6]</p>
-            <button id="enter-btn" class="play-btn"
-                style="width:auto; padding: 0 40px; height: 50px; margin-top: 40px; border-radius: 50px; font-weight:700;">Enter
-                Portal</button>
-        </div>
-    </div>
-
-    <!-- Navigation -->
     <nav class="navbar">
-        <div class="nav-logo">
-            <span
-                style="font-family:'Cinzel', serif; font-weight:700; color:var(--gold); letter-spacing:2px; font-size: 1.2rem;">AIFAZ</span>
+        <div class="container nav-container">
+            <a href="#" class="logo">AIFAZ<span class="highlight">ISLAMIC</span></a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#featured">Shop</a></li>
+                <li><a href="#collections">Collections</a></li>
+                <li><a href="#about">Our Values</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="#" class="cart-icon" id="cart-toggle">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-count">0</span>
+                </a>
+                <div class="hamburger">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
         </div>
-        <div class="lang-selector">
-            <button class="lang-btn active" data-lang="en">EN</button>
-            <button class="lang-btn" data-lang="ar">AR</button>
-        </div>
-        <ul class="nav-links">
-            <li><a href="#hero">Home</a></li>
-            <li><a href="#quran">Quran</a></li>
-            <li><a href="#prayer">Prayer</a></li>
-        </ul>
     </nav>
 
-
-    <main>
-        <!-- Hero Section -->
-        <section id="hero" class="hero-section">
-            <div class="current-date-box reveal-bottom">
-                <div class="date-hijri" id="hero-hijri-date">Loading Hijri...</div>
-                <div class="date-gregorian" id="hero-greg-date">Loading date...</div>
-            </div>
-            <div class="hero-glass-card glass-container reveal-bottom">
-                <span style="color: var(--gold); letter-spacing:4px; font-size:0.7rem; font-weight:700;">DIGITAL
-                    SANCTUARY v3.2</span>
-                <h1>Seek Divine Guidance</h1>
-                <p>An immersive crystal-glass experience for the modern seeker. Access the Holy Quran with audio,
-                    explore extensive Hadith volumes, and stay connected with your daily prayers.</p>
-                <div style="display: flex; gap: 20px; justify-content: center; margin-top: 30px;">
-                    <a href="#asma" class="play-btn"
-                        style="width:auto; padding:0 30px; height:50px; text-decoration:none; border-radius:50px; font-weight:700;">99
-                        Names</a>
+    <header id="home" class="hero">
+        <div class="container hero-container">
+            <div class="hero-content">
+                <span class="badge">Bismillah - Begin with Excellence</span>
+                <div id="quran-quote" class="quote-container">
+                    <i class="fas fa-quran quote-icon"></i>
+                    <p class="quote-text"></p>
+                    <p class="quote-reference"></p>
+                </div>
+                <h1>Elevate Your <br><span class="text-gradient">Deen & Dunya</span></h1>
+                <p>Experience the harmony of faith and elegance. Premium Sunnah remedies, modest apparel, and spiritual
+                    essentials curated for the modern believer.</p>
+                <div class="hero-btns">
+                    <a href="#featured" class="btn btn-primary">Shop Sunnah</a>
+                    <a href="#collections" class="btn btn-secondary">Explore Categories</a>
+                </div>
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-number">10k+</span>
+                        <span class="stat-label">Sunnahs Revived</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">Halal Certified</span>
+                    </div>
                 </div>
             </div>
-        </section>
-
-        <!-- Main Content -->
-        <main class="container">
-
-            <!-- Collections Section -->
-            <section id="collections">
-                <h2 class="section-title">The Collections</h2>
-                <div class="collections-grid">
-
-                    <!-- Quran Card -->
-                    <div class="collection-card" onclick="openQuranReader()">
-                        <div class="collection-header">
-                            <span class="english-title">The Noble Quran</span>
-                            <span class="arabic-title">القرآن الكريم</span>
-                        </div>
-                        <div class="collection-meta">
-                            <span>114 Surahs</span>
-                            <span>Complete Recitation</span>
-                        </div>
+            <div class="hero-image">
+                <div class="product-showcase">
+                    <div class="glow-effect"></div>
+                    <img src="https://images.unsplash.com/photo-1585671172828-569b9102434e?q=80&w=1000&auto=format&fit=crop"
+                        alt="Holy Quran and Tasbih" class="main-product-img">
+                    <div class="floating-card card-1">
+                        <i class="fas fa-star-and-crescent"></i>
+                        <span>Spiritually Crafted</span>
                     </div>
-
-                    <!-- 40 Hadith Card -->
-                    <div class="collection-card" onclick="openHadithCollection('nawawi')">
-                        <div class="collection-header">
-                            <span class="english-title">40 Hadith Nawawi</span>
-                            <span class="arabic-title">الأربعون النووية</span>
-                        </div>
-                        <div class="collection-meta">
-                            <span>42 Hadiths</span>
-                            <span>Imam An-Nawawi</span>
-                        </div>
+                    <div class="floating-card card-2">
+                        <i class="fas fa-award"></i>
+                        <span>Premium Quality</span>
                     </div>
-
-                    <!-- Bukhari (Placeholder) -->
-                    <div class="collection-card">
-                        <div class="collection-header">
-                            <span class="english-title">Sahih al-Bukhari</span>
-                            <span class="arabic-title">صحيح البخاري</span>
-                        </div>
-                        <div class="collection-meta">
-                            <span>Coming Soon</span>
-                        </div>
-                    </div>
-
-                    <!-- Muslim (Placeholder) -->
-                    <div class="collection-card">
-                        <div class="collection-header">
-                            <span class="english-title">Sahih Muslim</span>
-                            <span class="arabic-title">صحيح مسلم</span>
-                        </div>
-                        <div class="collection-meta">
-                            <span>Coming Soon</span>
-                        </div>
-                    </div>
-
                 </div>
-            </section>
+            </div>
+        </div>
+    </header>
 
-            <!-- Dynamic Reading Section (Injected via JS) -->
-            <section id="reader-view" style="display:none; margin-top: 50px;">
-                <div
-                    style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #ddd; padding-bottom:15px; margin-bottom:20px;">
-                    <h2 class="section-title" id="reader-heading" style="margin:0; border:none;">Reader</h2>
-                    <button onclick="closeReader()"
-                        style="background:#eee; border:none; padding:10px 20px; cursor:pointer; border-radius:4px;">&times;
-                        Close</button>
+    <section id="featured" class="featured">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Trending Essentials</h2>
+                <p class="section-subtitle">Loved by the Ummah</p>
+            </div>
+            <div class="product-grid">
+                <!-- Perfume -->
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=800&auto=format&fit=crop"
+                            alt="Premium Perfume">
+                        <span class="product-tag">Sunnah</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Royal Black Musk</h3>
+                        <p class="price">$89.00 <span class="old-price">$120.00</span></p>
+                        <button class="btn btn-add-cart">Add to Cart</button>
+                    </div>
                 </div>
-
-                <div id="reader-content" class="reader-container">
-                    <!-- Content goes here -->
+                <!-- Islamic Product 1 -->
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=800&auto=format&fit=crop"
+                            alt="Prayer Mat">
+                        <span class="product-tag">Best Seller</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Luxury Velvet Prayer Mat</h3>
+                        <p class="price">$45.00 <span class="old-price">$65.00</span></p>
+                        <button class="btn btn-add-cart">Add to Cart</button>
+                    </div>
                 </div>
-            </section>
+                <!-- Clothing -->
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1515434126000-961d90ff09db?q=80&w=800&auto=format&fit=crop"
+                            alt="Classic Thobe">
+                        <span class="product-tag hot">Trending</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Emirati Premium Thobe</h3>
+                        <p class="price">$110.00</p>
+                        <button class="btn btn-add-cart">Add to Cart</button>
+                    </div>
+                </div>
+                <!-- Islamic Product 2 -->
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1621319340428-144e04746654?q=80&w=800&auto=format&fit=crop"
+                            alt="Crystal Tasbih">
+                    </div>
+                    <div class="product-info">
+                        <h3>Handcrafted Tasbih (99 Beads)</h3>
+                        <p class="price">$29.00</p>
+                        <button class="btn btn-add-cart">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        </main>
+    <section id="collections" class="expertise">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our Collections</h2>
+                <p class="section-subtitle">Everything for the Muslim Home</p>
+            </div>
+            <div class="expertise-grid">
+                <div class="expertise-card category-card">
+                    <div class="icon-box">
+                        <i class="fas fa-bottle-droplet"></i>
+                    </div>
+                    <h3>Sunnah Fragrances</h3>
+                    <p>Authentic Ouds, Musks, and Attars free from alcohol.</p>
+                    <a href="#" class="shop-link">Shop Fragrances <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="expertise-card category-card">
+                    <div class="icon-box">
+                        <i class="fas fa-mosque"></i>
+                    </div>
+                    <h3>Prayer & Ibadah</h3>
+                    <p>Premium Mats, Tasbihs, and Rehal stands.</p>
+                    <a href="#" class="shop-link">Shop Essentials <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="expertise-card category-card">
+                    <div class="icon-box">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h3>Modest Wear</h3>
+                    <p>Elegant Thobes, Abayas, and Hijabs for every occasion.</p>
+                    <a href="#" class="shop-link">View Apparel <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="expertise-card category-card">
+                    <div class="icon-box">
+                        <i class="fas fa-book-quran"></i>
+                    </div>
+                    <h3>Islamic Art & Decor</h3>
+                    <p>Calligraphy, Wall Art, and Home Accessories.</p>
+                    <a href="#" class="shop-link">Explore Art <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <footer
-            style="background:#f8f9fa; text-align:center; padding:40px; margin-top:50px; border-top:1px solid #e9ecef; color:#888; font-size:0.9rem;">
-            &copy; 2026 Aifaz Portal. Styled inspired by Sunnah.com
-        </footer>
+    <section id="about" class="about">
+        <div class="container about-container">
+            <div class="section-header">
+                <h2 class="section-title">Our Values</h2>
+                <p class="section-subtitle">Guiding Principles of Faith</p>
+            </div>
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="value-icon"><i class="fas fa-hand-holding-heart"></i></div>
+                    <h3>Ehsan (Excellence)</h3>
+                    <p>Striving for perfection in every product and interaction, as Allah loves those who do good.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon"><i class="fas fa-scale-balanced"></i></div>
+                    <h3>Amanah (Trust)</h3>
+                    <p>Upholding honesty and transparency in all our dealings, ensuring 100% authentic products.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon"><i class="fas fa-handshake-angle"></i></div>
+                    <h3>Adab (Etiquette)</h3>
+                    <p>Treating every customer with the respect and kindness taught by our beloved Prophet (PBUH).</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <script src="script.js"></script>
+    <section class="trust-bar">
+        <div class="container trust-container">
+            <div class="trust-item">
+                <i class="fas fa-kaaba"></i>
+                <span>Ethically Sourced</span>
+            </div>
+            <div class="trust-item">
+                <i class="fas fa-hand-holding-dollar"></i>
+                <span>Percentage to Charity</span>
+            </div>
+            <div class="trust-item">
+                <i class="fas fa-clock"></i>
+                <span>24/7 Support</span>
+            </div>
+            <div class="trust-item">
+                <i class="fas fa-rotate-left"></i>
+                <span>Easy Returns</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Community Stories</h2>
+                <p class="section-subtitle">Voices from the Ummah</p>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                            class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p>"Alhamdulillah, the musk I ordered smells exactly like what I remember from Madinah. It brings
+                        such peace to my heart."</p>
+                    <div class="user-info">
+                        <img src="https://i.pravatar.cc/150?u=1" alt="User">
+                        <div>
+                            <h4>Omar Farooq</h4>
+                            <span>Verified Buyer</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                            class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p>"The prayer mat is beautiful and so comfortable for my elderly mother. May Allah bless your
+                        business."</p>
+                    <div class="user-info">
+                        <img src="https://i.pravatar.cc/150?u=2" alt="User">
+                        <div>
+                            <h4>Aisha K.</h4>
+                            <span>Verified Buyer</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="support" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Reach Out</h2>
+                <p class="section-subtitle">We are here to serve</p>
+            </div>
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <div class="info-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email Us</h4>
+                            <p>salam@aifazislamic.com</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-map-pin"></i>
+                        <div>
+                            <h4>Locations</h4>
+                            <p>Serving Globally</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fab fa-whatsapp"></i>
+                        <div>
+                            <h4>WhatsApp</h4>
+                            <p>+1 234 567 890</p>
+                        </div>
+                    </div>
+                </div>
+                <form class="contact-form">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="email@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" rows="5" placeholder="How can we assist you?" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-top">
+                <div class="footer-logo">AIFAZ<span class="highlight">ISLAMIC</span></div>
+                <p>Reviving Sunnahs through quality, ethics, and excellence. Your trusted partner in the Islamic
+                    lifestyle.</p>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 AIFAZ ISLAMIC. All rights reserved.</p>
+                <div class="payment-icons">
+                    <i class="fab fa-cc-visa"></i>
+                    <i class="fab fa-cc-mastercard"></i>
+                    <i class="fab fa-cc-apple-pay"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 
 </html>

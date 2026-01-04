@@ -744,3 +744,260 @@ body {
     max-height: 200px;
     background: #000;
 }
+/* --- Quran Reader Enhancements --- */
+
+/* Modal Background - Darker and more immersive */
+.reader-overlay {
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(30px);
+}
+
+/* Reader Container - Cleaner look, less borders */
+.reader-glass {
+    background: linear-gradient(145deg, rgba(20, 20, 20, 0.9) 0%, rgba(10, 10, 30, 0.9) 100%);
+    border: 1px solid rgba(245, 158, 11, 0.2); /* Subtle gold border */
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+    border-radius: 12px; /* Sharper corners for a book feel */
+}
+
+/* Top Header */
+.reader-header {
+    background: rgba(0, 0, 0, 0.4);
+    border-bottom: 1px solid rgba(245, 158, 11, 0.1);
+    padding: 20px 40px;
+}
+
+#reader-title {
+    font-size: 2rem;
+    letter-spacing: 2px;
+}
+
+/* Main Reading Area */
+.verse-view {
+    padding: 60px 15%; /* Much more padding, narrower column for readability */
+    background: transparent;
+    scroll-behavior: smooth;
+    /* Soft Paper Texture Effect Overlay (Concept) */
+    background-image: radial-gradient(rgba(255,255,255,0.02) 1px, transparent 0);
+    background-size: 40px 40px;
+}
+
+/* Individual Verse Styling */
+.verse-block {
+    margin-bottom: 60px; /* More breathing room */
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.015);
+    border-radius: 20px;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+    text-align: center; /* Center alignment for a more poetic feel */
+}
+
+.verse-block:hover {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(245, 158, 11, 0.1);
+    transform: translateY(-5px);
+}
+
+/* Typography */
+.arabic-txt {
+    font-family: 'Amiri', 'Scheherazade New', serif;
+    font-size: 3.5rem; /* Larger Arabic */
+    line-height: 2.2;
+    color: var(--gold);
+    text-shadow: 0 4px 15px rgba(245, 158, 11, 0.3); /* Glowing text */
+    margin-bottom: 25px;
+    text-align: center; /* Centered Arabic */
+    direction: rtl;
+}
+
+.translation-txt {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.3rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 300;
+    max-width: 800px;
+    margin: 0 auto; /* Center the block */
+}
+
+/* Sidebar Customization */
+.surah-sidebar {
+    background: rgba(0,0,0,0.6);
+    border-right: 1px solid rgba(255,255,255,0.05);
+    width: 300px;
+}
+
+.surah-item {
+    padding: 18px 25px;
+    font-size: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.surah-item span {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    color: var(--gold);
+    opacity: 0.5;
+}
+
+.surah-item.active {
+    background: linear-gradient(90deg, rgba(245, 158, 11, 0.1) 0%, transparent 100%);
+    border-left: 4px solid var(--gold);
+    color: white;
+}
+
+/* Scrollbar refinement */
+.surah-sidebar::-webkit-scrollbar,
+.verse-view::-webkit-scrollbar {
+    width: 6px;
+}
+.surah-sidebar::-webkit-scrollbar-thumb,
+.verse-view::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+}
+
+/* --- New Attractive Quran UI & Comments --- */
+
+/* Header Controls */
+.reader-controls-left { flex: 1; }
+.reader-controls-center { flex: 1; display: flex; justify-content: center; }
+.reader-controls-right { flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 1rem; }
+
+/* Language Toggles */
+.lang-toggles {
+    background: rgba(0,0,0,0.3);
+    padding: 5px;
+    border-radius: 30px;
+    display: flex;
+    gap: 5px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.lang-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.6);
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.lang-btn.active {
+    background: var(--gold);
+    color: black;
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+}
+
+/* Sidebar Search */
+.sidebar-search { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+#surah-search-input {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 10px 15px;
+    border-radius: 8px;
+    color: white;
+}
+
+/* Rendered Verse Improvements */
+.verse-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.verse-num {
+    background: var(--gold);
+    color: black;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%; /* Circle */
+    font-weight: 800;
+    font-size: 0.9rem;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+    font-family: 'Outfit', sans-serif;
+}
+
+.verse-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.7);
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.verse-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+/* Reflection / Comment Box */
+.reflection-box {
+    margin-top: 25px;
+    background: rgba(0,0,0,0.3);
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px dashed rgba(255,255,255,0.2);
+}
+
+.reflection-box textarea {
+    width: 100%;
+    height: 80px;
+    background: transparent;
+    border: none;
+    color: white;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    resize: vertical;
+    outline: none;
+}
+
+.reflection-box button {
+    background: var(--primary);
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    margin-top: 10px;
+    cursor: pointer;
+    float: right;
+}
+
+.reflection-box.active {
+    border-style: solid;
+    border-color: var(--gold);
+}
+
+/* Audio Player */
+.play-btn-small {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+}
+.close-btn {
+    font-size: 2rem;
+    color: rgba(255,255,255,0.5);
+    background: transparent; border: none;
+    cursor: pointer;
+}
+.close-btn:hover { color: white; }
+

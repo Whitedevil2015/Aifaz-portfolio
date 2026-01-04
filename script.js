@@ -355,85 +355,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.reveal-bottom').forEach(el => revealObserver.observe(el));
 
-    // --- Hijri Calendar Logic ---
-    let currentHMonth = 0;
-    let currentHYear = 0;
-    const hMonthNameEl = document.getElementById('hijri-month-name');
-    const hYearEl = document.getElementById('hijri-year');
-    const gDateEl = document.getElementById('gregorian-date');
-    const calGrid = document.getElementById('hijri-calendar-grid');
-    const prevMBtn = document.getElementById('prev-month');
-    const nextMBtn = document.getElementById('next-month');
-
-    async function initCalendar() {
-        try {
-            const res = await fetch('https://api.aladhan.com/v1/gToH');
-            const data = await res.json();
-            if (data.code === 200) {
-                currentHMonth = parseInt(data.data.hijri.month.number);
-                currentHYear = parseInt(data.data.hijri.year);
-                fetchCalendar(currentHMonth, currentHYear);
-            }
-        } catch (e) { console.error("Cal init failed", e); }
-    }
-
-    async function fetchCalendar(month, year) {
-        if (hMonthNameEl) hMonthNameEl.textContent = '...';
-        try {
-            const city = cityInput?.value.trim() || 'Mumbai';
-            const country = countryInput?.value.trim() || 'India';
-            const res = await fetch(`https://api.aladhan.com/v1/hCalendarByCity/${year}/${month}?city=${city}&country=${country}&method=2`);
-            const data = await res.json();
-            if (data.code === 200) renderCal(data.data);
-        } catch (e) { console.error("Cal fetch failed", e); }
-    }
-
-    function renderCal(days) {
-        if (!days || !calGrid) return;
-        const first = days[0];
-        if (hMonthNameEl) hMonthNameEl.textContent = first.hijri.month.en;
-        if (hYearEl) hYearEl.textContent = `${first.hijri.year} AH`;
-        if (gDateEl) gDateEl.textContent = `${first.gregorian.month.en} ${first.gregorian.year}`;
-
-        calGrid.innerHTML = '';
-        ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(d => {
-            const h = document.createElement('div');
-            h.className = 'calendar-day-header';
-            h.textContent = d;
-            calGrid.appendChild(h);
-        });
-
-        const startOffset = parseInt(days[0].gregorian.weekday.number) % 7;
-        for (let i = 0; i < startOffset; i++) {
-            const e = document.createElement('div');
-            e.className = 'calendar-day empty';
-            calGrid.appendChild(e);
-        }
-
-        const now = new Date();
-        const nowStr = `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`;
-
-        days.forEach(day => {
-            const d = document.createElement('div');
-            d.className = 'calendar-day';
-            if (day.gregorian.date === nowStr) d.classList.add('active');
-            d.innerHTML = `<span class="hijri-num">${day.hijri.day}</span><span class="greg-num">${day.gregorian.day}</span>`;
-            calGrid.appendChild(d);
-        });
-    }
-
-    prevMBtn?.addEventListener('click', () => {
-        currentHMonth--;
-        if (currentHMonth < 1) { currentHMonth = 12; currentHYear--; }
-        fetchCalendar(currentHMonth, currentHYear);
-    });
-
-    nextMBtn?.addEventListener('click', () => {
-        currentHMonth++;
-        if (currentHMonth > 12) { currentHMonth = 1; currentHYear++; }
-        fetchCalendar(currentHMonth, currentHYear);
-    });
-
     // --- Asma-ul-Husna (Allah's names) ---
     async function initAsma() {
         const grid = document.getElementById('asma-grid');
@@ -456,25 +377,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     initAsma();
-    initCalendar();
-
-    // --- Store Interactions (Merged) ---
-    const addToCartBtns = document.querySelectorAll('.btn-add-cart, .product-info button, .btn-secondary');
-    addToCartBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            // Only if it is strictly an add to cart type button
-            if (btn.textContent.includes('Add to Cart') || btn.textContent.includes('Shop')) {
-                const originalText = btn.textContent;
-                btn.textContent = "Added!";
-                btn.style.background = "var(--gold)";
-                btn.style.color = "black";
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                    btn.style.background = "";
-                    btn.style.color = "";
-                }, 1500);
-            }
-        });
-    });
 
 });

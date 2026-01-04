@@ -71,39 +71,82 @@
                 <p>An immersive crystal-glass experience for the modern seeker. Access the Holy Quran with audio,
                     explore extensive Hadith volumes, and stay connected with your daily prayers.</p>
                 <div style="display: flex; gap: 20px; justify-content: center; margin-top: 30px;">
-                    <a href="#quran" class="play-btn"
-                        style="width:auto; padding:0 30px; height:50px; text-decoration:none; border-radius:50px; font-weight:700;">Open
-                        Quran</a>
+                    <a href="#asma" class="play-btn"
+                        style="width:auto; padding:0 30px; height:50px; text-decoration:none; border-radius:50px; font-weight:700;">99
+                        Names</a>
                 </div>
             </div>
         </section>
 
-        <!-- Location & Prayer Times -->
+        <!-- Asma-ul-Husna Section (Moved Top) -->
+        <section id="asma" class="section">
+            <div class="container">
+                <h2 class="section-title">99 Names of Allah</h2>
+                <div id="asma-grid" class="content-grid"
+                    style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;">
+                    <!-- Names will be injected here via JS -->
+                    <div style="grid-column: 1/-1; text-align: center; padding: 50px;">
+                        <i class="fa-solid fa-circle-notch fa-spin fa-3x" style="color: var(--gold);"></i>
+                        <p style="margin-top: 15px;">Loading Sacred Names...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quran Reader (Glass Trigger Card) -->
+        <section id="quran" class="section">
+            <div class="container">
+                <div class="glass-container reveal-bottom"
+                    style="padding: 60px 40px; text-align: center; border: 2px solid var(--gold);">
+                    <i class="fa-solid fa-book-quran fa-4x" style="color: var(--gold); margin-bottom: 30px;"></i>
+                    <h2 style="font-family:'Cinzel', serif; font-size: 2.5rem; margin-bottom: 20px;">The Holy Quran</h2>
+                    <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto 30px;">Read and Listen to
+                        the Words of Allah.</p>
+                    <button id="open-quran-reader" class="play-btn"
+                        style="width:auto; padding:0 50px; height:60px; border-radius:50px; font-size:1.1rem; font-weight:700;">Continue
+                        Reading</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- New: 114 Surah Directory -->
+        <section id="surah-directory" class="section">
+            <div class="container">
+                <h2 class="section-title">Surah Index</h2>
+                <div id="surah-index-grid" class="content-grid"
+                    style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px;">
+                    <!-- 114 Surah Cards injected via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Location & Prayer Times (Moved Bottom + Azaan) -->
         <section id="prayer" class="section">
             <div class="container">
-                <h2 class="section-title">Global Azaan Times</h2>
+                <h2 class="section-title">Prayer Times & Azaan</h2>
                 <div class="glass-container" style="padding: 40px; margin-bottom: 50px; text-align: center;">
+
+                    <!-- Azaan Player -->
+                    <div class="azaan-player" style="margin-bottom: 30px;">
+                        <button id="play-azaan-btn" class="play-btn"
+                            style="width:auto; padding:0 40px; gap:10px; display:inline-flex; align-items:center;">
+                            <i class="fa-solid fa-mosque"></i> Play Azaan (Makkah)
+                        </button>
+                        <audio id="azaan-audio" src="https://www.islamcan.com/audio/adhan/azan2.mp3"></audio>
+                    </div>
+
                     <div
                         style="display:inline-flex; flex-wrap: wrap; justify-content: center; gap:15px; background: rgba(255,255,255,0.05); padding:15px 25px; border-radius:30px; border:1px solid rgba(255,255,255,0.1);">
                         <div style="display:flex; gap:10px; align-items:center;">
                             <i class="fa-solid fa-location-crosshairs" style="color:var(--gold);"></i>
                             <input type="text" id="city-input" placeholder="City"
                                 style="background:transparent; border:none; color:white; outline:none; font-weight:600; width:120px; border-bottom:1px solid rgba(255,255,255,0.2);">
-                            <input type="text" id="country-input" placeholder="Country"
-                                style="background:transparent; border:none; color:white; outline:none; font-weight:600; width:100px; border-bottom:1px solid rgba(255,255,255,0.2);">
-                        </div>
-                        <div style="display:flex; gap:10px; align-items:center;">
-                            <i class="fa-solid fa-calendar-day" style="color:var(--gold);"></i>
-                            <input type="date" id="date-picker"
-                                style="background:transparent; border:none; color:white; outline:none; font-weight:600; cursor:pointer; font-size:0.9rem;">
                         </div>
                         <button id="update-location-btn" class="play-btn"
-                            style="width:auto; padding:0 25px; height:40px; border-radius:50px; font-size:0.85rem; font-weight:700;">Update
-                            View</button>
+                            style="width:auto; padding:0 25px; height:40px; border-radius:50px; font-size:0.85rem; font-weight:700;">Update</button>
                     </div>
                     <p id="location-display" style="margin-top:20px; color:var(--text-secondary);">Currently viewing:
-                        <strong style="color:var(--gold);">Mumbai, IN</strong> | <span
-                            id="current-view-date">Today</span>
+                        <strong style="color:var(--gold);">Mumbai, IN</strong>
                     </p>
                 </div>
 
@@ -131,41 +174,6 @@
                 </div>
             </div>
         </section>
-
-        <!-- Quran Reader (Glass Trigger Card) -->
-        <section id="quran" class="section">
-            <div class="container">
-                <div class="glass-container reveal-bottom"
-                    style="padding: 80px 40px; text-align: center; border: 2px solid var(--gold);">
-                    <i class="fa-solid fa-book-quran fa-4x" style="color: var(--gold); margin-bottom: 30px;"></i>
-                    <h2 style="font-family:'Cinzel', serif; font-size: 2.5rem; margin-bottom: 20px;">The Holy Quran</h2>
-                    <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto 40px;">Listen to beautiful
-                        recitations and read full translations of all 114 Surahs with our integrated audio-text
-                        synchronizer.</p>
-                    <button id="open-quran-reader" class="play-btn"
-                        style="width:auto; padding:0 50px; height:60px; border-radius:50px; font-size:1.1rem; font-weight:700;">Launch
-                        Reader</button>
-                </div>
-            </div>
-        </section>
-
-
-
-        <!-- Asma-ul-Husna Section -->
-        <section id="asma" class="section">
-            <div class="container">
-                <h2 class="section-title">99 Names of Allah</h2>
-                <div id="asma-grid" class="content-grid"
-                    style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;">
-                    <!-- Names will be injected here via JS -->
-                    <div style="grid-column: 1/-1; text-align: center; padding: 50px;">
-                        <i class="fa-solid fa-circle-notch fa-spin fa-3x" style="color: var(--gold);"></i>
-                        <p style="margin-top: 15px;">Loading Sacred Names...</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
     </main>
 
     <!-- Crystal Reader Modal -->

@@ -172,44 +172,46 @@
     <div id="quran-modal" class="reader-overlay">
         <div class="reader-glass">
             <div class="reader-header">
-                <div>
-                    <h2 id="reader-title" style="font-family:'Cinzel', serif; color:var(--gold); margin:0;">Surah
-                        Al-Fatiha</h2>
-                    <span id="surah-info" style="font-size:0.8rem; opacity:0.6;">7 Ayahs | Revealed in Makkah</span>
+                <div class="reader-controls-left">
+                    <h2 id="reader-title">Surah Al-Fatiha</h2>
+                    <span id="surah-info">7 Ayahs | Makkah</span>
                 </div>
-                <div class="audio-controls" style="display:flex; align-items:center; gap:15px;">
-                    <button id="play-pause-btn" class="play-btn">
-                        <i class="fa-solid fa-play"></i>
-                    </button>
-                    <span style="font-size:0.75rem; font-weight:700; color:var(--gold); letter-spacing:1px;">READ &
-                        LISTEN</span>
+
+                <div class="reader-controls-center">
+                    <div class="lang-toggles">
+                        <button class="lang-btn active" data-lang="en">English</button>
+                        <button class="lang-btn" data-lang="hi">Hindi</button>
+                        <button class="lang-btn" data-lang="ur">Urdu</button>
+                    </div>
                 </div>
-                <button id="close-quran-btn"
-                    style="background:transparent; border:none; color:white; font-size:1.5rem; cursor:pointer;">&times;</button>
+
+                <div class="reader-controls-right">
+                    <div class="audio-player-box">
+                        <button id="play-pause-btn" class="play-btn-small" title="Play Recitation">
+                            <i class="fa-solid fa-play"></i>
+                        </button>
+                        <div class="audio-progress-container">
+                            <div id="audio-progress-bar"></div>
+                        </div>
+                    </div>
+                    <button id="close-quran-btn" class="close-btn">&times;</button>
+                </div>
             </div>
+
             <div class="reader-main">
                 <aside class="surah-sidebar">
-                    <div class="sidebar-tabs"
-                        style="display: flex; background: rgba(0,0,0,0.3); border-bottom: 1px solid rgba(255,255,255,0.1);">
-                        <button id="tab-surah" class="tab-btn active"
-                            style="flex:1; background:transparent; border:none; color:white; cursor:pointer; padding:15px 5px; font-weight:700; font-size: 0.75rem; text-transform:uppercase; letter-spacing:1px; border-bottom: 2px solid transparent;">Surah</button>
-                        <button id="tab-juz" class="tab-btn"
-                            style="flex:1; background:transparent; border:none; color:white; cursor:pointer; padding:15px 5px; font-weight:700; font-size: 0.75rem; text-transform:uppercase; letter-spacing:1px; border-bottom: 2px solid transparent;">Para
-                            (Juz)</button>
+                    <div class="sidebar-search">
+                        <input type="text" id="surah-search-input" placeholder="Search Surah...">
                     </div>
-                    <div id="surah-list-container" style="overflow-y: auto; height: calc(100% - 50px);">
+                    <div id="surah-list-container">
                         <div id="surah-list">
                             <!-- Surahs injected here -->
                         </div>
                     </div>
-                    <div id="juz-list-container" style="display:none; overflow-y: auto; height: calc(100% - 50px);">
-                        <div id="juz-list">
-                            <!-- 30 Juz injected here -->
-                        </div>
-                    </div>
                 </aside>
+
                 <section class="verse-view" id="quran-content">
-                    <!-- Verses injected here -->
+                    <!-- Verses injected here with Comments UI -->
                 </section>
             </div>
         </div>

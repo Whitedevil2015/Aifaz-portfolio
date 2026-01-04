@@ -435,6 +435,64 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.reveal-bottom').forEach(el => revealObserver.observe(el));
 
+    // --- Surah Index (Directory) ---
+    async function loadSurahDirectory() {
+        const grid = document.getElementById('surah-index-grid');
+        if (!grid) return;
+
+        try {
+            const res = await fetch('https://api.alquran.cloud/v1/surah');
+            const data = await res.json();
+
+            if (data.code === 200) {
+                grid.innerHTML = data.data.map((s, i) => `
+                    <div class="glass-container reveal-bottom" onclick="openReaderAndLoad(${s.number}, '${s.englishName}')"
+                         style="padding: 15px; cursor: pointer; text-align: center; border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s; transition-delay: ${i > 20 ? 0 : i * 0.05}s;">
+                        <span style="display:block; font-size: 0.8rem; color: var(--gold); margin-bottom: 5px;">${s.number}</span>
+                        <h4 style="margin: 0; font-size: 1rem; color: white;">${s.englishName}</h4>
+                        <span style="font-size: 0.75rem; opacity: 0.6;">${s.englishNameTranslation}</span>
+                    </div>
+                `).join('');
+
+                // Observe new elements
+                document.querySelectorAll('#surah-index-grid .reveal-bottom').forEach(el => revealObserver.observe(el));
+            }
+        } catch (e) { console.error("Index load failed"); }
+    }
+
+    // Helper to open reader from index
+    window.openReaderAndLoad = (num, name) => {
+        document.getElementById('quran-modal').style.display = 'flex';
+        loadSurahList(); // Ensure sidebar list is populated
+        window.loadSurah(num, name);
+    };
+
+    loadSurahDirectory();
+
+    // --- Azaan Player Logic ---
+    const azaanBtn = document.getElementById('play-azaan-btn');
+    const azaanAudio = document.getElementById('azaan-audio');
+
+    if (azaanBtn && azaanAudio) {
+        azaanBtn.addEventListener('click', () => {
+            if (azaanAudio.paused) {
+                azaanAudio.play();
+                azaanBtn.innerHTML = '<i class="fa-solid fa-stop"></i> Stop Azaan';
+                azaanBtn.classList.add('active'); // Add a glowing effect style if needed
+            } else {
+                azaanAudio.pause();
+                azaanAudio.currentTime = 0;
+                azaanBtn.innerHTML = '<i class="fa-solid fa-mosque"></i> Play Azaan (Makkah)';
+                azaanBtn.classList.remove('active');
+            }
+        });
+
+        azaanAudio.addEventListener('ended', () => {
+            azaanBtn.innerHTML = '<i class="fa-solid fa-mosque"></i> Play Azaan (Makkah)';
+            azaanBtn.classList.remove('active');
+        });
+    }
+
     // --- Asma-ul-Husna (Allah's names) ---
     async function initAsma() {
         const grid = document.getElementById('asma-grid');
@@ -444,11 +502,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await res.json();
             if (data.code === 200) {
                 grid.innerHTML = data.data.map((name, i) => `
-                    <div class="card-glass reveal-bottom" style="transition-delay: ${i * 0.05}s; text-align: center; padding: 25px;">
-                        <span style="color: var(--gold); font-size: 0.8rem; font-weight: 700; opacity: 0.6;">${name.number}</span>
-                        <h2 style="font-family: 'Amiri', serif; font-size: 2.2rem; color: var(--gold); margin: 10px 0;">${name.name}</h2>
-                        <h3 style="font-family: 'Cinzel', serif; font-size: 1.1rem; margin-bottom: 5px;">${name.transliteration}</h3>
-                        <p style="font-size: 0.85rem; opacity: 0.7; color: var(--accent); font-weight: 600;">${name.en.meaning}</p>
+                    <div class="card-glass asma-card reveal-bottom" style="transition-delay: ${i * 0.05}s;">
+                        <span class="asma-number">${name.number}</span>
+                        <div class="name-container-3d">
+                            <h2 class="name-3d">${name.name}</h2>
+                        </div>
+                        <h3 class="trans-3d">${name.transliteration}</h3>
+                        <p class="meaning-3d">${name.en.meaning}</p>
                     </div>
                 `).join('');
                 document.querySelectorAll('#asma-grid .reveal-bottom').forEach(el => revealObserver.observe(el));

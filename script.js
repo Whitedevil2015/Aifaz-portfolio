@@ -1,4 +1,74 @@
+// --- 40 Hadith Nawawi Data ---
+const hadithNawawi = [
+    {
+        id: 1,
+        arabic: "عَنْ أَمِيرِ الْمُؤْمِنِينَ أَبِي حَفْصٍ عُمَرَ بْنِ الْخَطَّابِ رَضِيَ اللهُ عَنْهُ قَالَ: سَمِعْتُ رَسُولَ اللَّهِ صلى الله عليه وسلم يَقُولُ: \" إِنَّمَا الْأَعْمَالُ بِالنِّيَّاتِ، وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى، فَمَنْ كَانَتْ هِجْرَتُهُ إِلَى اللَّهِ وَرَسُولِهِ فَهِجْرَتُهُ إِلَى اللَّهِ وَرَسُولِهِ، وَمَنْ كَانَتْ هِجْرَتُهُ لِدُنْيَا يُصِيبُهَا أَوْ امْرَأَةٍ يَنْكِحُهَا فَهِجْرَتُهُ إِلَى مَا هَاجَرَ إِلَيْهِ \".",
+        english: "Amir al-Mu'minin, Abu Hafs 'Umar bin al-Khattab (ra) said: I heard the Messenger of Allah (ﷺ) saying: \"Actions are according to intentions, and everyone will get what was intended. Whoever migrates with an intention for Allah and His Messenger, the migration will be for the sake of Allah and His Messenger. And whoever migrates for worldly gain or to marry a woman, then his migration will be for the sake of whatever he migrated for.\"",
+        ref: "Bukhari & Muslim"
+    },
+    {
+        id: 2,
+        arabic: "بَيْنَمَا نَحْنُ جُلُوسٌ عِنْدَ رَسُولِ اللَّهِ صلى الله عليه وسلم ذَاتَ يَوْمٍ، إِذْ طَلَعَ عَلَيْنَا رَجُلٌ شَدِيدُ بَيَاضِ الثِّيَابِ، شَدِيدُ سَوَادِ الشَّعْرِ، لَا يُرَى عَلَيْهِ أَثَرُ السَّفَرِ، وَلَا يَعْرِفُهُ مِنَّا أَحَدٌ، حَتَّى جَلَسَ إِلَى النَّبِيِّ صلى الله عليه وسلم ...",
+        english: "Also on the authority of Umar, who said: One day while we were sitting with the Messenger of Allah (ﷺ) there appeared before us a man whose clothes were exceedingly white and whose hair was exceedingly black; no signs of travel were to be seen on him and none of us knew him...",
+        ref: "Muslim"
+    },
+    {
+        id: 3,
+        arabic: "عَنْ أَبِي عَبْدِ الرَّحْمَنِ عَبْدِ اللَّهِ بْنِ عُمَرَ بْنِ الْخَطَّابِ رَضِيَ اللَّهُ عَنْهُمَا قَالَ: سَمِعْتُ رَسُولَ اللَّهِ صلى الله عليه وسلم يَقُولُ: \" بُنِيَ الْإِسْلَامُ عَلَى خَمْسٍ: شَهَادَةِ أَنْ لَا إِلَهَ إِلَّا اللَّهُ وَأَنَّ مُحَمَّدًا رَسُولُ اللَّهِ، وَإِقَامِ الصَّلَاةِ، وَإِيتَاءِ الزَّكَاةِ، وَحَجِّ الْبَيْتِ، وَصَوْمِ رَمَضَانَ \".",
+        english: "On the authority of Abu 'Abd ar-Rahman 'Abdullah bin 'Umar bin al-Khattab (ra) who said: I heard the Messenger of Allah (ﷺ) say: \"Islam is built upon five [pillars]: testifying that there is no god but Allah and that Muhammad is the Messenger of Allah, establishing the prayer, giving the Zakah, making the pilgrimage to the House, and fasting in Ramadan.\"",
+        ref: "Bukhari & Muslim"
+    }
+];
+
 document.addEventListener('DOMContentLoaded', () => {
+
+    // --- Hadith Integation ---
+    window.openHadith = (collection) => {
+        const modal = document.getElementById('quran-modal');
+        const title = document.getElementById('reader-title');
+        const info = document.getElementById('surah-info');
+        const content = document.getElementById('quran-content');
+
+        // Hide specific Quran elements
+        document.querySelector('.reader-controls-center').style.opacity = '0'; // Hide lang toggle
+        document.querySelector('.audio-player-box').style.display = 'none';
+        document.querySelector('.surah-sidebar').style.display = 'none';
+        document.querySelector('.verse-view').style.width = '100%'; // Full width
+        document.querySelector('.verse-view').style.padding = '40px';
+
+        modal.style.display = 'flex';
+
+        if (collection === 'nawawi') {
+            title.textContent = "40 Hadith Nawawi";
+            info.textContent = "Imam An-Nawawi | 42 Authentic Hadith";
+
+            content.innerHTML = hadithNawawi.map(h => `
+                <div class="verse-block">
+                     <div class="verse-header" style="justify-content:center; border-bottom:none;">
+                        <span class="verse-num" style="width:auto; padding:0 15px; border-radius:15px;">Hadith ${h.id}</span>
+                     </div>
+                     <div class="arabic-txt" style="font-size:2rem; line-height:2;">${h.arabic}</div>
+                     <div class="translation-txt" style="text-align:center; max-width:900px;">
+                        ${h.english}
+                        <p style="margin-top:20px; color:var(--gold); font-size:0.9rem; font-weight:700;">Reference: ${h.ref}</p>
+                     </div>
+                </div>
+            `).join('');
+        }
+    };
+
+    // Reset Modal on Close (to fix Quran layout)
+    document.getElementById('close-quran-btn').addEventListener('click', () => {
+        document.getElementById('quran-modal').style.display = 'none';
+        // Restore Quran defaults
+        document.querySelector('.reader-controls-center').style.opacity = '1';
+        document.querySelector('.audio-player-box').style.display = 'flex';
+        document.querySelector('.surah-sidebar').style.display = 'block';
+        document.querySelector('.verse-view').style.width = '';
+        document.querySelector('.verse-view').style.padding = '';
+    });
+
+
 
     // --- Core UI Elements ---
     const overlay = document.getElementById('portal-overlay');
@@ -73,6 +143,88 @@ document.addEventListener('DOMContentLoaded', () => {
         'ur': 'ur.jalandhry',
         'pa': 'pa.ahmed'
     };
+
+    // --- Intersection Observer for Animations ---
+    const animatedElements = document.querySelectorAll('.testimonial-card, .value-card, .trust-item');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-in');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    animatedElements.forEach(el => {
+        observer.observe(el);
+    });
+
+    // --- 3D Kaba Model (Three.js) ---
+    function initThreeJS() {
+        const container = document.getElementById('canvas-container');
+        if (!container) return;
+
+        // Scene
+        const scene = new THREE.Scene();
+
+        // Camera
+        const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100); // aspect ratio 1 for square container
+        camera.position.z = 5;
+
+        // Renderer
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(400, 400); // Matches CSS size roughly
+        container.insertBefore(renderer.domElement, container.firstChild);
+
+        // Kaba Geometry (Base Cube)
+        const geometry = new THREE.BoxGeometry(2, 2.2, 2);
+        const material = new THREE.MeshStandardMaterial({
+            color: 0x111111, // Very dark grey/black
+            roughness: 0.8
+        });
+        const kaba = new THREE.Mesh(geometry, material);
+
+        // Gold Stripe Geometry
+        const stripeGeo = new THREE.BoxGeometry(2.05, 0.4, 2.05); // Slightly larger
+        const stripeMat = new THREE.MeshStandardMaterial({
+            color: 0xD4AF37, // Gold
+            metalness: 0.8,
+            roughness: 0.2
+        });
+        const stripe = new THREE.Mesh(stripeGeo, stripeMat);
+        stripe.position.y = 0.5; // Upper part of Kaba
+
+        // Group them
+        const kabaGroup = new THREE.Group();
+        kabaGroup.add(kaba);
+        kabaGroup.add(stripe);
+        scene.add(kabaGroup);
+
+        // Lights
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+
+        const dirLight = new THREE.DirectionalLight(0xffd700, 0.8);
+        dirLight.position.set(5, 5, 5);
+        scene.add(dirLight);
+
+        // Animation Loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            kabaGroup.rotation.y += 0.005; // Slow rotation
+            kabaGroup.rotation.x = Math.sin(Date.now() * 0.001) * 0.05; // Gentle float tilt
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+    }
+
+    // Initialize 3D only if element exists
+    if (document.getElementById('canvas-container')) {
+        initThreeJS();
+    }
 
     document.querySelectorAll('.lang-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -364,6 +516,64 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { threshold: 0.1 });
 
     document.querySelectorAll('.reveal-bottom').forEach(el => revealObserver.observe(el));
+
+    // --- Surah Index (Directory) ---
+    async function loadSurahDirectory() {
+        const grid = document.getElementById('surah-index-grid');
+        if (!grid) return;
+
+        try {
+            const res = await fetch('https://api.alquran.cloud/v1/surah');
+            const data = await res.json();
+
+            if (data.code === 200) {
+                grid.innerHTML = data.data.map((s, i) => `
+                    <div class="glass-container reveal-bottom" onclick="openReaderAndLoad(${s.number}, '${s.englishName}')"
+                         style="padding: 15px; cursor: pointer; text-align: center; border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s; transition-delay: ${i > 20 ? 0 : i * 0.05}s;">
+                        <span style="display:block; font-size: 0.8rem; color: var(--gold); margin-bottom: 5px;">${s.number}</span>
+                        <h4 style="margin: 0; font-size: 1rem; color: white;">${s.englishName}</h4>
+                        <span style="font-size: 0.75rem; opacity: 0.6;">${s.englishNameTranslation}</span>
+                    </div>
+                `).join('');
+
+                // Observe new elements
+                document.querySelectorAll('#surah-index-grid .reveal-bottom').forEach(el => revealObserver.observe(el));
+            }
+        } catch (e) { console.error("Index load failed"); }
+    }
+
+    // Helper to open reader from index
+    window.openReaderAndLoad = (num, name) => {
+        document.getElementById('quran-modal').style.display = 'flex';
+        loadSurahList(); // Ensure sidebar list is populated
+        window.loadSurah(num, name);
+    };
+
+    loadSurahDirectory();
+
+    // --- Azaan Player Logic ---
+    const azaanBtn = document.getElementById('play-azaan-btn');
+    const azaanAudio = document.getElementById('azaan-audio');
+
+    if (azaanBtn && azaanAudio) {
+        azaanBtn.addEventListener('click', () => {
+            if (azaanAudio.paused) {
+                azaanAudio.play();
+                azaanBtn.innerHTML = '<i class="fa-solid fa-stop"></i> Stop Azaan';
+                azaanBtn.classList.add('active'); // Add a glowing effect style if needed
+            } else {
+                azaanAudio.pause();
+                azaanAudio.currentTime = 0;
+                azaanBtn.innerHTML = '<i class="fa-solid fa-mosque"></i> Play Azaan (Makkah)';
+                azaanBtn.classList.remove('active');
+            }
+        });
+
+        azaanAudio.addEventListener('ended', () => {
+            azaanBtn.innerHTML = '<i class="fa-solid fa-mosque"></i> Play Azaan (Makkah)';
+            azaanBtn.classList.remove('active');
+        });
+    }
 
     // --- Asma-ul-Husna (Allah's names) ---
     async function initAsma() {

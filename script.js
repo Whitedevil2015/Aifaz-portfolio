@@ -1,4 +1,74 @@
+// --- 40 Hadith Nawawi Data ---
+const hadithNawawi = [
+    {
+        id: 1,
+        arabic: "عَنْ أَمِيرِ الْمُؤْمِنِينَ أَبِي حَفْصٍ عُمَرَ بْنِ الْخَطَّابِ رَضِيَ اللهُ عَنْهُ قَالَ: سَمِعْتُ رَسُولَ اللَّهِ صلى الله عليه وسلم يَقُولُ: \" إِنَّمَا الْأَعْمَالُ بِالنِّيَّاتِ، وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى، فَمَنْ كَانَتْ هِجْرَتُهُ إِلَى اللَّهِ وَرَسُولِهِ فَهِجْرَتُهُ إِلَى اللَّهِ وَرَسُولِهِ، وَمَنْ كَانَتْ هِجْرَتُهُ لِدُنْيَا يُصِيبُهَا أَوْ امْرَأَةٍ يَنْكِحُهَا فَهِجْرَتُهُ إِلَى مَا هَاجَرَ إِلَيْهِ \".",
+        english: "Amir al-Mu'minin, Abu Hafs 'Umar bin al-Khattab (ra) said: I heard the Messenger of Allah (ﷺ) saying: \"Actions are according to intentions, and everyone will get what was intended. Whoever migrates with an intention for Allah and His Messenger, the migration will be for the sake of Allah and His Messenger. And whoever migrates for worldly gain or to marry a woman, then his migration will be for the sake of whatever he migrated for.\"",
+        ref: "Bukhari & Muslim"
+    },
+    {
+        id: 2,
+        arabic: "بَيْنَمَا نَحْنُ جُلُوسٌ عِنْدَ رَسُولِ اللَّهِ صلى الله عليه وسلم ذَاتَ يَوْمٍ، إِذْ طَلَعَ عَلَيْنَا رَجُلٌ شَدِيدُ بَيَاضِ الثِّيَابِ، شَدِيدُ سَوَادِ الشَّعْرِ، لَا يُرَى عَلَيْهِ أَثَرُ السَّفَرِ، وَلَا يَعْرِفُهُ مِنَّا أَحَدٌ، حَتَّى جَلَسَ إِلَى النَّبِيِّ صلى الله عليه وسلم ...",
+        english: "Also on the authority of Umar, who said: One day while we were sitting with the Messenger of Allah (ﷺ) there appeared before us a man whose clothes were exceedingly white and whose hair was exceedingly black; no signs of travel were to be seen on him and none of us knew him...",
+        ref: "Muslim"
+    },
+    {
+        id: 3,
+        arabic: "عَنْ أَبِي عَبْدِ الرَّحْمَنِ عَبْدِ اللَّهِ بْنِ عُمَرَ بْنِ الْخَطَّابِ رَضِيَ اللَّهُ عَنْهُمَا قَالَ: سَمِعْتُ رَسُولَ اللَّهِ صلى الله عليه وسلم يَقُولُ: \" بُنِيَ الْإِسْلَامُ عَلَى خَمْسٍ: شَهَادَةِ أَنْ لَا إِلَهَ إِلَّا اللَّهُ وَأَنَّ مُحَمَّدًا رَسُولُ اللَّهِ، وَإِقَامِ الصَّلَاةِ، وَإِيتَاءِ الزَّكَاةِ، وَحَجِّ الْبَيْتِ، وَصَوْمِ رَمَضَانَ \".",
+        english: "On the authority of Abu 'Abd ar-Rahman 'Abdullah bin 'Umar bin al-Khattab (ra) who said: I heard the Messenger of Allah (ﷺ) say: \"Islam is built upon five [pillars]: testifying that there is no god but Allah and that Muhammad is the Messenger of Allah, establishing the prayer, giving the Zakah, making the pilgrimage to the House, and fasting in Ramadan.\"",
+        ref: "Bukhari & Muslim"
+    }
+];
+
 document.addEventListener('DOMContentLoaded', () => {
+
+    // --- Hadith Integation ---
+    window.openHadith = (collection) => {
+        const modal = document.getElementById('quran-modal');
+        const title = document.getElementById('reader-title');
+        const info = document.getElementById('surah-info');
+        const content = document.getElementById('quran-content');
+
+        // Hide specific Quran elements
+        document.querySelector('.reader-controls-center').style.opacity = '0'; // Hide lang toggle
+        document.querySelector('.audio-player-box').style.display = 'none';
+        document.querySelector('.surah-sidebar').style.display = 'none';
+        document.querySelector('.verse-view').style.width = '100%'; // Full width
+        document.querySelector('.verse-view').style.padding = '40px';
+
+        modal.style.display = 'flex';
+
+        if (collection === 'nawawi') {
+            title.textContent = "40 Hadith Nawawi";
+            info.textContent = "Imam An-Nawawi | 42 Authentic Hadith";
+
+            content.innerHTML = hadithNawawi.map(h => `
+                <div class="verse-block">
+                     <div class="verse-header" style="justify-content:center; border-bottom:none;">
+                        <span class="verse-num" style="width:auto; padding:0 15px; border-radius:15px;">Hadith ${h.id}</span>
+                     </div>
+                     <div class="arabic-txt" style="font-size:2rem; line-height:2;">${h.arabic}</div>
+                     <div class="translation-txt" style="text-align:center; max-width:900px;">
+                        ${h.english}
+                        <p style="margin-top:20px; color:var(--gold); font-size:0.9rem; font-weight:700;">Reference: ${h.ref}</p>
+                     </div>
+                </div>
+            `).join('');
+        }
+    };
+
+    // Reset Modal on Close (to fix Quran layout)
+    document.getElementById('close-quran-btn').addEventListener('click', () => {
+        document.getElementById('quran-modal').style.display = 'none';
+        // Restore Quran defaults
+        document.querySelector('.reader-controls-center').style.opacity = '1';
+        document.querySelector('.audio-player-box').style.display = 'flex';
+        document.querySelector('.surah-sidebar').style.display = 'block';
+        document.querySelector('.verse-view').style.width = '';
+        document.querySelector('.verse-view').style.padding = '';
+    });
+
+
 
     // --- Core UI Elements ---
     const overlay = document.getElementById('portal-overlay');
@@ -69,20 +139,105 @@ document.addEventListener('DOMContentLoaded', () => {
     const langEditions = {
         'en': 'en.sahih',
         'ar': 'ar.arayan',
-        'hi': 'hi.hindi',
+        'hi': 'hi.farooq',
         'ur': 'ur.jalandhry',
         'pa': 'pa.ahmed'
     };
 
+    // --- Intersection Observer for Animations ---
+    const animatedElements = document.querySelectorAll('.testimonial-card, .value-card, .trust-item');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-in');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    animatedElements.forEach(el => {
+        observer.observe(el);
+    });
+
+    // --- 3D Kaba Model (Three.js) ---
+    function initThreeJS() {
+        const container = document.getElementById('canvas-container');
+        if (!container) return;
+
+        // Scene
+        const scene = new THREE.Scene();
+
+        // Camera
+        const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100); // aspect ratio 1 for square container
+        camera.position.z = 5;
+
+        // Renderer
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(400, 400); // Matches CSS size roughly
+        container.insertBefore(renderer.domElement, container.firstChild);
+
+        // Kaba Geometry (Base Cube)
+        const geometry = new THREE.BoxGeometry(2, 2.2, 2);
+        const material = new THREE.MeshStandardMaterial({
+            color: 0x111111, // Very dark grey/black
+            roughness: 0.8
+        });
+        const kaba = new THREE.Mesh(geometry, material);
+
+        // Gold Stripe Geometry
+        const stripeGeo = new THREE.BoxGeometry(2.05, 0.4, 2.05); // Slightly larger
+        const stripeMat = new THREE.MeshStandardMaterial({
+            color: 0xD4AF37, // Gold
+            metalness: 0.8,
+            roughness: 0.2
+        });
+        const stripe = new THREE.Mesh(stripeGeo, stripeMat);
+        stripe.position.y = 0.5; // Upper part of Kaba
+
+        // Group them
+        const kabaGroup = new THREE.Group();
+        kabaGroup.add(kaba);
+        kabaGroup.add(stripe);
+        scene.add(kabaGroup);
+
+        // Lights
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+
+        const dirLight = new THREE.DirectionalLight(0xffd700, 0.8);
+        dirLight.position.set(5, 5, 5);
+        scene.add(dirLight);
+
+        // Animation Loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            kabaGroup.rotation.y += 0.005; // Slow rotation
+            kabaGroup.rotation.x = Math.sin(Date.now() * 0.001) * 0.05; // Gentle float tilt
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+    }
+
+    // Initialize 3D only if element exists
+    if (document.getElementById('canvas-container')) {
+        initThreeJS();
+    }
+
     document.querySelectorAll('.lang-btn').forEach(btn => {
         btn.addEventListener('click', () => {
+            // Visual toggle
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+
+            // Logic
             currentLang = btn.getAttribute('data-lang');
-            // If reader is open, reload content
-            if (quranModal.style.display === 'flex') {
-                const name = readerTitle.textContent.replace('Surah ', '');
-                window.loadSurah(currentSurah, name);
+            if (quranModal.style.display !== 'none') {
+                // Reload current surah with new language
+                const surahNameStr = readerTitle.textContent.replace('Surah ', '');
+                window.loadSurah(currentSurah, surahNameStr);
             }
         });
     });
@@ -163,9 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const openReaderBtn = document.getElementById('open-quran-reader');
     const closeReaderBtn = document.getElementById('close-quran-btn');
     const surahListEl = document.getElementById('surah-list');
-    const juzListEl = document.getElementById('juz-list');
     const surahContainer = document.getElementById('surah-list-container');
-    const juzContainer = document.getElementById('juz-list-container');
     const quranContentEl = document.getElementById('quran-content');
     const playPauseBtn = document.getElementById('play-pause-btn');
     const audioPlayer = document.getElementById('quran-audio');
@@ -173,29 +326,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const progressSpan = document.getElementById('surah-info');
 
     const tabSurah = document.getElementById('tab-surah');
-    const tabJuz = document.getElementById('tab-juz');
 
     let currentSurah = 1;
-    let currentJuz = 1;
     let viewMode = 'surah';
 
     // Tab Switching Logic
     tabSurah?.addEventListener('click', () => {
         viewMode = 'surah';
         tabSurah.classList.add('active');
-        tabJuz?.classList.remove('active');
         if (surahContainer) surahContainer.style.display = 'block';
-        if (juzContainer) juzContainer.style.display = 'none';
         if (surahListEl && surahListEl.children.length === 0) loadSurahList();
-    });
-
-    tabJuz?.addEventListener('click', () => {
-        viewMode = 'juz';
-        tabJuz.classList.add('active');
-        tabSurah?.classList.remove('active');
-        if (juzContainer) juzContainer.style.display = 'block';
-        if (surahContainer) surahContainer.style.display = 'none';
-        if (juzListEl && juzListEl.children.length === 0) loadJuzList();
     });
 
     async function loadSurahList() {
@@ -205,7 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (surahListEl) {
                 surahListEl.innerHTML = data.data.map(s => `
                     <div class="surah-item ${s.number === currentSurah ? 'active' : ''}" onclick="window.loadSurah(${s.number}, '${s.englishName}')">
-                        <span style="opacity:0.5; margin-right:10px;">${s.number}</span>
+                        <span>${s.number}</span>
                         ${s.englishName}
                     </div>
                 `).join('');
@@ -213,68 +353,90 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (e) { console.log("List load failed", e); }
     }
 
-    function loadJuzList() {
-        if (juzListEl) {
-            juzListEl.innerHTML = Array.from({ length: 30 }, (_, i) => i + 1).map(j => `
-                <div class="surah-item ${j === currentJuz ? 'active' : ''}" onclick="window.loadJuz(${j})">
-                    <span style="opacity:0.5; margin-right:10px;">PARA</span>
-                    Juz ${j}
-                </div>
-            `).join('');
-        }
-    }
-
+    // --- Content Fetching & Rendering ---
     async function fetchContent(endpoint) {
-        quranContentEl.innerHTML = '<div style="padding:100px; text-align:center;"><i class="fa-solid fa-circle-notch fa-spin fa-2x"></i><p style="margin-top:15px; font-size:0.8rem; opacity:0.6;">Fetching Sacred Verses...</p></div>';
+        quranContentEl.innerHTML = '<div style="padding:100px; text-align:center;"><i class="fa-solid fa-circle-notch fa-spin fa-2x" style="color:var(--gold);"></i></div>';
         try {
             const edition = langEditions[currentLang] || 'en.sahih';
+
+            // Fetch Arabic and Translation in parallel
             const [arRes, transRes] = await Promise.all([
-                fetch(`https://api.alquran.cloud/v1/${endpoint}`),
+                fetch(`https://api.alquran.cloud/v1/${endpoint}/quran-uthmani`),
                 fetch(`https://api.alquran.cloud/v1/${endpoint}/${edition}`)
             ]);
+
             const ar = await arRes.json();
             const trans = await transRes.json();
+
+            if (!ar.data || !trans.data) throw new Error("Invalid Data");
+
             const ayahs = ar.data.ayahs;
             const transAyahs = trans.data.ayahs;
 
-            quranContentEl.innerHTML = ayahs.map((ayah, i) => `
+            // Render Verses
+            quranContentEl.innerHTML = ayahs.map((ayah, i) => {
+                const verseKey = `note-${currentSurah}-${ayah.numberInSurah}`;
+                const existingNote = localStorage.getItem(verseKey) || '';
+
+                return `
                 <div class="verse-block">
+                    <div class="verse-header">
+                        <span class="verse-num">${ayah.numberInSurah}</span>
+                        <div class="verse-actions">
+                           <button class="verse-btn" onclick="toggleNoteBox('${verseKey}')"><i class="far fa-comment-alt"></i> Reflection</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Arabic Text -->
                     <div class="arabic-txt">${ayah.text}</div>
-                    <div class="translation-txt">${transAyahs[i].text}</div>
+                    
+                    <!-- Translation Text -->
+                    <div class="translation-txt" data-lang="${currentLang}">${transAyahs[i].text}</div>
+                    
+                    <!-- Comment Section -->
+                    <div id="box-${verseKey}" class="reflection-box ${existingNote ? 'active' : ''}" style="display:${existingNote ? 'block' : 'none'};">
+                        <textarea id="input-${verseKey}" placeholder="Write your reflection here...">${existingNote}</textarea>
+                        <button onclick="saveNote('${verseKey}')">Save Note</button>
+                    </div>
                 </div>
-            `).join('');
-            progressSpan.textContent = `${ayahs.length} Ayahs | Language: ${currentLang.toUpperCase()}`;
+            `}).join('');
+
+            progressSpan.textContent = `${ayahs.length} Ayahs | ${ar.data.englishName}`;
             quranContentEl.scrollTo(0, 0);
-        } catch (e) { quranContentEl.innerHTML = "<p style='text-align:center; padding:50px;'>Content loading failed...</p>"; }
+
+        } catch (e) {
+            console.error(e);
+            quranContentEl.innerHTML = "<p style='text-align:center; padding:50px;'>Content loading failed.</p>";
+        }
     }
+
+    // --- Helper for Notes ---
+    window.toggleNoteBox = (key) => {
+        const box = document.getElementById(`box-${key}`);
+        if (box.style.display === 'none') {
+            box.style.display = 'block';
+        } else {
+            box.style.display = 'none';
+        }
+    };
+
+    window.saveNote = (key) => {
+        const val = document.getElementById(`input-${key}`).value;
+        localStorage.setItem(key, val);
+        alert('Reflection saved locally.');
+    };
 
     window.loadSurah = async (num, name) => {
         currentSurah = num;
         readerTitle.textContent = `Surah ${name}`;
         fetchContent(`surah/${num}`);
 
-        // Highlight active surah in sidebar
-        document.querySelectorAll('#surah-list .surah-item').forEach(i => {
-            i.classList.toggle('active', i.textContent.includes(name));
-        });
+        // Highlight active
+        document.querySelectorAll('.surah-item').forEach(i => i.classList.remove('active'));
+        // Find by text match logic omitted for brevity, relying on reload for now
 
-        // Fixed Reciter: Mishary Alafasy
+        // Audio Setup
         audioPlayer.src = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${num}.mp3`;
-        playPauseBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
-        audioPlayer.pause();
-    };
-
-    window.loadJuz = async (num) => {
-        currentJuz = num;
-        readerTitle.textContent = `Quran Para (Juz) ${num}`;
-        fetchContent(`juz/${num}`);
-
-        // Highlight active juz in sidebar
-        document.querySelectorAll('#juz-list .surah-item').forEach(i => {
-            i.classList.toggle('active', i.textContent.includes(`Juz ${num}`));
-        });
-
-        audioPlayer.src = ""; // Audio for full juz is not available in single file easily
         playPauseBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
         audioPlayer.pause();
     };
@@ -355,84 +517,63 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.reveal-bottom').forEach(el => revealObserver.observe(el));
 
-    // --- Hijri Calendar Logic ---
-    let currentHMonth = 0;
-    let currentHYear = 0;
-    const hMonthNameEl = document.getElementById('hijri-month-name');
-    const hYearEl = document.getElementById('hijri-year');
-    const gDateEl = document.getElementById('gregorian-date');
-    const calGrid = document.getElementById('hijri-calendar-grid');
-    const prevMBtn = document.getElementById('prev-month');
-    const nextMBtn = document.getElementById('next-month');
+    // --- Surah Index (Directory) ---
+    async function loadSurahDirectory() {
+        const grid = document.getElementById('surah-index-grid');
+        if (!grid) return;
 
-    async function initCalendar() {
         try {
-            const res = await fetch('https://api.aladhan.com/v1/gToH');
+            const res = await fetch('https://api.alquran.cloud/v1/surah');
             const data = await res.json();
+
             if (data.code === 200) {
-                currentHMonth = parseInt(data.data.hijri.month.number);
-                currentHYear = parseInt(data.data.hijri.year);
-                fetchCalendar(currentHMonth, currentHYear);
+                grid.innerHTML = data.data.map((s, i) => `
+                    <div class="glass-container reveal-bottom" onclick="openReaderAndLoad(${s.number}, '${s.englishName}')"
+                         style="padding: 15px; cursor: pointer; text-align: center; border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s; transition-delay: ${i > 20 ? 0 : i * 0.05}s;">
+                        <span style="display:block; font-size: 0.8rem; color: var(--gold); margin-bottom: 5px;">${s.number}</span>
+                        <h4 style="margin: 0; font-size: 1rem; color: white;">${s.englishName}</h4>
+                        <span style="font-size: 0.75rem; opacity: 0.6;">${s.englishNameTranslation}</span>
+                    </div>
+                `).join('');
+
+                // Observe new elements
+                document.querySelectorAll('#surah-index-grid .reveal-bottom').forEach(el => revealObserver.observe(el));
             }
-        } catch (e) { console.error("Cal init failed", e); }
+        } catch (e) { console.error("Index load failed"); }
     }
 
-    async function fetchCalendar(month, year) {
-        if (hMonthNameEl) hMonthNameEl.textContent = '...';
-        try {
-            const city = cityInput?.value.trim() || 'Mumbai';
-            const country = countryInput?.value.trim() || 'India';
-            const res = await fetch(`https://api.aladhan.com/v1/hCalendarByCity/${year}/${month}?city=${city}&country=${country}&method=2`);
-            const data = await res.json();
-            if (data.code === 200) renderCal(data.data);
-        } catch (e) { console.error("Cal fetch failed", e); }
-    }
+    // Helper to open reader from index
+    window.openReaderAndLoad = (num, name) => {
+        document.getElementById('quran-modal').style.display = 'flex';
+        loadSurahList(); // Ensure sidebar list is populated
+        window.loadSurah(num, name);
+    };
 
-    function renderCal(days) {
-        if (!days || !calGrid) return;
-        const first = days[0];
-        if (hMonthNameEl) hMonthNameEl.textContent = first.hijri.month.en;
-        if (hYearEl) hYearEl.textContent = `${first.hijri.year} AH`;
-        if (gDateEl) gDateEl.textContent = `${first.gregorian.month.en} ${first.gregorian.year}`;
+    loadSurahDirectory();
 
-        calGrid.innerHTML = '';
-        ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(d => {
-            const h = document.createElement('div');
-            h.className = 'calendar-day-header';
-            h.textContent = d;
-            calGrid.appendChild(h);
+    // --- Azaan Player Logic ---
+    const azaanBtn = document.getElementById('play-azaan-btn');
+    const azaanAudio = document.getElementById('azaan-audio');
+
+    if (azaanBtn && azaanAudio) {
+        azaanBtn.addEventListener('click', () => {
+            if (azaanAudio.paused) {
+                azaanAudio.play();
+                azaanBtn.innerHTML = '<i class="fa-solid fa-stop"></i> Stop Azaan';
+                azaanBtn.classList.add('active'); // Add a glowing effect style if needed
+            } else {
+                azaanAudio.pause();
+                azaanAudio.currentTime = 0;
+                azaanBtn.innerHTML = '<i class="fa-solid fa-mosque"></i> Play Azaan (Makkah)';
+                azaanBtn.classList.remove('active');
+            }
         });
 
-        const startOffset = parseInt(days[0].gregorian.weekday.number) % 7;
-        for (let i = 0; i < startOffset; i++) {
-            const e = document.createElement('div');
-            e.className = 'calendar-day empty';
-            calGrid.appendChild(e);
-        }
-
-        const now = new Date();
-        const nowStr = `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`;
-
-        days.forEach(day => {
-            const d = document.createElement('div');
-            d.className = 'calendar-day';
-            if (day.gregorian.date === nowStr) d.classList.add('active');
-            d.innerHTML = `<span class="hijri-num">${day.hijri.day}</span><span class="greg-num">${day.gregorian.day}</span>`;
-            calGrid.appendChild(d);
+        azaanAudio.addEventListener('ended', () => {
+            azaanBtn.innerHTML = '<i class="fa-solid fa-mosque"></i> Play Azaan (Makkah)';
+            azaanBtn.classList.remove('active');
         });
     }
-
-    prevMBtn?.addEventListener('click', () => {
-        currentHMonth--;
-        if (currentHMonth < 1) { currentHMonth = 12; currentHYear--; }
-        fetchCalendar(currentHMonth, currentHYear);
-    });
-
-    nextMBtn?.addEventListener('click', () => {
-        currentHMonth++;
-        if (currentHMonth > 12) { currentHMonth = 1; currentHYear++; }
-        fetchCalendar(currentHMonth, currentHYear);
-    });
 
     // --- Asma-ul-Husna (Allah's names) ---
     async function initAsma() {
@@ -443,11 +584,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await res.json();
             if (data.code === 200) {
                 grid.innerHTML = data.data.map((name, i) => `
-                    <div class="card-glass reveal-bottom" style="transition-delay: ${i * 0.05}s; text-align: center; padding: 25px;">
-                        <span style="color: var(--gold); font-size: 0.8rem; font-weight: 700; opacity: 0.6;">${name.number}</span>
-                        <h2 style="font-family: 'Amiri', serif; font-size: 2.2rem; color: var(--gold); margin: 10px 0;">${name.name}</h2>
-                        <h3 style="font-family: 'Cinzel', serif; font-size: 1.1rem; margin-bottom: 5px;">${name.transliteration}</h3>
-                        <p style="font-size: 0.85rem; opacity: 0.7; color: var(--accent); font-weight: 600;">${name.en.meaning}</p>
+                    <div class="card-glass asma-card reveal-bottom" style="transition-delay: ${i * 0.05}s;">
+                        <span class="asma-number">${name.number}</span>
+                        <div class="name-container-3d">
+                            <h2 class="name-3d">${name.name}</h2>
+                        </div>
+                        <h3 class="trans-3d">${name.transliteration}</h3>
+                        <p class="meaning-3d">${name.en.meaning}</p>
                     </div>
                 `).join('');
                 document.querySelectorAll('#asma-grid .reveal-bottom').forEach(el => revealObserver.observe(el));
@@ -456,25 +599,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     initAsma();
-    initCalendar();
-
-    // --- Store Interactions (Merged) ---
-    const addToCartBtns = document.querySelectorAll('.btn-add-cart, .product-info button, .btn-secondary');
-    addToCartBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            // Only if it is strictly an add to cart type button
-            if (btn.textContent.includes('Add to Cart') || btn.textContent.includes('Shop')) {
-                const originalText = btn.textContent;
-                btn.textContent = "Added!";
-                btn.style.background = "var(--gold)";
-                btn.style.color = "black";
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                    btn.style.background = "";
-                    btn.style.color = "";
-                }, 1500);
-            }
-        });
-    });
 
 });

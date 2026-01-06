@@ -30,10 +30,19 @@ A unified single-page application combining a spiritual Islamic companion with a
 *   **Frontend**: HTML5, Vanilla JavaScript, CSS3 (Glassmorphism Variables).
 *   **APIs**: Aladhan (Times/Calendar), Al Quran Cloud (Text/Audio).
 *   **Deployment**: Vercel (Auto-deployed from `main`).
-*   **Design**: "Crystal Glass" dark theme with Gold (#F59E0B) and Emerald (#10B981) accents.
+# AIFAZ ISLAMIC | Premium Sunnah Store
 
-## 🚀 Deployment
-This project is configured for Vercel. Pushing to `main` triggers a live update.
+## Overview
+A luxury e-commerce portal dedicated to authentic Sunnah products, including Ouds, Prayer Mats, and Modest Apparel.
+
+## Features
+*   **Islamic Theme**: Gold & Emerald aesthetic with geometric patterns.
+*   **3D Hero Experience**: Interactive 3D Kaba model using Three.js.
+*   **Dynamic Cart**: Functional shopping cart with real-time tracking.
+*   **Values Section**: Highlighting Adab, Ehsan, and Amanah.
+
+## Deployment
+Automatically deploys via Vercel on push to `main`.
 
 ## 📄 License
 © 2026 Aifaz Portal. All Rights Reserved.

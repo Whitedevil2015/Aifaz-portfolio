@@ -601,3 +601,54 @@ document.addEventListener('DOMContentLoaded', () => {
     initAsma();
 
 });
+
+// --- 3D Tilt Effect Logic (Vanilla JS) ---
+class VanillaTilt {
+    constructor(element, settings = {}) {
+        this.element = element;
+        this.settings = Object.assign({
+            max: 15, // max tilt rotation (deg)
+            perspective: 1000,
+            scale: 1.05,
+            speed: 400,
+            glare: true,
+            "max-glare": 0.3
+        }, settings);
+        
+        this.init();
+    }
+
+    init() {
+        this.element.addEventListener("mouseenter", this.onMouseEnter.bind(this));
+        this.element.addEventListener("mousemove", this.onMouseMove.bind(this));
+        this.element.addEventListener("mouseleave", this.onMouseLeave.bind(this));
+    }
+
+    onMouseEnter() {
+        this.element.style.transition = `none`;
+    }
+
+    onMouseMove(event) {
+        const rect = this.element.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        const xPct = x / rect.width;
+        const yPct = y / rect.height;
+        
+        const xTilt = (0.5 - yPct) * this.settings.max * 2;
+        const yTilt = (xPct - 0.5) * this.settings.max * 2;
+
+        this.element.style.transform = `perspective(${this.settings.perspective}px) rotateX(${xTilt}deg) rotateY(${yTilt}deg) scale(${this.settings.scale})`;
+    }
+
+    onMouseLeave() {
+        this.element.style.transition = `transform ${this.settings.speed}ms cubic-bezier(.03,.98,.52,.99)`;
+        this.element.style.transform = `perspective(${this.settings.perspective}px) rotateX(0deg) rotateY(0deg) scale(1)`;
+    }
+}
+
+// Initialize 3D Tilt
+document.addEventListener('DOMContentLoaded', () => {
+    const cards = document.querySelectorAll('.prayer-card, .asma-card, .glass-container, .value-card');
+    cards.forEach(card => new VanillaTilt(card));
+});

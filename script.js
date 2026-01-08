@@ -159,72 +159,9 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(el);
     });
 
-    // --- 3D Kaba Model (Three.js) ---
-    function initThreeJS() {
-        const container = document.getElementById('canvas-container');
-        if (!container) return;
+    // --- 3D Kaba Model (Removed) ---
+    // User requested removal of 3D Kaba animation.
 
-        // Scene
-        const scene = new THREE.Scene();
-
-        // Camera
-        const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100); // aspect ratio 1 for square container
-        camera.position.z = 5;
-
-        // Renderer
-        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-        renderer.setSize(400, 400); // Matches CSS size roughly
-        container.insertBefore(renderer.domElement, container.firstChild);
-
-        // Kaba Geometry (Base Cube)
-        const geometry = new THREE.BoxGeometry(2, 2.2, 2);
-        const material = new THREE.MeshStandardMaterial({
-            color: 0x111111, // Very dark grey/black
-            roughness: 0.8
-        });
-        const kaba = new THREE.Mesh(geometry, material);
-
-        // Gold Stripe Geometry
-        const stripeGeo = new THREE.BoxGeometry(2.05, 0.4, 2.05); // Slightly larger
-        const stripeMat = new THREE.MeshStandardMaterial({
-            color: 0xD4AF37, // Gold
-            metalness: 0.8,
-            roughness: 0.2
-        });
-        const stripe = new THREE.Mesh(stripeGeo, stripeMat);
-        stripe.position.y = 0.5; // Upper part of Kaba
-
-        // Group them
-        const kabaGroup = new THREE.Group();
-        kabaGroup.add(kaba);
-        kabaGroup.add(stripe);
-        scene.add(kabaGroup);
-
-        // Lights
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-        scene.add(ambientLight);
-
-        const dirLight = new THREE.DirectionalLight(0xffd700, 0.8);
-        dirLight.position.set(5, 5, 5);
-        scene.add(dirLight);
-
-        // Animation Loop
-        function animate() {
-            requestAnimationFrame(animate);
-
-            kabaGroup.rotation.y += 0.005; // Slow rotation
-            kabaGroup.rotation.x = Math.sin(Date.now() * 0.001) * 0.05; // Gentle float tilt
-
-            renderer.render(scene, camera);
-        }
-
-        animate();
-    }
-
-    // Initialize 3D only if element exists
-    if (document.getElementById('canvas-container')) {
-        initThreeJS();
-    }
 
     document.querySelectorAll('.lang-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -259,6 +196,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const g = data.data.gregorian;
                 if (hDateEl) hDateEl.textContent = `${h.day} ${h.month.en} ${h.year} AH`;
                 if (gDateEl) gDateEl.textContent = `${g.day} ${g.month.en} ${g.year}`;
+
+                // Bento Date Update
+                const bentoHijri = document.getElementById('bento-hijri');
+                const bentoGreg = document.getElementById('bento-greg');
+                if (bentoHijri) bentoHijri.textContent = `${h.day} ${h.month.en} ${h.year}`;
+                if (bentoGreg) bentoGreg.textContent = `${g.day} ${g.month.en} ${g.year}`;
             }
         } catch (e) { console.error("Date fetch failed"); }
     }
@@ -295,6 +238,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('time-asr').textContent = clock.Asr;
                 document.getElementById('time-maghrib').textContent = clock.Maghrib;
                 document.getElementById('time-isha').textContent = clock.Isha;
+
+                // Save for Atmosphere Logic
+                window.todayPrayers = {
+                    Fajr: clock.Fajr,
+                    Sunrise: clock.Sunrise,
+                    Dhuhr: clock.Dhuhr,
+                    Asr: clock.Asr,
+                    Maghrib: clock.Maghrib,
+                    Isha: clock.Isha
+                };
+                updateAtmosphere(); // Force update immediately
 
                 if (locDisplay) locDisplay.innerHTML = `Currently viewing: <strong style="color:var(--gold);">${city}, ${country}</strong> | <span style="color:var(--accent)">${apiDate}</span>`;
             }
@@ -343,23 +297,55 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await fetch('https://api.alquran.cloud/v1/surah');
             const data = await res.json();
             if (surahListEl) {
-                surahListEl.innerHTML = data.data.map(s => `
-                    <div class="surah-item ${s.number === currentSurah ? 'active' : ''}" onclick="window.loadSurah(${s.number}, '${s.englishName}')">
-                        <span>${s.number}</span>
-                        ${s.englishName}
-                    </div>
-                `).join('');
+                // Store data globally for search filtering
+                window.allSurahs = data.data;
+                renderSurahList(window.allSurahs);
             }
         } catch (e) { console.log("List load failed", e); }
     }
 
+    function renderSurahList(surahs) {
+        if (!surahListEl) return;
+        surahListEl.innerHTML = surahs.map(s => `
+            <div class="surah-item ${s.number === currentSurah ? 'active' : ''}" 
+                 onclick="window.loadSurah(${s.number}, '${s.englishName}')"
+                 data-number="${s.number}">
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <span style="display:inline-block; width:25px; height:25px; background:rgba(212,175,55,0.2); border-radius:50%; text-align:center; line-height:25px; font-size:0.8rem; color:#D4AF37;">${s.number}</span>
+                    <span style="font-weight:500;">${s.englishName}</span>
+                </div>
+                <span style="font-size:0.8rem; opacity:0.6;">${s.englishNameTranslation}</span>
+            </div>
+        `).join('');
+    }
+
+    // Search Functionality
+    const searchInput = document.getElementById('research-search');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            if (!window.allSurahs) return;
+            const filtered = window.allSurahs.filter(s =>
+                s.englishName.toLowerCase().includes(term) ||
+                s.englishNameTranslation.toLowerCase().includes(term) ||
+                String(s.number).includes(term)
+            );
+            renderSurahList(filtered);
+        });
+    }
+
     // --- Content Fetching & Rendering ---
     async function fetchContent(endpoint) {
-        quranContentEl.innerHTML = '<div style="padding:100px; text-align:center;"><i class="fa-solid fa-circle-notch fa-spin fa-2x" style="color:var(--gold);"></i></div>';
+        // Clear both panes
+        const arabicPane = document.querySelector('.pane-arabic-view');
+        const englishPane = document.querySelector('.pane-english-view');
+
+        if (arabicPane) arabicPane.innerHTML = '<div style="text-align:center; padding:50px;"><i class="fas fa-circle-notch fa-spin"></i> Loading...</div>';
+        if (englishPane) englishPane.innerHTML = '<div style="text-align:center; padding:50px;"><i class="fas fa-circle-notch fa-spin"></i> Loading...</div>';
+
         try {
             const edition = langEditions[currentLang] || 'en.sahih';
 
-            // Fetch Arabic and Translation in parallel
             const [arRes, transRes] = await Promise.all([
                 fetch(`https://api.alquran.cloud/v1/${endpoint}/quran-uthmani`),
                 fetch(`https://api.alquran.cloud/v1/${endpoint}/${edition}`)
@@ -373,40 +359,52 @@ document.addEventListener('DOMContentLoaded', () => {
             const ayahs = ar.data.ayahs;
             const transAyahs = trans.data.ayahs;
 
-            // Render Verses
-            quranContentEl.innerHTML = ayahs.map((ayah, i) => {
-                const verseKey = `note-${currentSurah}-${ayah.numberInSurah}`;
-                const existingNote = localStorage.getItem(verseKey) || '';
-
-                return `
-                <div class="verse-block">
-                    <div class="verse-header">
-                        <span class="verse-num">${ayah.numberInSurah}</span>
-                        <div class="verse-actions">
-                           <button class="verse-btn" onclick="toggleNoteBox('${verseKey}')"><i class="far fa-comment-alt"></i> Reflection</button>
-                        </div>
+            // 1. Render Right Pane (Arabic - RTL)
+            if (arabicPane) {
+                arabicPane.innerHTML = ayahs.map(ayah => `
+                    <div class="arabic-verse-text">
+                        ${ayah.text} <span style="color:#D4AF37; font-size:1.5rem;">(${ayah.numberInSurah})</span>
                     </div>
-                    
-                    <!-- Arabic Text -->
-                    <div class="arabic-txt">${ayah.text}</div>
-                    
-                    <!-- Translation Text -->
-                    <div class="translation-txt" data-lang="${currentLang}">${transAyahs[i].text}</div>
-                    
-                    <!-- Comment Section -->
-                    <div id="box-${verseKey}" class="reflection-box ${existingNote ? 'active' : ''}" style="display:${existingNote ? 'block' : 'none'};">
-                        <textarea id="input-${verseKey}" placeholder="Write your reflection here...">${existingNote}</textarea>
-                        <button onclick="saveNote('${verseKey}')">Save Note</button>
-                    </div>
-                </div>
-            `}).join('');
+                `).join('');
+            }
 
-            progressSpan.textContent = `${ayahs.length} Ayahs | ${ar.data.englishName}`;
-            quranContentEl.scrollTo(0, 0);
+            // 2. Render Left Pane (Translation - LTR)
+            if (englishPane) {
+                englishPane.innerHTML = transAyahs.map(ayah => `
+                    <div class="english-verse-text">
+                        <span style="color:#D4AF37; font-weight:bold; margin-right:10px;">${ayah.numberInSurah}.</span>
+                        ${ayah.text}
+                    </div>
+                `).join('');
+            }
+
+            // Sync Scroll (Simple Proportional Sync)
+            if (arabicPane && englishPane) {
+                let isScrolling = false;
+
+                arabicPane.onscroll = () => {
+                    if (isScrolling) return;
+                    isScrolling = true;
+                    const percentage = arabicPane.scrollTop / (arabicPane.scrollHeight - arabicPane.clientHeight);
+                    englishPane.scrollTop = percentage * (englishPane.scrollHeight - englishPane.clientHeight);
+                    setTimeout(() => isScrolling = false, 50);
+                };
+
+                englishPane.onscroll = () => {
+                    if (isScrolling) return;
+                    isScrolling = true;
+                    const percentage = englishPane.scrollTop / (englishPane.scrollHeight - englishPane.clientHeight);
+                    arabicPane.scrollTop = percentage * (arabicPane.scrollHeight - arabicPane.clientHeight);
+                    setTimeout(() => isScrolling = false, 50);
+                };
+            }
+
+            // Update Progress
+            if (progressSpan) progressSpan.textContent = `${ayahs.length} Ayahs | ${ar.data.englishName}`;
 
         } catch (e) {
             console.error(e);
-            quranContentEl.innerHTML = "<p style='text-align:center; padding:50px;'>Content loading failed.</p>";
+            if (arabicPane) arabicPane.innerHTML = "<p style='padding:20px;'>Failed to load.</p>";
         }
     }
 
@@ -429,6 +427,12 @@ document.addEventListener('DOMContentLoaded', () => {
     window.loadSurah = async (num, name) => {
         currentSurah = num;
         readerTitle.textContent = `Surah ${name}`;
+
+        // Update Active Class in Sidebar
+        document.querySelectorAll('.surah-item').forEach(item => item.classList.remove('active'));
+        const activeItem = document.querySelector(`.surah-item[data-number="${num}"]`);
+        if (activeItem) activeItem.classList.add('active');
+
         fetchContent(`surah/${num}`);
 
         // Highlight active
@@ -575,6 +579,77 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- Flight Bar Logic (Next Prayer Countdown) ---
+    function updateFlightBar() {
+        if (!window.todayPrayers) return;
+
+        const now = new Date();
+        const next = calculateNextPrayer(window.todayPrayers);
+
+        if (next) {
+            const diff = next.time - now;
+            const h = Math.floor(diff / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            const timerStr = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+
+            const nameEl = document.getElementById('flight-next-name');
+            const timerEl = document.getElementById('flight-countdown');
+
+            if (nameEl) nameEl.textContent = next.name;
+            if (timerEl) timerEl.textContent = timerStr;
+
+            // Header Update (Spiritual Dashboard)
+            const headerTimer = document.getElementById('header-countdown');
+            const headerName = document.getElementById('header-next-name');
+            if (headerTimer) headerTimer.textContent = timerStr;
+            if (headerName) headerName.textContent = next.name;
+
+            // Legacy/Portal widgets (if present)
+            const widgetTimer = document.getElementById('flight-countdown-widget');
+            const widgetName = document.getElementById('flight-next-name-widget');
+            if (widgetTimer) widgetTimer.textContent = timerStr;
+            if (widgetName) widgetName.textContent = next.name;
+        }
+    }
+
+    function calculateNextPrayer(prayers) {
+        const now = new Date();
+        const prayerList = [
+            { name: 'Fajr', time: prayers.Fajr },
+            { name: 'Dhuhr', time: prayers.Dhuhr },
+            { name: 'Asr', time: prayers.Asr },
+            { name: 'Maghrib', time: prayers.Maghrib },
+            { name: 'Isha', time: prayers.Isha }
+        ];
+
+        for (let p of prayerList) {
+            const pTime = new Date();
+            const [h, m] = p.time.split(':').map(Number);
+            pTime.setHours(h, m, 0);
+
+            if (pTime > now) {
+                return { name: p.name, time: pTime };
+            }
+        }
+
+        // If all passed, next is Fajr tomorrow (Handle simple case)
+        const tomorrowFajr = new Date();
+        tomorrowFajr.setDate(tomorrowFajr.getDate() + 1);
+        const [h, m] = prayers.Fajr.split(':').map(Number);
+        tomorrowFajr.setHours(h, m, 0);
+        return { name: 'Fajr', time: tomorrowFajr };
+    }
+
+    // Run Updates
+    setInterval(() => {
+        updateHeroTime();
+        updateAtmosphere();
+        updateFlightBar();
+        // Quote refresh can be less frequent or static
+    }, 1000);
+
     // --- Asma-ul-Husna (Allah's names) ---
     async function initAsma() {
         const grid = document.getElementById('asma-grid');
@@ -600,6 +675,61 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initAsma();
 
+    // --- Tasbeeh Logic ---
+    let tasbeehCount = 0;
+
+    // New Widget Function (Dhikr 1)
+    window.incrementWidgetTasbeeh = () => {
+        tasbeehCount++;
+        // Haptic feedback (if supported)
+        if (navigator.vibrate) navigator.vibrate(10);
+
+        const dhikr1 = document.getElementById('dhikr-1-count');
+        if (dhikr1) dhikr1.textContent = tasbeehCount;
+
+        // Legacy
+        const widgetDisplay = document.getElementById('widget-tasbeeh-count');
+        if (widgetDisplay) widgetDisplay.textContent = tasbeehCount;
+    };
+
+    // Legacy support (if elements exist)
+    const tasbeehBtn = document.getElementById('tasbeeh-btn');
+    const tasbeehDisplay = document.getElementById('tasbeeh-count');
+
+    if (tasbeehBtn && tasbeehDisplay) {
+        tasbeehBtn.addEventListener('click', () => {
+            tasbeehCount++;
+            tasbeehDisplay.textContent = tasbeehCount;
+            // Pulse animation
+            tasbeehDisplay.style.transform = "scale(1.2)";
+            setTimeout(() => tasbeehDisplay.style.transform = "scale(1)", 100);
+
+            // Sync widget
+            const widgetDisplay = document.getElementById('widget-tasbeeh-count');
+            if (widgetDisplay) widgetDisplay.textContent = tasbeehCount;
+        });
+    }
+
+    window.resetTasbeeh = () => {
+        tasbeehCount = 0;
+        if (tasbeehDisplay) tasbeehDisplay.textContent = 0;
+        const widgetDisplay = document.getElementById('widget-tasbeeh-count');
+        if (widgetDisplay) widgetDisplay.textContent = 0;
+    };
+
+    // --- Qibla Mock Logic (Compass) ---
+    // Update both compasses if they exist
+    const arrow = document.getElementById('qibla-arrow');
+    const widgetArrow = document.getElementById('widget-qibla-arrow');
+
+    const setQibla = (deg) => {
+        if (arrow) arrow.style.transform = `translateX(-50%) rotate(${deg}deg)`;
+        if (widgetArrow) widgetArrow.style.transform = `translateX(-50%) rotate(${deg}deg)`;
+    };
+
+    setQibla(45); // Init
+
+
 });
 
 // --- 3D Tilt Effect Logic (Vanilla JS) ---
@@ -614,7 +744,7 @@ class VanillaTilt {
             glare: true,
             "max-glare": 0.3
         }, settings);
-        
+
         this.init();
     }
 
@@ -634,7 +764,7 @@ class VanillaTilt {
         const y = event.clientY - rect.top;
         const xPct = x / rect.width;
         const yPct = y / rect.height;
-        
+
         const xTilt = (0.5 - yPct) * this.settings.max * 2;
         const yTilt = (xPct - 0.5) * this.settings.max * 2;
 
@@ -652,3 +782,39 @@ document.addEventListener('DOMContentLoaded', () => {
     const cards = document.querySelectorAll('.prayer-card, .asma-card, .glass-container, .value-card');
     cards.forEach(card => new VanillaTilt(card));
 });
+
+/* --- Dynamic Hero Logic (Bento Grid) --- */
+function updateHeroTime() {
+    const now = new Date();
+    const hours = now.getHours();
+    const isNight = hours < 6 || hours > 18;
+
+    // Toggle Mode Class on Body
+    if (isNight) {
+        document.body.classList.add('night-mode');
+        document.body.classList.remove('morning-mode');
+    } else {
+        document.body.classList.remove('night-mode');
+        document.body.classList.add('morning-mode');
+    }
+
+    // Update Time Text
+    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const timeEl = document.getElementById('current-time-display');
+    if (timeEl) timeEl.textContent = timeStr;
+
+    // Update Next Prayer logic (Simplified for demo)
+    const timerEl = document.getElementById('next-prayer-timer');
+    if (timerEl) {
+        // Mock countdown logic
+        const nextPrayer = new Date();
+        nextPrayer.setHours(hours + 1);
+        nextPrayer.setMinutes(0);
+        const diff = nextPrayer - now;
+        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        timerEl.textContent = `00:${m < 10 ? '0' + m : m}`;
+    }
+}
+
+// Initial call
+updateHeroTime();

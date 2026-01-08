@@ -29,66 +29,113 @@
     <div class="islamic-pattern-bg"></div>
 
     <nav class="navbar">
-        <div class="container nav-container">
-            <a href="#" class="logo">EHSAAN<span class="highlight">PORTAL</span></a>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#prayer-times">Prayer Times</a></li>
-                <li><a href="#quran-index">Quran</a></li>
-                <li><a href="#asma-ul-husna">99 Names</a></li>
-                <li><a href="#about">Our Values</a></li>
-            </ul>
-            <div class="nav-actions">
-                <div class="hamburger">
-                    <i class="fas fa-bars"></i>
-                </div>
+        <a href="#" class="logo" style="font-family: 'Outfit', sans-serif; letter-spacing: -1px;">Aifaz<span
+                class="highlight" style="font-weight: 300; opacity: 0.8;">.in</span></a>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#prayer-times">Prayer Times</a></li>
+            <li><a href="#quran-index">Quran</a></li>
+            <li><a href="#asma-ul-husna">99 Names</a></li>
+            <li><a href="#prayer-times">Prayer Times</a></li>
+            <li><a href="#about">Our Values</a></li>
+        </ul>
+        <div class="nav-actions">
+            <div class="hamburger">
+                <i class="fas fa-bars"></i>
             </div>
+        </div>
         </div>
     </nav>
 
-    <header id="home" class="hero">
-        <div class="container hero-container">
-            <div class="hero-content">
-                <span class="hero-badge-3d">Bismillah - Begin with Excellence</span>
-                <div id="quran-quote" class="quote-container">
-                    <i class="fas fa-quran quote-icon"></i>
-                    <p class="quote-text"></p>
-                    <p class="quote-reference"></p>
-                </div>
-                <h1>Welcome to <br><span class="text-gradient">Ehsaan Portal</span></h1>
-                <p>Experience the beauty of Excellence (Ehsan). A dedicated sanctuary for the Holy Quran, Prayer Times,
-                    and Islamic Learning.</p>
-                <div class="hero-btns">
-                    <a href="#quran-index" class="btn btn-primary">Read Quran</a>
-                    <a href="#prayer-times" class="btn btn-secondary">Prayer Times</a>
-                </div>
-                <div class="stats">
-                    <div class="stat-item">
-                        <span class="stat-number">114</span>
-                        <span class="stat-label">Surahs</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">99</span>
-                        <span class="stat-label">Names of Allah</span>
-                    </div>
-                </div>
+
+    <!-- Main Portal Dashboard (Image Match Layout) -->
+    <!-- Spiritual Dashboard (Native Feel) -->
+
+    <!-- Top Native Header -->
+    <header class="dashboard-header">
+        <div class="location-badge">
+            <i class="fas fa-map-marker-alt"></i>
+            <span id="header-location">Mecca, SA</span>
+        </div>
+        <div class="prayer-countdown-native">
+            <div class="next-prayer-label">Next: <span id="header-next-name">Loading...</span></div>
+            <div class="next-prayer-timer" id="header-countdown">--:--:--</div>
+        </div>
+    </header>
+
+    <main class="dashboard-container">
+        <!-- 1. Daily Verse Card -->
+        <div class="verse-card">
+            <div class="verse-arabic" id="daily-verse-ar">
+                بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيم
             </div>
-            <div class="hero-image">
-                <div id="canvas-container" class="product-showcase">
-                    <!-- 3D Model will be injected here -->
-                    <div class="glow-effect"></div>
-                    <div class="floating-card card-1">
-                        <i class="fas fa-star-and-crescent"></i>
-                        <span>Spiritually Crafted</span>
-                    </div>
-                    <div class="floating-card card-2">
-                        <i class="fas fa-award"></i>
-                        <span>Premium Quality</span>
-                    </div>
+            <div class="verse-english" id="daily-verse-en">
+                "In the name of Allah, the Entirely Merciful, the Especially Merciful."
+            </div>
+            <button class="share-btn" onclick="alert('Sharing not implemented')">
+                <i class="fas fa-share-alt"></i> Share to Story
+            </button>
+            <div style="position:absolute; bottom:10px; right:20px; font-size:0.8rem; color:var(--text-muted);"
+                id="daily-ref">Al-Fatiha 1:1</div>
+
+            <!-- Watermark -->
+            <i class="fas fa-quran"
+                style="position:absolute; top:-20px; left:-20px; font-size:8rem; opacity:0.03; color:var(--primary-color);"></i>
+        </div>
+
+        <!-- 2. Sunnah Tracker -->
+        <div class="tracker-section">
+            <h3>Sunnah Tracker</h3>
+            <div class="habit-list">
+                <div class="habit-item" onclick="this.classList.toggle('completed')">
+                    <div class="checkbox-circle"></div>
+                    <span class="habit-text">Miswak before Salah</span>
+                </div>
+                <div class="habit-item" onclick="this.classList.toggle('completed')">
+                    <div class="checkbox-circle"></div>
+                    <span class="habit-text">Duha Prayer (2 Rakat)</span>
+                </div>
+                <div class="habit-item" onclick="this.classList.toggle('completed')">
+                    <div class="checkbox-circle"></div>
+                    <span class="habit-text">Morning Adhkar</span>
+                </div>
+                <div class="habit-item" onclick="this.classList.toggle('completed')">
+                    <div class="checkbox-circle"></div>
+                    <span class="habit-text">Surah Al-Mulk before Sleep</span>
                 </div>
             </div>
         </div>
-    </header>
+
+        <!-- 3. Quick Dhikr (Horizontal Scroll) -->
+        <div class="dhikr-section">
+            <h3>Quick Dhikr</h3>
+            <div class="dhikr-scroll">
+
+                <div class="dhikr-btn-card" onclick="window.incrementWidgetTasbeeh()">
+                    <span class="dhikr-arabic">سُبْحَانَ الله</span>
+                    <span class="dhikr-label">SubhanAllah</span>
+                    <div style="margin-top:10px; font-weight:700; color:var(--accent-color);" id="dhikr-1-count">0</div>
+                </div>
+
+                <div class="dhikr-btn-card" onclick="/* distinct counter logic needed */">
+                    <span class="dhikr-arabic">الْحَمْدُ لِلَّه</span>
+                    <span class="dhikr-label">Alhamdulillah</span>
+                </div>
+
+                <div class="dhikr-btn-card">
+                    <span class="dhikr-arabic">اللهُ أَكْبَر</span>
+                    <span class="dhikr-label">Allahu Akbar</span>
+                </div>
+
+                <div class="dhikr-btn-card">
+                    <span class="dhikr-arabic">أَسْتَغْفِرُ اللَّه</span>
+                    <span class="dhikr-label">Astaghfirullah</span>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
 
     <!-- Prayer Times Section -->
     <section id="prayer-times" class="portal-section">
@@ -210,7 +257,7 @@
                         <i class="fas fa-envelope"></i>
                         <div>
                             <h4>Email Us</h4>
-                            <p>salam@aifazislamic.com</p>
+                            <p>aifazpathan18@gmail.com</p>
                         </div>
                     </div>
                     <div class="info-item">
@@ -224,7 +271,7 @@
                         <i class="fab fa-whatsapp"></i>
                         <div>
                             <h4>WhatsApp</h4>
-                            <p>+1 234 567 890</p>
+                            <p>+91 7620266321</p>
                         </div>
                     </div>
                 </div>
@@ -267,43 +314,81 @@
     </footer>
 
     <!-- Quran Reader Modal -->
+    <!-- Persistent Prayer Status Bar -->
+    <div id="flight-bar">
+        <div class="flight-info">
+            <span class="flight-label">Next Prayer</span>
+            <span class="flight-main" id="flight-next-name">Loading...</span>
+        </div>
+        <div class="flight-timer" id="flight-countdown">--:--:--</div>
+    </div>
+
+    <!-- Research Portal Modal -->
     <div id="quran-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="reader-title" style="font-family:'Amiri'; font-size:1.5rem; color: var(--gold);">The Noble Quran
-                </h3>
-                <div class="reader-controls-center" style="display:flex; gap:10px;">
-                    <button class="lang-btn active" data-lang="en"
-                        style="background:none; border:1px solid #D4AF37; color:white; padding:5px 10px; border-radius:4px; cursor:pointer;">English</button>
-                    <button class="lang-btn" data-lang="ur"
-                        style="background:none; border:1px solid #D4AF37; color:white; padding:5px 10px; border-radius:4px; cursor:pointer;">Urdu</button>
+        <div class="modal-content research-portal-layout">
+
+            <!-- Scholar Sidebar -->
+            <aside class="surah-sidebar">
+                <div class="sidebar-header" style="padding: 20px; border-bottom: 2px solid #D4AF37;">
+                    <h3 style="color: #D4AF37; font-family: 'Amiri', serif; margin-bottom: 5px;">Al-Maktoum</h3>
+                    <small style="opacity: 0.7;">Research & Study</small>
                 </div>
-                <div class="audio-player-box">
-                    <span id="surah-info" style="font-size:0.8rem; color:var(--text-light);"></span>
-                    <div class="player-controls">
-                        <button id="play-pause-btn"><i class="fas fa-play"></i></button>
-                    </div>
-                    <audio id="quran-audio"></audio>
+                <div class="research-search-container">
+                    <input type="text" id="research-search" class="research-input" placeholder="Search Noble Quran...">
                 </div>
-                <button id="close-quran-btn"><i class="fas fa-times"></i></button>
+                <!-- Surah List -->
+                <div id="surah-list-container" class="surah-list-container" style="flex: 1; overflow-y: auto;">
+                    <div id="surah-list"></div>
+                </div>
+            </aside>
+
+            <!-- Main Split Screen Area -->
+            <div class="research-main">
+                <div class="modal-header">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <h2 id="reader-title" style="color: #D4AF37; font-family: 'Amiri', serif; margin: 0;">Surah
+                            Al-Fatiha</h2>
+                        <span id="surah-info" style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">Meccan • 7
+                            Ayahs</span>
+                    </div>
+
+                    <div class="header-tools" style="display: flex; gap: 15px; align-items: center;">
+                        <!-- Translation Toggle -->
+                        <div class="lang-toggle" style="background: rgba(0,0,0,0.3); border-radius: 4px; padding: 2px;">
+                            <button class="lang-btn active" data-lang="en"
+                                style="padding: 5px 12px; border: none; background: transparent; color: #fff; cursor: pointer;">EN</button>
+                            <button class="lang-btn" data-lang="ur"
+                                style="padding: 5px 12px; border: none; background: transparent; color: #fff; cursor: pointer;">UR</button>
+                        </div>
+
+                        <!-- Audio Player -->
+                        <div class="audio-mini-player"
+                            style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.3); padding: 5px 10px; border-radius: 20px; border: 1px solid rgba(212, 175, 55, 0.2);">
+                            <button id="play-pause-btn"
+                                style="background: none; border: none; color: #D4AF37; cursor: pointer;"><i
+                                    class="fas fa-play"></i></button>
+                            <audio id="quran-audio"></audio>
+                        </div>
+
+                        <button id="close-quran-btn"
+                            style="background: none; border: none; color: #fff; opacity: 0.5; font-size: 1.2rem; cursor: pointer;"><i
+                                class="fas fa-times"></i></button>
+                    </div>
+                </div>
+
+                <div class="modal-body">
+                    <!-- Right: Arabic Pane (Parchment) -->
+                    <div class="pane-arabic-view">
+                        <!-- Content Injected via JS -->
+                    </div>
+
+                    <!-- Left: Translation Pane (Clean) -->
+                    <div class="pane-english-view">
+                        <!-- Content Injected via JS -->
+                    </div>
+                </div>
             </div>
-            <div class="modal-body">
-                <aside class="surah-sidebar">
-                    <div class="tabs"
-                        style="display:flex; padding:10px; border-bottom:1px solid rgba(255,255,255,0.1);">
-                        <button id="tab-surah" class="active"
-                            style="flex:1; background:none; border:none; color:white; cursor:pointer; font-weight:bold;">Surahs</button>
-                    </div>
-                    <div id="surah-list-container" class="surah-list-container">
-                        <div id="surah-list"></div>
-                    </div>
-                </aside>
-                <main class="verse-view">
-                    <div id="quran-content">
-                        <!-- Verses go here -->
-                    </div>
-                </main>
-            </div>
+
         </div>
     </div>
 

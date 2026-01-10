@@ -148,6 +148,66 @@
             </div>
 
         </section>
+    <main>
+        <!-- Horizontal Scroll Cards -->
+        <section class="quick-access-scroller">
+            <div class="scroll-track">
+                
+                <!-- Daily Verse Card -->
+                <div class="feature-card verse-card">
+                    <div class="card-icon"><i class="fas fa-book-open"></i></div>
+                    <h3>Daily Verse</h3>
+                    <p class="arabic-preview">...Loading</p>
+                    <button class="card-btn">Read</button>
+                    <div class="card-bg-glow"></div>
+                </div>
+
+                <!-- 99 Names Card -->
+                <div class="feature-card names-card">
+                     <div class="card-icon"><i class="fas fa-star-and-crescent"></i></div>
+                    <h3>Asma-ul-Husna</h3>
+                    <p>Discover the 99 attributes of Allah.</p>
+                    <button class="card-btn">Explore</button>
+                </div>
+
+                 <!-- Tasbeeh Card -->
+                 <div class="feature-card tasbeeh-card">
+                    <div class="card-icon"><i class="fas fa-fingerprint"></i></div>
+                    <h3>Digital Tasbeeh</h3>
+                    <div class="tasbeeh-counter" id="tasbeeh-count">0</div>
+                    <button class="card-btn" onclick="incrementTasbeeh()">Tap</button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Prayer Times Grid -->
+        <section class="prayer-section" id="prayer">
+            <h2 class="section-heading">Prayer Times</h2>
+            <div class="prayer-grid">
+                <div class="prayer-box active">
+                    <span>Fajr</span>
+                    <h3 id="time-fajr">05:30</h3>
+                </div>
+                <div class="prayer-box">
+                    <span>Dhuhr</span>
+                    <h3 id="time-dhuhr">12:45</h3>
+                </div>
+                <div class="prayer-box">
+                    <span>Asr</span>
+                    <h3 id="time-asr">16:15</h3>
+                </div>
+                <div class="prayer-box">
+                    <span>Maghrib</span>
+                    <h3 id="time-maghrib">18:50</h3>
+                </div>
+                <div class="prayer-box">
+                    <span>Isha</span>
+                    <h3 id="time-isha">20:15</h3>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <script src="script.js"></script>

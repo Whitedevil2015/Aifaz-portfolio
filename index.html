@@ -1,226 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Portfolio of Aifaz Khan, a dedicated Banking Customer Service Professional committed to excellence in financial client relations.">
-    <title>Aifaz Khan | Banking Customer Service Professional</title>
-
-    <!-- Fonts -->
+    <title>Crystal Quran | Divine Revelation</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@300;400;500;600&display=swap"
-        rel="stylesheet">
-
-    <!-- Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Outfit:wght@300;400;600&family=Cinzel:wght@600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Styles -->
-    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <nav class="navbar">
-        <div class="container nav-container">
-            <a href="#" class="logo">Aifaz.<span class="highlight">Khan</span></a>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About Me</a></li>
-                <li><a href="#expertise">Expertise</a></li>
-                <li><a href="#contact" class="btn-primary-outline">Contact Me</a></li>
-            </ul>
-            <div class="hamburger">
-                <i class="fas fa-bars"></i>
-            </div>
+
+    <div class="ambient-bg"></div>
+
+    <nav class="crystal-nav">
+        <div class="logo">QURAN<span class="highlight">KAREEM</span></div>
+        <div class="nav-links">
+            <button class="nav-btn active"><i class="fas fa-book-open"></i> Read</button>
+            <button class="nav-btn"><i class="fas fa-bookmark"></i> Bookmarks</button>
+            <button class="nav-btn"><i class="fas fa-cog"></i> Settings</button>
         </div>
     </nav>
 
-    <header id="home" class="hero">
-        <div class="container hero-container">
-            <div class="hero-content">
-                <span class="badge">Banking & Financial Services</span>
-                <div id="quran-quote" class="quote-container">
-                    <i class="fas fa-quote-left quote-icon"></i>
-                    <p class="quote-text"></p>
-                    <p class="quote-reference"></p>
-                </div>
-                <h1>Excellence in <br><span class="text-gradient">Customer Service</span></h1>
-                <p>Hello, I'm Aifaz Khan. I specialize in building trust, resolving complex financial inquiries, and
-                    delivering exceptional banking experiences to every client.</p>
-                <div class="hero-btns">
-                    <a href="#contact" class="btn btn-primary">Get in Touch</a>
-                    <a href="#about" class="btn btn-secondary">My Journey</a>
-                </div>
-                <div class="stats">
-                    <div class="stat-item">
-                        <span class="stat-number">5+</span>
-                        <span class="stat-label">Years Exp.</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">100%</span>
-                        <span class="stat-label">Client Satisfaction</span>
-                    </div>
-                </div>
+    <main class="quran-layout">
+        
+        <!-- Sidebar: Surah List -->
+        <aside class="surah-sidebar glass-panel">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="surah-search" placeholder="Search Surah...">
             </div>
-            <div class="hero-image">
-                <div class="image-wrapper">
-                    <img src="assets/profile.png" alt="Aifaz Khan - Banking Professional">
-                    <div class="floating-card card-1">
-                        <i class="fas fa-check-circle"></i>
-                        <span>Problem Solver</span>
-                    </div>
-                    <div class="floating-card card-2">
-                        <i class="fas fa-shield-alt"></i>
-                        <span>Trusted Advisor</span>
-                    </div>
-                </div>
+            <div class="surah-list" id="surah-list-container">
+                <!-- Populated via JS -->
             </div>
-        </div>
-    </header>
+        </aside>
 
-    <section id="about" class="about">
-        <div class="container about-container">
-            <div class="section-header">
-                <h2 class="section-title">About Me</h2>
-                <p class="section-subtitle">Dedicated to Financial Wellness</p>
-            </div>
-            <div class="about-content">
-                <div class="about-text">
-                    <p>With a strong foundation in the banking sector, I have dedicated my career to serving customers
-                        with integrity and precision. I understand that behind every transaction is a person with goals
-                        and concerns.</p>
-                    <p>My approach combines deep product knowledge with empathetic communication. Whether it's assisting
-                        with account management, resolving discrepancies, or advising on financial products, I
-                        prioritize clarity and customer satisfaction.</p>
-                    <ul class="skills-list">
-                        <li><i class="fas fa-check"></i> Conflict Resolution</li>
-                        <li><i class="fas fa-check"></i> Financial Product Knowledge</li>
-                        <li><i class="fas fa-check"></i> CRM Software Proficiency</li>
-                        <li><i class="fas fa-check"></i> Regulatory Compliance</li>
-                        <li><i class="fas fa-check"></i> Effective Communication</li>
-                        <li><i class="fas fa-check"></i> Team Collaboration</li>
-                    </ul>
+        <!-- Main Reader: Display Area -->
+        <section class="reader-area">
+            
+            <!-- Sticky Header for Reader -->
+            <div class="reader-header glass-panel">
+                <div class="surah-info">
+                    <h1 id="current-surah-title">Al-Fatiha</h1>
+                    <span id="current-surah-meta">The Opener • 7 Ayahs • Makki</span>
+                </div>
+                <div class="reader-actions">
+                    <button class="action-btn" title="Audio"><i class="fas fa-play"></i></button>
+                    <button class="action-btn" title="Favorite"><i class="far fa-heart"></i></button>
+                    <button class="action-btn" title="Info"><i class="fas fa-info-circle"></i></button>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <section id="expertise" class="expertise">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">My Expertise</h2>
-                <p class="section-subtitle">How I Add Value</p>
-            </div>
-            <div class="expertise-grid">
-                <div class="expertise-card">
-                    <div class="icon-box">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <h3>Client Relations</h3>
-                    <p>Building long-term relationships through active listening and personalized service strategies
-                        that boost retention.</p>
+            <!-- Scrollable Verses -->
+            <div class="verses-container" id="verses-display">
+                
+                <div class="bismillah-header">
+                    ﷽
                 </div>
-                <div class="expertise-card">
-                    <div class="icon-box">
-                        <i class="fas fa-headset"></i>
-                    </div>
-                    <h3>Inquiry Management</h3>
-                    <p>Efficiently handling high volumes of customer queries across multiple channels while maintaining
-                        quality standards.</p>
-                </div>
-                <div class="expertise-card">
-                    <div class="icon-box">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3>Financial Advisory</h3>
-                    <p>Guiding customers through various banking products to find solutions that best fit their
-                        financial needs.</p>
-                </div>
-                <div class="expertise-card">
-                    <div class="icon-box">
-                        <i class="fas fa-hand-holding-usd"></i>
-                    </div>
-                    <h3>Ops & Compliance</h3>
-                    <p>Ensuring all transactions and interactions strictly adhere to banking regulations and internal
-                        policies.</p>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <section class="cta-section">
-        <div class="container">
-            <div class="cta-content">
-                <h2>Ready to enhance your customer experience team?</h2>
-                <p>I am available for new opportunities in the banking and financial sector.</p>
-                <a href="#contact" class="btn btn-primary">Contact Me Today</a>
-            </div>
-        </div>
-    </section>
-
-    <section id="contact" class="contact">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Get In Touch</h2>
-                <p class="section-subtitle">Let's Connect</p>
-            </div>
-            <div class="contact-wrapper">
-                <div class="contact-info">
-                    <div class="info-item">
-                        <i class="fas fa-envelope"></i>
-                        <div>
-                            <p>contact@aifaz.in</p>
-                        </div>
+                <!-- Verse 1 -->
+                <div class="verse-row glass-panel-3d">
+                    <div class="verse-actions">
+                        <span class="verse-num">1</span>
+                        <button class="v-btn"><i class="fas fa-play"></i></button>
+                        <button class="v-btn"><i class="far fa-bookmark"></i></button>
                     </div>
-                    <div class="info-item">
-                        <i class="fas fa-phone-alt"></i>
-                        <div>
-                            <h4>Call Me</h4>
-                            <p>+91 7620266321</p>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <div>
-                            <h4>Location</h4>
-                            <p>Opposite Axis bank, beside Bombay juice centre Abids</p>
-                        </div>
-                    </div>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    <div class="verse-content">
+                        <p class="arabic-text">الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ</p>
+                        <p class="transliteration">Alhamdu lillahi rabbi alAAalameen</p>
+                        <p class="translation">"All praise is due to Allah, Lord of the worlds."</p>
                     </div>
                 </div>
-                <form class="contact-form">
-                    <div class="form-group">
-                        <label for="name">Your Name</label>
-                        <input type="text" id="name" placeholder="John Doe" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Your Email</label>
-                        <input type="email" id="email" placeholder="john@example.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" rows="5" placeholder="How can I help you?" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Send Message</button>
-                </form>
-            </div>
-        </div>
-    </section>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 Aifaz Khan. All rights reserved.</p>
-        </div>
-    </footer>
+                <!-- Verse 2 -->
+                <div class="verse-row glass-panel-3d">
+                    <div class="verse-actions">
+                        <span class="verse-num">2</span>
+                        <button class="v-btn"><i class="fas fa-play"></i></button>
+                        <button class="v-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <div class="verse-content">
+                        <p class="arabic-text">الرَّحْمَٰنِ الرَّحِيمِ</p>
+                        <p class="transliteration">Arrahmani arraheem</p>
+                        <p class="translation">"The Entirely Merciful, the Especially Merciful."</p>
+                    </div>
+                </div>
+
+                 <!-- Verse 3 -->
+                 <div class="verse-row glass-panel-3d">
+                    <div class="verse-actions">
+                        <span class="verse-num">3</span>
+                        <button class="v-btn"><i class="fas fa-play"></i></button>
+                        <button class="v-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <div class="verse-content">
+                        <p class="arabic-text">مَالِكِ يَوْمِ الدِّينِ</p>
+                        <p class="transliteration">Maliki yawmi addeen</p>
+                        <p class="translation">"Sovereign of the Day of Recompense."</p>
+                    </div>
+                </div>
+
+                 <!-- Verse 4 -->
+                 <div class="verse-row glass-panel-3d">
+                    <div class="verse-actions">
+                        <span class="verse-num">4</span>
+                        <button class="v-btn"><i class="fas fa-play"></i></button>
+                        <button class="v-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <div class="verse-content">
+                        <p class="arabic-text">إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ</p>
+                        <p class="transliteration">Iyyaka naAAbudu wa-iyyaka nastaAAeen</p>
+                        <p class="translation">"It is You we worship and You we ask for help."</p>
+                    </div>
+                </div>
+
+                 <!-- Verse 5 -->
+                 <div class="verse-row glass-panel-3d">
+                    <div class="verse-actions">
+                        <span class="verse-num">5</span>
+                        <button class="v-btn"><i class="fas fa-play"></i></button>
+                        <button class="v-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <div class="verse-content">
+                        <p class="arabic-text">اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ</p>
+                        <p class="transliteration">Ihdina assirata almustaqeem</p>
+                        <p class="translation">"Guide us to the straight path."</p>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- Audio Player Bar -->
+            <div class="audio-bar glass-panel">
+                <div class="audio-info">
+                    <span>Now Playing: Al-Fatiha</span>
+                    <span class="reciter">Mishary Rashid Alafasy</span>
+                </div>
+                <div class="audio-controls">
+                    <button class="ctrl-btn"><i class="fas fa-step-backward"></i></button>
+                    <button class="ctrl-btn play-pause-main"><i class="fas fa-play-circle"></i></button>
+                    <button class="ctrl-btn"><i class="fas fa-step-forward"></i></button>
+                </div>
+                <div class="audio-progress">
+                    <div class="bar-bg"><div class="bar-fill"></div></div>
+                </div>
+            </div>
+
+        </section>
+    </main>
 
     <script src="script.js"></script>
 </body>
-
 </html>

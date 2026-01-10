@@ -233,8 +233,156 @@ window.toggleLike = (id) => {
     renderDuas();
 };
 
-function showToast() {
-    const t = document.getElementById('toast');
-    t.classList.add('active');
-    setTimeout(() => t.classList.remove('active'), 2000);
+// --- QURAN DATA & LOGIC ---
+
+const popularSurahs = [
+    { num: 1, en: "Al-Fatiha", ar: "الفاتحة", type: "Meccan", ayahs: 7 },
+    { num: 2, en: "Al-Baqarah", ar: "البقرة", type: "Medinan", ayahs: 286 },
+    { num: 3, en: "Al-Imran", ar: "آل عمران", type: "Medinan", ayahs: 200 },
+    { num: 4, en: "An-Nisa", ar: "النساء", type: "Medinan", ayahs: 176 },
+    { num: 18, en: "Al-Kahf", ar: "الكهف", type: "Meccan", ayahs: 110 },
+    { num: 36, en: "Ya-Sin", ar: "يس", type: "Meccan", ayahs: 83 },
+    { num: 55, en: "Ar-Rahman", ar: "الرحمن", type: "Medinan", ayahs: 78 },
+    { num: 56, en: "Al-Waqi'ah", ar: "الواقعة", type: "Meccan", ayahs: 96 },
+    { num: 67, en: "Al-Mulk", ar: "الملك", type: "Meccan", ayahs: 30 },
+    { num: 112, en: "Al-Ikhlas", ar: "الإخلاص", type: "Meccan", ayahs: 4 },
+    { num: 113, en: "Al-Falaq", ar: "الفلق", type: "Meccan", ayahs: 5 },
+    { num: 114, en: "An-Nas", ar: "الناس", type: "Meccan", ayahs: 6 }
+];
+
+// Document Ready Extension
+const originalInit = window.onload || function () { };
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Run existing dua logic
+    renderDuas();
+    setupFilters();
+    setupSearch();
+    setupFavoritesToggle();
+
+    // Run new Quran logic
+    setupModeToggles();
+    renderSurahList();
+    setupQuranSearch();
+});
+
+function setupModeToggles() {
+    // Modify category-sidebar buttons for mode switching
+    const cats = document.querySelectorAll('.cat-btn');
+    const duaMode = document.getElementById('mode-duas');
+    const quranMode = document.getElementById('mode-quran');
+
+    // Add a specialized 'Quran' button in sidebar if not exists
+    const container = document.querySelector('.cat-grid');
+    if (container && !document.getElementById('btn-quran-mode')) {
+        const qBtn = document.createElement('button');
+        qBtn.className = 'cat-btn';
+        qBtn.id = 'btn-quran-mode';
+        qBtn.innerHTML = '<i class="fas fa-book-open"></i> Quran';
+        qBtn.onclick = () => {
+            // Switch UI
+            duaMode.classList.add('hidden');
+            quranMode.classList.remove('hidden');
+
+            // Sidebar Active State
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            qBtn.classList.add('active');
+        };
+        // Insert at TOP
+        container.insertBefore(qBtn, container.firstChild);
+
+        // Ensure other buttons switch back to Dua Mode
+        cats.forEach(b => {
+            b.addEventListener('click', () => {
+                duaMode.classList.remove('hidden');
+                quranMode.classList.add('hidden');
+                qBtn.classList.remove('active');
+            });
+        });
+    }
 }
+
+function renderSurahList(filter = '') {
+    const list = document.getElementById('surah-list');
+    if (!list) return;
+
+    list.innerHTML = '';
+
+    const data = popularSurahs.filter(s => s.en.toLowerCase().includes(filter.toLowerCase()));
+
+    data.forEach(s => {
+        const el = document.createElement('div');
+        el.className = 'q-item';
+        if (s.num === 1) el.classList.add('active');
+        el.innerHTML = `
+            <div>
+                <span class="v-num" style="width:20px; height:20px; display:inline-flex; border:none;">${s.num}</span>
+                <span style="font-weight:600; color:white;">${s.en}</span>
+            </div>
+            <span style="font-family:'Amiri'; color:var(--gold);">${s.ar}</span>
+        `;
+        el.onclick = () => loadSurah(s);
+        list.appendChild(el);
+    });
+}
+
+function setupQuranSearch() {
+    const inp = document.getElementById('search-surah');
+    if (inp) inp.addEventListener('input', (e) => renderSurahList(e.target.value));
+}
+
+function loadSurah(surah) {
+    // Update Header
+    document.getElementById('q-surah-title').innerText = surah.en;
+    document.getElementById('q-surah-meta').innerText = `${surah.meaning || ''} • ${surah.ayahs} Ayahs • ${surah.type}`;
+
+    // Visual Mock: Fade Reader
+    const reader = document.getElementById('q-reader-display');
+    reader.style.opacity = '0.5';
+    setTimeout(() => {
+        reader.style.opacity = '1';
+        // Logic to fetch verses would go here
+    }, 300);
+
+    // Update Active State in List
+    document.querySelectorAll('.q-item').forEach(i => i.classList.remove('active'));
+    // (In real app, match ID)
+}
+
+/* Audio & Bookmark Stubs */
+let isAudioPlaying = false;
+window.toggleAudio = () => {
+    isAudioPlaying = !isAudioPlaying;
+    const btn = document.querySelector('.q-actions button');
+    btn.innerHTML = isAudioPlaying
+        ? '<i class="fas fa-pause"></i> Pause Audio'
+        : '<i class="fas fa-play"></i> Play Audio';
+}
+
+window.playVerse = (num) => {
+    // Toggle icon state
+    const row = document.getElementById('v' + num);
+    const icon = row.querySelector('.fa-play-circle, .fa-pause-circle');
+
+    if (icon.classList.contains('fa-play-circle')) {
+        icon.classList.replace('fa-play-circle', 'fa-pause-circle');
+        icon.style.color = 'var(--accent)';
+    } else {
+        icon.classList.replace('fa-pause-circle', 'fa-play-circle');
+        icon.style.color = '';
+    }
+}
+
+window.bookmarkVerse = (num) => {
+    const row = document.getElementById('v' + num);
+    const icon = row.querySelector('.fa-bookmark');
+
+    if (icon.classList.contains('far')) {
+        icon.classList.replace('far', 'fas');
+        icon.style.color = 'var(--gold)';
+    } else {
+        icon.classList.replace('fas', 'far');
+        icon.style.color = '';
+    }
+}
+

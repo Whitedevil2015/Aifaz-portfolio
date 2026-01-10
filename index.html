@@ -1,226 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Portfolio of Aifaz Khan, a dedicated Banking Customer Service Professional committed to excellence in financial client relations.">
-    <title>Aifaz Khan | Banking Customer Service Professional</title>
-
-    <!-- Fonts -->
+    <title>Noor - Islamic Digital Sanctuary</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@300;400;500;600&display=swap"
-        rel="stylesheet">
-
-    <!-- Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cinzel:wght@400;700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Styles -->
-    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <nav class="navbar">
-        <div class="container nav-container">
-            <a href="#" class="logo">Aifaz.<span class="highlight">Khan</span></a>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About Me</a></li>
-                <li><a href="#expertise">Expertise</a></li>
-                <li><a href="#contact" class="btn-primary-outline">Contact Me</a></li>
-            </ul>
-            <div class="hamburger">
-                <i class="fas fa-bars"></i>
-            </div>
-        </div>
-    </nav>
 
-    <header id="home" class="hero">
-        <div class="container hero-container">
-            <div class="hero-content">
-                <span class="badge">Banking & Financial Services</span>
-                <div id="quran-quote" class="quote-container">
-                    <i class="fas fa-quote-left quote-icon"></i>
-                    <p class="quote-text"></p>
-                    <p class="quote-reference"></p>
-                </div>
-                <h1>Excellence in <br><span class="text-gradient">Customer Service</span></h1>
-                <p>Hello, I'm Aifaz Khan. I specialize in building trust, resolving complex financial inquiries, and
-                    delivering exceptional banking experiences to every client.</p>
-                <div class="hero-btns">
-                    <a href="#contact" class="btn btn-primary">Get in Touch</a>
-                    <a href="#about" class="btn btn-secondary">My Journey</a>
-                </div>
-                <div class="stats">
-                    <div class="stat-item">
-                        <span class="stat-number">5+</span>
-                        <span class="stat-label">Years Exp.</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">100%</span>
-                        <span class="stat-label">Client Satisfaction</span>
-                    </div>
-                </div>
+    <!-- Dynamic Background -->
+    <div class="bg-layer"></div>
+
+    <header class="hero-header">
+        <nav class="glass-nav">
+            <div class="logo">NOOR</div>
+            <div class="nav-items">
+                <a href="#quran">Quran</a>
+                <a href="#names">99 Names</a>
+                <a href="#prayer">Prayer</a>
             </div>
-            <div class="hero-image">
-                <div class="image-wrapper">
-                    <img src="assets/profile.png" alt="Aifaz Khan - Banking Professional">
-                    <div class="floating-card card-1">
-                        <i class="fas fa-check-circle"></i>
-                        <span>Problem Solver</span>
-                    </div>
-                    <div class="floating-card card-2">
-                        <i class="fas fa-shield-alt"></i>
-                        <span>Trusted Advisor</span>
-                    </div>
-                </div>
+            <button class="settings-btn"><i class="fas fa-cog"></i></button>
+        </nav>
+
+        <div class="hero-content">
+            <div class="bismillah-calligraphy">
+               ﷽
+            </div>
+            <h1 class="hero-title">Seek Light in Every Verse</h1>
+            <p class="hero-subtitle">An immersive digital sanctuary for the modern believer.</p>
+            
+            <div class="next-prayer-pill">
+                <span class="pill-label">Next Prayer</span>
+                <span class="pill-value" id="next-prayer-name">Loading...</span>
+                <span class="pill-timer" id="next-prayer-timer">--:--</span>
             </div>
         </div>
     </header>
 
-    <section id="about" class="about">
-        <div class="container about-container">
-            <div class="section-header">
-                <h2 class="section-title">About Me</h2>
-                <p class="section-subtitle">Dedicated to Financial Wellness</p>
-            </div>
-            <div class="about-content">
-                <div class="about-text">
-                    <p>With a strong foundation in the banking sector, I have dedicated my career to serving customers
-                        with integrity and precision. I understand that behind every transaction is a person with goals
-                        and concerns.</p>
-                    <p>My approach combines deep product knowledge with empathetic communication. Whether it's assisting
-                        with account management, resolving discrepancies, or advising on financial products, I
-                        prioritize clarity and customer satisfaction.</p>
-                    <ul class="skills-list">
-                        <li><i class="fas fa-check"></i> Conflict Resolution</li>
-                        <li><i class="fas fa-check"></i> Financial Product Knowledge</li>
-                        <li><i class="fas fa-check"></i> CRM Software Proficiency</li>
-                        <li><i class="fas fa-check"></i> Regulatory Compliance</li>
-                        <li><i class="fas fa-check"></i> Effective Communication</li>
-                        <li><i class="fas fa-check"></i> Team Collaboration</li>
-                    </ul>
+    <main>
+        <!-- Horizontal Scroll Cards -->
+        <section class="quick-access-scroller">
+            <div class="scroll-track">
+                
+                <!-- Daily Verse Card -->
+                <div class="feature-card verse-card">
+                    <div class="card-icon"><i class="fas fa-book-open"></i></div>
+                    <h3>Daily Verse</h3>
+                    <p class="arabic-preview">...Loading</p>
+                    <button class="card-btn">Read</button>
+                    <div class="card-bg-glow"></div>
                 </div>
-            </div>
-        </div>
-    </section>
 
-    <section id="expertise" class="expertise">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">My Expertise</h2>
-                <p class="section-subtitle">How I Add Value</p>
-            </div>
-            <div class="expertise-grid">
-                <div class="expertise-card">
-                    <div class="icon-box">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <h3>Client Relations</h3>
-                    <p>Building long-term relationships through active listening and personalized service strategies
-                        that boost retention.</p>
+                <!-- 99 Names Card -->
+                <div class="feature-card names-card">
+                     <div class="card-icon"><i class="fas fa-star-and-crescent"></i></div>
+                    <h3>Asma-ul-Husna</h3>
+                    <p>Discover the 99 attributes of Allah.</p>
+                    <button class="card-btn">Explore</button>
                 </div>
-                <div class="expertise-card">
-                    <div class="icon-box">
-                        <i class="fas fa-headset"></i>
-                    </div>
-                    <h3>Inquiry Management</h3>
-                    <p>Efficiently handling high volumes of customer queries across multiple channels while maintaining
-                        quality standards.</p>
-                </div>
-                <div class="expertise-card">
-                    <div class="icon-box">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3>Financial Advisory</h3>
-                    <p>Guiding customers through various banking products to find solutions that best fit their
-                        financial needs.</p>
-                </div>
-                <div class="expertise-card">
-                    <div class="icon-box">
-                        <i class="fas fa-hand-holding-usd"></i>
-                    </div>
-                    <h3>Ops & Compliance</h3>
-                    <p>Ensuring all transactions and interactions strictly adhere to banking regulations and internal
-                        policies.</p>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <section class="cta-section">
-        <div class="container">
-            <div class="cta-content">
-                <h2>Ready to enhance your customer experience team?</h2>
-                <p>I am available for new opportunities in the banking and financial sector.</p>
-                <a href="#contact" class="btn btn-primary">Contact Me Today</a>
-            </div>
-        </div>
-    </section>
-
-    <section id="contact" class="contact">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Get In Touch</h2>
-                <p class="section-subtitle">Let's Connect</p>
-            </div>
-            <div class="contact-wrapper">
-                <div class="contact-info">
-                    <div class="info-item">
-                        <i class="fas fa-envelope"></i>
-                        <div>
-                            <p>contact@aifaz.in</p>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <i class="fas fa-phone-alt"></i>
-                        <div>
-                            <h4>Call Me</h4>
-                            <p>+91 7620266321</p>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <div>
-                            <h4>Location</h4>
-                            <p>Opposite Axis bank, beside Bombay juice centre Abids</p>
-                        </div>
-                    </div>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
+                 <!-- Tasbeeh Card -->
+                 <div class="feature-card tasbeeh-card">
+                    <div class="card-icon"><i class="fas fa-fingerprint"></i></div>
+                    <h3>Digital Tasbeeh</h3>
+                    <div class="tasbeeh-counter" id="tasbeeh-count">0</div>
+                    <button class="card-btn" onclick="incrementTasbeeh()">Tap</button>
                 </div>
-                <form class="contact-form">
-                    <div class="form-group">
-                        <label for="name">Your Name</label>
-                        <input type="text" id="name" placeholder="John Doe" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Your Email</label>
-                        <input type="email" id="email" placeholder="john@example.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" rows="5" placeholder="How can I help you?" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Send Message</button>
-                </form>
-            </div>
-        </div>
-    </section>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 Aifaz Khan. All rights reserved.</p>
-        </div>
-    </footer>
+            </div>
+        </section>
+
+        <!-- Prayer Times Grid -->
+        <section class="prayer-section" id="prayer">
+            <h2 class="section-heading">Prayer Times</h2>
+            <div class="prayer-grid">
+                <div class="prayer-box active">
+                    <span>Fajr</span>
+                    <h3 id="time-fajr">05:30</h3>
+                </div>
+                <div class="prayer-box">
+                    <span>Dhuhr</span>
+                    <h3 id="time-dhuhr">12:45</h3>
+                </div>
+                <div class="prayer-box">
+                    <span>Asr</span>
+                    <h3 id="time-asr">16:15</h3>
+                </div>
+                <div class="prayer-box">
+                    <span>Maghrib</span>
+                    <h3 id="time-maghrib">18:50</h3>
+                </div>
+                <div class="prayer-box">
+                    <span>Isha</span>
+                    <h3 id="time-isha">20:15</h3>
+                </div>
+            </div>
+        </section>
+
+    </main>
 
     <script src="script.js"></script>
 </body>
-
 </html>

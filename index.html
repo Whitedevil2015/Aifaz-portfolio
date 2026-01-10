@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,9 +8,12 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Outfit:wght@300;400;600&family=Cinzel:wght@600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Outfit:wght@300;400;600&family=Cinzel:wght@600&family=Rajdhani:wght@500;600;700&family=Orbitron:wght@500;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
 
     <div class="ambient-bg"></div>
@@ -24,7 +28,7 @@
     </nav>
 
     <main class="quran-layout">
-        
+
         <!-- Sidebar: Surah List -->
         <aside class="surah-sidebar glass-panel">
             <div class="search-box">
@@ -38,7 +42,7 @@
 
         <!-- Main Reader: Display Area -->
         <section class="reader-area">
-            
+
             <!-- Sticky Header for Reader -->
             <div class="reader-header glass-panel">
                 <div class="surah-info">
@@ -54,7 +58,7 @@
 
             <!-- Scrollable Verses -->
             <div class="verses-container" id="verses-display">
-                
+
                 <div class="bismillah-header">
                     ﷽
                 </div>
@@ -87,8 +91,8 @@
                     </div>
                 </div>
 
-                 <!-- Verse 3 -->
-                 <div class="verse-row glass-panel-3d">
+                <!-- Verse 3 -->
+                <div class="verse-row glass-panel-3d">
                     <div class="verse-actions">
                         <span class="verse-num">3</span>
                         <button class="v-btn"><i class="fas fa-play"></i></button>
@@ -101,8 +105,8 @@
                     </div>
                 </div>
 
-                 <!-- Verse 4 -->
-                 <div class="verse-row glass-panel-3d">
+                <!-- Verse 4 -->
+                <div class="verse-row glass-panel-3d">
                     <div class="verse-actions">
                         <span class="verse-num">4</span>
                         <button class="v-btn"><i class="fas fa-play"></i></button>
@@ -115,8 +119,8 @@
                     </div>
                 </div>
 
-                 <!-- Verse 5 -->
-                 <div class="verse-row glass-panel-3d">
+                <!-- Verse 5 -->
+                <div class="verse-row glass-panel-3d">
                     <div class="verse-actions">
                         <span class="verse-num">5</span>
                         <button class="v-btn"><i class="fas fa-play"></i></button>
@@ -130,7 +134,7 @@
                 </div>
 
             </div>
-            
+
             <!-- Audio Player Bar -->
             <div class="audio-bar glass-panel">
                 <div class="audio-info">
@@ -143,7 +147,9 @@
                     <button class="ctrl-btn"><i class="fas fa-step-forward"></i></button>
                 </div>
                 <div class="audio-progress">
-                    <div class="bar-bg"><div class="bar-fill"></div></div>
+                    <div class="bar-bg">
+                        <div class="bar-fill"></div>
+                    </div>
                 </div>
             </div>
 
@@ -152,4 +158,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>

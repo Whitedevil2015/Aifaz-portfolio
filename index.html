@@ -1,162 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crystal Quran | Divine Revelation</title>
+    <title>Fortress of the Believer | Authentic Duas</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Outfit:wght@300;400;600&family=Cinzel:wght@600&family=Rajdhani:wght@500;600;700&family=Orbitron:wght@500;900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Outfit:wght@300;400;600&family=Cinzel:wght@600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-
 <body>
 
-    <div class="ambient-bg"></div>
+    <div class="bg-gradient"></div>
+    <div class="noise-overlay"></div>
 
-    <nav class="crystal-nav">
-        <div class="logo">QURAN<span class="highlight">KAREEM</span></div>
-        <div class="nav-links">
-            <button class="nav-btn active"><i class="fas fa-book-open"></i> Read</button>
-            <button class="nav-btn"><i class="fas fa-bookmark"></i> Bookmarks</button>
-            <button class="nav-btn"><i class="fas fa-cog"></i> Settings</button>
+    <nav class="glass-nav">
+        <div class="logo">HISN<span class="highlight">UL MUSLIM</span></div>
+        <div class="nav-actions">
+            <button class="icon-btn" id="toggle-favorites"><i class="fas fa-heart"></i> Favorites</button>
+            <button class="icon-btn"><i class="fas fa-cog"></i></button>
         </div>
     </nav>
 
-    <main class="quran-layout">
-
-        <!-- Sidebar: Surah List -->
-        <aside class="surah-sidebar glass-panel">
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" id="surah-search" placeholder="Search Surah...">
-            </div>
-            <div class="surah-list" id="surah-list-container">
-                <!-- Populated via JS -->
+    <main class="app-container">
+        
+        <!-- Categories Sidebar -->
+        <aside class="category-sidebar">
+            <h3>Categories</h3>
+            <div class="cat-grid">
+                <button class="cat-btn active" data-cat="all"><i class="fas fa-th-large"></i> All</button>
+                <button class="cat-btn" data-cat="Morning"><i class="fas fa-sun"></i> Morning</button>
+                <button class="cat-btn" data-cat="Evening"><i class="fas fa-moon"></i> Evening</button>
+                <button class="cat-btn" data-cat="Sleep"><i class="fas fa-bed"></i> Sleep</button>
+                <button class="cat-btn" data-cat="Travel"><i class="fas fa-plane"></i> Travel</button>
+                <button class="cat-btn" data-cat="Home"><i class="fas fa-home"></i> Home</button>
+                <button class="cat-btn" data-cat="Food"><i class="fas fa-utensils"></i> Food</button>
+                <button class="cat-btn" data-cat="Prayer"><i class="fas fa-pray"></i> Prayer</button>
+                <button class="cat-btn" data-cat="Ablution"><i class="fas fa-water"></i> Ablution</button>
+                <button class="cat-btn" data-cat="Clothing"><i class="fas fa-tshirt"></i> Clothing</button>
             </div>
         </aside>
 
-        <!-- Main Reader: Display Area -->
-        <section class="reader-area">
+        <!-- Main Content -->
+        <section class="dua-feed">
+            <header class="feed-header">
+                <h1 id="feed-title">All Duas</h1>
+                <input type="text" id="search-duas" placeholder="Search for a dua...">
+            </header>
 
-            <!-- Sticky Header for Reader -->
-            <div class="reader-header glass-panel">
-                <div class="surah-info">
-                    <h1 id="current-surah-title">Al-Fatiha</h1>
-                    <span id="current-surah-meta">The Opener • 7 Ayahs • Makki</span>
-                </div>
-                <div class="reader-actions">
-                    <button class="action-btn" title="Audio"><i class="fas fa-play"></i></button>
-                    <button class="action-btn" title="Favorite"><i class="far fa-heart"></i></button>
-                    <button class="action-btn" title="Info"><i class="fas fa-info-circle"></i></button>
-                </div>
+            <div class="duas-list" id="duas-container">
+                <!-- Duas injected here -->
             </div>
-
-            <!-- Scrollable Verses -->
-            <div class="verses-container" id="verses-display">
-
-                <div class="bismillah-header">
-                    ﷽
-                </div>
-
-                <!-- Verse 1 -->
-                <div class="verse-row glass-panel-3d">
-                    <div class="verse-actions">
-                        <span class="verse-num">1</span>
-                        <button class="v-btn"><i class="fas fa-play"></i></button>
-                        <button class="v-btn"><i class="far fa-bookmark"></i></button>
-                    </div>
-                    <div class="verse-content">
-                        <p class="arabic-text">الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ</p>
-                        <p class="transliteration">Alhamdu lillahi rabbi alAAalameen</p>
-                        <p class="translation">"All praise is due to Allah, Lord of the worlds."</p>
-                    </div>
-                </div>
-
-                <!-- Verse 2 -->
-                <div class="verse-row glass-panel-3d">
-                    <div class="verse-actions">
-                        <span class="verse-num">2</span>
-                        <button class="v-btn"><i class="fas fa-play"></i></button>
-                        <button class="v-btn"><i class="far fa-bookmark"></i></button>
-                    </div>
-                    <div class="verse-content">
-                        <p class="arabic-text">الرَّحْمَٰنِ الرَّحِيمِ</p>
-                        <p class="transliteration">Arrahmani arraheem</p>
-                        <p class="translation">"The Entirely Merciful, the Especially Merciful."</p>
-                    </div>
-                </div>
-
-                <!-- Verse 3 -->
-                <div class="verse-row glass-panel-3d">
-                    <div class="verse-actions">
-                        <span class="verse-num">3</span>
-                        <button class="v-btn"><i class="fas fa-play"></i></button>
-                        <button class="v-btn"><i class="far fa-bookmark"></i></button>
-                    </div>
-                    <div class="verse-content">
-                        <p class="arabic-text">مَالِكِ يَوْمِ الدِّينِ</p>
-                        <p class="transliteration">Maliki yawmi addeen</p>
-                        <p class="translation">"Sovereign of the Day of Recompense."</p>
-                    </div>
-                </div>
-
-                <!-- Verse 4 -->
-                <div class="verse-row glass-panel-3d">
-                    <div class="verse-actions">
-                        <span class="verse-num">4</span>
-                        <button class="v-btn"><i class="fas fa-play"></i></button>
-                        <button class="v-btn"><i class="far fa-bookmark"></i></button>
-                    </div>
-                    <div class="verse-content">
-                        <p class="arabic-text">إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ</p>
-                        <p class="transliteration">Iyyaka naAAbudu wa-iyyaka nastaAAeen</p>
-                        <p class="translation">"It is You we worship and You we ask for help."</p>
-                    </div>
-                </div>
-
-                <!-- Verse 5 -->
-                <div class="verse-row glass-panel-3d">
-                    <div class="verse-actions">
-                        <span class="verse-num">5</span>
-                        <button class="v-btn"><i class="fas fa-play"></i></button>
-                        <button class="v-btn"><i class="far fa-bookmark"></i></button>
-                    </div>
-                    <div class="verse-content">
-                        <p class="arabic-text">اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ</p>
-                        <p class="transliteration">Ihdina assirata almustaqeem</p>
-                        <p class="translation">"Guide us to the straight path."</p>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Audio Player Bar -->
-            <div class="audio-bar glass-panel">
-                <div class="audio-info">
-                    <span>Now Playing: Al-Fatiha</span>
-                    <span class="reciter">Mishary Rashid Alafasy</span>
-                </div>
-                <div class="audio-controls">
-                    <button class="ctrl-btn"><i class="fas fa-step-backward"></i></button>
-                    <button class="ctrl-btn play-pause-main"><i class="fas fa-play-circle"></i></button>
-                    <button class="ctrl-btn"><i class="fas fa-step-forward"></i></button>
-                </div>
-                <div class="audio-progress">
-                    <div class="bar-bg">
-                        <div class="bar-fill"></div>
-                    </div>
-                </div>
-            </div>
-
         </section>
+
     </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden"><i class="fas fa-check-circle"></i> Copied to clipboard!</div>
 
     <script src="script.js"></script>
 </body>
-
 </html>

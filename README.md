@@ -1,4 +1,4 @@
-# Aifaz Islamic Portal & Luxe Store 🕌✨
+# Zaifa Islamic Portal & Luxe Store 🕌✨
 > **Last Deployment Trigger:** 2026-01-08 (v3.6 Force Update)
 
 **Legacy Meets Luxury** v3.6 (Noble Islamic Edition)
@@ -15,7 +15,7 @@ A unified single-page application combining a spiritual Islamic companion with a
 *   **99 Names**: Interactive grid of Asma-ul-Husna with meanings.
 *   **Tasbih**: Digital counter for Dhikr.
 
-### 🛍️ Aifaz Luxe Store
+### 🛍️ Zaifa Islamic Store
 *   **Curated Collection**: Premium Ouds, Prayer Mats, and Tasbihs.
 *   **Seamless UI**: Modern "Add to Cart" interactions and product showcases.
 
@@ -31,7 +31,7 @@ A unified single-page application combining a spiritual Islamic companion with a
 *   **Frontend**: HTML5, Vanilla JavaScript, CSS3 (Glassmorphism Variables).
 *   **APIs**: Aladhan (Times/Calendar), Al Quran Cloud (Text/Audio).
 *   **Deployment**: Vercel (Auto-deployed from `main`).
-# AIFAZ ISLAMIC | Premium Sunnah Store
+# ZAIFA ISLAMIC | Premium Sunnah Store
 
 ## Overview
 A luxury e-commerce portal dedicated to authentic Sunnah products, including Ouds, Prayer Mats, and Modest Apparel.
@@ -46,4 +46,4 @@ A luxury e-commerce portal dedicated to authentic Sunnah products, including Oud
 Automatically deploys via Vercel on push to `main`.
 
 ## 📄 License
-© 2026 Aifaz Portal. All Rights Reserved.
+© 2026 Zaifa Islamic. All Rights Reserved.

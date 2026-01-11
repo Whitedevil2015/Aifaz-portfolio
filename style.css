@@ -1221,6 +1221,7 @@ footer p {
     transform: translateY(30px);
     transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
+
 /* --- 3D & Glass Components (Appended) --- */
 .glass-3d {
     background: var(--glass-bg);
@@ -1235,8 +1236,8 @@ footer p {
 }
 
 .glass-3d:hover {
-    box-shadow: 
-        0 20px 50px -10px rgba(0,0,0,0.6),
+    box-shadow:
+        0 20px 50px -10px rgba(0, 0, 0, 0.6),
         0 0 20px rgba(212, 175, 55, 0.2);
     border-color: var(--accent-color);
 }
@@ -1256,16 +1257,19 @@ footer p {
     display: inline-block;
 }
 
-.prayer-card, .asma-card, .glass-container {
+.prayer-card,
+.asma-card,
+.glass-container {
     background: rgba(255, 255, 255, 0.03) !important;
     backdrop-filter: blur(12px) !important;
-    border: 1px solid rgba(255,255,255,0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
     transform-style: preserve-3d;
 }
 
 .prayer-time {
     background: var(--gradient-gold);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     font-weight: 800;
 }

@@ -775,6 +775,66 @@ footer p {
     transform: translateY(0);
 }
 
+/* Horizontal Scroll for Mobile */
+.horizontal-scroll {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .horizontal-scroll {
+        display: flex;
+        overflow-x: auto;
+        padding-bottom: 2rem;
+        scroll-snap-type: x mandatory;
+        gap: 1rem;
+        /* Hide scrollbar */
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .horizontal-scroll::-webkit-scrollbar {
+        display: none;
+    }
+
+    .horizontal-scroll>* {
+        min-width: 280px;
+        scroll-snap-align: center;
+    }
+}
+
+/* Dynamic Colored Cards */
+.color-card {
+    position: relative;
+    overflow: hidden;
+    border-top: 4px solid var(--card-color, var(--accent-color)) !important;
+}
+
+.color-card .value-icon {
+    color: var(--card-color, var(--accent-color)) !important;
+    background: rgba(255, 255, 255, 0.05);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.color-card:hover .value-icon {
+    background: var(--card-color, var(--accent-color));
+    color: #fff !important;
+    box-shadow: 0 0 20px var(--card-color);
+}
+
+.color-card h3 {
+    color: var(--card-color, var(--text-dark));
+}
+
 /* Values Section */
 .about {
     padding: 100px 0;

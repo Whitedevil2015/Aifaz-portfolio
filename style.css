@@ -1131,6 +1131,36 @@ footer p {
     box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
 }
 
+/* Full Grid Restorations */
+.surah-grid-full,
+.asma-grid-full {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem 0;
+}
+
+/* Informative Display Grids */
+.surah-grid-display,
+.asma-grid-display {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    /* Slightly wider for info */
+    gap: 1.5rem;
+    padding: 2rem 0;
+}
+
+/* Informative Card Enhancements */
+.card-info-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
 .prayer-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));

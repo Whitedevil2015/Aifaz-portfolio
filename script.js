@@ -522,22 +522,53 @@ document.addEventListener('DOMContentLoaded', () => {
         const grid = document.getElementById('surah-index-grid');
         if (!grid) return;
 
+        const isDisplay = grid.classList.contains('surah-grid-display');
+        const featuredIDs = [1, 18, 36, 55, 56, 67, 112, 113, 114]; // Fatiha, Kahf, Yaseen, Rahman, Waqia, Mulk, 3 Quls
+
         try {
             const res = await fetch('https://api.alquran.cloud/v1/surah');
             const data = await res.json();
 
             if (data.code === 200) {
-                grid.innerHTML = data.data.map((s, i) => `
+                let surahs = data.data;
+                if (isDisplay) {
+                    surahs = surahs.filter(s => featuredIDs.includes(s.number));
+                }
+
+                grid.innerHTML = surahs.map((s, i) => `
                     <div class="glass-container reveal-bottom" onclick="openReaderAndLoad(${s.number}, '${s.englishName}')"
-                         style="padding: 15px; cursor: pointer; text-align: center; border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s; transition-delay: ${i > 20 ? 0 : i * 0.05}s;">
-                        <span style="display:block; font-size: 0.8rem; color: var(--gold); margin-bottom: 5px;">${s.number}</span>
-                        <h4 style="margin: 0; font-size: 1rem; color: white;">${s.englishName}</h4>
-                        <span style="font-size: 0.75rem; opacity: 0.6;">${s.englishNameTranslation}</span>
+                         style="padding: 1.5rem; cursor: pointer; text-align: left; border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s; transition-delay: ${i > 20 ? 0 : i * 0.05}s; position:relative; overflow:hidden;">
+                        
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1rem;">
+                            <div>
+                                <span style="display:inline-block; font-size: 0.7rem; background:rgba(212,175,55,0.2); color: var(--gold); padding:2px 8px; border-radius:4px; margin-bottom: 5px;">#${s.number}</span>
+                                <h4 style="margin: 0; font-size: 1.2rem; color: white; font-family:var(--font-serif);">${s.englishName}</h4>
+                                <span style="font-size: 0.8rem; opacity: 0.7;">${s.englishNameTranslation}</span>
+                            </div>
+                            <div style="text-align:right;">
+                                <span style="font-family:var(--font-arabic); font-size:1.4rem; color:var(--gold);">${s.name.replace('سُورَةُ ', '')}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="card-info-row">
+                            <span>${s.numberOfAyahs} Verses</span>
+                            <span>${s.revelationType}</span>
+                        </div>
                     </div>
                 `).join('');
 
                 // Observe new elements
                 document.querySelectorAll('#surah-index-grid .reveal-bottom').forEach(el => revealObserver.observe(el));
+
+                // View All Logic
+                const viewAllBtn = document.getElementById('view-all-surahs-btn');
+                if (viewAllBtn) {
+                    viewAllBtn.onclick = () => {
+                        grid.className = 'surah-grid-full';
+                        viewAllBtn.style.display = 'none';
+                        loadSurahDirectory(); // Re-render full
+                    };
+                }
             }
         } catch (e) { console.error("Index load failed"); }
     }
@@ -587,8 +618,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await fetch('https://api.aladhan.com/v1/asmaAlHusna');
             const data = await res.json();
             if (data.code === 200) {
-                // Render Full List
-                const namesToShow = data.data;
+                // Render logic based on view type
+                const isDisplay = grid.classList.contains('asma-grid-display');
+                let namesToShow = data.data;
+
+                if (isDisplay) {
+                    // Random 12 names for "Attributes of the Day" feel, or just first 12
+                    // Let's do first 12 for consistency
+                    namesToShow = data.data.slice(0, 12);
+                }
 
                 grid.innerHTML = namesToShow.map((name, i) => `
                     <div class="card-glass asma-card reveal-bottom" style="transition-delay: ${i * 0.05}s;">
@@ -601,6 +639,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 `).join('');
                 document.querySelectorAll('#asma-grid .reveal-bottom').forEach(el => revealObserver.observe(el));
+
+                // View All Button Logic
+                const viewAllBtn = document.getElementById('view-all-names-btn');
+                if (viewAllBtn) {
+                    viewAllBtn.onclick = () => {
+                        grid.className = 'asma-grid-full'; // Switch class
+                        viewAllBtn.style.display = 'none'; // Hide button
+                        initAsma(); // Re-render full
+                    };
+                }
             }
         } catch (e) { grid.innerHTML = "<p>Failed to load names. Please try again.</p>"; }
     }

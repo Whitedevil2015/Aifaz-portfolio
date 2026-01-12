@@ -1,29 +1,22 @@
 :root {
-    /* Reference Theme: Noor (Dark Mode Version) */
-    --font-sans: "Plus Jakarta Sans", sans-serif;
-    --font-serif: "Cormorant Garamond", Georgia, serif;
-    --font-arabic: "Amiri", serif;
-
+    /* Elegant Green Theme */
     --primary-color: #10b981;
-    /* Emerald-500 equivalent */
-    /* Elegant Maroon & Black Theme */
-    --primary-color: #800000;
-    /* Maroon */
-    --primary-dark: #4a0404;
+    /* Emerald */
+    --primary-dark: #064e3b;
     --accent-color: #d4af37;
-    /* Gold remains for elegance */
-    --text-dark: #f3f4f6;
-    /* Light text for dark theme */
-    --text-light: #9ca3af;
-    --bg-white: #0f0f0f;
-    /* Approaching Black */
-    --bg-light: #1a1a1a;
-    --glass-bg: rgba(20, 20, 20, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.1);
+    /* Gold */
+    --text-dark: #f0fdf4;
+    --text-light: #d1fae5;
+    --bg-white: #022c22;
+    /* Deep Emerald Black */
+    --bg-light: #064e3b;
+    --glass-bg: rgba(6, 78, 59, 0.4);
+    --glass-border: rgba(16, 185, 129, 0.2);
     --font-serif: 'Cormorant Garamond', serif;
     --font-sans: 'Plus Jakarta Sans', sans-serif;
     --font-arabic: 'Amiri', serif;
     --gradient-gold: linear-gradient(135deg, #d4af37 0%, #f6e0b5 50%, #d4af37 100%);
+    --gradient-emerald: linear-gradient(135deg, #059669 0%, #047857 100%);
     --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     --container-width: 1240px;
 }
@@ -96,7 +89,7 @@ img {
 .hero-section {
     position: relative;
     min-height: 100vh;
-    background: radial-gradient(circle at center, #2e0202 0%, #000000 100%);
+    background: radial-gradient(circle at center, #064e3b 0%, #022c22 100%);
     display: flex;
     align-items: center;
     justify-content: center;

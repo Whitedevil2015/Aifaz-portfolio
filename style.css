@@ -1933,12 +1933,121 @@ footer p {
 }
 
 /* Footer (Dark Green Theme) */
+/* Footer (Dark Green Theme) */
 .main-footer {
-    background: #062c21;
-    /* Deep Emerald/Black Green */
-    color: #d1d5db;
+    background: #020617;
+    /* Very dark slate/black */
+    color: #94a3b8;
     padding: 5rem 0 2rem 0;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Minimalist Overrides (Applied here to ensure they cascade over previous styles) */
+:root {
+    --primary-color: #10b981;
+    --primary-dark: #064e3b;
+    --accent-color: #fbbf24;
+    --text-dark: #f8fafc;
+    --text-light: #cbd5e1;
+    --bg-white: #0f172a;
+    --bg-light: #1e293b;
+    --glass-bg: #1e293b;
+    --glass-border: rgba(255, 255, 255, 0.05);
+    --font-serif: 'Cormorant Garamond', serif;
+    --font-sans: 'Plus Jakarta Sans', sans-serif;
+    --font-arabic: 'Amiri', serif;
+    --gradient-emerald: linear-gradient(to bottom, #0f172a, #1e293b);
+}
+
+body {
+    background-color: var(--bg-white);
+    color: var(--text-dark);
+}
+
+.navbar {
+    background: var(--bg-white) !important;
+    border-bottom: 1px solid var(--glass-border) !important;
+    backdrop-filter: none !important;
+}
+
+.logo span {
+    color: white !important;
+    font-weight: 500 !important;
+}
+
+.nav-links a {
+    color: var(--text-light) !important;
+    font-weight: 400 !important;
+}
+
+.nav-links a:hover {
+    color: var(--primary-color) !important;
+}
+
+.hero-section {
+    background: var(--bg-white);
+    background-image: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 70%);
+}
+
+.hero-verse-container {
+    padding: 0 1rem;
+}
+
+.arabic-verse {
+    color: var(--text-dark);
+    text-shadow: none;
+    font-weight: 400;
+}
+
+.english-verse {
+    font-family: var(--font-sans);
+    font-weight: 300;
+    color: #e2e8f0;
+}
+
+.surah-grid-display,
+.asma-grid-display,
+.surah-grid-full,
+.asma-grid-full {
+    gap: 1rem;
+}
+
+.glass-container,
+.card-glass,
+.prayer-card {
+    background: var(--bg-light) !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: none !important;
+    border-radius: 8px !important;
+    backdrop-filter: none;
+    transform: none !important;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.glass-container:hover,
+.card-glass:hover,
+.prayer-card:hover {
+    background: #334155 !important;
+    transform: translateY(-2px) !important;
+}
+
+.prayer-time {
+    background: none;
+    -webkit-text-fill-color: var(--text-dark);
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+.asma-number,
+.verse-num {
+    background: transparent !important;
+    color: var(--primary-color) !important;
+    font-weight: bold;
+}
+
+rald/Black Green */ color: #d1d5db;
+padding: 5rem 0 2rem 0;
+border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .footer-grid {

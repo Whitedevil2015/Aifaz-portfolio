@@ -64,8 +64,13 @@
 
             <!-- Decorative Islamic Element (Text-based) -->
             <div class="hero-decorative-divider"
-                style="color:var(--accent-color); font-size: 1.5rem; opacity: 0.8; margin-top:2rem;">
+                style="color:var(--accent-color); font-size: 1.5rem; opacity: 0.8; margin-top:1rem;">
                 ۞ ۞ ۞
+            </div>
+
+            <!-- Hijri Calendar Widget -->
+            <div class="hijri-badge fade-in-section" style="margin-top: 1.5rem;">
+                <i class="far fa-calendar-alt"></i> <span id="hijri-date-text">Loading Hijri Date...</span>
             </div>
 
             <div class="hero-scroll-btn">
@@ -80,6 +85,7 @@
     <section id="daily-hadith" class="portal-section" style="padding-top: 2rem; padding-bottom: 2rem;">
         <div class="container">
             <div class="hadith-container fade-in-section">
+                <!-- Hadith content remains... -->
                 <div class="section-header" style="margin-bottom: 1.5rem;">
                     <h2 class="section-title" style="font-size: 1.8rem;">Hadith of the Moment</h2>
                     <p class="section-subtitle" style="font-size: 0.9rem;">Wisdom from the Prophet (ﷺ)</p>
@@ -92,6 +98,53 @@
                         <button id="refresh-hadith-btn" class="icon-btn" title="New Hadith"><i
                                 class="fas fa-sync-alt"></i></button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Kids & Family Zone (New) -->
+    <section id="kids-family" class="portal-section"
+        style="background: var(--bg-light); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Family & Kids Zone</h2>
+                <p class="section-subtitle">Interactive Learning & Azkar</p>
+            </div>
+
+            <div class="kids-grid">
+                <!-- Digital Tasbih -->
+                <div class="kids-card tasbih-card">
+                    <div class="card-icon-bg"><i class="fas fa-fingerprint"></i></div>
+                    <h3>Digital Tasbih</h3>
+                    <div class="tasbih-display">
+                        <span id="tasbih-count">0</span>
+                    </div>
+                    <div class="tasbih-controls">
+                        <button id="tasbih-btn" class="btn-tasbih pulse-effect">Tap to Count</button>
+                        <button id="tasbih-reset" class="btn-reset" title="Reset"><i class="fas fa-undo"></i></button>
+                    </div>
+                    <p style="font-size:0.8rem; margin-top:10px; opacity:0.7;">SubhanAllah • Alhamdulillah •
+                        AllahuAkbar</p>
+                </div>
+
+                <!-- Kids Quiz (Placeholder Link) -->
+                <div class="kids-card quiz-card">
+                    <div class="card-icon-bg" style="background: rgba(251, 191, 36, 0.2); color: #fbbf24;"><i
+                            class="fas fa-puzzle-piece"></i></div>
+                    <h3>Islamic Quiz</h3>
+                    <p>Test your knowledge with fun questions about Prophets and Quran.</p>
+                    <button class="btn btn-outline-pill" style="margin-top:1rem; font-size:0.8rem;">Start
+                        Quiz</button>
+                </div>
+
+                <!-- Prophet Stories -->
+                <div class="kids-card story-card">
+                    <div class="card-icon-bg" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8;"><i
+                            class="fas fa-book-open"></i></div>
+                    <h3>Prophet Stories</h3>
+                    <p>Read beautifully illustrated stories of the Prophets for bedtime.</p>
+                    <button class="btn btn-outline-pill" style="margin-top:1rem; font-size:0.8rem;">Read Now</button>
                 </div>
             </div>
         </div>

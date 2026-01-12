@@ -992,11 +992,61 @@ function loadRandomHadith() {
     }
 }
 
-// Bind button
+// Initial Load
+// Bind button - Move to DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
     const refreshHadithBtn = document.getElementById('refresh-hadith-btn');
     if (refreshHadithBtn) {
         refreshHadithBtn.addEventListener('click', loadRandomHadith);
     }
     loadRandomHadith();
+    updateHijriDate();
+    initTasbih();
 });
+
+// --- Hijri Date Logic ---
+function updateHijriDate() {
+    const el = document.getElementById('hijri-date-text');
+    if (el) {
+        // Use Intl API for instant Hijri Date
+        const date = new Date();
+        const options = { numberingSystem: 'latn', day: 'numeric', month: 'long', year: 'numeric', calendar: 'islamic-umalqura' };
+        try {
+            const hijri = new Intl.DateTimeFormat('en-TN-u-ca-islamic-umalqura', options).format(date);
+            el.textContent = hijri;
+        } catch (e) {
+            // Fallback if browser doesn't support Islamic calendar
+            el.textContent = "1445 AH";
+        }
+    }
+}
+
+// --- Digital Tasbih Logic ---
+function initTasbih() {
+    let count = 0;
+    const countEl = document.getElementById('tasbih-count');
+    const btn = document.getElementById('tasbih-btn');
+    const reset = document.getElementById('tasbih-reset');
+
+    if (btn && countEl) {
+        btn.addEventListener('click', () => {
+            count++;
+            countEl.textContent = count;
+
+            // Subtle vibration on mobile?
+            if (navigator.vibrate) navigator.vibrate(20);
+
+            // Animation reset
+            btn.classList.remove('pulse-effect');
+            void btn.offsetWidth; // trigger reflow
+            btn.classList.add('pulse-effect');
+        });
+
+        reset?.addEventListener('click', () => {
+            if (confirm('Reset counter?')) {
+                count = 0;
+                countEl.textContent = 0;
+            }
+        });
+    }
+}

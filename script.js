@@ -918,3 +918,85 @@ document.addEventListener('DOMContentLoaded', () => {
     const cards = document.querySelectorAll('.prayer-card, .asma-card, .glass-container, .value-card, .tilt-card');
     cards.forEach(card => new VanillaTilt(card));
 });
+
+// --- Random Hadith Feature ---
+const authenticHadiths = [
+    {
+        arabic: "إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ، وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى",
+        english: "The reward of deeds depends upon the intentions and every person will get the reward according to what he has intended.",
+        source: "Sahih al-Bukhari 1"
+    },
+    {
+        arabic: "لَا يُؤْمِنُ أَحَدُكُمْ حَتَّى يُحِبَّ لِأَخِيهِ مَا يُحِبُّ لِنَفْسِهِ",
+        english: "None of you [truly] believes until he loves for his brother that which he loves for himself.",
+        source: "Sahih al-Bukhari 13"
+    },
+    {
+        arabic: "خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ",
+        english: "The best among you (Muslims) are those who learn the Quran and teach it.",
+        source: "Sahih al-Bukhari 5027"
+    },
+    {
+        arabic: "مَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الآخِرِ فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ",
+        english: "He who believes in Allah and the Last Day must either speak good or remain silent.",
+        source: "Sahih Muslim 47"
+    },
+    {
+        arabic: "الدِّينُ النَّصِيحَةُ",
+        english: "Religion is sincerity (or sincere advice).",
+        source: "Sahih Muslim 55"
+    },
+    {
+        arabic: "لاَ تَدْخُلُونَ الْجَنَّةَ حَتَّى تُؤْمِنُوا وَلاَ تُؤْمِنُوا حَتَّى تَحَابُّوا",
+        english: "You will not enter Paradise until you believe, and you will not believe until you love one another.",
+        source: "Sahih Muslim 54"
+    },
+    {
+        arabic: "اتَّقِ اللَّهَ حَيْثُمَا كُنْتَ، وَأَتْبِعِ السَّيِّئَةَ الْحَسَنَةَ تَمْحُهَا، وَخَالِقِ النَّاسَ بِخُلُقٍ حَسَنٍ",
+        english: "Fear Allah wherever you are, follow a bad deed with a good deed and it will wipe it out, and behave well towards the people.",
+        source: "Tirmidhi 1987"
+    },
+    {
+        arabic: "مَنْ دَلَّ عَلَى خَيْرٍ فَلَهُ مِثْلُ أَجْرِ فَاعِلِهِ",
+        english: "Whoever guides someone to goodness will have a reward like one who did it.",
+        source: "Sahih Muslim 1893"
+    },
+    {
+        arabic: "الْبِرُّ حُسْنُ الْخُلُقِ",
+        english: "Righteousness is good character.",
+        source: "Sahih Muslim 2553"
+    }
+];
+
+function loadRandomHadith() {
+    const arabicEl = document.getElementById('hadith-arabic');
+    const englishEl = document.getElementById('hadith-english');
+    const sourceEl = document.getElementById('hadith-source');
+
+    if (arabicEl && englishEl) {
+        arabicEl.style.opacity = 0;
+        englishEl.style.opacity = 0;
+        if (sourceEl) sourceEl.style.opacity = 0;
+
+        setTimeout(() => {
+            const random = authenticHadiths[Math.floor(Math.random() * authenticHadiths.length)];
+
+            arabicEl.textContent = random.arabic;
+            englishEl.textContent = `"${random.english}"`;
+            if (sourceEl) sourceEl.textContent = random.source;
+
+            arabicEl.style.opacity = 1;
+            englishEl.style.opacity = 1;
+            if (sourceEl) sourceEl.style.opacity = 1;
+        }, 300);
+    }
+}
+
+// Bind button
+document.addEventListener('DOMContentLoaded', () => {
+    const refreshHadithBtn = document.getElementById('refresh-hadith-btn');
+    if (refreshHadithBtn) {
+        refreshHadithBtn.addEventListener('click', loadRandomHadith);
+    }
+    loadRandomHadith();
+});

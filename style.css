@@ -758,7 +758,7 @@ footer p {
 }
 
 .fade-in-section {
-    opacity: 0;
+    opacity: 1;
     transform: translateY(30px);
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
@@ -1217,7 +1217,7 @@ footer p {
 }
 
 .reveal-bottom {
-    opacity: 0;
+    opacity: 1;
     transform: translateY(30px);
     transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }

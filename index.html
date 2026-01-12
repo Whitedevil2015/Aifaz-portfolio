@@ -35,8 +35,9 @@
                 <li><a href="#home">Home</a></li>
                 <li><a href="#prayer-times">Prayer Times</a></li>
                 <li><a href="#quran-index">Quran</a></li>
+                <li><a href="#books">Books</a></li>
+                <li><a href="#duas">Duas</a></li>
                 <li><a href="#asma-ul-husna">99 Names</a></li>
-                <li><a href="#about">Our Values</a></li>
             </ul>
             <div class="nav-actions">
                 <div class="hamburger">
@@ -210,238 +211,239 @@
     <section id="duas" class="portal-section" style="background: var(--bg-light);">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Daily Adhkar & Duas</h2>
-                <p class="section-subtitle">Remembrance of Allah</p>
-            </div>
-            <div class="values-grid">
-                <div class="value-card" onclick="window.openReaderAndLoad(1, 'Morning Adhkar')" style="cursor:pointer;">
-                    <div class="value-icon"><i class="fas fa-sun"></i></div>
-                    <h3>Morning Adhkar</h3>
-                    <p>Start your day with the remembrance of Allah for protection and barakah.</p>
-                </div>
-                <div class="value-card" onclick="window.openReaderAndLoad(114, 'Evening Adhkar')"
-                    style="cursor:pointer;">
-                    <div class="value-icon"><i class="fas fa-moon"></i></div>
-                    <h3>Evening Adhkar</h3>
-                    <p>End your day with gratitude and seek protection through the night.</p>
-                </div>
-                <div class="value-card" onclick="window.openReaderAndLoad(112, 'Quranic Duas')" style="cursor:pointer;">
-                    <div class="value-icon"><i class="fas fa-hands-praying"></i></div>
-                    <h3>Quranic Duas</h3>
-                    <p>Supplications directly from the Holy Quran for guidance and mercy.</p>
-                </div>
+                <h2 class="section-title">Hisn al-Muslim</h2>
+                <p class="section-subtitle">Authentic Supplications</p>
             </div>
 
-            <!-- Featured Shop Removed -->
+            <!-- Dua Categories -->
+            <div class="dua-categories horizontal-scroll" style="margin-bottom: 2rem; padding-bottom:1rem;">
+                <button class="dua-cat-btn active" data-cat="all">All</button>
+                <button class="dua-cat-btn" data-cat="morning">Morning</button>
+                <button class="dua-cat-btn" data-cat="evening">Evening</button>
+                <button class="dua-cat-btn" data-cat="sleep">Sleep</button>
+                <button class="dua-cat-btn" data-cat="prayer">Prayer</button>
+                <button class="dua-cat-btn" data-cat="travel">Travel</button>
+                <button class="dua-cat-btn" data-cat="home">Home</button>
+                <button class="dua-cat-btn" data-cat="food">Food</button>
+            </div>
 
-            <!-- Featured Shop & Collections Removed -->
+            <!-- Authentic Duas Grid -->
+            <div id="duas-grid" class="prayer-grid"
+                style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+                <!-- Duas Injected via JS -->
+            </div>
+        </div>
+    </section>
 
-            <section id="values" class="about" style="background: var(--bg-white);">
-                <div class="container about-container">
-                    <div class="section-header">
-                        <h2 class="section-title">Core Islamic Values</h2>
-                        <p class="section-subtitle">The Pillars of Character</p>
+    <!-- Featured Shop Removed -->
+
+    <!-- Featured Shop & Collections Removed -->
+
+    <section id="values" class="about" style="background: var(--bg-white);">
+        <div class="container about-container">
+            <div class="section-header">
+                <h2 class="section-title">Core Islamic Values</h2>
+                <p class="section-subtitle">The Pillars of Character</p>
+            </div>
+            <div class="values-grid horizontal-scroll">
+                <!-- Sidq -->
+                <div class="value-card color-card" style="--card-color: #3b82f6;">
+                    <div class="value-icon"><i class="fas fa-check-double"></i></div>
+                    <h3>Sidq (Truthfulness)</h3>
+                    <p>Speaking the truth in every situation, for truth leads to righteousness and Paradise.</p>
+                </div>
+                <!-- Amanah -->
+                <div class="value-card color-card" style="--card-color: #6366f1;">
+                    <div class="value-icon"><i class="fas fa-hand-holding-heart"></i></div>
+                    <h3>Amanah (Honesty)</h3>
+                    <p>Fulfilling trusts and responsibilities with absolute integrity and reliability.</p>
+                </div>
+                <!-- Ihsan -->
+                <div class="value-card color-card" style="--card-color: #8b5cf6;">
+                    <div class="value-icon"><i class="fas fa-star"></i></div>
+                    <h3>Ihsan (Excellence)</h3>
+                    <p>Worshipping Allah as if you see Him, and striving for perfection in all deeds.</p>
+                </div>
+                <!-- Sabr -->
+                <div class="value-card color-card" style="--card-color: #f97316;">
+                    <div class="value-icon"><i class="fas fa-hourglass-half"></i></div>
+                    <h3>Sabr (Patience)</h3>
+                    <p>Enduring hardships with dignity and unwavering faith in Allah's decree.</p>
+                </div>
+                <!-- Shukr -->
+                <div class="value-card color-card" style="--card-color: #10b981;">
+                    <div class="value-icon"><i class="fas fa-leaf"></i></div>
+                    <h3>Shukr (Gratitude)</h3>
+                    <p>Acknowledging blessings and using them in obedience to the Bestower.</p>
+                </div>
+                <!-- Tawadu -->
+                <div class="value-card color-card" style="--card-color: #14b8a6;">
+                    <div class="value-icon"><i class="fas fa-water"></i></div>
+                    <h3>Tawadu (Humility)</h3>
+                    <p>Lowering the wing of mercy to others and avoiding arrogance and pride.</p>
+                </div>
+                <!-- Adl -->
+                <div class="value-card color-card" style="--card-color: #ef4444;">
+                    <div class="value-icon"><i class="fas fa-balance-scale"></i></div>
+                    <h3>Adl (Justice)</h3>
+                    <p>Upholding fairness and equity, even if it is against oneself.</p>
+                </div>
+                <!-- Rahmah -->
+                <div class="value-card color-card" style="--card-color: #ec4899;">
+                    <div class="value-icon"><i class="fas fa-heart"></i></div>
+                    <h3>Rahmah (Compassion)</h3>
+                    <p>Showing mercy to all creation, for those who show mercy will be shown mercy.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Islamic Manners Section -->
+    <section id="manners" class="portal-section" style="background: var(--bg-light);">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Islamic Adab & Manners</h2>
+                <p class="section-subtitle">Conduct of a Believer</p>
+            </div>
+            <div class="values-grid horizontal-scroll">
+                <div class="value-card color-card" style="--card-color: #f59e0b;">
+                    <div class="value-icon"><i class="fas fa-users"></i></div>
+                    <h3>Family Relations</h3>
+                    <p>Kindness to parents, strengthening ties of kinship, and harmonious home life.</p>
+                </div>
+                <div class="value-card color-card" style="--card-color: #3b82f6;">
+                    <div class="value-icon"><i class="fas fa-handshake"></i></div>
+                    <h3>Social Conduct</h3>
+                    <p>Greeting with Salam, honoring guests, and respecting the rights of neighbors.</p>
+                </div>
+                <div class="value-card color-card" style="--card-color: #10b981;">
+                    <div class="value-icon"><i class="fas fa-briefcase"></i></div>
+                    <h3>Business Ethics</h3>
+                    <p>Honest dealings, fair measurements, and fulfilling contracts without deceit.</p>
+                </div>
+                <div class="value-card color-card" style="--card-color: #8b5cf6;">
+                    <div class="value-icon"><i class="fas fa-user-graduate"></i></div>
+                    <h3>Personal Development</h3>
+                    <p>Continuous seeking of knowledge, purification of the soul (Tazkiyah), and
+                        self-discipline.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Commercial Sections Removed -->
+
+    <section id="support" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Reach Out</h2>
+                <p class="section-subtitle">We are here to serve</p>
+            </div>
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <div class="info-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email Us</h4>
+                            <p>salam@zaifaislamic.com</p>
+                        </div>
                     </div>
-                    <div class="values-grid horizontal-scroll">
-                        <!-- Sidq -->
-                        <div class="value-card color-card" style="--card-color: #3b82f6;">
-                            <div class="value-icon"><i class="fas fa-check-double"></i></div>
-                            <h3>Sidq (Truthfulness)</h3>
-                            <p>Speaking the truth in every situation, for truth leads to righteousness and Paradise.</p>
+                    <div class="info-item">
+                        <i class="fas fa-map-pin"></i>
+                        <div>
+                            <h4>Locations</h4>
+                            <p>Serving Globally</p>
                         </div>
-                        <!-- Amanah -->
-                        <div class="value-card color-card" style="--card-color: #6366f1;">
-                            <div class="value-icon"><i class="fas fa-hand-holding-heart"></i></div>
-                            <h3>Amanah (Honesty)</h3>
-                            <p>Fulfilling trusts and responsibilities with absolute integrity and reliability.</p>
-                        </div>
-                        <!-- Ihsan -->
-                        <div class="value-card color-card" style="--card-color: #8b5cf6;">
-                            <div class="value-icon"><i class="fas fa-star"></i></div>
-                            <h3>Ihsan (Excellence)</h3>
-                            <p>Worshipping Allah as if you see Him, and striving for perfection in all deeds.</p>
-                        </div>
-                        <!-- Sabr -->
-                        <div class="value-card color-card" style="--card-color: #f97316;">
-                            <div class="value-icon"><i class="fas fa-hourglass-half"></i></div>
-                            <h3>Sabr (Patience)</h3>
-                            <p>Enduring hardships with dignity and unwavering faith in Allah's decree.</p>
-                        </div>
-                        <!-- Shukr -->
-                        <div class="value-card color-card" style="--card-color: #10b981;">
-                            <div class="value-icon"><i class="fas fa-leaf"></i></div>
-                            <h3>Shukr (Gratitude)</h3>
-                            <p>Acknowledging blessings and using them in obedience to the Bestower.</p>
-                        </div>
-                        <!-- Tawadu -->
-                        <div class="value-card color-card" style="--card-color: #14b8a6;">
-                            <div class="value-icon"><i class="fas fa-water"></i></div>
-                            <h3>Tawadu (Humility)</h3>
-                            <p>Lowering the wing of mercy to others and avoiding arrogance and pride.</p>
-                        </div>
-                        <!-- Adl -->
-                        <div class="value-card color-card" style="--card-color: #ef4444;">
-                            <div class="value-icon"><i class="fas fa-balance-scale"></i></div>
-                            <h3>Adl (Justice)</h3>
-                            <p>Upholding fairness and equity, even if it is against oneself.</p>
-                        </div>
-                        <!-- Rahmah -->
-                        <div class="value-card color-card" style="--card-color: #ec4899;">
-                            <div class="value-icon"><i class="fas fa-heart"></i></div>
-                            <h3>Rahmah (Compassion)</h3>
-                            <p>Showing mercy to all creation, for those who show mercy will be shown mercy.</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fab fa-whatsapp"></i>
+                        <div>
+                            <h4>WhatsApp</h4>
+                            <p>+1 234 567 890</p>
                         </div>
                     </div>
                 </div>
-            </section>
+                <form class="contact-form">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="email@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" rows="5" placeholder="How can we assist you?" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
 
-            <!-- Islamic Manners Section -->
-            <section id="manners" class="portal-section" style="background: var(--bg-light);">
-                <div class="container">
-                    <div class="section-header">
-                        <h2 class="section-title">Islamic Adab & Manners</h2>
-                        <p class="section-subtitle">Conduct of a Believer</p>
-                    </div>
-                    <div class="values-grid horizontal-scroll">
-                        <div class="value-card color-card" style="--card-color: #f59e0b;">
-                            <div class="value-icon"><i class="fas fa-users"></i></div>
-                            <h3>Family Relations</h3>
-                            <p>Kindness to parents, strengthening ties of kinship, and harmonious home life.</p>
-                        </div>
-                        <div class="value-card color-card" style="--card-color: #3b82f6;">
-                            <div class="value-icon"><i class="fas fa-handshake"></i></div>
-                            <h3>Social Conduct</h3>
-                            <p>Greeting with Salam, honoring guests, and respecting the rights of neighbors.</p>
-                        </div>
-                        <div class="value-card color-card" style="--card-color: #10b981;">
-                            <div class="value-icon"><i class="fas fa-briefcase"></i></div>
-                            <h3>Business Ethics</h3>
-                            <p>Honest dealings, fair measurements, and fulfilling contracts without deceit.</p>
-                        </div>
-                        <div class="value-card color-card" style="--card-color: #8b5cf6;">
-                            <div class="value-icon"><i class="fas fa-user-graduate"></i></div>
-                            <h3>Personal Development</h3>
-                            <p>Continuous seeking of knowledge, purification of the soul (Tazkiyah), and
-                                self-discipline.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Commercial Sections Removed -->
-
-            <section id="support" class="contact">
-                <div class="container">
-                    <div class="section-header">
-                        <h2 class="section-title">Reach Out</h2>
-                        <p class="section-subtitle">We are here to serve</p>
-                    </div>
-                    <div class="contact-wrapper">
-                        <div class="contact-info">
-                            <div class="info-item">
-                                <i class="fas fa-envelope"></i>
-                                <div>
-                                    <h4>Email Us</h4>
-                                    <p>salam@zaifaislamic.com</p>
-                                </div>
-                            </div>
-                            <div class="info-item">
-                                <i class="fas fa-map-pin"></i>
-                                <div>
-                                    <h4>Locations</h4>
-                                    <p>Serving Globally</p>
-                                </div>
-                            </div>
-                            <div class="info-item">
-                                <i class="fab fa-whatsapp"></i>
-                                <div>
-                                    <h4>WhatsApp</h4>
-                                    <p>+1 234 567 890</p>
-                                </div>
-                            </div>
-                        </div>
-                        <form class="contact-form">
-                            <div class="form-group">
-                                <label for="name">Name</label>
-                                <input type="text" id="name" placeholder="Your Name" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" id="email" placeholder="email@example.com" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="message">Message</label>
-                                <textarea id="message" rows="5" placeholder="How can we assist you?"
-                                    required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Send Message</button>
-                        </form>
-                    </div>
-                </div>
-            </section>
-
-            <footer>
-                <div class="container footer-content">
-                    <div class="footer-top">
-                        <div class="footer-logo">ZAIFA<span class="highlight">ISLAMIC</span></div>
-                        <p>Reviving Sunnahs through quality, ethics, and excellence. Your trusted partner in the Islamic
-                            lifestyle.</p>
-                    </div>
-                    <div class="footer-bottom">
-                        <div class="footer-bottom">
-                            <p>&copy; 2026 ZAIFA ISLAMIC. Learning Edition. All rights reserved.</p>
-                            <div class="payment-icons">
-                                <i class="fas fa-book-open"></i>
-                                <i class="fas fa-mosque"></i>
-                                <i class="fas fa-star-and-crescent"></i>
-                            </div>
-                        </div>
-                    </div>
-            </footer>
-
-            <!-- Quran Reader Modal -->
-            <div id="quran-modal" class="modal">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 id="reader-title" style="font-family:'Amiri'; font-size:1.5rem; color: var(--gold);">The
-                            Noble Quran
-                        </h3>
-                        <div class="reader-controls-center" style="display:flex; gap:10px;">
-                            <button class="lang-btn active" data-lang="en"
-                                style="background:none; border:1px solid #D4AF37; color:white; padding:5px 10px; border-radius:4px; cursor:pointer;">English</button>
-                            <button class="lang-btn" data-lang="ur"
-                                style="background:none; border:1px solid #D4AF37; color:white; padding:5px 10px; border-radius:4px; cursor:pointer;">Urdu</button>
-                        </div>
-                        <div class="audio-player-box">
-                            <span id="surah-info" style="font-size:0.8rem; color:var(--text-light);"></span>
-                            <div class="player-controls">
-                                <button id="play-pause-btn"><i class="fas fa-play"></i></button>
-                            </div>
-                            <audio id="quran-audio"></audio>
-                        </div>
-                        <button id="close-quran-btn"><i class="fas fa-times"></i></button>
-                    </div>
-                    <div class="modal-body">
-                        <aside class="surah-sidebar">
-                            <div class="tabs"
-                                style="display:flex; padding:10px; border-bottom:1px solid rgba(255,255,255,0.1);">
-                                <button id="tab-surah" class="active"
-                                    style="flex:1; background:none; border:none; color:white; cursor:pointer; font-weight:bold;">Surahs</button>
-                            </div>
-                            <div id="surah-list-container" class="surah-list-container">
-                                <div id="surah-list"></div>
-                            </div>
-                        </aside>
-                        <main class="verse-view">
-                            <div id="quran-content">
-                                <!-- Verses go here -->
-                            </div>
-                        </main>
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-top">
+                <div class="footer-logo">ZAIFA<span class="highlight">ISLAMIC</span></div>
+                <p>Reviving Sunnahs through quality, ethics, and excellence. Your trusted partner in the Islamic
+                    lifestyle.</p>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-bottom">
+                    <p>&copy; 2026 ZAIFA ISLAMIC. Learning Edition. All rights reserved.</p>
+                    <div class="payment-icons">
+                        <i class="fas fa-book-open"></i>
+                        <i class="fas fa-mosque"></i>
+                        <i class="fas fa-star-and-crescent"></i>
                     </div>
                 </div>
             </div>
+    </footer>
 
-            <script src="script.js"></script>
+    <!-- Quran Reader Modal -->
+    <div id="quran-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="reader-title" style="font-family:'Amiri'; font-size:1.5rem; color: var(--gold);">The
+                    Noble Quran
+                </h3>
+                <div class="reader-controls-center" style="display:flex; gap:10px;">
+                    <button class="lang-btn active" data-lang="en"
+                        style="background:none; border:1px solid #D4AF37; color:white; padding:5px 10px; border-radius:4px; cursor:pointer;">English</button>
+                    <button class="lang-btn" data-lang="ur"
+                        style="background:none; border:1px solid #D4AF37; color:white; padding:5px 10px; border-radius:4px; cursor:pointer;">Urdu</button>
+                </div>
+                <div class="audio-player-box">
+                    <span id="surah-info" style="font-size:0.8rem; color:var(--text-light);"></span>
+                    <div class="player-controls">
+                        <button id="play-pause-btn"><i class="fas fa-play"></i></button>
+                    </div>
+                    <audio id="quran-audio"></audio>
+                </div>
+                <button id="close-quran-btn"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <aside class="surah-sidebar">
+                    <div class="tabs"
+                        style="display:flex; padding:10px; border-bottom:1px solid rgba(255,255,255,0.1);">
+                        <button id="tab-surah" class="active"
+                            style="flex:1; background:none; border:none; color:white; cursor:pointer; font-weight:bold;">Surahs</button>
+                    </div>
+                    <div id="surah-list-container" class="surah-list-container">
+                        <div id="surah-list"></div>
+                    </div>
+                </aside>
+                <main class="verse-view">
+                    <div id="quran-content">
+                        <!-- Verses go here -->
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 
 </html>

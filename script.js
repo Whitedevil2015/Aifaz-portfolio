@@ -598,6 +598,202 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (e) { grid.innerHTML = "<p>Failed to load names. Please try again.</p>"; }
     }
 
+    // --- Authentic Duas Logic ---
+    const duasData = [
+        {
+            id: 1,
+            category: "morning",
+            title: "Morning Main Adhkar",
+            arabic: "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+            transliteration: "Asbahna wa-asbahal-mulku lillah walhamdu lillah la ilaha illal-lah wahdahu la sharika lah, lahul-mulku walahul-hamdu wa-huwa 'ala kulli shay'in qadir.",
+            translation: "We have entered a new morning and the dominion belongs to Allah, and all praise is to Allah. There is no deity but Allah alone, He has no partner. His is the dominion and His is the praise, and He is over all things competent.",
+            source: "Muslim 4/2088"
+        },
+        {
+            id: 2,
+            category: "evening",
+            title: "Evening Protection",
+            arabic: "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ...",
+            transliteration: "Amsayna wa-amsal-mulku lillah walhamdu lillah...",
+            translation: "We have reached the evening and the dominion belongs to Allah, and all praise is to Allah...",
+            source: "Muslim"
+        },
+        {
+            id: 3,
+            category: "food",
+            title: "Before Eating",
+            arabic: "بِسْمِ اللَّهِ",
+            transliteration: "Bismillah",
+            translation: "In the name of Allah.",
+            source: "Al-Bukhari 6/520"
+        },
+        {
+            id: 4,
+            category: "food",
+            title: "After Eating",
+            arabic: "الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنِي هَذَا وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلَا قُوَّةٍ",
+            transliteration: "Alhamdu lillahil-ladhi at'amani hadha wa razaqanihi min ghayri hawlin minni wa la quwwah.",
+            translation: "All praise is due to Allah who fed me this and provided it for me without any might or power on my part.",
+            source: "At-Tirmidhi"
+        },
+        {
+            id: 5,
+            category: "travel",
+            title: "Travelling Dua",
+            arabic: "سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ وَإِنَّا إِلَى رَبِّنَا لَمُنْقَلِبُونَ",
+            transliteration: "Subhanal-ladhi sakh-khara lana hadha wa ma kunna lahu muqrinin. Wa inna ila Rabbina lamunqalibun.",
+            translation: "Glory is to Him Who has subjected this to us, and we were not able [to subdue it] ourselves. And indeed, to our Lord we will return.",
+            source: "Surah Az-Zukhruf 43:13-14"
+        },
+        {
+            id: 6,
+            category: "home",
+            title: "Entering Home",
+            arabic: "بِسْمِ اللَّهِ وَلَجْنَا، وَبِسْمِ اللَّهِ خَرَجْنَا، وَعَلَى رَبِّنَا تَوَكَّلْنَا",
+            transliteration: "Bismillahi walajna, wa bismillahi kharajna, wa 'ala Rabbina tawakkalna.",
+            translation: "In the name of Allah we enter, and in the name of Allah we leave, and upon our Lord we rely.",
+            source: "Abu Dawud"
+        },
+        {
+            id: 7,
+            category: "home",
+            title: "Leaving Home",
+            arabic: "بِسْمِ اللَّهِ، تَوَكَّلْتُ عَلَى اللَّهِ، وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ",
+            transliteration: "Bismillahi, tawakkaltu 'alallahi, wa la hawla wa la quwwata illa billah.",
+            translation: "In the name of Allah, I rely upon Allah, and there is no might or power except with Allah.",
+            source: "Abu Dawud 4/325"
+        },
+        {
+            id: 8,
+            category: "sleep",
+            title: "Before Sleeping",
+            arabic: "بِاسْمِكَ رَبِّي وَضَعْتُ جَنْبِي، وَبِكَ أَرْفَعُهُ...",
+            transliteration: "Bismika Rabbi wada'tu janbi, wa bika arfa'uhu...",
+            translation: "In Your name my Lord, I lay my side down, and in Your name I raise it...",
+            source: "Al-Bukhari 11/126"
+        },
+        {
+            id: 9,
+            category: "prayer",
+            title: "Dua After Prayer",
+            arabic: "أَسْتَغْفِرُ اللَّهَ (3x) اللَّهُمَّ أَنْتَ السَّلاَمُ وَمِنْكَ السَّلاَمُ، تَبَارَكْتَ يَا ذَا الْجَلاَلِ وَالإِكْرَامِ",
+            transliteration: "Astaghfirullah (3x). Allahumma antas-salam wa minkas-salam, tabarakta ya dhal-jalali wal-ikram.",
+            translation: "I seek forgiveness from Allah (3x). O Allah, You are Peace and from You is peace. Blessed are You, O Owner of Majesty and Honor.",
+            source: "Muslim 1/414"
+        },
+        {
+            id: 10,
+            category: "ablution",
+            title: "After Wudhu",
+            arabic: "أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ",
+            transliteration: "Ash-hadu an la ilaha illallahu wahdahu la sharika lahu wa ash-hadu anna Muhammadan 'abduhu wa Rasuluhu.",
+            translation: "I testify that there is no deity except Allah alone, with no partner, and I testify that Muhammad is His slave and Messenger.",
+            source: "Muslim 1/209"
+        },
+        {
+            id: 11,
+            category: "sleep",
+            title: "Upon Waking",
+            arabic: "الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ",
+            transliteration: "Alhamdu lillahil-ladhi ahyana ba'da ma amatana wa ilayhin-nushur.",
+            translation: "All praise is due to Allah who gave us life after having given us death, and unto Him is the resurrection.",
+            source: "Al-Bukhari 11/113"
+        },
+        {
+            id: 12,
+            category: "clothing",
+            title: "New Clothes",
+            arabic: "اللَّهُمَّ لَكَ الْحَمْدُ أَنْتَ كَسَوْتَنِيهِ، أَسْأَلُكَ مِنْ خَيْرِهِ وَخَيْرِ مَا صُنِعَ لَهُ، وَأَعُوذُ بِكَ مِنْ شَرِّهِ وَشَرِّ مَا صُنِعَ لَهُ",
+            transliteration: "Allahumma lakal-hamdu anta kasawtanihi, as'aluka min khayrihi wa khayri ma suni'a lahu, wa a'udhu bika min sharrihi wa sharri ma suni'a lahu.",
+            translation: "O Allah, for You is all praise. You have clothed me with it. I ask You for the good of it and the good for which it was made, and I seek refuge with You from the evil of it and the evil for which it was made.",
+            source: "Abu Dawud"
+        }
+    ];
+
+    function renderDuas(category = 'all') {
+        const grid = document.getElementById('duas-grid');
+        if (!grid) return;
+
+        const filtered = category === 'all' ? duasData : duasData.filter(d => d.category === category);
+        const favorites = JSON.parse(localStorage.getItem('favDuas') || '[]');
+
+        grid.innerHTML = filtered.map(d => {
+            const isFav = favorites.includes(d.id);
+            return `
+            <div class="prayer-card dua-card reveal-bottom">
+                <div class="dua-card-content">
+                    <div class="dua-header">
+                        <span class="dua-category-tag">${d.category}</span>
+                        <div class="dua-actions-mini" style="display:flex; gap:5px;">
+                             <button class="dua-action-btn favorite ${isFav ? 'active' : ''}" onclick="toggleFaxDua(${d.id})"><i class="${isFav ? 'fas' : 'far'} fa-heart"></i></button>
+                        </div>
+                    </div>
+                    <h3 class="dua-title">${d.title}</h3>
+                    <div class="dua-arabic">${d.arabic}</div>
+                    <div class="dua-transliteration">"${d.transliteration}"</div>
+                    <div class="dua-translation">${d.translation}</div>
+                    <div class="dua-source">${d.source}</div>
+                    
+                    <div class="dua-actions">
+                        <button class="dua-action-btn" onclick="copyDuaText('${d.arabic}')"><i class="fas fa-copy"></i> Copy</button>
+                        <button class="dua-action-btn" onclick="playGenericAudio()"><i class="fas fa-volume-up"></i> Audio</button>
+                        <button class="dua-action-btn" onclick="shareDua('${d.title}', '${d.translation}')"><i class="fas fa-share-alt"></i> Share</button>
+                    </div>
+                </div>
+            </div>
+            `;
+        }).join('');
+
+        // Re-observe for animations
+        document.querySelectorAll('#duas-grid .reveal-bottom').forEach(el => revealObserver.observe(el));
+    }
+
+    // Category Buttons Logic
+    document.querySelectorAll('.dua-cat-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.dua-cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderDuas(btn.getAttribute('data-cat'));
+        });
+    });
+
+    // Helper Functions
+    window.toggleFaxDua = (id) => {
+        let favorites = JSON.parse(localStorage.getItem('favDuas') || '[]');
+        if (favorites.includes(id)) {
+            favorites = favorites.filter(f => f !== id);
+        } else {
+            favorites.push(id);
+        }
+        localStorage.setItem('favDuas', JSON.stringify(favorites));
+        // Re-render to show state change (or just toggle class for performance)
+        const activeBtn = document.querySelector('.dua-cat-btn.active');
+        renderDuas(activeBtn ? activeBtn.getAttribute('data-cat') : 'all');
+    };
+
+    window.copyDuaText = (text) => {
+        navigator.clipboard.writeText(text).then(() => alert('Arabic text copied to clipboard!'));
+    };
+
+    window.playGenericAudio = () => {
+        alert('Audio recitation coming soon for this Dua.');
+    };
+
+    window.shareDua = (title, text) => {
+        if (navigator.share) {
+            navigator.share({
+                title: title,
+                text: `${title}: ${text} - via Noor Islamic Portal`,
+                url: window.location.href
+            });
+        } else {
+            alert('Sharing not supported on this device.');
+        }
+    };
+
+    // Initial Render
+    renderDuas();
+
     initAsma();
 
 });
@@ -614,7 +810,7 @@ class VanillaTilt {
             glare: true,
             "max-glare": 0.3
         }, settings);
-        
+
         this.init();
     }
 
@@ -634,7 +830,7 @@ class VanillaTilt {
         const y = event.clientY - rect.top;
         const xPct = x / rect.width;
         const yPct = y / rect.height;
-        
+
         const xTilt = (0.5 - yPct) * this.settings.max * 2;
         const yTilt = (xPct - 0.5) * this.settings.max * 2;
 

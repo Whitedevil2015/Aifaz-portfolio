@@ -1,24 +1,35 @@
 :root {
-    /* Elegant Green Theme */
-    --primary-color: #10b981;
-    /* Emerald */
+    /* Noor Ethics: Modern Light Theme */
+    --primary-color: #047857;
+    /* Deep Emerald */
+    --primary-light: #34d399;
+    /* Soft Green */
     --primary-dark: #064e3b;
     --accent-color: #d4af37;
     /* Gold */
-    --text-dark: #f0fdf4;
-    --text-light: #d1fae5;
-    --bg-white: #022c22;
-    /* Deep Emerald Black */
-    --bg-light: #064e3b;
-    --glass-bg: rgba(6, 78, 59, 0.4);
-    --glass-border: rgba(16, 185, 129, 0.2);
+    --text-dark: #111827;
+    /* Gray-900 */
+    --text-muted: #6b7280;
+    /* Gray-500 */
+    --bg-white: #fdfbf7;
+    /* Warm Cream */
+    --bg-surface: #ffffff;
+    /* Pure White */
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(4, 120, 87, 0.08);
+    /* faint emerald border */
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.08);
+
     --font-serif: 'Cormorant Garamond', serif;
     --font-sans: 'Plus Jakarta Sans', sans-serif;
     --font-arabic: 'Amiri', serif;
-    --gradient-gold: linear-gradient(135deg, #d4af37 0%, #f6e0b5 50%, #d4af37 100%);
-    --gradient-emerald: linear-gradient(135deg, #059669 0%, #047857 100%);
-    --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    --container-width: 1240px;
+
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --container-width: 1200px;
+    --radius-lg: 24px;
+    --radius-md: 16px;
 }
 
 * {
@@ -34,11 +45,10 @@ html {
 body {
     font-family: var(--font-sans);
     color: var(--text-dark);
-    line-height: 1.6;
+    line-height: 1.7;
     background-color: var(--bg-white);
     overflow-x: hidden;
-    position: relative;
-    perspective: 2000px;
+    -webkit-font-smoothing: antialiased;
 }
 
 /* Islamic Pattern Background (from Reference) */
@@ -1932,557 +1942,267 @@ footer p {
     /* Emerald green icon */
 }
 
-/* Footer (Dark Green Theme) */
-/* Footer (Dark Green Theme) */
-.main-footer {
-    background: #020617;
-    /* Very dark slate/black */
-    background: #047857;
-    color: #e5e7eb;
-    padding: 5rem 0 2rem 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
 
-/* Minimalist Overrides (Applied here to ensure they cascade over previous styles) */
-:root {
-    /* Noor Ethics - Soft Light Theme */
-    --primary-color: #047857;
-    /* Deep Emerald */
-    --primary-light: #10b981;
-    /* Soft Emerald */
-    --accent-color: #d4af37;
-    /* Gold */
-    --text-dark: #1f2937;
-    /* Dark Gray */
-    --text-muted: #4b5563;
-    /* Medium Gray */
-    --bg-white: #fdfbf7;
-    /* Gentle Cream */
-    --bg-light: #ffffff;
-    /* White */
-    --glass-bg: rgba(255, 255, 255, 0.8);
-    --glass-border: rgba(4, 120, 87, 0.1);
-    --font-serif: 'Cormorant Garamond', serif;
-    --font-sans: 'Plus Jakarta Sans', sans-serif;
-    --font-arabic: 'Amiri', serif;
-    --gradient-emerald: linear-gradient(135deg, #047857 0%, #065f46 100%);
-    --container-width: 1240px;
-}
+/* --- Modern Component System --- */
 
-body {
-    background-color: var(--bg-white);
-    color: var(--text-dark);
-    font-family: var(--font-sans);
-}
-
+/* Modern Navbar */
 .navbar {
-    background: rgba(253, 251, 247, 0.95) !important;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
-    backdrop-filter: blur(10px) !important;
+    background: rgba(253, 251, 247, 0.85) !important;
+    backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid var(--glass-border) !important;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 .logo span {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
     color: var(--primary-color) !important;
-    font-weight: 700 !important;
+    letter-spacing: -0.5px;
 }
 
 .nav-links a {
     color: var(--text-muted) !important;
-    font-weight: 500 !important;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.2s;
 }
 
 .nav-links a:hover {
     color: var(--primary-color) !important;
 }
 
-/* Hero Refinement for Light Theme */
+/* Modern Hero */
 .hero-section {
     background: var(--bg-white);
-    background-image: linear-gradient(rgba(253, 251, 247, 0.9), rgba(253, 251, 247, 0.95)),
-        url('https://www.transparenttextures.com/patterns/arabesque.png');
-    /* Subtle pattern placeholder or pure CSS pattern */
-    color: var(--text-dark);
+    padding: 8rem 2rem 6rem;
+    text-align: center;
+    position: relative;
+}
+
+.hero-verse-container {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 10;
 }
 
 .arabic-verse {
+    font-family: var(--font-arabic);
+    font-size: 3.5rem;
     color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
 }
 
 .english-verse {
-    color: var(--text-dark);
-}
-
-.verse-ref {
-    color: var(--accent-color);
-}
-
-.hero-decorative-divider {
-    color: var(--accent-color);
-}
-
-.hijri-badge {
-    background: white;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    color: var(--primary-color);
-}
-
-.hero-scroll-btn a {
-    color: var(--text-muted) !important;
-}
-
-/* General Section Overrides */
-.portal-section {
-    background: var(--bg-white);
-}
-
-.section-title {
-    color: var(--primary-color) !important;
-}
-
-.section-subtitle {
-    color: var(--text-muted) !important;
-}
-
-/* Cards Light Mode */
-.hadith-card,
-.kids-card,
-.glass-container,
-.prayer-card {
-    background: white !important;
-    border: 1px solid rgba(0, 0, 0, 0.05) !important;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
-}
-
-.hadith-card:hover,
-.kids-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05) !important;
-    background: white !important;
-}
-
-.hadith-arabic {
-    color: var(--text-dark);
-}
-
-.hadith-english {
-    color: var(--text-muted);
-}
-
-.card-icon-bg {
-    background: rgba(4, 120, 87, 0.1);
-    color: var(--primary-color);
-}
-
-.kids-card h3 {
-    color: var(--text-dark);
-}
-
-.kids-card p {
-    color: var(--text-muted);
-}
-
-.prayer-time {
-    -webkit-text-fill-color: var(--text-dark);
-    color: var(--text-dark);
-}
-
-/* Footer Light */
-.main-footer {
-    background: #047857;
-    color: #e5e7eb;
-}
-
-.footer-col h4 {
-    color: white;
-}
-
-.footer-col ul li a {
-    color: #d1fae5;
-}
-
-/* Hadith Section Styles */
-.hadith-card {
-    background: var(--bg-light);
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
-    padding: 2.5rem;
-    text-align: center;
-    max-width: 900px;
-    margin: 0 auto;
-    position: relative;
-    transition: transform 0.3s ease, border-color 0.3s ease;
-}
-
-.hadith-card:hover {
-    border-color: rgba(16, 185, 129, 0.3);
-    transform: translateY(-2px);
-}
-
-.hadith-arabic {
-    font-family: var(--font-arabic);
-    font-size: 1.8rem;
-    color: var(--text-dark);
-    margin-bottom: 1.5rem;
-    line-height: 2;
-    direction: rtl;
-}
-
-.hadith-english {
     font-family: var(--font-serif);
-    font-size: 1.25rem;
-    color: #e2e8f0;
-    line-height: 1.6;
-    font-style: italic;
-    margin-bottom: 2rem;
-}
-
-.hadith-source-row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    padding-top: 1rem;
-    margin-top: 1rem;
-}
-
-.hadith-source {
-    font-family: var(--font-sans);
-    font-size: 0.85rem;
-    color: var(--primary-color);
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    font-size: 2.8rem;
+    color: var(--text-dark);
     font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 2rem;
+    letter-spacing: -1px;
 }
 
-#refresh-hadith-btn {
-    color: var(--text-light);
-    transition: transform 0.4s;
+/* Floating Search Bar */
+.ethics-search-box {
+    margin-top: 3rem;
+    position: relative;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-#refresh-hadith-btn:hover {
-    color: var(--primary-color);
-    transform: rotate(180deg);
-}
-
-/* Hijri Calendar Styles */
-.hijri-badge {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--glass-border);
-    padding: 0.5rem 1.2rem;
-    border-radius: 50px;
-    color: var(--accent-color);
+.ethics-search-box input {
+    width: 100%;
+    padding: 1.2rem 2rem;
+    padding-right: 140px;
+    border-radius: 99px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    /* faint border */
+    background: var(--bg-surface);
+    box-shadow: var(--shadow-lg);
     font-family: var(--font-sans);
-    font-weight: 500;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 1rem;
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    outline: none;
+    transition: var(--transition);
 }
 
-/* Kids & Family Zone Styles */
-.kids-grid {
+.ethics-search-box input:focus {
+    box-shadow: 0 20px 40px -10px rgba(4, 120, 87, 0.15);
+    border-color: rgba(4, 120, 87, 0.3);
+}
+
+.ethics-search-box button {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    bottom: 8px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0 2rem;
+    border-radius: 99px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    transition: transform 0.2s, background 0.2s;
+}
+
+.ethics-search-box button:hover {
+    background: var(--primary-dark);
+    transform: scale(1.02);
+}
+
+/* Modern Cards */
+.kids-grid,
+.ethic-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 2rem;
     margin-top: 2rem;
 }
 
-.kids-card {
-    background: var(--bg-light);
-    border: 1px solid var(--glass-border);
-    border-radius: 16px;
-    padding: 2rem;
+.kids-card,
+.category-card,
+.hadith-card {
+    background: var(--bg-surface) !important;
+    border: 1px solid rgba(0, 0, 0, 0.04) !important;
+    border-radius: var(--radius-lg) !important;
+    padding: 2.5rem 2rem;
     text-align: center;
-    transition: transform 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    box-shadow: var(--shadow-sm) !important;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
 }
 
-.kids-card:hover {
-    transform: translateY(-5px);
-    background: #1e293b;
+.kids-card:hover,
+.category-card:hover,
+.hadith-card:hover {
+    transform: translateY(-8px) !important;
+    box-shadow: var(--shadow-lg) !important;
+    border-color: rgba(0, 0, 0, 0.02) !important;
 }
 
 .card-icon-bg {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: rgba(16, 185, 129, 0.2);
+    width: 72px;
+    height: 72px;
+    border-radius: 20px;
+    background: rgba(4, 120, 87, 0.08);
     color: var(--primary-color);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
-    margin-bottom: 1.2rem;
+    font-size: 1.8rem;
+    margin: 0 auto 1.5rem auto;
+    transition: transform 0.4s ease;
+}
+
+.kids-card:hover .card-icon-bg {
+    background: var(--primary-color);
+    color: white;
+    transform: rotate(10deg);
 }
 
 .kids-card h3 {
-    font-family: var(--font-sans);
-    color: white;
-    margin-bottom: 0.5rem;
-}
-
-.kids-card p {
-    font-size: 0.9rem;
-    color: #94a3b8;
-    line-height: 1.5;
-}
-
-/* Digital Tasbih Styles */
-.tasbih-display {
-    background: #0f172a;
-    width: 100px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    margin: 1rem 0;
-    border: 2px solid #334155;
-}
-
-#tasbih-count {
-    font-family: 'Courier New', monospace;
-    font-size: 2rem;
-    color: var(--primary-color);
-    font-weight: bold;
-}
-
-.tasbih-controls {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.btn-tasbih {
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 50px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 4px 0 #065f46;
-    /* 3D Click feel */
-    transition: transform 0.1s;
-}
-
-.btn-tasbih:active {
-    transform: translateY(4px);
-    box-shadow: none;
-}
-
-.btn-reset {
-    background: #334155;
-    color: #94a3b8;
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: color 0.3s;
-}
-
-.btn-reset:hover {
-    color: white;
-}
-
-.hero-verse-container {
-    padding: 0 1rem;
-}
-
-.arabic-verse {
-    color: var(--text-dark);
-    text-shadow: none;
-    font-weight: 400;
-}
-
-.english-verse {
-    font-family: var(--font-sans);
-    font-weight: 300;
-    color: #e2e8f0;
-}
-
-.surah-grid-display,
-.asma-grid-display,
-.surah-grid-full,
-.asma-grid-full {
-    gap: 1rem;
-}
-
-.glass-container,
-.card-glass,
-.prayer-card {
-    background: var(--bg-light) !important;
-    border: 1px solid var(--glass-border) !important;
-    box-shadow: none !important;
-    border-radius: 8px !important;
-    backdrop-filter: none;
-    transform: none !important;
-    transition: background 0.2s ease, transform 0.2s ease;
-}
-
-.glass-container:hover,
-.card-glass:hover,
-.prayer-card:hover {
-    background: #334155 !important;
-    transform: translateY(-2px) !important;
-}
-
-.prayer-time {
-    background: none;
-    -webkit-text-fill-color: var(--text-dark);
-    color: var(--text-dark);
-    font-weight: 500;
-}
-
-.asma-number,
-.verse-num {
-    background: transparent !important;
-    color: var(--primary-color) !important;
-    font-weight: bold;
-}
-
-
-.footer-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 4rem;
-    margin-bottom: 4rem;
-}
-
-.footer-logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
     font-family: var(--font-serif);
-    font-size: 1.5rem;
-    color: white;
-    margin-bottom: 1rem;
-}
-
-.footer-desc {
-    font-size: 0.95rem;
-    line-height: 1.6;
-    opacity: 0.8;
-    max-width: 300px;
-}
-
-.footer-col h4 {
-    color: white;
-    font-family: var(--font-sans);
-    margin-bottom: 1.5rem;
-    font-size: 1.1rem;
-}
-
-.footer-col ul {
-    list-style: none;
-}
-
-.footer-col ul li {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--text-dark);
     margin-bottom: 0.8rem;
 }
 
-.footer-col ul li a {
-    color: #9ca3af;
-    text-decoration: none;
-    transition: color 0.2s;
+.kids-card p {
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.6;
 }
 
-.footer-col ul li a:hover {
-    color: var(--accent-color);
-}
-
-.footer-bottom-bar {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding-top: 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.9rem;
-    opacity: 0.7;
-}
-
-.arabic-signature {
-    font-family: var(--font-arabic);
-    color: var(--accent-color);
-    font-size: 1.2rem;
-}
-
-/* Community Section Dark Green */
-.community-section {
-    background: #022c22 !important;
-    /* Deepest Emerald to match footer/hero edge */
-    color: var(--text-dark) !important;
+/* Hadith Card Refinement */
+.hadith-card {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 4rem;
     position: relative;
     overflow: hidden;
 }
 
-.community-section::before {
-    content: '';
+.hadith-card::before {
+    content: '"';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 70%);
-    pointer-events: none;
+    top: 1rem;
+    left: 2rem;
+    font-size: 10rem;
+    color: rgba(4, 120, 87, 0.03);
+    font-family: serif;
+    line-height: 1;
 }
 
-.stat-pill {
-    background: rgba(6, 78, 59, 0.6) !important;
-    border: 1px solid var(--glass-border) !important;
-    color: var(--text-light) !important;
+.hadith-arabic {
+    font-size: 2.2rem;
+    margin-bottom: 2rem;
+    color: var(--text-dark);
 }
 
-.community-title {
-    color: white !important;
+.hadith-english {
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--text-muted);
 }
 
+.hadith-source {
+    color: var(--accent-color);
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    font-size: 0.8rem;
+}
+
+/* Footer Clean */
 .main-footer {
-    background: #011812;
-    /* Almost black green for bottom-most part */
-    border-top: 1px solid rgba(16, 185, 129, 0.1);
+    background: #047857;
+    color: #f3f4f6;
+    padding: 6rem 0 3rem;
 }
 
 .footer-col h4 {
     color: white;
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
 }
 
 .footer-col ul li a {
-    color: #9ca3af;
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .footer-col ul li a:hover {
-    color: var(--accent-color);
+    color: white;
 }
 
-.footer-bottom-bar {
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+/* General Titles */
+.section-title {
+    font-family: var(--font-serif);
+    color: var(--primary-color) !important;
+    /* Ensure override */
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
 }
 
-.arabic-signature {
-    color: var(--accent-color);
+.section-subtitle {
+    font-family: var(--font-sans);
+    color: var(--text-muted) !important;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
-@media (max-width: 768px) {
-    .community-title {
-        font-size: 2.5rem;
-    }
-
-    .footer-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-
-    .footer-bottom-bar {
-        flex-direction: column;
-        gap: 1rem;
-    }
-}
-
-.dua-action-btn.favorite.active {
-    color: #ef4444;
+.hijri-badge {
+    background: white;
+    box-shadow: var(--shadow-sm);
+    padding: 0.6rem 1.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    color: var(--primary-dark);
 }

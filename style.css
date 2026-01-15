@@ -8,6 +8,30 @@
     --text-dark: #1f2937;
 }
 
+/* Dark Mode Overrides */
+.dark {
+    --bg-light: #111827;
+    --text-dark: #f9fafb;
+    --primary: #d4af37;
+    background-color: #111827;
+    color: #f9fafb;
+}
+
+.dark .bg-white {
+    background-color: #1f2937 !important;
+    border-color: #374151 !important;
+    color: #f9fafb;
+}
+
+.dark .text-gray-800 {
+    color: #f9fafb !important;
+}
+
+.dark .text-gray-500 {
+    color: #9ca3af !important;
+}
+
+
 body {
     font-family: 'Inter', sans-serif;
     background-color: var(--bg-light);

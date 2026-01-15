@@ -25,576 +25,123 @@
 </head>
 
 <body>
-    <!-- Islamic Pattern Background -->
-    <div class="islamic-pattern-bg"></div>
 
-    <nav class="navbar" style="background: #ffffff; border-bottom: 1px solid rgba(0,0,0,0.05);">
-        <div class="container nav-container">
-            <a href="#" class="logo">
-                <i class="fas fa-sun"
-                    style="background:var(--primary-color); padding:6px; border-radius:50%; color:white; font-size: 0.9rem;"></i>
-                <span style="font-family: 'Cormorant Garamond'; font-weight: 700; margin-left: 8px;">Noor Ethics</span>
-            </a>
-
-            <ul class="nav-links center-links">
-                <li><a href="#home" class="active-nav">Home</a></li>
-                <li><a href="#quran-index">The Quran</a></li>
-                <li><a href="#books">Books</a></li>
-                <li><a href="#duas">Duas</a></li>
-                <li><a href="#community">Community</a></li>
-            </ul>
-
-            <div class="nav-actions">
-                <button class="icon-btn"><i class="far fa-bell" style="color: #4b5563;"></i></button>
-                <button class="btn btn-primary"
-                    style="background: #047857; padding: 0.5rem 1.5rem; font-size: 0.9rem;">Sign In</button>
+    <div class="portal-wrapper">
+        <!-- Sidebar -->
+        <aside class="portal-sidebar">
+            <div class="sidebar-brand">
+                <i class="fas fa-mosque"></i>
+                <span>Noor</span>
             </div>
-        </div>
-    </nav>
 
-    <header id="home" class="hero-section">
-        <div class="hero-pattern-overlay"></div>
-        <div class="container hero-content-stacked">
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active"><i class="fas fa-clock"></i> Prayer Times</a>
+                <a href="#quran-index" class="nav-item"><i class="fas fa-book-open"></i> Quran</a>
+                <a href="#duas" class="nav-item"><i class="fas fa-praying-hands"></i> Duas</a>
+                <a href="#asma-ul-husna" class="nav-item"><i class="fas fa-star"></i> 99 Names</a>
+                <a href="#community" class="nav-item"><i class="fas fa-users"></i> Community</a>
+            </nav>
 
-            <!-- Ethics Search Hero -->
-            <div class="hero-verse-container fade-in-section" style="max-width: 900px;">
-                <p class="arabic-verse" style="font-size: 3rem; margin-bottom: 0.5rem;">وَإِنَّكَ لَعَلَىٰ خُلُقٍ
-                    عَظِيمٍ</p>
-                <h1 class="english-verse" style="font-size: 2.5rem; margin-bottom: 1rem;">"And indeed, you are of a
-                    great moral character."</h1>
+            <div class="sidebar-footer">
+                <p>&copy; 2026 Noor Portal</p>
+                <div style="margin-top:0.5rem; font-size:0.8rem; opacity:0.7;">
+                    <i class="fas fa-cog"></i> Settings
+                </div>
+            </div>
+        </aside>
 
-                <div class="ethics-search-box" style="margin-top: 2.5rem; position: relative;">
-                    <input type="text" placeholder="Search for ethics (e.g., Patience, Honesty, Leadership)..."
-                        style="width: 100%; padding: 1.2rem 2rem; border-radius: 50px; border: 1px solid rgba(0,0,0,0.1); 
-                                  box-shadow: 0 10px 25px rgba(0,0,0,0.05); font-family: var(--font-sans); font-size: 1.1rem; outline: none;">
-                    <button style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); 
-                                   background: var(--primary-color); color: white; border: none; padding: 0.8rem 1.5rem; 
-                                   border-radius: 40px; cursor: pointer; font-weight: 600;">
-                        Search
-                    </button>
+        <!-- Main Content -->
+        <main class="portal-main">
+            <!-- Top Header: Search -->
+            <div class="portal-header">
+                <div>
+                    <!-- Breadcrumb or Date could go here -->
+                    <h2 id="portal-current-date" style="font-size:1.2rem; margin-bottom:0;">Loading Date...</h2>
+                    <p style="color:var(--text-muted); font-size:0.9rem;" id="portal-location-label">Locating...</p>
+                </div>
+
+                <div class="location-search-bar">
+                    <i class="fas fa-search" style="color:var(--text-muted);"></i>
+                    <input type="text" id="prayer-city-input" placeholder="Search City, Country..." />
+                    <button id="portal-search-btn" class="icon-btn"><i class="fas fa-arrow-right"></i></button>
                 </div>
             </div>
 
-            <!-- Decorative Islamic Element (Text-based) -->
-            <div class="hero-decorative-divider"
-                style="color:var(--accent-color); font-size: 1.5rem; opacity: 0.8; margin-top:1rem;">
-                ۞ ۞ ۞
+            <!-- Large Green Hero: Countdown -->
+            <div class="countdown-hero">
+                <div class="next-prayer-label">Next Prayer in</div>
+                <div id="countdown-display" class="countdown-timer">--:--:--</div>
+                <div id="next-prayer-name" class="upcoming-prayer-name">Waiting...</div>
             </div>
 
-            <!-- Hijri Calendar Widget -->
-            <div class="hijri-badge fade-in-section" style="margin-top: 1.5rem;">
-                <i class="far fa-calendar-alt"></i> <span id="hijri-date-text">Loading Hijri Date...</span>
+            <!-- 6-Column Grid -->
+            <div class="six-col-grid" id="prayer-times-grid">
+                <!-- Fallback content until JS loads -->
+                <div class="prayer-item-box"><span>Fajr</span></div>
+                <div class="prayer-item-box"><span>Sunrise</span></div>
+                <div class="prayer-item-box"><span>Dhuhr</span></div>
+                <div class="prayer-item-box"><span>Asr</span></div>
+                <div class="prayer-item-box"><span>Maghrib</span></div>
+                <div class="prayer-item-box"><span>Isha</span></div>
             </div>
 
-            <div class="hero-scroll-btn">
-                <a href="#prayer-times" style="color:white; opacity:0.7; font-size:1.5rem;"><i
-                        class="fas fa-chevron-down bounce"></i></a>
+            <!-- Footer: Settings & Method -->
+            <div
+                style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid rgba(0,0,0,0.05); display:flex; justify-content:space-between; color:var(--text-muted); font-size: 0.9rem;">
+                <div>Calculation Method: <span style="font-weight:600; color:var(--text-dark);">Muslim World
+                        League</span></div>
+                <div style="cursor:pointer;"><i class="fas fa-cog"></i> Adjust Settings</div>
             </div>
 
-        </div>
-    </header>
+            <!-- Hidden Sections (Preserved for functionality calls if needed, hidden visually if not requested) -->
+            <!-- We will append other sections below if desired, for now keeping it clean per "web portal" request -->
 
-    <!-- Daily Hadith Section -->
-    <section id="daily-hadith" class="portal-section" style="padding-top: 2rem; padding-bottom: 2rem;">
-        <div class="container">
-            <div class="hadith-container fade-in-section">
-                <!-- Hadith content remains... -->
-                <div class="section-header" style="margin-bottom: 1.5rem;">
-                    <h2 class="section-title" style="font-size: 1.8rem;">Hadith of the Moment</h2>
-                    <p class="section-subtitle" style="font-size: 0.9rem;">Wisdom from the Prophet (ﷺ)</p>
-                </div>
-                <div class="hadith-card minimalist-card">
-                    <p id="hadith-arabic" class="hadith-arabic">loading...</p>
-                    <p id="hadith-english" class="hadith-english">Loading wisdom...</p>
-                    <div class="hadith-source-row">
-                        <span id="hadith-source" class="hadith-source"></span>
-                        <button id="refresh-hadith-btn" class="icon-btn" title="New Hadith"><i
-                                class="fas fa-sync-alt"></i></button>
+            <!-- Keeping Audio/Modal Elements for functionality -->
+            <!-- Quran Reader Modal -->
+            <div id="quran-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="reader-title">The Noble Quran</h3>
+                        <div class="reader-controls-center">
+                            <button class="lang-btn active" data-lang="en">English</button>
+                        </div>
+                        <button id="close-quran-btn"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <aside class="surah-sidebar">
+                            <div id="surah-list-container"></div>
+                        </aside>
+                        <main class="verse-view">
+                            <div id="quran-content"></div>
+                        </main>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Ethical Categories Grid (Replaces Kids Zone) -->
-    <section id="ethical-categories" class="portal-section" style="padding-top: 4rem;">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Ethical Foundations</h2>
-                <p class="section-subtitle">Core values derived from the Prophetic Tradition</p>
-            </div>
-
-            <div class="kids-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
-                <!-- Social Justice -->
-                <div class="kids-card category-card">
-                    <div class="card-icon-bg"><i class="fas fa-balance-scale"></i></div>
-                    <h3>Social Justice</h3>
-                    <p>Upholding fairness, rights of the weak, and community welfare.</p>
-                </div>
-
-                <!-- Family Values -->
-                <div class="kids-card category-card">
-                    <div class="card-icon-bg"><i class="fas fa-home"></i></div>
-                    <h3>Family Values</h3>
-                    <p>Strengthening bonds, respecting parents, and raising the next generation.</p>
-                </div>
-
-                <!-- Business Integrity -->
-                <div class="kids-card category-card">
-                    <div class="card-icon-bg"><i class="fas fa-handshake"></i></div>
-                    <h3>Business Integrity</h3>
-                    <p>Honesty in trade, fulfilling contracts, and ethical leadership.</p>
-                </div>
-
-                <!-- Personal Character -->
-                <div class="kids-card category-card">
-                    <div class="card-icon-bg"><i class="fas fa-heart"></i></div>
-                    <h3>Personal Character</h3>
-                    <p>Patience, humility, truthfulness, and self-purification.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Lifestyle & Fiqh Section (New) -->
-    <section id="lifestyle-fiqh" class="portal-section" style="background: var(--bg-white);">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Lifestyle & Fiqh</h2>
-                <p class="section-subtitle">Practical Guidance for Daily Life</p>
-            </div>
-
-            <div class="kids-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
-                <!-- Daily Fiqh -->
-                <div class="kids-card category-card">
-                    <div class="card-icon-bg" style="background: rgba(16, 185, 129, 0.1); color: var(--primary-color);">
-                        <i class="fas fa-book-open"></i>
+            <!-- Global Audio Player (Fixed Bottom) -->
+            <div id="global-player" class="global-audio-player">
+                <div class="player-info">
+                    <div class="player-icon-art"><i class="fas fa-quran"></i></div>
+                    <div class="player-text">
+                        <h4 id="player-track-title">Surah Al-Fatiha</h4>
                     </div>
-                    <h3>Daily Fiqh</h3>
-                    <p>Essential rules on Salah, Fasting (Sawm), and Zakat broken down simply.</p>
-                    <button class="btn btn-outline-pill" style="margin-top: 1.5rem; font-size: 0.9rem;">Learn
-                        Rules</button>
                 </div>
-
-                <!-- Family & Youth -->
-                <div class="kids-card category-card">
-                    <div class="card-icon-bg" style="background: rgba(212, 175, 55, 0.1); color: var(--accent-color);">
-                        <i class="fas fa-users"></i>
+                <div class="player-controls">
+                    <button id="global-play-btn" class="play-pause-btn"><i class="fas fa-play"></i></button>
+                </div>
+                <div class="player-progress-container">
+                    <div class="player-progress-bar" id="audio-progress-bar">
+                        <div class="progress-filled" id="audio-progress-filled"></div>
                     </div>
-                    <h3>Family & Youth</h3>
-                    <p>Guidance on marriage, effective parenting, and engaging stories for kids.</p>
-                    <button class="btn btn-outline-pill" style="margin-top: 1.5rem; font-size: 0.9rem;">Explore</button>
                 </div>
-
-                <!-- Halal Guide -->
-                <div class="kids-card category-card">
-                    <div class="card-icon-bg" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;"><i
-                            class="fas fa-utensils"></i></div>
-                    <h3>Halal Guide</h3>
-                    <p>Navigate Food, Ethical Finance, and Travel with confidence.</p>
-                    <button class="btn btn-outline-pill" style="margin-top: 1.5rem; font-size: 0.9rem;">View
-                        Guide</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Prayer Times Section -->
-    <section id="prayer-times" class="portal-section">
-        <div class="container prayer-container">
-            <div class="section-header">
-                <h2 class="section-title">Prayer Times</h2>
-                <p class="section-subtitle">Auto-detected or Manual Search</p>
+                <button id="close-player-btn"><i class="fas fa-times"></i></button>
             </div>
 
-            <!-- Manual Location Search -->
-            <div class="prayer-search-box" style="max-width:500px; margin: 0 auto 2rem auto; display:flex; gap:10px;">
-                <input type="text" id="prayer-city" placeholder="City (e.g. London)" class="form-input"
-                    style="flex:1; padding:0.8rem; border-radius:8px; border:1px solid #ddd;">
-                <input type="text" id="prayer-country" placeholder="Country" class="form-input"
-                    style="flex:1; padding:0.8rem; border-radius:8px; border:1px solid #ddd;">
-                <button id="prayer-search-btn" class="btn btn-primary"
-                    style="background:var(--primary-color); color:white; border:none; padding:0.8rem 1.5rem; border-radius:8px; cursor:pointer;">Search</button>
-            </div>
-
-            <!-- Grid container will be populated by JS -->
-            <div class="prayer-grid-modern" id="prayer-times-grid">
-                <!-- JS will inject cards here -->
-            </div>
-        </div>
-    </section>
-
-    <!-- 99 Names Section (Informative Display) -->
-    <section id="asma-ul-husna" class="portal-section" style="background: var(--bg-white);">
-        <div class="container">
-            <div class="section-header">
-                <p class="arabic-subtitle">الأسماء الحسنى</p>
-                <h2 class="section-title">The 99 Names of Allah</h2>
-                <p class="section-subtitle-text">Reflect upon His Attributes (Attributes of the Day)</p>
-            </div>
-
-            <div id="asma-grid" class="asma-grid-display">
-                <!-- JS will inject names here -->
-            </div>
-
-            <div style="text-align:center; margin-top:2rem;">
-                <button id="view-all-names-btn" class="btn btn-outline-pill">View Full List</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Quran Section (Informative Display) -->
-    <section id="quran-index" class="portal-section" style="background: var(--bg-light);">
-        <div class="container">
-            <div class="section-header">
-                <p class="arabic-subtitle">القرآن الكريم</p>
-                <h2 class="section-title">The Holy Quran</h2>
-                <p class="section-subtitle-text">Key Surahs and Daily Recitations</p>
-            </div>
-
-            <!-- Short Surah List Container -->
-            <div id="surah-index-grid" class="surah-grid-display">
-                <!-- JS will inject Surah List here -->
-            </div>
-
-            <div style="text-align:center; margin-top:2rem;">
-                <button id="view-all-surahs-btn" class="btn btn-outline-pill">View Full Quran</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Islamic Books Section -->
-    <section id="books" class="portal-section" style="background: var(--bg-white);">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Islamic Library</h2>
-                <p class="section-subtitle">Books of Hadith & Wisdom</p>
-            </div>
-            <div class="prayer-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
-                <div class="prayer-card open-book-btn" data-book="Sahih Bukhari"
-                    style="cursor:pointer; text-align:center;">
-                    <i class="fas fa-book-open"
-                        style="font-size:3rem; color:var(--accent-color); margin-bottom:1rem;"></i>
-                    <span class="prayer-name" style="display:block;">Sahih Bukhari</span>
-                    <span style="font-size:0.8rem; color:var(--text-light);">Authentic Hadiths</span>
-                </div>
-                <div class="prayer-card open-book-btn" data-book="Sahih Muslim"
-                    style="cursor:pointer; text-align:center;">
-                    <i class="fas fa-book-open"
-                        style="font-size:3rem; color:var(--accent-color); margin-bottom:1rem;"></i>
-                    <span class="prayer-name" style="display:block;">Sahih Muslim</span>
-                    <span style="font-size:0.8rem; color:var(--text-light);">Authentic Hadiths</span>
-                </div>
-                <div class="prayer-card open-book-btn" data-book="Riyad us-Saliheen"
-                    style="cursor:pointer; text-align:center;">
-                    <i class="fas fa-book-reader"
-                        style="font-size:3rem; color:var(--accent-color); margin-bottom:1rem;"></i>
-                    <span class="prayer-name" style="display:block;">Riyad us-Saliheen</span>
-                    <span style="font-size:0.8rem; color:var(--text-light);">Gardens of the Righteous</span>
-                </div>
-                <div class="prayer-card open-book-btn" data-book="40 Hadith Nawawi"
-                    style="cursor:pointer; text-align:center;">
-                    <i class="fas fa-scroll" style="font-size:3rem; color:var(--accent-color); margin-bottom:1rem;"></i>
-                    <span class="prayer-name" style="display:block;">40 Hadith Nawawi</span>
-                    <span style="font-size:0.8rem; color:var(--text-light);">Core Fundamentals</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Duas Section -->
-    <section id="duas" class="portal-section" style="background: var(--bg-light);">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Hisn al-Muslim</h2>
-                <p class="section-subtitle">Authentic Supplications</p>
-            </div>
-
-            <!-- Dua Categories -->
-            <div class="dua-categories horizontal-scroll" style="margin-bottom: 2rem; padding-bottom:1rem;">
-                <button class="dua-cat-btn active" data-cat="all">All</button>
-                <button class="dua-cat-btn" data-cat="morning">Morning</button>
-                <button class="dua-cat-btn" data-cat="evening">Evening</button>
-                <button class="dua-cat-btn" data-cat="sleep">Sleep</button>
-                <button class="dua-cat-btn" data-cat="prayer">Prayer</button>
-                <button class="dua-cat-btn" data-cat="travel">Travel</button>
-                <button class="dua-cat-btn" data-cat="home">Home</button>
-                <button class="dua-cat-btn" data-cat="food">Food</button>
-            </div>
-
-            <!-- Authentic Duas Grid -->
-            <div id="duas-grid" class="prayer-grid"
-                style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
-                <!-- Duas Injected via JS -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Featured Shop Removed -->
-
-    <!-- Featured Shop & Collections Removed -->
-
-    <section id="values" class="about" style="background: var(--bg-white);">
-        <div class="container about-container">
-            <div class="section-header">
-                <h2 class="section-title">Core Islamic Values</h2>
-                <p class="section-subtitle">The Pillars of Character</p>
-            </div>
-            <div class="values-grid horizontal-scroll">
-                <!-- Sidq -->
-                <div class="value-card color-card" style="--card-color: #3b82f6;">
-                    <div class="value-icon"><i class="fas fa-check-double"></i></div>
-                    <h3>Sidq (Truthfulness)</h3>
-                    <p>Speaking the truth in every situation, for truth leads to righteousness and Paradise.</p>
-                </div>
-                <!-- Amanah -->
-                <div class="value-card color-card" style="--card-color: #6366f1;">
-                    <div class="value-icon"><i class="fas fa-hand-holding-heart"></i></div>
-                    <h3>Amanah (Honesty)</h3>
-                    <p>Fulfilling trusts and responsibilities with absolute integrity and reliability.</p>
-                </div>
-                <!-- Ihsan -->
-                <div class="value-card color-card" style="--card-color: #8b5cf6;">
-                    <div class="value-icon"><i class="fas fa-star"></i></div>
-                    <h3>Ihsan (Excellence)</h3>
-                    <p>Worshipping Allah as if you see Him, and striving for perfection in all deeds.</p>
-                </div>
-                <!-- Sabr -->
-                <div class="value-card color-card" style="--card-color: #f97316;">
-                    <div class="value-icon"><i class="fas fa-hourglass-half"></i></div>
-                    <h3>Sabr (Patience)</h3>
-                    <p>Enduring hardships with dignity and unwavering faith in Allah's decree.</p>
-                </div>
-                <!-- Shukr -->
-                <div class="value-card color-card" style="--card-color: #10b981;">
-                    <div class="value-icon"><i class="fas fa-leaf"></i></div>
-                    <h3>Shukr (Gratitude)</h3>
-                    <p>Acknowledging blessings and using them in obedience to the Bestower.</p>
-                </div>
-                <!-- Tawadu -->
-                <div class="value-card color-card" style="--card-color: #14b8a6;">
-                    <div class="value-icon"><i class="fas fa-water"></i></div>
-                    <h3>Tawadu (Humility)</h3>
-                    <p>Lowering the wing of mercy to others and avoiding arrogance and pride.</p>
-                </div>
-                <!-- Adl -->
-                <div class="value-card color-card" style="--card-color: #ef4444;">
-                    <div class="value-icon"><i class="fas fa-balance-scale"></i></div>
-                    <h3>Adl (Justice)</h3>
-                    <p>Upholding fairness and equity, even if it is against oneself.</p>
-                </div>
-                <!-- Rahmah -->
-                <div class="value-card color-card" style="--card-color: #ec4899;">
-                    <div class="value-icon"><i class="fas fa-heart"></i></div>
-                    <h3>Rahmah (Compassion)</h3>
-                    <p>Showing mercy to all creation, for those who show mercy will be shown mercy.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Islamic Manners Section -->
-    <section id="manners" class="portal-section" style="background: var(--bg-light);">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Islamic Adab & Manners</h2>
-                <p class="section-subtitle">Conduct of a Believer</p>
-            </div>
-            <div class="values-grid horizontal-scroll">
-                <div class="value-card color-card" style="--card-color: #f59e0b;">
-                    <div class="value-icon"><i class="fas fa-users"></i></div>
-                    <h3>Family Relations</h3>
-                    <p>Kindness to parents, strengthening ties of kinship, and harmonious home life.</p>
-                </div>
-                <div class="value-card color-card" style="--card-color: #3b82f6;">
-                    <div class="value-icon"><i class="fas fa-handshake"></i></div>
-                    <h3>Social Conduct</h3>
-                    <p>Greeting with Salam, honoring guests, and respecting the rights of neighbors.</p>
-                </div>
-                <div class="value-card color-card" style="--card-color: #10b981;">
-                    <div class="value-icon"><i class="fas fa-briefcase"></i></div>
-                    <h3>Business Ethics</h3>
-                    <p>Honest dealings, fair measurements, and fulfilling contracts without deceit.</p>
-                </div>
-                <div class="value-card color-card" style="--card-color: #8b5cf6;">
-                    <div class="value-icon"><i class="fas fa-user-graduate"></i></div>
-                    <h3>Personal Development</h3>
-                    <p>Continuous seeking of knowledge, purification of the soul (Tazkiyah), and
-                        self-discipline.</p>
-                </div>
-            </div>
-    </section>
-
-    <!-- Commercial Sections Removed    <!-- Community Section -->
-    <section id="community" class="community-section">
-        <div class="container" style="text-align: center;">
-            <p class="community-subtitle">المجتمع</p>
-            <h2 class="community-title">Join Our Community</h2>
-            <p class="community-desc">Connect with Muslims around the world. Share knowledge, ask questions, and
-                grow together in faith.</p>
-
-            <div class="community-stats">
-                <div class="stat-pill">
-                    <i class="fas fa-users"></i>
-                    <span>50,000+ Members</span>
-                </div>
-                <div class="stat-pill">
-                    <i class="fas fa-comments"></i>
-                    <span>1,200+ Daily Discussions</span>
-                </div>
-                <div class="stat-pill">
-                    <i class="fas fa-heart"></i>
-                    <span>100+ Countries</span>
-                </div>
-            </div>
-
-            <button class="btn btn-primary btn-large" style="margin-top: 2rem;">Join for Free</button>
-        </div>
-    </section>
-
-    <!-- New Dark Footer -->
-    <footer class="main-footer">
-        <div class="container">
-            <div class="footer-grid">
-                <!-- Brand Column -->
-                <div class="footer-col brand-col">
-                    <div class="footer-logo">
-                        <i class="fas fa-star"
-                            style="background:var(--accent-color); padding:5px; border-radius:50%; color:white; font-size: 0.8rem;"></i>
-                        <span>Noor</span>
-                    </div>
-                    <p class="footer-desc">Illuminating your path to spiritual growth with Islamic tools and knowledge.
-                    </p>
-                </div>
-
-                <!-- Features Column -->
-                <div class="footer-col">
-                    <h4>Features</h4>
-                    <ul>
-                        <li><a href="#prayer-times">Prayer Times</a></li>
-                        <li><a href="#quran-index">Quran</a></li>
-                        <li><a href="#">Qibla Finder</a></li>
-                        <li><a href="#">Islamic Calendar</a></li>
-                    </ul>
-                </div>
-
-                <!-- Resources Column -->
-                <div class="footer-col">
-                    <h4>Resources</h4>
-                    <ul>
-                        <li><a href="#">Articles</a></li>
-                        <li><a href="#duas">Duas</a></li>
-                        <li><a href="#asma-ul-husna">Names of Allah</a></li>
-                        <li><a href="#community">Community</a></li>
-                    </ul>
-                </div>
-
-                <!-- Company Column -->
-                <div class="footer-col">
-                    <h4>Company</h4>
-                    <ul>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Contact</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="footer-bottom-bar">
-                <p>&copy; 2026 Noor. All rights reserved.</p>
-                <p class="arabic-signature">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Quran Reader Modal -->
-    <div id="quran-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="reader-title" style="font-family:'Amiri'; font-size:1.5rem; color: var(--gold);">The
-                    Noble Quran
-                </h3>
-                <div class="reader-controls-center" style="display:flex; gap:10px;">
-                    <button class="lang-btn active" data-lang="en"
-                        style="background:none; border:1px solid #D4AF37; color:white; padding:5px 10px; border-radius:4px; cursor:pointer;">English</button>
-                    <button class="lang-btn" data-lang="ur"
-                        style="background:none; border:1px solid #D4AF37; color:white; padding:5px 10px; border-radius:4px; cursor:pointer;">Urdu</button>
-                </div>
-                <div class="audio-player-box">
-                    <span id="surah-info" style="font-size:0.8rem; color:var(--text-light);"></span>
-                    <div class="player-controls">
-                        <button id="play-pause-btn"><i class="fas fa-play"></i></button>
-                    </div>
-                    <audio id="quran-audio"></audio>
-                </div>
-                <button id="close-quran-btn"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="modal-body">
-                <aside class="surah-sidebar">
-                    <div class="tabs"
-                        style="display:flex; padding:10px; border-bottom:1px solid rgba(255,255,255,0.1);">
-                        <button id="tab-surah" class="active"
-                            style="flex:1; background:none; border:none; color:white; cursor:pointer; font-weight:bold;">Surahs</button>
-                    </div>
-                    <div id="surah-list-container" class="surah-list-container">
-                        <div id="surah-list"></div>
-                    </div>
-                </aside>
-                <main class="verse-view">
-                    <div id="quran-content">
-                        <!-- Verses go here -->
-                    </div>
-                </main>
-            </div>
-        </div>
+            <audio id="main-audio-element"></audio>
+        </main>
     </div>
 
     <script src="script.js"></script>
-    <!-- Global Audio Player (Fixed Bottom) -->
-    <div id="global-player" class="global-audio-player">
-        <div class="player-info">
-            <div class="player-icon-art"><i class="fas fa-quran"></i></div>
-            <div class="player-text">
-                <h4 id="player-track-title">Surah Al-Fatiha</h4>
-                <p id="player-track-artist">Mishary Alafasy</p>
-            </div>
-        </div>
-
-        <div class="player-controls">
-            <button class="player-btn prev-btn"><i class="fas fa-step-backward"></i></button>
-            <button id="global-play-btn" class="play-pause-btn"><i class="fas fa-play"></i></button>
-            <button class="player-btn next-btn"><i class="fas fa-step-forward"></i></button>
-        </div>
-
-        <div class="player-progress-container">
-            <div class="player-progress-bar" id="audio-progress-bar">
-                <div class="progress-filled" id="audio-progress-filled"></div>
-                <div class="progress-thumb"></div>
-            </div>
-        </div>
-
-        <div class="player-volume" style="display:flex; align-items:center; gap:10px; color:var(--text-muted);">
-            <i class="fas fa-volume-up"></i>
-            <input type="range" min="0" max="1" step="0.1" style="width:80px; accent-color:var(--primary-color);">
-        </div>
-
-        <button id="close-player-btn"
-            style="background:none; border:none; color:var(--text-muted); margin-left:1rem; cursor:pointer;"><i
-                class="fas fa-times"></i></button>
-    </div>
-
-    <!-- Hidden Audio Element -->
-    <audio id="main-audio-element"></audio>
-
-    <!-- Proprietary Effects -->
-    <div id="noor-glow" class="noor-glow"></div>
-
-    <!-- Admin Badge (Hidden by default) -->
-    <div id="admin-badge" class="admin-only admin-badge">
-        <i class="fas fa-shield-alt"></i> Admin Mode
-    </div>
-
 </body>
 
 </html>

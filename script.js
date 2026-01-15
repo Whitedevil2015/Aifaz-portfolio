@@ -1052,24 +1052,49 @@ function initTasbih() {
 }
 
 // --- Prayer Times Logic (Auto & Manual) ---
+// --- Prayer Times Logic (Portal Version) ---
+let currentTimings = null;
+let countdownInterval = null;
+
 function initPrayerTimes() {
-    // Event Listener for Manual Search
-    const searchBtn = document.getElementById('prayer-search-btn');
+    // New Portal Search Button
+    const searchBtn = document.getElementById('portal-search-btn');
     if (searchBtn) {
+        // Allow detecting enter key on input
+        const input = document.getElementById('prayer-city-input');
+        if (input) {
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') searchBtn.click();
+            });
+        }
+
         searchBtn.addEventListener('click', () => {
-            const city = document.getElementById('prayer-city').value;
-            const country = document.getElementById('prayer-country').value;
-            if (city && country) {
+            const query = document.getElementById('prayer-city-input').value;
+            if (query) {
+                // Simple assumption: If comma, split City/Country. Else treat as City.
+                let city = query;
+                let country = '';
+                if (query.includes(',')) {
+                    [city, country] = query.split(',').map(s => s.trim());
+                }
+
+                // Show "Locating..."
+                document.getElementById('portal-location-label').textContent = `Locating ${city}...`;
+
                 fetchTimesByCity(city, country);
             } else {
-                alert("Please enter both City and Country");
+                alert("Please enter a location");
             }
         });
     }
 
-    // Default: Mecca (Manual Location Preferred)
-    // Disabled Auto-Location per user request
-    fetchTimesByCoords(21.3891, 39.8579, "Mecca (Default)");
+    // Default: Mecca
+    fetchTimesByCoords(21.3891, 39.8579, "Mecca, Saudi Arabia");
+
+    // Set Header Date
+    const today = new Date();
+    const dateEl = document.getElementById('portal-current-date');
+    if (dateEl) dateEl.textContent = today.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 }
 
 function fetchTimesByCoords(lat, lon, label = "Auto-detected Location") {
@@ -1082,41 +1107,106 @@ function fetchTimesByCoords(lat, lon, label = "Auto-detected Location") {
 }
 
 function fetchTimesByCity(city, country) {
-    fetch(`https://api.aladhan.com/v1/timingsByCity?city=${city}&country=${country}&method=2`)
+    const url = country
+        ? `https://api.aladhan.com/v1/timingsByCity?city=${city}&country=${country}&method=2`
+        : `https://api.aladhan.com/v1/timingsByCity?city=${city}&country=&method=2`; // AlAdhan might require country, but let's try. Actually Aladhan usually needs country.
+
+    fetch(url)
         .then(res => res.json())
-        .then(data => renderPrayerTimes(data.data.timings, `${city}, ${country}`))
+        .then(data => renderPrayerTimes(data.data.timings, country ? `${city}, ${country}` : city))
         .catch(err => {
-            alert("Could not find prayer times for this location.");
+            alert("Could not find prayer times. Please try 'City, Country' format.");
             console.error(err);
         });
 }
 
 function renderPrayerTimes(timings, locationLabel) {
+    currentTimings = timings; // Store for countdown
+
+    // Update Header Label
+    const locLabel = document.getElementById('portal-location-label');
+    if (locLabel) locLabel.textContent = locationLabel;
+
     const grid = document.getElementById('prayer-times-grid');
-    const subtitle = document.querySelector('#prayer-times .section-subtitle');
-
-    if (subtitle) subtitle.textContent = locationLabel;
-
     if (grid) {
+        // 6 Columns: Fajr, Sunrise, Dhuhr, Asr, Maghrib, Isha
         grid.innerHTML = `
             ${createPrayerCard('Fajr', timings.Fajr, 'fa-cloud-sun')}
+            ${createPrayerCard('Sunrise', timings.Sunrise, 'fa-sun', true)} 
             ${createPrayerCard('Dhuhr', timings.Dhuhr, 'fa-sun')}
             ${createPrayerCard('Asr', timings.Asr, 'fa-cloud-sun-rain')}
             ${createPrayerCard('Maghrib', timings.Maghrib, 'fa-moon')}
             ${createPrayerCard('Isha', timings.Isha, 'fa-star')}
         `;
         highlightNextPrayer(timings);
+        startCountdown(timings);
     }
 }
 
-function createPrayerCard(name, time, icon) {
+function createPrayerCard(name, time, icon, isSecondary = false) {
     return `
-        <div class="prayer-card-modern" data-name="${name}" data-time="${time}">
-            <i class="fas ${icon} prayer-icon"></i>
-            <div class="prayer-name">${name}</div>
-            <div class="prayer-time-large">${formatTime(time)}</div>
+        <div class="prayer-item-box ${isSecondary ? 'secondary-time' : ''}" data-name="${name}" data-time="${time}">
+            <i class="fas ${icon} prayer-item-icon"></i>
+            <div class="prayer-item-name">${name}</div>
+            <div class="prayer-item-time">${formatTime(time)}</div>
         </div>
     `;
+}
+
+// Start Countdown Timer Logic
+function startCountdown(timings) {
+    if (countdownInterval) clearInterval(countdownInterval);
+
+    function update() {
+        const now = new Date();
+        const timeStr = now.toTimeString().slice(0, 5); // HH:MM
+
+        // Find next prayer
+        const prayers = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+        let nextPrayer = null;
+        let nextPrayerTime = null;
+
+        for (let p of prayers) {
+            if (timings[p] > timeStr) {
+                nextPrayer = p;
+                nextPrayerTime = timings[p];
+                break;
+            }
+        }
+
+        // If no more prayers today, next is Fajr tomorrow (simplified logic: just show 00:00 or handle tomorrow)
+        if (!nextPrayer) {
+            nextPrayer = 'Fajr';
+            nextPrayerTime = timings['Fajr'];
+            // In a real app we'd add 24h diff. For now let's just show waiting.
+        }
+
+        // Update Hero Names
+        const nextNameEl = document.getElementById('next-prayer-name');
+        if (nextNameEl) nextNameEl.textContent = nextPrayer;
+
+        // Calculate Diff
+        const nowMs = now.getTime();
+        const [h, m] = nextPrayerTime.split(':');
+        const nextDate = new Date();
+        nextDate.setHours(h, m, 0, 0);
+
+        if (nextDate < now) {
+            nextDate.setDate(nextDate.getDate() + 1); // Tomorrow
+        }
+
+        const diff = nextDate - nowMs;
+        const diffHrs = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const diffMins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const diffSecs = Math.floor((diff % (1000 * 60)) / 1000);
+
+        const display = `${String(diffHrs).padStart(2, '0')}:${String(diffMins).padStart(2, '0')}:${String(diffSecs).padStart(2, '0')}`;
+        const countEl = document.getElementById('countdown-display');
+        if (countEl) countEl.textContent = display;
+    }
+
+    update();
+    countdownInterval = setInterval(update, 1000);
 }
 
 function formatTime(timeVal) {

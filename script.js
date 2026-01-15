@@ -1247,4 +1247,43 @@ document.addEventListener('DOMContentLoaded', () => {
     // Re-call these if they were already called or call them now
     initPrayerTimes();
     audioPlayer.init();
+    initAdminAndEffects();
 });
+
+// --- Admin & Proprietary Effects Logic ---
+function initAdminAndEffects() {
+    // 1. Check for Admin Role (Simulated via URL param ?role=admin)
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('role') === 'admin') {
+        document.body.classList.add('admin-mode');
+
+        // Add editable hints to cards for admin visualization
+        document.querySelectorAll('.kids-card, .prayer-card-modern, .hero-section h1').forEach(el => {
+            el.classList.add('editable-hint');
+            el.addEventListener('click', (e) => {
+                if (e.ctrlKey || e.metaKey) {
+                    alert('Admin Mode: Edit Feature Prototype');
+                }
+            });
+        });
+
+        console.log("Admin Mode Activated");
+    }
+
+    // 2. Noor Ambient Glow Effect (Mouse Follower)
+    const glow = document.getElementById('noor-glow');
+    if (glow) {
+        document.addEventListener('mousemove', (e) => {
+            requestAnimationFrame(() => {
+                glow.style.left = e.clientX + 'px';
+                glow.style.top = e.clientY + 'px';
+            });
+        });
+    }
+
+    // 3. Proprietary Card Effect (Golden Sheen)
+    // Add the class to important cards
+    document.querySelectorAll('.kids-card, .prayer-card-modern').forEach(card => {
+        card.classList.add('proprietary-card-effect');
+    });
+}

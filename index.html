@@ -4,125 +4,368 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="ZAIFA ISLAMIC - Premium Sunnah & Lifestyle Essentials. Elevate your Deen and Dunya with our curated collection.">
-    <title>Noor - Islamic Portal</title>
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Scheherazade+New:wght@400;700&family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
-
-    <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Three.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- Styles -->
-    <link rel="stylesheet" href="style.css">
-    <!-- Tailwind CSS (Added for new Dashboard Layout) -->
+    <title>Noor Islamic Portal - Premium Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'portal-green': '#5D770F',
-                        'portal-green-light': 'rgba(93, 119, 15, 0.1)',
-                    }
-                }
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Amiri:wght@400;700&family=Cormorant+Garamond:wght@600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        /* Custom Scrollbar for Sidebar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(212, 175, 55, 0.3);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(212, 175, 55, 0.8);
+        }
+
+        /* Animation Utils */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
-    </script>
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        /* 3D Text Effects for Names */
+        .name-3d {
+            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+            background: linear-gradient(45deg, #1a472a, #2d5a3f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-container {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .glass-container:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 
-<body>
+<body class="bg-gray-50 text-gray-800 font-sans overflow-hidden">
 
-    <div class="flex min-h-screen font-sans text-gray-800 bg-gray-50">
-        <aside class="w-64 bg-[#5D770F] text-white flex flex-col shrink-0">
-            <div class="p-8 text-center border-b border-white/10">
-                <div class="mx-auto mb-4 w-20 h-20 bg-white rounded-full flex items-center justify-center">
-                    <svg class="w-12 h-12 text-[#5D770F]" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 2L2 12h3v8h6v-6h2v6h6v-8h3L12 2z" />
-                    </svg>
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside
+            class="w-64 bg-gradient-to-b from-[#1a472a] to-[#0f2b19] text-white flex flex-col shrink-0 shadow-2xl relative z-10 transition-all duration-300"
+            id="main-sidebar">
+            <div class="p-8 text-center border-b border-white/10 relative overflow-hidden">
+                <div
+                    class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')] opacity-10">
                 </div>
-                <h1 class="text-xl font-bold leading-tight">Prayer times</h1>
-                <p class="text-xs opacity-80 uppercase tracking-widest">Azan Times</p>
+                <div class="relative z-10">
+                    <div
+                        class="mx-auto mb-4 w-20 h-20 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20 shadow-[0_0_15px_rgba(212,175,55,0.3)]">
+                        <i class="fas fa-kaaba text-3xl text-[#d4af37]"></i>
+                    </div>
+                    <h1 class="text-2xl font-[Cormorant_Garamond] font-bold tracking-wide text-[#d4af37]">AIFAZ ISLAMIC
+                    </h1>
+                    <p class="text-xs opacity-60 uppercase tracking-widest mt-1">Premium Portal</p>
+                </div>
             </div>
 
-            <nav class="flex-1 py-4 overflow-y-auto">
-                <a href="#" class="block px-6 py-3 hover:bg-black/10 border-l-4 border-white">Prayer times</a>
-                <a href="#" class="block px-6 py-3 hover:bg-black/10 border-l-4 border-transparent">Qibla</a>
-                <a href="#" class="block px-6 py-3 hover:bg-black/10 border-l-4 border-transparent">Moon Today</a>
-                <a href="#" class="block px-6 py-3 hover:bg-black/10 border-l-4 border-transparent">Zakat calculator</a>
-                <a href="#" class="block px-6 py-3 hover:bg-black/10 border-l-4 border-transparent">Hijri date</a>
+            <nav class="flex-1 py-6 overflow-y-auto space-y-1">
+                <a href="#"
+                    class="nav-link active group relative flex items-center px-6 py-3.5 hover:bg-white/5 border-r-4 border-[#d4af37] transition-all"
+                    data-target="view-dashboard">
+                    <i
+                        class="fas fa-clock w-6 text-center text-[#d4af37]/80 group-hover:text-[#d4af37] transition-colors"></i>
+                    <span class="ml-3 font-medium">Prayer Times</span>
+                </a>
+                <a href="#"
+                    class="nav-link group relative flex items-center px-6 py-3.5 hover:bg-white/5 border-r-4 border-transparent hover:border-white/20 transition-all"
+                    data-target="view-quran">
+                    <i
+                        class="fas fa-quran w-6 text-center text-[#d4af37]/80 group-hover:text-[#d4af37] transition-colors"></i>
+                    <span class="ml-3 font-medium">Al-Quran</span>
+                </a>
+                <a href="#"
+                    class="nav-link group relative flex items-center px-6 py-3.5 hover:bg-white/5 border-r-4 border-transparent hover:border-white/20 transition-all"
+                    data-target="view-names">
+                    <i
+                        class="fas fa-star w-6 text-center text-[#d4af37]/80 group-hover:text-[#d4af37] transition-colors"></i>
+                    <span class="ml-3 font-medium">99 Names</span>
+                </a>
+                <a href="#"
+                    class="nav-link group relative flex items-center px-6 py-3.5 hover:bg-white/5 border-r-4 border-transparent hover:border-white/20 transition-all"
+                    data-target="view-duas">
+                    <i
+                        class="fas fa-hands-praying w-6 text-center text-[#d4af37]/80 group-hover:text-[#d4af37] transition-colors"></i>
+                    <span class="ml-3 font-medium">Daily Duas</span>
+                </a>
+                <a href="#"
+                    class="nav-link group relative flex items-center px-6 py-3.5 hover:bg-white/5 border-r-4 border-transparent hover:border-white/20 transition-all"
+                    data-target="view-library">
+                    <i
+                        class="fas fa-book-open w-6 text-center text-[#d4af37]/80 group-hover:text-[#d4af37] transition-colors"></i>
+                    <span class="ml-3 font-medium">Hadith Library</span>
+                </a>
             </nav>
+
+            <div class="p-4 border-t border-white/10 text-center text-xs opacity-40">
+                &copy; 2026 Noor Portal
+            </div>
         </aside>
 
-        <main class="flex-1 p-8 overflow-y-auto">
-            <div class="max-w-4xl mx-auto bg-white p-6 rounded shadow-sm mb-6 text-center">
-                <h2 class="text-2xl font-bold mb-4">Prayer times</h2>
-                <div class="flex gap-2 max-w-xl mx-auto">
-                    <input type="text" id="prayer-city-input" placeholder="Place Name ..."
-                        class="flex-1 border p-2 rounded focus:outline-none focus:ring-2 focus:ring-[#5D770F]">
+        <!-- Main Content Area -->
+        <main class="flex-1 relative overflow-y-auto bg-gray-50 scroll-smooth" id="main-scroll-area">
+            <!-- Top Header (Search & Date) -->
+            <header
+                class="sticky top-0 z-20 bg-white/80 backdrop-blur-md border-b border-gray-200 px-8 py-4 flex justify-between items-center shadow-sm">
+                <div class="flex items-center gap-4 w-full max-w-2xl">
+                    <div class="relative flex-1">
+                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="prayer-city-input" placeholder="Search city (e.g., Pune, Mecca)..."
+                            class="w-full pl-12 pr-4 py-2.5 bg-gray-100 border-none rounded-full focus:ring-2 focus:ring-[#5D770F]/50 focus:bg-white transition-all text-sm outline-none">
+                    </div>
                     <button id="portal-search-btn"
-                        class="bg-[#5D770F] text-white px-6 py-2 rounded font-bold">Search!</button>
-                    <button class="bg-[#5D770F] text-white px-6 py-2 rounded font-bold">My Location</button>
+                        class="bg-[#5D770F] text-white px-6 py-2.5 rounded-full text-sm font-bold shadow-lg hover:shadow-[#5D770F]/30 hover:-translate-y-0.5 transition-all">
+                        Search
+                    </button>
+                    <!-- Hidden functionality for now but kept for layout -->
+                    <button id="update-location-btn"
+                        class="hidden bg-gray-800 text-white px-6 py-2.5 rounded-full text-sm font-bold shadow-lg hover:shadow-gray-800/30 hover:-translate-y-0.5 transition-all">
+                        My Location
+                    </button>
                 </div>
-            </div>
-
-            <div class="max-w-4xl mx-auto mb-6">
-                <h3 class="text-blue-700 font-bold text-lg" id="portal-location-label">Pune, India Prayer times and
-                    Azan</h3>
-                <p class="text-gray-500 text-sm" id="portal-current-date">Thursday 26 Rajab 1447 Hijri - 2026/01/15</p>
-            </div>
-
-            <div
-                class="max-w-4xl mx-auto bg-[#5D770F] text-white rounded-lg overflow-hidden shadow-md text-center py-10 mb-8">
-                <p class="text-2xl mb-2" id="next-prayer-name">Fajr</p>
-                <div class="text-7xl font-mono font-bold" id="countdown-display">00:11:31</div>
-                <p class="mt-2 text-sm opacity-90 italic">Fajr Remaining time</p>
-            </div>
-
-            <div class="text-center mb-8">
-                <p class="text-3xl font-bold text-gray-700" id="current-time-display">5:42:30 AM</p>
-                <p class="text-gray-500">Local Time</p>
-            </div>
-
-            <div class="max-w-5xl mx-auto grid grid-cols-6 gap-3 mb-8" id="prayer-times-grid">
-                <div class="bg-white border-2 border-[#5D770F]/20 p-4 rounded text-center shadow-sm">
-                    <p class="text-xs font-bold">5:54 AM</p>
-                    <div class="my-3 text-2xl">🌅</div>
-                    <p class="text-sm font-bold bg-[#5D770F]/10 py-1 rounded">Fajr</p>
+                <div class="text-right hidden md:block">
+                    <div id="local-time" class="text-xl font-bold font-mono text-[#5D770F]">--:--:--</div>
+                    <div id="portal-current-date" class="text-xs text-gray-500 font-medium">--</div>
                 </div>
-                <!-- Other cells will be populated by JS -->
-            </div>
+            </header>
 
-            <div class="max-w-4xl mx-auto grid grid-cols-4 gap-4 text-xs border-t pt-6 text-center text-gray-600">
-                <div>
-                    <p class="font-bold">Calc Method:</p>
-                    <p>Karachi - University of Islamic Sciences</p>
-                </div>
-                <div>
-                    <p class="font-bold">Juristic Methods:</p>
-                    <p>Standard (Shafi, Hanbali, Maliki)</p>
-                </div>
-                <div>
-                    <p class="font-bold">Latitude, Longitude:</p>
-                    <p>18.75, 73.75</p>
-                </div>
-                <div>
-                    <p class="font-bold">TimeZone:</p>
-                    <p>Asia/Kolkata (UTC+5.5)</p>
-                </div>
-            </div>
+            <!-- Dashboard View -->
+            <section id="view-dashboard" class="view-section p-8 space-y-8 animate-fade-in-up">
 
-            <!-- Hidden Audio for Back Compatibility -->
-            <audio id="main-audio-element"></audio>
+                <!-- Hero Section -->
+                <div
+                    class="relative rounded-3xl overflow-hidden shadow-2xl min-h-[400px] flex items-center justify-center text-center text-white">
+                    <!-- Dynamic Background -->
+                    <div class="absolute inset-0 z-0">
+                        <div class="absolute inset-0 bg-gradient-to-r from-[#1a472a] to-[#2d5a3f]"></div>
+                        <div
+                            class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]">
+                        </div>
+                        <!-- 3D Canvas Placeholder -->
+                        <div id="canvas-container"
+                            class="absolute right-0 top-1/2 -translate-y-1/2 w-[400px] h-[400px] opacity-40 mix-blend-overlay pointer-events-none">
+                        </div>
+                    </div>
+
+                    <div class="relative z-10 p-8 space-y-6 max-w-2xl">
+                        <div>
+                            <span
+                                class="inline-block px-4 py-1.5 rounded-full bg-white/10 backdrop-blur border border-white/20 text-sm font-medium mb-4 text-[#d4af37] animate-pulse">
+                                Upcoming Prayer
+                            </span>
+                            <h2 class="text-5xl md:text-7xl font-[Cormorant_Garamond] font-bold mb-2 drop-shadow-lg"
+                                id="next-prayer-name">Fajr</h2>
+                            <p class="text-xl opacity-90 font-light">Remembrance of Allah is the greatest deed.</p>
+                        </div>
+
+                        <div
+                            class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/10 inline-block min-w-[300px]">
+                            <div class="text-6xl font-mono font-bold tracking-tight drop-shadow-md" id="countdown">
+                                00:00:00</div>
+                            <div class="text-xs uppercase tracking-[0.2em] mt-2 opacity-70">Time Remaining</div>
+                        </div>
+
+                        <div id="portal-location-label" class="text-white/80 font-medium text-lg mt-4">Pune, India</div>
+                    </div>
+                </div>
+
+                <!-- Prayer Grid -->
+                <!-- Use JS to populate this grid with proper styling -->
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4" id="prayer-times-grid">
+                    <!-- Populated by JS -->
+                </div>
+
+                <!-- Extra Info Strip -->
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div
+                        class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4 hover:shadow-md transition-shadow">
+                        <div
+                            class="w-12 h-12 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center text-xl">
+                            <i class="fas fa-moon"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800">Hijri Date</h4>
+                            <p class="text-sm text-gray-500" id="hero-hijri-date">Loading...</p>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4 hover:shadow-md transition-shadow">
+                        <div
+                            class="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-xl">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800">Gregorian</h4>
+                            <p class="text-sm text-gray-500" id="hero-greg-date">Loading...</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4 hover:shadow-md transition-shadow cursor-pointer"
+                        id="play-azaan-btn">
+                        <div
+                            class="w-12 h-12 rounded-full bg-amber-50 text-[#d4af37] flex items-center justify-center text-xl">
+                            <i class="fas fa-mosque"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800">Play Azaan</h4>
+                            <p class="text-sm text-gray-500">Makkah Recording</p>
+                        </div>
+                        <audio id="azaan-audio"
+                            src="https://cdn.islamic.network/quran/audio/128/ar.alafasy/azaan.mp3"></audio>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Quran View -->
+            <section id="view-quran" class="view-section hidden p-8 space-y-8 animate-fade-in-up">
+                <div class="text-center mb-8">
+                    <h2 class="text-4xl font-[Cormorant_Garamond] font-bold text-[#1a472a]">The Noble Quran</h2>
+                    <p class="text-gray-500 mt-2">Read, Listen, and Reflect upon the Holy Verses</p>
+                    <button id="view-all-surahs-btn" class="mt-4 text-[#5D770F] font-bold text-sm hover:underline">View
+                        All Surahs</button>
+                </div>
+                <!-- Surah Grid -->
+                <div id="surah-index-grid"
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 surah-grid-display">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+            <!-- Names View -->
+            <section id="view-names" class="view-section hidden p-8 space-y-8 animate-fade-in-up">
+                <div class="text-center mb-8">
+                    <h2 class="text-4xl font-[Cormorant_Garamond] font-bold text-[#1a472a]">99 Names of Allah</h2>
+                    <p class="text-gray-500 mt-2">Asma-ul-Husna - The Most Beautiful Names</p>
+                    <button id="view-all-names-btn" class="mt-4 text-[#5D770F] font-bold text-sm hover:underline">View
+                        Full List</button>
+                </div>
+                <div id="asma-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 asma-grid-display">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+            <!-- Duas View -->
+            <section id="view-duas" class="view-section hidden p-8 space-y-8 animate-fade-in-up">
+                <div class="text-center mb-8">
+                    <h2 class="text-4xl font-[Cormorant_Garamond] font-bold text-[#1a472a]">Daily Adhkar & Duas</h2>
+                    <p class="text-gray-500 mt-2">Fortress of the Muslim - Authentic Supplications</p>
+                </div>
+
+                <div class="flex flex-wrap justify-center gap-2 mb-8" id="dua-categories">
+                    <button
+                        class="dua-cat-btn active px-4 py-2 rounded-full bg-white border border-gray-200 text-sm font-medium hover:bg-[#5D770F] hover:text-white transition-all shadow-sm"
+                        data-cat="all">All</button>
+                    <button
+                        class="dua-cat-btn px-4 py-2 rounded-full bg-white border border-gray-200 text-sm font-medium hover:bg-[#5D770F] hover:text-white transition-all shadow-sm"
+                        data-cat="morning">Morning</button>
+                    <button
+                        class="dua-cat-btn px-4 py-2 rounded-full bg-white border border-gray-200 text-sm font-medium hover:bg-[#5D770F] hover:text-white transition-all shadow-sm"
+                        data-cat="evening">Evening</button>
+                    <button
+                        class="dua-cat-btn px-4 py-2 rounded-full bg-white border border-gray-200 text-sm font-medium hover:bg-[#5D770F] hover:text-white transition-all shadow-sm"
+                        data-cat="food">Food</button>
+                    <button
+                        class="dua-cat-btn px-4 py-2 rounded-full bg-white border border-gray-200 text-sm font-medium hover:bg-[#5D770F] hover:text-white transition-all shadow-sm"
+                        data-cat="travel">Travel</button>
+                </div>
+
+                <div id="duas-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+            <section id="view-library" class="view-section hidden p-32 text-center">
+                <i class="fas fa-tools text-6xl text-gray-200 mb-4"></i>
+                <h3 class="text-2xl font-bold text-gray-400">Library Under Construction</h3>
+                <p>We are digitizing Sahih Bukhari and Muslim. Check back soon.</p>
+            </section>
+
         </main>
     </div>
+
+    <!-- QURAN READER MODAL (Overlay) -->
+    <div id="quran-modal" class="fixed inset-0 z-50 bg-black/95 text-white hidden flex-col">
+        <!-- Reader Header -->
+        <div class="flex items-center justify-between p-4 border-b border-white/10 bg-[#0f2b19]">
+            <div class="text-left">
+                <h3 id="reader-title" class="text-xl font-[Cormorant_Garamond] font-bold text-[#d4af37]">Surah Al-Fatiha
+                </h3>
+                <p id="surah-info" class="text-xs opacity-60">7 Ayahs | Meccan</p>
+            </div>
+
+            <div class="flex items-center gap-4 bg-white/5 px-4 py-2 rounded-full backdrop-blur-md">
+                <button id="play-pause-btn"
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-[#d4af37] text-black hover:scale-105 transition-transform">
+                    <i class="fas fa-play ml-1"></i>
+                </button>
+                <audio id="quran-audio"></audio>
+            </div>
+
+            <button id="close-quran-btn"
+                class="w-10 h-10 rounded-full bg-white/10 hover:bg-red-500/20 text-white flex items-center justify-center transition-colors">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="flex flex-1 overflow-hidden">
+            <!-- Sidebar List -->
+            <div class="w-64 border-r border-white/10 bg-black/50 overflow-y-auto hidden md:block"
+                id="surah-list-container">
+                <div class="p-4 border-b border-white/5">
+                    <button id="tab-surah" class="w-full text-left font-bold text-[#d4af37]">Surahs</button>
+                </div>
+                <div id="surah-list" class="space-y-1 p-2">
+                    <!-- List -->
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="flex-1 overflow-y-auto p-6 md:p-12 relative bg-[#121212]" id="quran-content">
+                <!-- Verses go here -->
+                <div class="text-center mt-20">
+                    <i class="fas fa-circle-notch fa-spin text-4xl text-[#d4af37]"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden audio for legacy compat -->
+    <audio id="main-audio-element"></audio>
+    <div id="global-player"></div>
 
     <script src="script.js"></script>
 </body>

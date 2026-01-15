@@ -1067,28 +1067,17 @@ function initPrayerTimes() {
         });
     }
 
-    // Default: Auto-Detect
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                fetchTimesByCoords(position.coords.latitude, position.coords.longitude);
-            },
-            () => {
-                // Fallback to Mecca
-                fetchTimesByCoords(21.3891, 39.8579);
-            }
-        );
-    } else {
-        fetchTimesByCoords(21.3891, 39.8579);
-    }
+    // Default: Mecca (Manual Location Preferred)
+    // Disabled Auto-Location per user request
+    fetchTimesByCoords(21.3891, 39.8579, "Mecca (Default)");
 }
 
-function fetchTimesByCoords(lat, lon) {
+function fetchTimesByCoords(lat, lon, label = "Auto-detected Location") {
     const date = new Date();
     const timestamp = Math.floor(date.getTime() / 1000);
     fetch(`https://api.aladhan.com/v1/timings/${timestamp}?latitude=${lat}&longitude=${lon}&method=2`)
         .then(res => res.json())
-        .then(data => renderPrayerTimes(data.data.timings, "Auto-detected Location"))
+        .then(data => renderPrayerTimes(data.data.timings, label))
         .catch(err => console.error(err));
 }
 

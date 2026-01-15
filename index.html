@@ -26,117 +26,86 @@
 
 <body>
 
-    <div class="portal-wrapper">
-        <!-- Sidebar -->
-        <aside class="portal-sidebar">
-            <div class="sidebar-brand">
-                <i class="fas fa-mosque"></i>
-                <span>Noor</span>
-            </div>
-
-            <nav class="sidebar-nav">
-                <a href="#" class="nav-item active"><i class="fas fa-clock"></i> Prayer Times</a>
-                <a href="#quran-index" class="nav-item"><i class="fas fa-book-open"></i> Quran</a>
-                <a href="#duas" class="nav-item"><i class="fas fa-praying-hands"></i> Duas</a>
-                <a href="#asma-ul-husna" class="nav-item"><i class="fas fa-star"></i> 99 Names</a>
-                <a href="#community" class="nav-item"><i class="fas fa-users"></i> Community</a>
-            </nav>
-
-            <div class="sidebar-footer">
-                <p>&copy; 2026 Noor Portal</p>
-                <div style="margin-top:0.5rem; font-size:0.8rem; opacity:0.7;">
-                    <i class="fas fa-cog"></i> Settings
+    <div class="flex min-h-screen font-sans text-gray-800 bg-gray-50">
+        <aside class="w-64 bg-[#5D770F] text-white flex flex-col shrink-0">
+            <div class="p-8 text-center border-b border-white/10">
+                <div class="mx-auto mb-4 w-20 h-20 bg-white rounded-full flex items-center justify-center">
+                    <svg class="w-12 h-12 text-[#5D770F]" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L2 12h3v8h6v-6h2v6h6v-8h3L12 2z" />
+                    </svg>
                 </div>
+                <h1 class="text-xl font-bold leading-tight">Prayer times</h1>
+                <p class="text-xs opacity-80 uppercase tracking-widest">Azan Times</p>
             </div>
+
+            <nav class="flex-1 py-4 overflow-y-auto">
+                <a href="#" class="block px-6 py-3 hover:bg-black/10 border-l-4 border-white">Prayer times</a>
+                <a href="#" class="block px-6 py-3 hover:bg-black/10 border-l-4 border-transparent">Qibla</a>
+                <a href="#" class="block px-6 py-3 hover:bg-black/10 border-l-4 border-transparent">Moon Today</a>
+                <a href="#" class="block px-6 py-3 hover:bg-black/10 border-l-4 border-transparent">Zakat calculator</a>
+                <a href="#" class="block px-6 py-3 hover:bg-black/10 border-l-4 border-transparent">Hijri date</a>
+            </nav>
         </aside>
 
-        <!-- Main Content -->
-        <main class="portal-main">
-            <!-- Top Header: Search -->
-            <div class="portal-header">
-                <div>
-                    <!-- Breadcrumb or Date could go here -->
-                    <h2 id="portal-current-date" style="font-size:1.2rem; margin-bottom:0;">Loading Date...</h2>
-                    <p style="color:var(--text-muted); font-size:0.9rem;" id="portal-location-label">Locating...</p>
-                </div>
-
-                <div class="location-search-bar">
-                    <i class="fas fa-search" style="color:var(--text-muted);"></i>
-                    <input type="text" id="prayer-city-input" placeholder="Search City, Country..." />
-                    <button id="portal-search-btn" class="icon-btn"><i class="fas fa-arrow-right"></i></button>
+        <main class="flex-1 p-8 overflow-y-auto">
+            <div class="max-w-4xl mx-auto bg-white p-6 rounded shadow-sm mb-6 text-center">
+                <h2 class="text-2xl font-bold mb-4">Prayer times</h2>
+                <div class="flex gap-2 max-w-xl mx-auto">
+                    <input type="text" id="prayer-city-input" placeholder="Place Name ..."
+                        class="flex-1 border p-2 rounded focus:outline-none focus:ring-2 focus:ring-[#5D770F]">
+                    <button id="portal-search-btn"
+                        class="bg-[#5D770F] text-white px-6 py-2 rounded font-bold">Search!</button>
+                    <button class="bg-[#5D770F] text-white px-6 py-2 rounded font-bold">My Location</button>
                 </div>
             </div>
 
-            <!-- Large Green Hero: Countdown -->
-            <div class="countdown-hero">
-                <div class="next-prayer-label">Next Prayer in</div>
-                <div id="countdown-display" class="countdown-timer">--:--:--</div>
-                <div id="next-prayer-name" class="upcoming-prayer-name">Waiting...</div>
+            <div class="max-w-4xl mx-auto mb-6">
+                <h3 class="text-blue-700 font-bold text-lg" id="portal-location-label">Pune, India Prayer times and
+                    Azan</h3>
+                <p class="text-gray-500 text-sm" id="portal-current-date">Thursday 26 Rajab 1447 Hijri - 2026/01/15</p>
             </div>
 
-            <!-- 6-Column Grid -->
-            <div class="six-col-grid" id="prayer-times-grid">
-                <!-- Fallback content until JS loads -->
-                <div class="prayer-item-box"><span>Fajr</span></div>
-                <div class="prayer-item-box"><span>Sunrise</span></div>
-                <div class="prayer-item-box"><span>Dhuhr</span></div>
-                <div class="prayer-item-box"><span>Asr</span></div>
-                <div class="prayer-item-box"><span>Maghrib</span></div>
-                <div class="prayer-item-box"><span>Isha</span></div>
-            </div>
-
-            <!-- Footer: Settings & Method -->
             <div
-                style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid rgba(0,0,0,0.05); display:flex; justify-content:space-between; color:var(--text-muted); font-size: 0.9rem;">
-                <div>Calculation Method: <span style="font-weight:600; color:var(--text-dark);">Muslim World
-                        League</span></div>
-                <div style="cursor:pointer;"><i class="fas fa-cog"></i> Adjust Settings</div>
+                class="max-w-4xl mx-auto bg-[#5D770F] text-white rounded-lg overflow-hidden shadow-md text-center py-10 mb-8">
+                <p class="text-2xl mb-2" id="next-prayer-name">Fajr</p>
+                <div class="text-7xl font-mono font-bold" id="countdown-display">00:11:31</div>
+                <p class="mt-2 text-sm opacity-90 italic">Fajr Remaining time</p>
             </div>
 
-            <!-- Hidden Sections (Preserved for functionality calls if needed, hidden visually if not requested) -->
-            <!-- We will append other sections below if desired, for now keeping it clean per "web portal" request -->
+            <div class="text-center mb-8">
+                <p class="text-3xl font-bold text-gray-700" id="current-time-display">5:42:30 AM</p>
+                <p class="text-gray-500">Local Time</p>
+            </div>
 
-            <!-- Keeping Audio/Modal Elements for functionality -->
-            <!-- Quran Reader Modal -->
-            <div id="quran-modal" class="modal">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 id="reader-title">The Noble Quran</h3>
-                        <div class="reader-controls-center">
-                            <button class="lang-btn active" data-lang="en">English</button>
-                        </div>
-                        <button id="close-quran-btn"><i class="fas fa-times"></i></button>
-                    </div>
-                    <div class="modal-body">
-                        <aside class="surah-sidebar">
-                            <div id="surah-list-container"></div>
-                        </aside>
-                        <main class="verse-view">
-                            <div id="quran-content"></div>
-                        </main>
-                    </div>
+            <div class="max-w-5xl mx-auto grid grid-cols-6 gap-3 mb-8" id="prayer-times-grid">
+                <div class="bg-white border-2 border-[#5D770F]/20 p-4 rounded text-center shadow-sm">
+                    <p class="text-xs font-bold">5:54 AM</p>
+                    <div class="my-3 text-2xl">🌅</div>
+                    <p class="text-sm font-bold bg-[#5D770F]/10 py-1 rounded">Fajr</p>
+                </div>
+                <!-- Other cells will be populated by JS -->
+            </div>
+
+            <div class="max-w-4xl mx-auto grid grid-cols-4 gap-4 text-xs border-t pt-6 text-center text-gray-600">
+                <div>
+                    <p class="font-bold">Calc Method:</p>
+                    <p>Karachi - University of Islamic Sciences</p>
+                </div>
+                <div>
+                    <p class="font-bold">Juristic Methods:</p>
+                    <p>Standard (Shafi, Hanbali, Maliki)</p>
+                </div>
+                <div>
+                    <p class="font-bold">Latitude, Longitude:</p>
+                    <p>18.75, 73.75</p>
+                </div>
+                <div>
+                    <p class="font-bold">TimeZone:</p>
+                    <p>Asia/Kolkata (UTC+5.5)</p>
                 </div>
             </div>
 
-            <!-- Global Audio Player (Fixed Bottom) -->
-            <div id="global-player" class="global-audio-player">
-                <div class="player-info">
-                    <div class="player-icon-art"><i class="fas fa-quran"></i></div>
-                    <div class="player-text">
-                        <h4 id="player-track-title">Surah Al-Fatiha</h4>
-                    </div>
-                </div>
-                <div class="player-controls">
-                    <button id="global-play-btn" class="play-pause-btn"><i class="fas fa-play"></i></button>
-                </div>
-                <div class="player-progress-container">
-                    <div class="player-progress-bar" id="audio-progress-bar">
-                        <div class="progress-filled" id="audio-progress-filled"></div>
-                    </div>
-                </div>
-                <button id="close-player-btn"><i class="fas fa-times"></i></button>
-            </div>
-
+            <!-- Hidden Audio for Back Compatibility -->
             <audio id="main-audio-element"></audio>
         </main>
     </div>

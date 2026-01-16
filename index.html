@@ -87,7 +87,7 @@
                         class="mx-auto mb-4 w-20 h-20 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20 shadow-[0_0_15px_rgba(212,175,55,0.3)]">
                         <i class="fas fa-kaaba text-3xl text-[#d4af37]"></i>
                     </div>
-                    <h1 class="text-2xl font-[Cormorant_Garamond] font-bold tracking-wide text-[#d4af37]">AIFAZ ISLAMIC
+                    <h1 class="text-2xl font-[Cormorant_Garamond] font-bold tracking-wide text-[#d4af37]">Qulb
                     </h1>
                     <p class="text-xs opacity-60 uppercase tracking-widest mt-1">Premium Portal</p>
                 </div>
@@ -136,10 +136,17 @@
                         class="fas fa-book-open w-6 text-center text-[#d4af37]/80 group-hover:text-[#d4af37] transition-colors"></i>
                     <span class="ml-3 font-medium">Hadith Library</span>
                 </a>
+                <a href="#"
+                    class="nav-link group relative flex items-center px-6 py-3.5 hover:bg-white/5 border-r-4 border-transparent hover:border-white/20 transition-all"
+                    data-target="view-ramadan">
+                    <i
+                        class="fas fa-moon w-6 text-center text-[#d4af37]/80 group-hover:text-[#d4af37] transition-colors"></i>
+                    <span class="ml-3 font-medium">Ramadan 2026</span>
+                </a>
             </nav>
 
             <div class="p-4 border-t border-white/10 text-center text-xs opacity-40">
-                &copy; 2026 Noor Portal
+                &copy; 2026 Qulb
             </div>
         </aside>
 
@@ -179,7 +186,7 @@
 
                 <!-- Hero Section -->
                 <div
-                    class="relative rounded-3xl overflow-hidden shadow-2xl min-h-[400px] flex items-center justify-center text-center text-white">
+                    class="relative rounded-3xl overflow-hidden shadow-2xl min-h-[400px] flex items-center justify-center text-center text-white shimmer-card">
                     <!-- Dynamic Background -->
                     <div class="absolute inset-0 z-0">
                         <div class="absolute inset-0 bg-gradient-to-r from-[#1a472a] to-[#2d5a3f]"></div>
@@ -220,14 +227,32 @@
                     <label class="font-bold text-sm text-[#1a472a] dark:text-[#d4af37]">Azan Voice:</label>
                     <select id="azan-selector" onchange="changeAzanVoice()"
                         class="flex-1 p-2 rounded bg-gray-50 dark:bg-gray-700 outline-none border-none text-sm dark:text-white cursor-pointer">
-                        <option value="https://www.islamcan.com/common/azan/azan1.mp3">Makkah (Masjid al-Haram)</option>
-                        <option value="https://www.islamcan.com/common/azan/azan3.mp3">Madinah (Masjid an-Nabawi)
+                        <option value="https://www.islamcan.com/common/azan/azan1.mp3">Makkah - Masjid al-Haram (Full)
                         </option>
-                        <option value="https://www.islamcan.com/common/azan/azan16.mp3">Al-Aqsa Style</option>
-                        <option value="https://www.islamcan.com/common/azan/azan2.mp3">Egypt (Abdul Basit)</option>
+                        <option value="https://www.islamcan.com/common/azan/azan3.mp3">Madinah - Masjid an-Nabawi
+                        </option>
+                        <option value="https://www.islamcan.com/common/azan/azan16.mp3">Al-Aqsa - Jerusalem Style
+                        </option>
+                        <option value="https://www.islamcan.com/common/azan/azan2.mp3">Egypt - Abdul Basit (Short)
+                        </option>
+                        <option value="https://www.islamcan.com/common/azan/azan15.mp3">Turkey - Ottoman Style</option>
                     </select>
                     <button onclick="playPreview()"
                         class="px-4 py-2 bg-[#1a472a] text-white rounded-lg text-xs font-bold hover:bg-[#5D770F] transition-colors shadow-md">Preview</button>
+                    <button onclick="stopAzan()"
+                        class="px-3 py-2 bg-red-600 text-white rounded-lg text-xs font-bold hover:bg-red-700 transition-colors shadow-md"><i
+                            class="fas fa-stop"></i></button>
+
+                    <div
+                        class="flex items-center gap-3 bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-full shadow-inner">
+                        <button id="mute-btn" onclick="toggleMute()"
+                            class="text-lg hover:scale-110 transition-transform dark:text-gray-200">
+                            <span id="mute-icon">🔊</span>
+                        </button>
+                        <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5"
+                            oninput="updateVolume(this.value)"
+                            class="w-20 h-1.5 bg-[#1a472a] rounded-lg appearance-none cursor-pointer accent-[#1a472a]">
+                    </div>
                 </div>
 
                 <!-- Prayer Grid -->
@@ -430,6 +455,107 @@
                         <i class="fas fa-tools text-6xl text-gray-200 mb-4"></i>
                         <h3 class="text-2xl font-bold text-gray-400">Library Under Construction</h3>
                         <p>We are digitizing Sahih Bukhari and Muslim. Check back soon.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Ramadan View - Royale Edition -->
+            <section id="view-ramadan" class="view-section hidden p-8 space-y-8 animate-fade-in-up">
+                <div class="max-w-5xl mx-auto">
+                    <!-- Royale Header -->
+                    <header class="text-center mb-12">
+                        <div
+                            class="inline-block p-4 rounded-full bg-[#1a472a]/20 mb-4 border border-[#1a472a]/30 dark:bg-emerald-900/50 dark:border-emerald-500/30">
+                            <span class="text-4xl">🌙</span>
+                        </div>
+                        <h1 class="text-5xl font-bold text-[#d4af37] drop-shadow-[0_0_10px_rgba(212,175,55,0.4)]">
+                            Ramadan Kareem</h1>
+                        <p
+                            class="text-[#1a472a] dark:text-emerald-200 mt-2 tracking-widest uppercase text-sm font-bold">
+                            Blessed Month 1447 AH</p>
+                        <p id="ramadan-currentDate" class="text-xs text-gray-500 mt-1"></p>
+                    </header>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+
+                        <!-- Col 1: Dua Card -->
+                        <div class="lg:col-span-1">
+                            <div
+                                class="glass h-full p-6 border-l-4 border-[#d4af37] rounded-3xl relative overflow-hidden flex flex-col justify-center">
+                                <h3 class="text-[#d4af37] font-bold mb-4 uppercase text-xs tracking-widest">Dua of the
+                                    Day</h3>
+                                <p id="duaArabic"
+                                    class="text-2xl md:text-3xl text-right leading-loose mb-4 font-[Amiri] text-gray-800 dark:text-white"
+                                    style="font-family: 'Amiri', serif;">...</p>
+                                <p id="duaTranslation" class="text-gray-600 dark:text-gray-300 italic text-sm">...</p>
+                                <p id="duaReference" class="text-xs text-gray-400 mt-2 text-right"></p>
+                            </div>
+                        </div>
+
+                        <!-- Col 2: Countdown Card (Royale) -->
+                        <div class="lg:col-span-2">
+                            <div id="countdownCard"
+                                class="hidden h-full glass p-10 text-center relative overflow-hidden rounded-3xl border border-white/10 shadow-2xl bg-gradient-to-br from-[#1a472a] to-[#0f2b19] text-white">
+                                <div class="absolute top-0 right-0 p-4 opacity-10 text-8xl">🕌</div>
+
+                                <h2 class="text-xl text-emerald-300 font-medium mb-2"><span id="countdownLabel">Next
+                                        Milestone</span></h2>
+                                <div id="timer"
+                                    class="text-6xl md:text-8xl font-black tracking-tighter text-[#d4af37] drop-shadow-[0_0_15px_rgba(212,175,55,0.5)] mb-4 font-mono">
+                                    --:--:--
+                                </div>
+                                <div class="flex justify-center gap-6 mt-6 border-t border-white/10 pt-6">
+                                    <div class="text-center">
+                                        <p class="text-xs text-gray-400 uppercase mb-1">Sehri (Fajr)</p>
+                                        <p id="time-fajr" class="text-xl font-bold">--:--</p>
+                                    </div>
+                                    <div class="w-px h-10 bg-white/20"></div>
+                                    <div class="text-center">
+                                        <p class="text-xs text-gray-400 uppercase mb-1">Iftar (Maghrib)</p>
+                                        <p id="time-maghrib" class="text-xl font-bold">--:--</p>
+                                    </div>
+                                </div>
+                                <p id="locationDisplay"
+                                    class="mt-4 text-xs text-emerald-100/60 uppercase tracking-widest"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Search Bar -->
+                    <div
+                        class="bg-white dark:bg-gray-800 p-4 rounded-full shadow-lg max-w-2xl mx-auto flex items-center mb-12 border border-gray-100 dark:border-gray-700">
+                        <input id="ramadan-city" type="text" placeholder="City (e.g. Dubai)"
+                            class="bg-transparent px-4 py-2 w-1/3 outline-none text-gray-700 dark:text-white placeholder:text-gray-400 text-sm border-r border-gray-200 dark:border-gray-600">
+                        <input id="ramadan-country" type="text" placeholder="Country"
+                            class="bg-transparent px-4 py-2 w-1/3 outline-none text-gray-700 dark:text-white placeholder:text-gray-400 text-sm">
+                        <button onclick="getRamadanTimes()"
+                            class="bg-[#d4af37] hover:bg-[#b5952f] text-[#1a472a] font-bold px-8 py-2.5 rounded-full transition w-1/3 shadow-lg">
+                            Find Times
+                        </button>
+                    </div>
+
+                    <!-- Results List -->
+                    <div id="ramadan-results"
+                        class="hidden bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700">
+                        <div class="bg-[#1a472a] p-4 text-center border-b border-[#d4af37]/20">
+                            <h3 id="ramadan-locationLabel"
+                                class="font-bold text-[#d4af37] tracking-widest uppercase text-sm">Calendar</h3>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead
+                                    class="bg-gray-50 dark:bg-gray-700/50 text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                                    <tr>
+                                        <th class="p-4">Ramadan Date</th>
+                                        <th class="p-4">Day</th>
+                                        <th class="p-4">Sehri</th>
+                                        <th class="p-4">Iftar</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ramadan-calendarBody" class="divide-y divide-gray-100 dark:divide-gray-700">
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </section>

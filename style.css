@@ -1,43 +1,50 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Amiri:wght@400;700&family=Cormorant+Garamond:wght@600;700&display=swap');
 
 :root {
-    --primary: #1a472a;
-    --secondary: #5D770F;
-    --gold: #d4af37;
-    --bg-light: #f9fafb;
-    --text-dark: #1f2937;
+    --primary: #0f172a;
+    /* Deep Ocean */
+    --secondary: #0ea5e9;
+    /* Sky Blue */
+    --gold: #2dd4bf;
+    /* Neon Teal (replacing Gold) */
+    --accent: #f0f9ff;
+    --bg-light: #f0f9ff;
+    --text-dark: #0f172a;
 }
 
-/* Dark Mode Overrides */
-.dark {
-    --bg-light: #111827;
-    --text-dark: #f9fafb;
-    --primary: #d4af37;
-    background-color: #111827;
-    color: #f9fafb;
-}
-
-.dark .bg-white {
-    background-color: #1f2937 !important;
-    border-color: #374151 !important;
-    color: #f9fafb;
-}
-
-.dark .text-gray-800 {
-    color: #f9fafb !important;
-}
-
-.dark .text-gray-500 {
-    color: #9ca3af !important;
-}
-
-
+/* --- ANIMATED MESH BACKGROUND (OCEAN THEME) --- */
 body {
     font-family: 'Inter', sans-serif;
-    background-color: var(--bg-light);
     color: var(--text-dark);
+    /* Light Mode: Glacial/Ocean Breeze */
+    background: linear-gradient(-45deg, #e0f2fe, #f0f9ff, #ccfbf1, #e0f2fe);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    min-height: 100vh;
 }
 
+.dark body {
+    /* Dark Mode: Deep Ocean Abyss */
+    background: linear-gradient(-45deg, #020617, #0f172a, #1e293b, #111827);
+    background-size: 400% 400%;
+    color: #f9fafb;
+}
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Typography Defaults */
 h1,
 h2,
 h3,
@@ -51,80 +58,65 @@ h6 {
     font-family: 'Amiri', serif;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-    width: 8px;
+/* --- GLASSMORPHISM & NEON --- */
+
+/* Glass Cards (Light Mode) */
+.glass,
+.bg-white {
+    background: rgba(255, 255, 255, 0.65) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.05);
 }
 
-::-webkit-scrollbar-track {
-    background: transparent;
+/* Glass Cards (Dark Mode) */
+.dark .glass,
+.dark .bg-white,
+.dark .bg-gray-800 {
+    background: rgba(15, 23, 42, 0.6) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(45, 212, 191, 0.1);
+    /* Teal border hint */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    color: #f0f9ff;
 }
 
-::-webkit-scrollbar-thumb {
-    background: rgba(93, 119, 15, 0.4);
-    border-radius: 4px;
+/* Neon Glows (Teal) */
+.neon-glow {
+    box-shadow: 0 0 15px rgba(45, 212, 191, 0.3), inset 0 0 10px rgba(45, 212, 191, 0.05);
+    border: 1px solid rgba(45, 212, 191, 0.4);
 }
 
-::-webkit-scrollbar-thumb:hover {
-    background: rgba(93, 119, 15, 0.8);
-}
-
-/* Utility Animations */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-.view-section {
-    animation: fadeIn 0.5s ease-in-out;
-}
-
-/* 3D and Hover Effects */
-.perspective-container {
-    perspective: 1000px;
-}
-
-.hover-card-3d {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.hover-card-3d:hover {
-    transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-}
-
-/* Glassmorphism Utils */
-.glass {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+.dark .neon-glow {
+    box-shadow: 0 0 25px rgba(45, 212, 191, 0.25), inset 0 0 15px rgba(45, 212, 191, 0.1);
+    border: 1px solid rgba(45, 212, 191, 0.5);
 }
 
 /* Active Nav Link Glow */
+.nav-link.active {
+    background: rgba(45, 212, 191, 0.1);
+    box-shadow: 0 0 15px rgba(45, 212, 191, 0.15);
+    border-right: 4px solid var(--gold);
+    /* Teal */
+}
+
 .nav-link.active i {
-    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.5));
+    filter: drop-shadow(0 0 8px rgba(45, 212, 191, 0.6));
+    color: var(--gold) !important;
 }
 
-/* Rich Theme Overrides */
-.bg-gradient-rich {
-    background: linear-gradient(135deg, #1a472a 0%, #0f2b19 100%);
+/* Texts in Dark Mode */
+.dark .text-gray-800 {
+    color: #f0f9ff !important;
 }
 
-.text-gold {
-    color: #d4af37;
+.dark .text-gray-500 {
+    color: #94a3b8 !important;
 }
 
-.border-gold {
-    border-color: #d4af37;
-}
-
-/* Scrollbar styling for Webkit */
+/* Scrollbar (Teal) */
 ::-webkit-scrollbar {
     width: 6px;
 }
@@ -134,10 +126,132 @@ h6 {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgba(212, 175, 55, 0.5);
+    background: rgba(45, 212, 191, 0.5);
     border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: rgba(212, 175, 55, 0.8);
+    background: rgba(45, 212, 191, 0.9);
+}
+
+/* Hover Effects */
+.hover-card-3d:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(15, 23, 42, 0.1);
+}
+
+/* Utils */
+.view-section {
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- SILK/GLASS SHIMMER EFFECT --- */
+.shimmer-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.shimmer-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.1) 40%,
+            rgba(255, 255, 255, 0.4) 50%,
+            rgba(255, 255, 255, 0.1) 60%,
+            rgba(255, 255, 255, 0) 100%);
+    transform: skewX(-25deg);
+    animation: silkShimmer 6s infinite ease-in-out;
+    z-index: 20;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+}
+
+@keyframes silkShimmer {
+    0% {
+        left: -150%;
+        opacity: 0;
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    50% {
+        left: 150%;
+        opacity: 0;
+    }
+
+    100% {
+        left: 150%;
+        opacity: 0;
+    }
+}
+
+/* --- WEATHER ATMOSPHERES --- */
+/* Clear / Sunny */
+body.weather-clear {
+    background: linear-gradient(-45deg, #fefce8, #fde047, #bae6fd, #e0f2fe) !important;
+    background-size: 400% 400%;
+}
+
+.dark body.weather-clear {
+    background: linear-gradient(-45deg, #0f172a, #1e3a8a, #172554, #020617) !important;
+    /* Clear Starlit Night */
+}
+
+/* Clouds */
+body.weather-clouds {
+    background: linear-gradient(-45deg, #94a3b8, #cbd5e1, #e2e8f0, #f1f5f9) !important;
+    background-size: 400% 400%;
+}
+
+.dark body.weather-clouds {
+    background: linear-gradient(-45deg, #334155, #1e293b, #0f172a, #020617) !important;
+}
+
+/* Rain */
+body.weather-rain {
+    background: linear-gradient(180deg, #64748b, #475569, #334155) !important;
+    background-size: 200% 200%;
+    animation: rainMood 3s linear infinite;
+}
+
+.dark body.weather-rain {
+    background: linear-gradient(180deg, #1e293b, #0f172a, #020617) !important;
+}
+
+@keyframes rainMood {
+    0% {
+        background-position: 50% 0%;
+    }
+
+    100% {
+        background-position: 50% 100%;
+    }
+}
+
+/* Snow */
+body.weather-snow {
+    background: linear-gradient(to bottom, #e0f2fe, #f0f9ff, #ffffff) !important;
+}
+
+.dark body.weather-snow {
+    background: linear-gradient(to bottom, #1e293b, #334155, #cbd5e1) !important;
 }

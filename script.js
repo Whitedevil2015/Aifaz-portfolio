@@ -82,21 +82,64 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (e) { }
     }
 
+    // --- ATMOSPHERIC WEATHER ---
+    async function fetchAtmosphere(lat, lng) {
+        try {
+            console.log(`Fetching weather: ${lat}, ${lng}`);
+            const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`);
+            const data = await res.json();
+            const code = data.current_weather.weathercode;
+            console.log(`Weather Code: ${code}`);
+
+            document.body.classList.remove('weather-clear', 'weather-clouds', 'weather-rain', 'weather-snow');
+
+            let theme = 'weather-clear'; // Default
+            let icon = '☀️';
+
+            if (code <= 3) { theme = 'weather-clear'; icon = '☀️'; }
+            else if (code <= 48) { theme = 'weather-clouds'; icon = '☁️'; }
+            else if (code <= 67 || code >= 80) { theme = 'weather-rain'; icon = '🌧️'; }
+            else if (code >= 71) { theme = 'weather-snow'; icon = '❄️'; }
+
+            document.body.classList.add(theme);
+
+            // Visual Confirmation in UI
+            const locLabel = document.getElementById('portal-location-label');
+            if (locLabel) {
+                const currentText = locLabel.textContent.split(' • ')[0]; // Keep city
+                locLabel.innerHTML = `${currentText} • <span class="text-sm font-normal">${icon} ${theme.replace('weather-', '').toUpperCase()}</span>`;
+            }
+
+        } catch (e) {
+            console.warn("Atmosphere update failed", e);
+            // Fallback
+            document.body.classList.add('weather-clear');
+        }
+    }
+
     async function fetchPrayers(lat = null, lng = null, city = null) {
         let url = '';
         if (lat && lng) {
             url = `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=1`;
             coordinates = { lat, lng };
+            fetchAtmosphere(lat, lng); // Trigger Weather
             document.getElementById('portal-location-label').textContent = `${lat.toFixed(2)}, ${lng.toFixed(2)}`;
         } else {
             const c = city || "Pune";
-            url = `https://api.aladhan.com/v1/timingsByCity?city=${c}&country=India&method=1`; // Default country India for simplicity unless param provided
+            url = `https://api.aladhan.com/v1/timingsByCity?city=${c}&country=India&method=1`;
             document.getElementById('portal-location-label').textContent = `${c}, India`;
+            // For city search, we'll need coordinates from the response (handled below)
         }
 
         try {
             const res = await fetch(url);
             const data = await res.json();
+
+            // If city search, get lat/lng from response for weather
+            if (!lat && data.data && data.data.meta) {
+                fetchAtmosphere(data.data.meta.latitude, data.data.meta.longitude);
+            }
+
             if (data.code === 200) {
                 prayerTimesRaw = data.data.timings;
                 renderPrayerGrid(prayerTimesRaw);
@@ -534,27 +577,265 @@ window.calculateZakat = function () {
 // --- AZAN VOICE LOGIC ---
 window.adhanAudio = null;
 
-window.changeAzanVoice = function () {
+/* --- ROBUST AUDIO ENGINE --- */
+if (!window.adhanAudio) window.adhanAudio = new Audio();
+
+window.updateAzanSource = function () {
+    const selector = document.getElementById('azan-selector');
+    if (selector && window.adhanAudio) {
+        window.adhanAudio.src = selector.value;
+        window.adhanAudio.load();
+    }
+}
+// Compatibility Alias
+window.changeAzanVoice = window.updateAzanSource;
+
+window.unlockAndClose = function () {
+    if (window.adhanAudio) {
+        window.adhanAudio.play().then(() => {
+            window.adhanAudio.pause();
+            window.adhanAudio.currentTime = 0;
+        }).catch(e => console.log("Unlock pending"));
+    }
+    const modal = document.getElementById('audio-modal');
+    if (modal) modal.classList.add('hidden');
+}
+
+window.playPreview = function () {
     const selector = document.getElementById('azan-selector');
     if (!selector) return;
-    const selectedUrl = selector.value;
 
+    window.updateAzanSource();
+
+    if (window.adhanAudio) {
+        window.adhanAudio.play()
+            .then(() => {
+                setTimeout(() => {
+                    window.adhanAudio.pause();
+                    window.adhanAudio.currentTime = 0;
+                }, 10000);
+            })
+            .catch(error => {
+                console.error("Playback failed:", error);
+                const modal = document.getElementById('audio-modal');
+                if (modal) modal.classList.remove('hidden');
+                else alert("Please click anywhere to enable audio.");
+            });
+    }
+}
+
+// --- AZAN VOLUME & CONTROLS ---
+let isMuted = false;
+let lastVolume = 0.5;
+
+window.updateVolume = function (val) {
+    lastVolume = val;
+    if (window.adhanAudio) window.adhanAudio.volume = val;
+
+    const icon = document.getElementById('mute-icon');
+    if (icon) {
+        if (val == 0) icon.innerText = '🔇';
+        else if (val < 0.5) icon.innerText = '🔉';
+        else icon.innerText = '🔊';
+    }
+}
+
+window.toggleMute = function () {
+    isMuted = !isMuted;
+    if (window.adhanAudio) window.adhanAudio.muted = isMuted;
+
+    const icon = document.getElementById('mute-icon');
+    const slider = document.getElementById('volume-slider');
+
+    if (isMuted) {
+        if (icon) icon.innerText = '🔇';
+        if (slider) slider.style.opacity = "0.5";
+    } else {
+        window.updateVolume(lastVolume);
+        if (slider) slider.style.opacity = "1";
+    }
+}
+
+window.stopAzan = function () {
     if (window.adhanAudio) {
         window.adhanAudio.pause();
         window.adhanAudio.currentTime = 0;
     }
-    window.adhanAudio = new Audio(selectedUrl);
 }
 
-window.playPreview = function () {
-    if (!window.adhanAudio) window.changeAzanVoice();
-
+// Function to unlock audio on first click
+document.addEventListener('click', () => {
+    // This plays a silent 0.1s clip to "prime" the audio engine
     if (window.adhanAudio) {
-        window.adhanAudio.play().catch(e => alert("Please click on the page to enable audio first."));
-        // Stop after 15s preview
-        setTimeout(() => {
+        window.adhanAudio.play().then(() => {
             window.adhanAudio.pause();
             window.adhanAudio.currentTime = 0;
-        }, 15000);
+            console.log("Audio Engine Unlocked");
+        }).catch(error => console.log("Unlock failed", error));
+    } else {
+        window.changeAzanVoice(); // Init logic
+    }
+}, { once: true });
+
+// --- RAMADAN 2026 FEATURE ---
+let ramadanInterval;
+
+window.getRamadanTimes = async function () {
+    const city = document.getElementById('ramadan-city').value;
+    const country = document.getElementById('ramadan-country').value;
+    const resultsDiv = document.getElementById('ramadan-results');
+    const tableBody = document.getElementById('ramadan-calendarBody');
+    const locationLabel = document.getElementById('ramadan-locationLabel');
+    const countdownCard = document.getElementById('countdownCard');
+
+    if (!city || !country) {
+        alert("Please enter both city and country");
+        return;
+    }
+
+    const url = `https://api.aladhan.com/v1/timingsByCity?city=${city}&country=${country}&method=1`;
+    // Fetch both Feb (Start) and March (End) of 2026 to cover full Ramadan
+    const calUrlFeb = `https://api.aladhan.com/v1/calendarByCity/2026/2?city=${city}&country=${country}&method=1`;
+    const calUrlMar = `https://api.aladhan.com/v1/calendarByCity/2026/3?city=${city}&country=${country}&method=1`;
+
+    try {
+        locationLabel.innerText = "Fetching full month...";
+        resultsDiv.classList.remove('hidden');
+
+        // 1. Fetch Today's Data for Countdown
+        const resStats = await fetch(url);
+        const dataStats = await resStats.json();
+
+        if (dataStats.code === 200) {
+            const timings = dataStats.data.timings;
+            countdownCard.classList.remove('hidden');
+            document.getElementById('locationDisplay').innerText = `Current Location: ${city}, ${country}`;
+            document.getElementById('ramadan-currentDate').innerText = new Date().toDateString();
+
+            // Royale specific updates
+            if (document.getElementById('time-fajr'))
+                document.getElementById('time-fajr').innerText = timings.Fajr;
+            if (document.getElementById('time-maghrib'))
+                document.getElementById('time-maghrib').innerText = timings.Maghrib;
+
+            startRamadanCountdown(timings.Fajr, timings.Maghrib);
+        }
+
+        // 2. Fetch Full Calendar (Feb + March)
+        const [resFeb, resMar] = await Promise.all([
+            fetch(calUrlFeb),
+            fetch(calUrlMar)
+        ]);
+        const dataFeb = await resFeb.json();
+        const dataMar = await resMar.json();
+
+        let allDays = [];
+        if (dataFeb.code === 200) allDays = [...allDays, ...dataFeb.data];
+        if (dataMar.code === 200) allDays = [...allDays, ...dataMar.data];
+
+        tableBody.innerHTML = "";
+        locationLabel.innerText = `Full Ramadan Calendar - ${city}, ${country}`;
+
+        // Filter for Ramadan (Hijri Month 9)
+        const ramadanDays = allDays.filter(day => day.date.hijri.month.number === 9);
+
+        if (ramadanDays.length > 0) {
+            ramadanDays.forEach((day) => {
+                const row = `
+                    <tr class="hover:bg-gray-50 dark:hover:bg-white/5 border-b border-gray-100 dark:border-gray-700 transition-colors">
+                        <td class="p-4 font-medium text-[#1a472a] dark:text-[#d4af37]">
+                            <span class="font-bold">${day.date.hijri.day}</span> Ramadan
+                        </td>
+                        <td class="p-4 text-sm">${day.date.readable} <br> <span class="text-xs opacity-50 text-gray-400">${day.date.gregorian.weekday.en}</span></td>
+                        <td class="p-4 font-bold text-blue-600 dark:text-blue-400 bg-blue-50/10 rounded">${day.timings.Fajr.split(' ')[0]}</td>
+                        <td class="p-4 font-bold text-orange-600 dark:text-orange-400 bg-orange-50/10 rounded">${day.timings.Maghrib.split(' ')[0]}</td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        } else {
+            tableBody.innerHTML = '<tr><td colspan="4" class="p-4 text-center">No Ramadan dates found for 2026 yet. check query.</td></tr>';
+        }
+    } catch (error) {
+        console.error(error);
+        alert("Could not fetch data. Check spelling or try again.");
     }
 }
+
+function startRamadanCountdown(fajr, maghrib) {
+    if (ramadanInterval) clearInterval(ramadanInterval);
+
+    ramadanInterval = setInterval(() => {
+        const now = new Date();
+        const getTodayTime = (timeStr) => {
+            const [hours, minutes] = timeStr.split(':');
+            const d = new Date();
+            d.setHours(hours, minutes, 0);
+            return d;
+        };
+
+        let target = getTodayTime(maghrib);
+        let label = "Time until Iftar (Maghrib)";
+
+        if (now > target) {
+            target = getTodayTime(fajr);
+            target.setDate(target.getDate() + 1); // Tomorrow's Sehri
+            label = "Time until Sehri (Fajr)";
+        } else if (now < getTodayTime(fajr)) {
+            target = getTodayTime(fajr);
+            label = "Time until Sehri (Fajr)";
+        }
+
+        const diff = target - now;
+        if (diff < 0) return;
+
+        const h = Math.floor(diff / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+
+        document.getElementById('countdownLabel').innerText = label;
+        // Fix for undefined Element
+        const timerEl = document.getElementById('timer');
+        if (timerEl) timerEl.innerText = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }, 1000);
+}
+
+// --- DUA OF THE DAY ---
+const ramadanDuas = [
+    {
+        arabic: "اللَّهُمَّ إِنَّكَ عَفُوٌّ تُحِبُّ الْعَفْوَ فَاعْفُ عَنِّي",
+        translation: "O Allah, You are Forgiving and love forgiveness, so forgive me.",
+        ref: "Sunan Tirmidhi"
+    },
+    {
+        arabic: "ذَهَبَ الظَّمَأُ وَابْتَلَّتِ الْعُرُوقُ وَثَبَتَ الأَجْرُ إِنْ شَاءَ اللَّهُ",
+        translation: "The thirst is gone, the veins are moistened, and the reward is confirmed, if Allah wills.",
+        ref: "Dua for breaking fast (Abu Dawud)"
+    },
+    {
+        arabic: "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",
+        translation: "Our Lord, give us in this world that which is good and in the Hereafter that which is good and protect us from the punishment of the Fire.",
+        ref: "Surah Al-Baqarah 2:201"
+    },
+    {
+        arabic: "اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا وَرِزْقًا طَيِّبًا وَعَمَلاً مُتَقَبَّلاً",
+        translation: "O Allah, I ask You for knowledge that is of benefit, a good provision, and deeds that will be accepted.",
+        ref: "Ibn Majah"
+    }
+];
+
+function displayRandomDua() {
+    const randomIndex = Math.floor(Math.random() * ramadanDuas.length);
+    const selectedDua = ramadanDuas[randomIndex];
+
+    const arEl = document.getElementById('duaArabic');
+    const trEl = document.getElementById('duaTranslation');
+    const refEl = document.getElementById('duaReference');
+
+    if (arEl) arEl.innerText = selectedDua.arabic;
+    if (trEl) trEl.innerText = `"${selectedDua.translation}"`;
+    if (refEl) refEl.innerText = `— ${selectedDua.ref}`;
+}
+
+// Initialize Dua on Load
+setTimeout(displayRandomDua, 1000);

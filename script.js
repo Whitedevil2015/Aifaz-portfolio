@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
 
     // --- STATE VARIABLES ---
@@ -551,7 +550,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initEffects();
     setTimeout(showDailyVerse, 1000);
 
-
+    const azaanBtn = document.getElementById('play-azaan-btn');
+    const azaanAudio = document.getElementById('azaan-audio');
+    if (azaanBtn && azaanAudio) azaanBtn.addEventListener('click', () => { if (azaanAudio.paused) azaanAudio.play(); else azaanAudio.pause(); });
 
 });
 
@@ -572,7 +573,108 @@ window.calculateZakat = function () {
     }
 }
 
+// --- AZAN VOICE LOGIC ---
+window.adhanAudio = null;
 
+/* --- ROBUST AUDIO ENGINE --- */
+if (!window.adhanAudio) window.adhanAudio = new Audio();
+
+window.updateAzanSource = function () {
+    const selector = document.getElementById('azan-selector');
+    if (selector && window.adhanAudio) {
+        window.adhanAudio.src = selector.value;
+        window.adhanAudio.load();
+    }
+}
+// Compatibility Alias
+window.changeAzanVoice = window.updateAzanSource;
+
+window.unlockAndClose = function () {
+    if (window.adhanAudio) {
+        window.adhanAudio.play().then(() => {
+            window.adhanAudio.pause();
+            window.adhanAudio.currentTime = 0;
+        }).catch(e => console.log("Unlock pending"));
+    }
+    const modal = document.getElementById('audio-modal');
+    if (modal) modal.classList.add('hidden');
+}
+
+window.playPreview = function () {
+    const selector = document.getElementById('azan-selector');
+    if (!selector) return;
+
+    window.updateAzanSource();
+
+    if (window.adhanAudio) {
+        window.adhanAudio.play()
+            .then(() => {
+                setTimeout(() => {
+                    window.adhanAudio.pause();
+                    window.adhanAudio.currentTime = 0;
+                }, 10000);
+            })
+            .catch(error => {
+                console.error("Playback failed:", error);
+                const modal = document.getElementById('audio-modal');
+                if (modal) modal.classList.remove('hidden');
+                else alert("Please click anywhere to enable audio.");
+            });
+    }
+}
+
+// --- AZAN VOLUME & CONTROLS ---
+let isMuted = false;
+let lastVolume = 0.5;
+
+window.updateVolume = function (val) {
+    lastVolume = val;
+    if (window.adhanAudio) window.adhanAudio.volume = val;
+
+    const icon = document.getElementById('mute-icon');
+    if (icon) {
+        if (val == 0) icon.innerText = '🔇';
+        else if (val < 0.5) icon.innerText = '🔉';
+        else icon.innerText = '🔊';
+    }
+}
+
+window.toggleMute = function () {
+    isMuted = !isMuted;
+    if (window.adhanAudio) window.adhanAudio.muted = isMuted;
+
+    const icon = document.getElementById('mute-icon');
+    const slider = document.getElementById('volume-slider');
+
+    if (isMuted) {
+        if (icon) icon.innerText = '🔇';
+        if (slider) slider.style.opacity = "0.5";
+    } else {
+        window.updateVolume(lastVolume);
+        if (slider) slider.style.opacity = "1";
+    }
+}
+
+window.stopAzan = function () {
+    if (window.adhanAudio) {
+        window.adhanAudio.pause();
+        window.adhanAudio.currentTime = 0;
+    }
+}
+
+// Function to unlock audio on first click
+document.addEventListener('click', () => {
+    // This plays a silent 0.1s clip to "prime" the audio engine
+    if (window.adhanAudio) {
+        window.adhanAudio.play().then(() => {
+            window.adhanAudio.pause();
+            window.adhanAudio.currentTime = 0;
+            console.log("Audio Engine Unlocked");
+        }).catch(error => console.log("Unlock failed", error));
+    } else {
+        window.changeAzanVoice(); // Init logic
+    }
+}, { once: true });
 
 // --- RAMADAN 2026 FEATURE ---
 let ramadanInterval;
@@ -784,3 +886,5 @@ function displayRandomDua() {
 
 // Initialize Dua on Load
 setTimeout(displayRandomDua, 1000);
+
+

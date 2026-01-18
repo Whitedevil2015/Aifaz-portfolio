@@ -72,7 +72,7 @@
     </style>
 </head>
 
-<body class="bg-gray-50 text-gray-800 font-sans overflow-hidden">
+<body class="font-sans overflow-hidden dark">
 
     <div class="flex h-screen">
         <!-- Sidebar (Desktop) -->
@@ -250,7 +250,39 @@
                     </div>
                 </div>
 
+                <!-- Azan Voice Selector -->
+                <div
+                    class="max-w-4xl mx-auto flex items-center gap-4 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 animate-fade-in-up">
+                    <label class="font-bold text-sm text-[#1a472a] dark:text-[#d4af37]">Azan Voice:</label>
+                    <select id="azan-selector" onchange="changeAzanVoice()"
+                        class="flex-1 p-2 rounded bg-gray-50 dark:bg-gray-700 outline-none border-none text-sm dark:text-white cursor-pointer">
+                        <option value="https://www.islamcan.com/common/azan/azan1.mp3">Makkah - Masjid al-Haram (Full)
+                        </option>
+                        <option value="https://www.islamcan.com/common/azan/azan3.mp3">Madinah - Masjid an-Nabawi
+                        </option>
+                        <option value="https://www.islamcan.com/common/azan/azan16.mp3">Al-Aqsa - Jerusalem Style
+                        </option>
+                        <option value="https://www.islamcan.com/common/azan/azan2.mp3">Egypt - Abdul Basit (Short)
+                        </option>
+                        <option value="https://www.islamcan.com/common/azan/azan15.mp3">Turkey - Ottoman Style</option>
+                    </select>
+                    <button onclick="playPreview()"
+                        class="px-4 py-2 bg-[#1a472a] text-white rounded-lg text-xs font-bold hover:bg-[#5D770F] transition-colors shadow-md">Preview</button>
+                    <button onclick="stopAzan()"
+                        class="px-3 py-2 bg-red-600 text-white rounded-lg text-xs font-bold hover:bg-red-700 transition-colors shadow-md"><i
+                            class="fas fa-stop"></i></button>
 
+                    <div
+                        class="flex items-center gap-3 bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-full shadow-inner">
+                        <button id="mute-btn" onclick="toggleMute()"
+                            class="text-lg hover:scale-110 transition-transform dark:text-gray-200">
+                            <span id="mute-icon">🔊</span>
+                        </button>
+                        <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5"
+                            oninput="updateVolume(this.value)"
+                            class="w-20 h-1.5 bg-[#1a472a] rounded-lg appearance-none cursor-pointer accent-[#1a472a]">
+                    </div>
+                </div>
 
                 <!-- Prayer Grid -->
                 <!-- Use JS to populate this grid with proper styling -->
@@ -484,20 +516,14 @@
                             --:--:--
                         </div>
 
-                        <div class="grid grid-cols-2 gap-4 mb-8">
-                            <div
-                                class="bg-emerald-50 rounded-2xl p-4 border border-emerald-100 shadow-sm transition-transform hover:scale-105">
-                                <p class="text-[10px] uppercase font-bold text-emerald-600 mb-1 tracking-wider">Saheri
-                                    Ends</p>
-                                <p id="saheriVal" class="text-xl md:text-2xl font-black text-emerald-800 font-mono">
-                                    --:--</p>
+                        <div class="grid grid-cols-2 gap-4 mb-8 text-[#022c22]">
+                            <div class="border-r border-emerald-100">
+                                <p class="text-[10px] uppercase font-bold text-emerald-800/50">Saheri Ends</p>
+                                <p id="saheriVal" class="text-xl md:text-2xl font-bold italic">--:--</p>
                             </div>
-                            <div
-                                class="bg-orange-50 rounded-2xl p-4 border border-orange-100 shadow-sm transition-transform hover:scale-105">
-                                <p class="text-[10px] uppercase font-bold text-orange-600 mb-1 tracking-wider">Iftar
-                                    Starts</p>
-                                <p id="iftarVal" class="text-xl md:text-2xl font-black text-orange-800 font-mono">--:--
-                                </p>
+                            <div>
+                                <p class="text-[10px] uppercase font-bold text-emerald-800/50">Iftar Starts</p>
+                                <p id="iftarVal" class="text-xl md:text-2xl font-bold italic">--:--</p>
                             </div>
                         </div>
 

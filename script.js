@@ -681,86 +681,76 @@ document.addEventListener('click', () => {
 let ramadanInterval;
 
 window.getRamadanTimes = async function () {
-    const city = document.getElementById('ramadan-city').value;
-    const country = document.getElementById('ramadan-country').value;
-    const resultsDiv = document.getElementById('ramadan-results');
-    const tableBody = document.getElementById('ramadan-calendarBody');
-    const locationLabel = document.getElementById('ramadan-locationLabel');
-    const countdownCard = document.getElementById('countdownCard');
+    const cityInput = document.getElementById('ramadan-city');
+    let rawCity = cityInput ? cityInput.value : '';
 
-    if (!city || !country) {
-        alert("Please enter both city and country");
-        return;
+    // Default or Parse
+    if (!rawCity) rawCity = "Mecca, SA";
+
+    let city = rawCity;
+    let country = "Saudi Arabia"; // Default
+
+    if (rawCity.includes(',')) {
+        const parts = rawCity.split(',');
+        city = parts[0].trim();
+        country = parts[1].trim();
     }
+
+    const cityLabel = document.getElementById('cityLabel');
+    if (cityLabel) cityLabel.innerText = city;
 
     const url = `https://api.aladhan.com/v1/timingsByCity?city=${city}&country=${country}&method=1`;
-    // Fetch both Feb (Start) and March (End) of 2026 to cover full Ramadan
-    const calUrlFeb = `https://api.aladhan.com/v1/calendarByCity/2026/2?city=${city}&country=${country}&method=1`;
-    const calUrlMar = `https://api.aladhan.com/v1/calendarByCity/2026/3?city=${city}&country=${country}&method=1`;
 
     try {
-        locationLabel.innerText = "Fetching full month...";
-        resultsDiv.classList.remove('hidden');
+        const res = await fetch(url);
+        const data = await res.json();
 
-        // 1. Fetch Today's Data for Countdown
-        const resStats = await fetch(url);
-        const dataStats = await resStats.json();
+        if (data.code === 200) {
+            const timings = data.data.timings;
 
-        if (dataStats.code === 200) {
-            const timings = dataStats.data.timings;
-            countdownCard.classList.remove('hidden');
-            document.getElementById('locationDisplay').innerText = `Current Location: ${city}, ${country}`;
-            document.getElementById('ramadan-currentDate').innerText = new Date().toDateString();
+            // Populate View Elements
+            const saheriEl = document.getElementById('saheriVal');
+            const iftarEl = document.getElementById('iftarVal');
 
-            // Royale specific updates
-            if (document.getElementById('time-fajr'))
-                document.getElementById('time-fajr').innerText = timings.Fajr;
-            if (document.getElementById('time-maghrib'))
-                document.getElementById('time-maghrib').innerText = timings.Maghrib;
+            if (saheriEl) saheriEl.innerText = timings.Fajr;
+            if (iftarEl) iftarEl.innerText = timings.Maghrib;
 
+            // Start Countdown
             startRamadanCountdown(timings.Fajr, timings.Maghrib);
-        }
-
-        // 2. Fetch Full Calendar (Feb + March)
-        const [resFeb, resMar] = await Promise.all([
-            fetch(calUrlFeb),
-            fetch(calUrlMar)
-        ]);
-        const dataFeb = await resFeb.json();
-        const dataMar = await resMar.json();
-
-        let allDays = [];
-        if (dataFeb.code === 200) allDays = [...allDays, ...dataFeb.data];
-        if (dataMar.code === 200) allDays = [...allDays, ...dataMar.data];
-
-        tableBody.innerHTML = "";
-        locationLabel.innerText = `Full Ramadan Calendar - ${city}, ${country}`;
-
-        // Filter for Ramadan (Hijri Month 9)
-        const ramadanDays = allDays.filter(day => day.date.hijri.month.number === 9);
-
-        if (ramadanDays.length > 0) {
-            ramadanDays.forEach((day) => {
-                const row = `
-                    <tr class="hover:bg-gray-50 dark:hover:bg-white/5 border-b border-gray-100 dark:border-gray-700 transition-colors">
-                        <td class="p-4 font-medium text-[#1a472a] dark:text-[#d4af37]">
-                            <span class="font-bold">${day.date.hijri.day}</span> Ramadan
-                        </td>
-                        <td class="p-4 text-sm">${day.date.readable} <br> <span class="text-xs opacity-50 text-gray-400">${day.date.gregorian.weekday.en}</span></td>
-                        <td class="p-4 font-bold text-blue-600 dark:text-blue-400 bg-blue-50/10 rounded">${day.timings.Fajr.split(' ')[0]}</td>
-                        <td class="p-4 font-bold text-orange-600 dark:text-orange-400 bg-orange-50/10 rounded">${day.timings.Maghrib.split(' ')[0]}</td>
-                    </tr>
-                `;
-                tableBody.innerHTML += row;
-            });
         } else {
-            tableBody.innerHTML = '<tr><td colspan="4" class="p-4 text-center">No Ramadan dates found for 2026 yet. check query.</td></tr>';
+            alert("Could not load timings. Check city name.");
         }
-    } catch (error) {
-        console.error(error);
-        alert("Could not fetch data. Check spelling or try again.");
+    } catch (e) {
+        console.error("Ramadan API Error", e);
     }
 }
+
+window.shareToWhatsApp = function () {
+    const city = document.getElementById('cityLabel')?.innerText || 'Unknown Location';
+    const saheri = document.getElementById('saheriVal')?.innerText || '--:--';
+    const iftar = document.getElementById('iftarVal')?.innerText || '--:--';
+    const date = new Date().toDateString();
+
+    const message = `🌙 *Ramadan 1447 Timings*\n📍 Location: ${city}\n📅 Date: ${date}\n\n🥣 *Saheri Ends:* ${saheri}\n🌅 *Iftar Starts:* ${iftar}\n\n_Generated by Qulb Portal_`;
+
+    const encodedMsg = encodeURIComponent(message);
+    window.open(`https://wa.me/?text=${encodedMsg}`, '_blank');
+}
+
+window.updateAtmosphere = function () {
+    const hour = new Date().getHours();
+    const section = document.getElementById('view-ramadan');
+    // Only update if section exists
+    if (!section) return;
+
+    // Apply background color to the section based on time
+    if (hour >= 17 && hour < 19) section.style.backgroundColor = "#022c22"; // Sunset Deep Green
+    else if (hour >= 19 || hour < 5) section.style.backgroundColor = "#011a14"; // Night Dark 
+    else section.style.backgroundColor = "#064e3b"; // Day Bright Green
+}
+// Init Atmosphere
+setInterval(window.updateAtmosphere, 60000); // Check every minute
+window.updateAtmosphere(); // Run immediately
 
 function startRamadanCountdown(fajr, maghrib) {
     if (ramadanInterval) clearInterval(ramadanInterval);
@@ -775,15 +765,15 @@ function startRamadanCountdown(fajr, maghrib) {
         };
 
         let target = getTodayTime(maghrib);
-        let label = "Time until Iftar (Maghrib)";
+        let label = "Time until Iftar";
 
         if (now > target) {
             target = getTodayTime(fajr);
             target.setDate(target.getDate() + 1); // Tomorrow's Sehri
-            label = "Time until Sehri (Fajr)";
+            label = "Time until Sehri";
         } else if (now < getTodayTime(fajr)) {
             target = getTodayTime(fajr);
-            label = "Time until Sehri (Fajr)";
+            label = "Time until Sehri";
         }
 
         const diff = target - now;
@@ -793,8 +783,10 @@ function startRamadanCountdown(fajr, maghrib) {
         const m = Math.floor((diff % 3600000) / 60000);
         const s = Math.floor((diff % 60000) / 1000);
 
-        document.getElementById('countdownLabel').innerText = label;
-        // Fix for undefined Element
+        // Update Label if it exists
+        const labelEl = document.querySelector('.mihrab-arch p.tracking-widest');
+        if (labelEl) labelEl.innerText = label;
+
         const timerEl = document.getElementById('timer');
         if (timerEl) timerEl.innerText = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
     }, 1000);

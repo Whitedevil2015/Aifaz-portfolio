@@ -268,26 +268,30 @@ body.weather-snow {
 }
 
 .mihrab-arch {
-    /* Create a prayer niche shape */
-    border-radius: 100px 100px 24px 24px;
-    border: 3px solid #d4af37;
-    position: relative;
-    box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.2), 0 20px 40px rgba(0, 0, 0, 0.3);
-    background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 100%);
+    /* User Requested Style */
+    background: #ffffff;
+    color: #022c22;
+    border-radius: 120px 120px 20px 20px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    transition: border-radius 0.3s ease;
+    border: none;
     overflow: hidden;
 }
 
-.mihrab-arch::before {
-    /* Inner arch line */
-    content: '';
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    right: 8px;
-    bottom: 8px;
-    border-radius: 90px 90px 18px 18px;
-    border: 1px dashed rgba(212, 175, 55, 0.4);
-    pointer-events: none;
+@media (min-width: 768px) {
+    .mihrab-arch {
+        border-radius: 250px 250px 40px 40px;
+    }
+}
+
+.whatsapp-btn {
+    background-color: #25D366;
+    color: white;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.whatsapp-btn:active {
+    transform: scale(0.95);
 }
 
 .ornamental-separator {

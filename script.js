@@ -680,26 +680,38 @@ document.addEventListener('click', () => {
 // --- RAMADAN 2026 FEATURE ---
 let ramadanInterval;
 
+// --- CALENDAR STATE ---
+let calendarCurrentDate = new Date();
+let globalCity = "Hyderabad"; // User Requested Default
+let globalCountry = "India";
+
 window.getRamadanTimes = async function () {
     const cityInput = document.getElementById('ramadan-city');
     let rawCity = cityInput ? cityInput.value : '';
 
-    // Default or Parse
-    if (!rawCity) rawCity = "Mecca, SA";
-
-    let city = rawCity;
-    let country = "Saudi Arabia"; // Default
+    // Default to Hyderabad if empty
+    if (!rawCity) rawCity = "Hyderabad, IN";
 
     if (rawCity.includes(',')) {
         const parts = rawCity.split(',');
-        city = parts[0].trim();
-        country = parts[1].trim();
+        globalCity = parts[0].trim();
+        globalCountry = parts[1].trim();
+    } else {
+        globalCity = rawCity;
+        // Auto-assign India for Hyderabad default
+        if (globalCity.toLowerCase() === 'hyderabad') globalCountry = 'India';
     }
 
     const cityLabel = document.getElementById('cityLabel');
-    if (cityLabel) cityLabel.innerText = city;
+    if (cityLabel) cityLabel.innerText = globalCity;
 
-    const url = `https://api.aladhan.com/v1/timingsByCity?city=${city}&country=${country}&method=1`;
+    // Reset Calendar to today
+    calendarCurrentDate = new Date();
+    fetchMonthlyCalendar();
+
+    // Fetch Today's Specifics for Countdown
+    // Using Method 1 (Karachi) and School 1 (Hanafi) for Hyderabad standards
+    const url = `https://api.aladhan.com/v1/timingsByCity?city=${globalCity}&country=${globalCountry}&method=1&school=1`;
 
     try {
         const res = await fetch(url);
@@ -707,21 +719,65 @@ window.getRamadanTimes = async function () {
 
         if (data.code === 200) {
             const timings = data.data.timings;
-
             // Populate View Elements
-            const saheriEl = document.getElementById('saheriVal');
-            const iftarEl = document.getElementById('iftarVal');
+            if (document.getElementById('saheriVal')) document.getElementById('saheriVal').innerText = timings.Fajr;
+            if (document.getElementById('iftarVal')) document.getElementById('iftarVal').innerText = timings.Maghrib;
 
-            if (saheriEl) saheriEl.innerText = timings.Fajr;
-            if (iftarEl) iftarEl.innerText = timings.Maghrib;
-
-            // Start Countdown
             startRamadanCountdown(timings.Fajr, timings.Maghrib);
-        } else {
-            alert("Could not load timings. Check city name.");
+        }
+    } catch (e) { console.error("API Error", e); }
+}
+
+window.changeCalendarMonth = function (delta) {
+    calendarCurrentDate.setMonth(calendarCurrentDate.getMonth() + delta);
+    fetchMonthlyCalendar();
+}
+
+window.fetchMonthlyCalendar = async function () {
+    const month = calendarCurrentDate.getMonth() + 1;
+    const year = calendarCurrentDate.getFullYear();
+    const label = document.getElementById('calendar-month-label');
+    const tbody = document.getElementById('monthly-calendar-body');
+
+    if (label) label.innerText = "Loading...";
+
+    // Ensure Method 1 & School 1 here too
+    const url = `https://api.aladhan.com/v1/calendarByCity/${year}/${month}?city=${globalCity}&country=${globalCountry}&method=1&school=1`;
+
+    try {
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (data.code === 200 && tbody) {
+            const hijriName = data.data[0]?.date.hijri.month.en || "";
+            const yearHijri = data.data[0]?.date.hijri.year || "";
+            const results = data.data;
+
+            if (label) label.innerText = `${calendarCurrentDate.toLocaleString('default', { month: 'long', year: 'numeric' })} / ${hijriName} ${yearHijri}`;
+
+            tbody.innerHTML = results.map(day => {
+                const isRamadan = day.date.hijri.month.number === 9;
+                return `
+                <tr class="hover:bg-white/5 transition-colors ${isRamadan ? 'bg-emerald-900/30' : ''}">
+                    <td class="px-4 py-3 border-r border-[#d4af37]/10">
+                        <span class="font-bold text-white">${day.date.gregorian.day}</span>
+                        <span class="text-xs opacity-50 block">${day.date.gregorian.weekday.en}</span>
+                    </td>
+                    <td class="px-4 py-3 border-r border-[#d4af37]/10 font-serif">
+                        <span class="text-[#d4af37] font-bold">${day.date.hijri.day}</span> ${day.date.hijri.month.en}
+                    </td>
+                    <td class="px-4 py-3 text-center border-r border-[#d4af37]/10 font-mono text-emerald-200">
+                        ${day.timings.Fajr.split(' ')[0]}
+                    </td>
+                    <td class="px-4 py-3 text-center font-mono text-amber-200">
+                        ${day.timings.Maghrib.split(' ')[0]}
+                    </td>
+                </tr>
+            `}).join('');
         }
     } catch (e) {
-        console.error("Ramadan API Error", e);
+        console.error("Calendar Fetch Error", e);
+        if (label) label.innerText = "Error Loading Data";
     }
 }
 

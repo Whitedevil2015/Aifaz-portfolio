@@ -533,10 +533,46 @@
                             Share Today's Times
                         </button>
                     </div>
+
+                    <!-- Monthly Calendar Section (New) -->
+                    <div
+                        class="mt-8 bg-[#0f2b19]/80 rounded-3xl p-6 border border-[#d4af37]/20 backdrop-blur-md shadow-2xl">
+                        <div class="flex justify-between items-center mb-6 border-b border-[#d4af37]/10 pb-4">
+                            <button onclick="changeCalendarMonth(-1)"
+                                class="w-10 h-10 rounded-full bg-white/5 hover:bg-[#d4af37] hover:text-black transition-colors flex items-center justify-center text-[#d4af37]">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <div class="text-center">
+                                <h3 id="calendar-month-label"
+                                    class="text-xl font-bold text-white font-[Cormorant_Garamond]">Loading...</h3>
+                                <p class="text-xs text-emerald-400 uppercase tracking-widest">Islamic Calendar</p>
+                            </div>
+                            <button onclick="changeCalendarMonth(1)"
+                                class="w-10 h-10 rounded-full bg-white/5 hover:bg-[#d4af37] hover:text-black transition-colors flex items-center justify-center text-[#d4af37]">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+
+                        <div class="overflow-x-auto max-h-96 scrollbar-thin scrollbar-thumb-[#d4af37]/20">
+                            <table class="w-full text-sm text-left text-emerald-100/80">
+                                <thead
+                                    class="text-xs uppercase bg-black/20 text-[#d4af37] sticky top-0 backdrop-blur-md">
+                                    <tr>
+                                        <th class="px-4 py-3 rounded-l-lg">Date</th>
+                                        <th class="px-4 py-3">Hijri Month</th>
+                                        <th class="px-4 py-3 text-center">Sehri</th>
+                                        <th class="px-4 py-3 text-center rounded-r-lg">Iftar</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="monthly-calendar-body" class="divide-y divide-white/5">
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
 
                 <p id="cityLabel" class="hidden">--</p>
-            </section>
             </section>
 
         </main>

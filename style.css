@@ -1,33 +1,36 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Amiri:wght@400;700&family=Cormorant+Garamond:wght@600;700&display=swap');
 
 :root {
-    --primary: #0f172a;
-    /* Deep Ocean */
-    --secondary: #0ea5e9;
-    /* Sky Blue */
-    --gold: #2dd4bf;
-    /* Neon Teal (replacing Gold) */
-    --accent: #f0f9ff;
-    --bg-light: #f0f9ff;
-    --text-dark: #0f172a;
+    --primary: #020617;
+    /* Deep Slate */
+    --secondary: #059669;
+    /* Emerald */
+    --gold: #d4af37;
+    /* Authentic Gold */
+    --text-dark: #1e293b;
+    --text-light: #f8fafc;
 }
 
 /* --- ANIMATED MESH BACKGROUND (OCEAN THEME) --- */
 body {
     font-family: 'Inter', sans-serif;
     color: var(--text-dark);
-    /* Light Mode: Glacial/Ocean Breeze */
-    background: linear-gradient(-45deg, #e0f2fe, #f0f9ff, #ccfbf1, #e0f2fe);
-    background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
+    /* Light Mode: Clean Professional */
+    background: #f8fafc;
+    background-image:
+        radial-gradient(at 0% 0%, rgba(5, 150, 105, 0.03) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(212, 175, 55, 0.05) 0px, transparent 50%);
     min-height: 100vh;
+    line-height: 1.6;
 }
 
-.dark body {
-    /* Dark Mode: Deep Ocean Abyss */
-    background: linear-gradient(-45deg, #020617, #0f172a, #1e293b, #111827);
-    background-size: 400% 400%;
-    color: #f9fafb;
+body.dark {
+    /* Dark Mode: Deep Professional */
+    background: #020617;
+    background-image:
+        radial-gradient(circle at 50% 0%, #064e3b 0%, transparent 60%),
+        radial-gradient(at 100% 100%, rgba(20, 83, 45, 0.2) 0px, transparent 50%);
+    color: var(--text-light);
 }
 
 @keyframes gradientBG {
@@ -61,26 +64,27 @@ h6 {
 /* --- GLASSMORPHISM & NEON --- */
 
 /* Glass Cards (Light Mode) */
+/* Glass Cards (Light Mode) */
 .glass,
 .bg-white {
-    background: rgba(255, 255, 255, 0.65) !important;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.05);
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
 }
 
 /* Glass Cards (Dark Mode) */
 .dark .glass,
 .dark .bg-white,
 .dark .bg-gray-800 {
-    background: rgba(15, 23, 42, 0.6) !important;
+    background: rgba(15, 23, 42, 0.85) !important;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(45, 212, 191, 0.1);
-    /* Teal border hint */
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-    color: #f0f9ff;
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    /* Subtle Gold */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+    color: #f1f5f9;
 }
 
 /* Neon Glows (Teal) */
@@ -96,10 +100,9 @@ h6 {
 
 /* Active Nav Link Glow */
 .nav-link.active {
-    background: rgba(45, 212, 191, 0.1);
-    box-shadow: 0 0 15px rgba(45, 212, 191, 0.15);
+    background: rgba(212, 175, 55, 0.1);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
     border-right: 4px solid var(--gold);
-    /* Teal */
 }
 
 .nav-link.active i {
@@ -206,54 +209,26 @@ h6 {
 
 /* --- WEATHER ATMOSPHERES --- */
 /* Clear / Sunny */
-body.weather-clear {
-    background: linear-gradient(-45deg, #fefce8, #fde047, #bae6fd, #e0f2fe) !important;
-    background-size: 400% 400%;
-}
-
+/* Clear / Sunny */
+/* Backgrounds disabled to show Wavy Theme */
+body.weather-clear,
 .dark body.weather-clear {
-    background: linear-gradient(-45deg, #0f172a, #1e3a8a, #172554, #020617) !important;
-    /* Clear Starlit Night */
+    /* background disabled */
 }
 
-/* Clouds */
-body.weather-clouds {
-    background: linear-gradient(-45deg, #94a3b8, #cbd5e1, #e2e8f0, #f1f5f9) !important;
-    background-size: 400% 400%;
-}
-
+body.weather-clouds,
 .dark body.weather-clouds {
-    background: linear-gradient(-45deg, #334155, #1e293b, #0f172a, #020617) !important;
+    /* background disabled */
 }
 
-/* Rain */
-body.weather-rain {
-    background: linear-gradient(180deg, #64748b, #475569, #334155) !important;
-    background-size: 200% 200%;
-    animation: rainMood 3s linear infinite;
-}
-
+body.weather-rain,
 .dark body.weather-rain {
-    background: linear-gradient(180deg, #1e293b, #0f172a, #020617) !important;
+    /* background disabled */
 }
 
-@keyframes rainMood {
-    0% {
-        background-position: 50% 0%;
-    }
-
-    100% {
-        background-position: 50% 100%;
-    }
-}
-
-/* Snow */
-body.weather-snow {
-    background: linear-gradient(to bottom, #e0f2fe, #f0f9ff, #ffffff) !important;
-}
-
+body.weather-snow,
 .dark body.weather-snow {
-    background: linear-gradient(to bottom, #1e293b, #334155, #cbd5e1) !important;
+    /* background disabled */
 }
 
 /* --- ISLAMIC AESTHETICS --- */

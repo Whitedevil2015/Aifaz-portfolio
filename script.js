@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
 
     // --- STATE VARIABLES ---
@@ -116,27 +117,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    async function fetchPrayers(lat = null, lng = null, city = null) {
+    async function fetchPrayers(lat = null, lng = null, city = null, country = null) {
         let url = '';
         if (lat && lng) {
             url = `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=1`;
             coordinates = { lat, lng };
-            fetchAtmosphere(lat, lng); // Trigger Weather
+            fetchAtmosphere(lat, lng);
             document.getElementById('portal-location-label').textContent = `${lat.toFixed(2)}, ${lng.toFixed(2)}`;
         } else {
-            const c = city || "Pune";
-            url = `https://api.aladhan.com/v1/timingsByCity?city=${c}&country=India&method=1`;
-            document.getElementById('portal-location-label').textContent = `${c}, India`;
-            // For city search, we'll need coordinates from the response (handled below)
+            const c = city || "Delhi";
+            const co = country || "India";
+            url = `https://api.aladhan.com/v1/timingsByCity?city=${c}&country=${co}&method=1`;
+            document.getElementById('portal-location-label').textContent = `${c}, ${co}`;
         }
 
         try {
             const res = await fetch(url);
             const data = await res.json();
 
-            // If city search, get lat/lng from response for weather
+            // Coordinate Update for Qibla
             if (!lat && data.data && data.data.meta) {
+                coordinates = { lat: data.data.meta.latitude, lng: data.data.meta.longitude };
                 fetchAtmosphere(data.data.meta.latitude, data.data.meta.longitude);
+                if (typeof initQibla === 'function') initQibla();
             }
 
             if (data.code === 200) {
@@ -181,13 +184,13 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: 'Isha', icon: 'fa-star' }
         ];
         grid.innerHTML = prayers.map(p => `
-            <div class="bg-white border-2 border-transparent hover:border-[#5D770F]/20 p-4 rounded-xl text-center shadow-sm hover:shadow-md transition-all group hover-card-3d relative overflow-hidden dark:bg-gray-800 dark:border-gray-700">
-                <div class="absolute -right-4 -top-4 opacity-5 text-6xl text-[#5D770F]"><i class="fas ${p.icon}"></i></div>
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">${p.id}</p>
-                <div class="my-3 text-3xl text-[#5D770F] group-hover:scale-110 transition-transform">
+            <div id="card-${p.id}" class="glass p-4 rounded-2xl text-center border border-white/20 relative group transition-all duration-500 hover:-translate-y-2 dark:bg-gray-800/40">
+                <div class="absolute -right-6 -top-6 opacity-10 text-7xl text-[#d4af37] group-hover:rotate-12 transition-transform"><i class="fas ${p.icon}"></i></div>
+                <div class="w-10 h-10 mx-auto bg-[#d4af37]/10 rounded-full flex items-center justify-center text-[#d4af37] mb-3 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(212,175,55,0.2)]">
                     <i class="fas ${p.icon}"></i>
                 </div>
-                <p class="text-xl font-bold text-gray-800 font-mono dark:text-white">${formatTo12Hour(timings[p.id])}</p>
+                <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1 dark:text-gray-400">${p.id}</p>
+                <p class="text-2xl font-[Amiri] font-bold text-gray-800 dark:text-white group-hover:text-[#d4af37] transition-colors">${formatTo12Hour(timings[p.id])}</p>
             </div>
         `).join('');
     }
@@ -209,9 +212,6 @@ document.addEventListener('DOMContentLoaded', () => {
             let next = 'Fajr';
             let nextTimeStr = timings.Fajr;
             let minDiff = Infinity;
-
-            // Logic to find next prayer considering current time
-            // Simple approach: Convert all to minutes from midnight and compare
             const curMins = now.getHours() * 60 + now.getMinutes();
             let found = false;
 
@@ -225,64 +225,50 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
                 }
             }
-            // If none found, it's Fajr tomorrow
             if (!found) {
                 next = 'Fajr';
                 nextTimeStr = timings.Fajr;
             }
 
+            // Highlight Logic
+            document.querySelectorAll('[id^="card-"]').forEach(el => {
+                el.classList.remove('ring-2', 'ring-[#d4af37]', 'neon-glow');
+                if (el.id === `card-${next}`) {
+                    el.classList.add('ring-2', 'ring-[#d4af37]', 'neon-glow');
+                }
+            });
+
             document.getElementById('next-prayer-name').textContent = next;
 
-            // Parse target
             const [th, tm] = nextTimeStr.split(':');
             const target = new Date();
             target.setHours(th, tm, 0);
             if (!found) target.setDate(target.getDate() + 1);
-
             const diff = target - now;
 
-            // ADHAN TRIGGER
-            if (diff <= 1000 && diff > 0 && !isAzaanPlaying) {
-                playAzaan();
-            }
-
-            // Format Countdown
             if (diff > 0) {
                 const hrs = Math.floor(diff / 3600000);
                 const mins = Math.floor((diff % 3600000) / 60000);
                 const secs = Math.floor((diff % 60000) / 1000);
                 document.getElementById('countdown').textContent = `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
             }
-
         }, 1000);
     }
 
-    function playAzaan() {
-        if (!window.adhanAudio) window.changeAzanVoice();
 
-        if (window.adhanAudio) {
-            isAzaanPlaying = true;
-            window.adhanAudio.play().catch(e => console.log("Audio play failed", e));
-
-            // Show Notification
-            if (Notification.permission === "granted") {
-                new Notification("Prayer Time", { body: "It is time for " + document.getElementById('next-prayer-name').textContent });
-            } else if (Notification.permission !== "denied") {
-                Notification.requestPermission();
-            }
-            // Reset flag after 5 mins
-            setTimeout(() => isAzaanPlaying = false, 300000);
-        }
-    }
 
 
     // --- QIBLA LOGIC ---
-    function initQibla() {
-        const needle = document.getElementById('qibla-needle');
-        const degDisplay = document.getElementById('qibla-deg');
-        if (!needle) return;
+    // --- QIBLA & COMPASS LOGIC ---
+    let qiblaBearing = 0;
 
-        // Kaaba Coords
+    function initQibla() {
+        const degDisplay = document.getElementById('qibla-deg');
+        if (!coordinates || !coordinates.lat) {
+            if (degDisplay) degDisplay.innerText = "N/A";
+            return;
+        }
+
         const kaabaLat = 21.4225;
         const kaabaLng = 39.8262;
 
@@ -293,30 +279,89 @@ document.addEventListener('DOMContentLoaded', () => {
         const y = Math.sin(dLam) * Math.cos(phi2);
         const x = Math.cos(phi1) * Math.sin(phi2) - Math.sin(phi1) * Math.cos(phi2) * Math.cos(dLam);
         let bearing = Math.atan2(y, x) * 180 / Math.PI;
-        bearing = (bearing + 360) % 360;
+        qiblaBearing = (bearing + 360) % 360;
 
-        degDisplay.innerText = bearing.toFixed(0) + '°';
+        if (degDisplay) degDisplay.innerText = qiblaBearing.toFixed(0) + '°';
 
-        // On desktop, just point the needle to the calculated bearing assuming North is Up (0deg)
-        // Ideally we need device orientation for true north relative to device
-        needle.style.transform = `rotate(${bearing}deg)`;
-
-        // Mobile Device Orientation
-        if (window.DeviceOrientationEvent) {
-            window.addEventListener("deviceorientation", function (event) {
-                // alpha: rotation around z-axis
-                const loop = event.alpha;
-                if (loop !== null) {
-                    // Compass heading = 360 - alpha;
-                    // We want needle to point to qibla not just North
-                    // Qibla Relative = Bearing - Heading
-                    const heading = 360 - loop; // Approx magnetic north
-                    const relativeDir = bearing - heading;
-                    needle.style.transform = `rotate(${relativeDir}deg)`;
-                }
-            }, true);
+        // Position Kaaba Marker on the rotating plane
+        const kaabaContainer = document.getElementById('kaaba-marker-container');
+        if (kaabaContainer) {
+            kaabaContainer.style.transform = `rotate(${qiblaBearing}deg)`;
         }
+
+        // Initialize Compass Button
+        initCompass();
     }
+
+    function initCompass() {
+        const btn = document.getElementById('start-compass-btn');
+        if (!btn) return;
+
+        // Remove old listener to avoid dupes (clone node)
+        const newBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newBtn, btn);
+
+        newBtn.addEventListener('click', async () => {
+            newBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Calibrating...';
+
+            if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                try {
+                    const permissionState = await DeviceOrientationEvent.requestPermission();
+                    if (permissionState === 'granted') {
+                        window.addEventListener('deviceorientation', handleOrientation);
+                        newBtn.style.display = 'none';
+                    } else {
+                        alert("Permission denied. Enable sensors in settings.");
+                        newBtn.innerHTML = 'Permission Denied';
+                    }
+                } catch (e) {
+                    console.error(e);
+                    newBtn.innerHTML = 'Error'; // HTTPS required mostly
+                }
+            } else {
+                // Android/Desktop
+                window.addEventListener('deviceorientation', handleOrientation);
+                newBtn.style.display = 'none';
+
+                // If no event fires after 1s, assume desktop
+                setTimeout(() => {
+                    const headingDisplay = document.getElementById('compass-heading');
+                    if (headingDisplay && headingDisplay.innerText === '--°') {
+                        // Desktop fallback or sensor fail
+                        // Maybe show manual controls? Or just leave it.
+                    }
+                }, 2000);
+            }
+        });
+    }
+
+    function handleOrientation(event) {
+        let alpha = event.alpha;
+        // iOS Webkit
+        if (event.webkitCompassHeading) {
+            alpha = event.webkitCompassHeading;
+            // Rotation is reversed for webkitCompassHeading? 
+            // webkitCompassHeading is 0 at North, increases CW. 
+            // alpha is 0 at North, increases ... ? alpha is z-axis rotation.
+            // Usually we use -alpha for visual rotation.
+        } else {
+            // Android alpha: 0 at North? Not always true North without calibration.
+            // Absolute orientation:
+            if (!event.absolute && event.alpha === null) return;
+            // alpha usually 0 when device top points North.
+        }
+
+        // Fallback for null (desktop)
+        if (alpha === null || isNaN(alpha)) return;
+
+        const compassPlane = document.getElementById('compass-plane');
+        const headingDisplay = document.getElementById('compass-heading');
+
+        // Visual Rotation: Rotate Plane OPPOSITE to Heading
+        if (compassPlane) compassPlane.style.transform = `rotate(-${alpha}deg)`;
+        if (headingDisplay) headingDisplay.innerText = Math.round(alpha) + '°';
+    }
+
 
 
     // --- LIBRARY & SEARCH ---
@@ -438,20 +483,43 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchSurahContent(num) {
         quranContentEl.innerHTML = '<div class="text-center mt-20"><i class="fas fa-circle-notch fa-spin text-4xl text-[#d4af37]"></i></div>';
         try {
-            const [arRes, enRes] = await Promise.all([fetch(`https://api.alquran.cloud/v1/surah/${num}`), fetch(`https://api.alquran.cloud/v1/surah/${num}/en.sahih`)]);
+            const [arRes, enRes, trRes, urRes, hiRes] = await Promise.all([
+                fetch(`https://api.alquran.cloud/v1/surah/${num}`),
+                fetch(`https://api.alquran.cloud/v1/surah/${num}/en.sahih`),
+                fetch(`https://api.alquran.cloud/v1/surah/${num}/en.transliteration`),
+                fetch(`https://api.alquran.cloud/v1/surah/${num}/ur.jalandhry`),
+                fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/urd-abulaalamaududi-la/${num}.json`)
+            ]);
+
             const arData = await arRes.json();
             const enData = await enRes.json();
+            const trData = await trRes.json();
+            const urData = await urRes.json();
+            const hiData = await hiRes.json();
+
             quranContentEl.innerHTML = arData.data.ayahs.map((a, i) => `
                 <div class="mb-8 border-b border-white/5 pb-8 group hover:bg-white/5 p-4 rounded-lg transition-colors">
                     <div class="flex justify-between items-center mb-4">
                         <span class="w-8 h-8 rounded-full border border-[#d4af37] text-[#d4af37] flex items-center justify-center text-xs ml-4 font-mono">${a.numberInSurah}</span>
                         <div class="text-right font-[Amiri] text-3xl leading-relaxed text-white drop-shadow-md" style="direction:rtl;">${a.text}</div>
                     </div>
-                    <div class="text-gray-400 text-lg leading-relaxed">${enData.data.ayahs[i].text}</div>
+                    
+                    <!-- Roman English (Transliteration) -->
+                    <div class="text-[#d4af37] text-sm mb-2 italic font-serif opacity-90 tracking-wide">${trData.data.ayahs[i].text}</div>
+                    
+                    <!-- English Translation -->
+                    <div class="text-gray-300 text-lg leading-relaxed mb-3">${enData.data.ayahs[i].text}</div>
+
+                    <!-- Hinglish Tarjuma (Roman Urdu) -->
+                    <div class="text-emerald-300 text-lg mb-2 italic font-medium leading-relaxed" style="font-family: 'Inter', sans-serif;">"${hiData.chapter[i]?.text || ''}"</div>
+                    
+                    <!-- Urdu Script Tarjuma -->
+                    <div class="text-emerald-100/90 text-xl font-[Amiri] leading-loose text-right dir-rtl border-t border-white/5 pt-2 mt-2" style="direction:rtl;">${urData.data.ayahs[i].text}</div>
                 </div>
             `).join('');
+
             if (audioPlayer) audioPlayer.src = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${num}.mp3`;
-        } catch (e) { }
+        } catch (e) { console.error(e); }
     }
     // Standard listeners
     document.getElementById('close-quran-btn')?.addEventListener('click', () => { if (quranModal) quranModal.style.display = 'none'; if (audioPlayer) audioPlayer.pause(); });
@@ -550,9 +618,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initEffects();
     setTimeout(showDailyVerse, 1000);
 
-    const azaanBtn = document.getElementById('play-azaan-btn');
-    const azaanAudio = document.getElementById('azaan-audio');
-    if (azaanBtn && azaanAudio) azaanBtn.addEventListener('click', () => { if (azaanAudio.paused) azaanAudio.play(); else azaanAudio.pause(); });
+
 
 });
 
@@ -573,108 +639,7 @@ window.calculateZakat = function () {
     }
 }
 
-// --- AZAN VOICE LOGIC ---
-window.adhanAudio = null;
 
-/* --- ROBUST AUDIO ENGINE --- */
-if (!window.adhanAudio) window.adhanAudio = new Audio();
-
-window.updateAzanSource = function () {
-    const selector = document.getElementById('azan-selector');
-    if (selector && window.adhanAudio) {
-        window.adhanAudio.src = selector.value;
-        window.adhanAudio.load();
-    }
-}
-// Compatibility Alias
-window.changeAzanVoice = window.updateAzanSource;
-
-window.unlockAndClose = function () {
-    if (window.adhanAudio) {
-        window.adhanAudio.play().then(() => {
-            window.adhanAudio.pause();
-            window.adhanAudio.currentTime = 0;
-        }).catch(e => console.log("Unlock pending"));
-    }
-    const modal = document.getElementById('audio-modal');
-    if (modal) modal.classList.add('hidden');
-}
-
-window.playPreview = function () {
-    const selector = document.getElementById('azan-selector');
-    if (!selector) return;
-
-    window.updateAzanSource();
-
-    if (window.adhanAudio) {
-        window.adhanAudio.play()
-            .then(() => {
-                setTimeout(() => {
-                    window.adhanAudio.pause();
-                    window.adhanAudio.currentTime = 0;
-                }, 10000);
-            })
-            .catch(error => {
-                console.error("Playback failed:", error);
-                const modal = document.getElementById('audio-modal');
-                if (modal) modal.classList.remove('hidden');
-                else alert("Please click anywhere to enable audio.");
-            });
-    }
-}
-
-// --- AZAN VOLUME & CONTROLS ---
-let isMuted = false;
-let lastVolume = 0.5;
-
-window.updateVolume = function (val) {
-    lastVolume = val;
-    if (window.adhanAudio) window.adhanAudio.volume = val;
-
-    const icon = document.getElementById('mute-icon');
-    if (icon) {
-        if (val == 0) icon.innerText = '🔇';
-        else if (val < 0.5) icon.innerText = '🔉';
-        else icon.innerText = '🔊';
-    }
-}
-
-window.toggleMute = function () {
-    isMuted = !isMuted;
-    if (window.adhanAudio) window.adhanAudio.muted = isMuted;
-
-    const icon = document.getElementById('mute-icon');
-    const slider = document.getElementById('volume-slider');
-
-    if (isMuted) {
-        if (icon) icon.innerText = '🔇';
-        if (slider) slider.style.opacity = "0.5";
-    } else {
-        window.updateVolume(lastVolume);
-        if (slider) slider.style.opacity = "1";
-    }
-}
-
-window.stopAzan = function () {
-    if (window.adhanAudio) {
-        window.adhanAudio.pause();
-        window.adhanAudio.currentTime = 0;
-    }
-}
-
-// Function to unlock audio on first click
-document.addEventListener('click', () => {
-    // This plays a silent 0.1s clip to "prime" the audio engine
-    if (window.adhanAudio) {
-        window.adhanAudio.play().then(() => {
-            window.adhanAudio.pause();
-            window.adhanAudio.currentTime = 0;
-            console.log("Audio Engine Unlocked");
-        }).catch(error => console.log("Unlock failed", error));
-    } else {
-        window.changeAzanVoice(); // Init logic
-    }
-}, { once: true });
 
 // --- RAMADAN 2026 FEATURE ---
 let ramadanInterval;
@@ -886,5 +851,3 @@ function displayRandomDua() {
 
 // Initialize Dua on Load
 setTimeout(displayRandomDua, 1000);
-
-

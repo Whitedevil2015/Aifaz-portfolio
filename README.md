@@ -1,36 +1,32 @@
-# Zaifa Islamic Portal & Luxe Store 🕌✨
-> **Last Deployment Trigger:** 2026-01-08 (v3.6 Force Update)
+# Sirat al-Qalb (Path of the Heart) 🕌✨
+> **Version 4.0 (Emerald Edition)** | Updated: 2026-01-22
 
-**Legacy Meets Luxury** v3.6 (Noble Islamic Edition)
+An advanced Islamic portal combining spiritual resources with a premium aesthetic.
 
-A unified single-page application combining a spiritual Islamic companion with a premium lifestyle store. Updated: 08-Jan-2026.
+## 🌟 Key Features
 
-## 🌟 Features
+### � Enhanced Quran Experience
+*   **Multi-View Reader**: Displays Arabic, English, Transliteration, **Hinglish (Roman Urdu)**, and Urdu Script simultaneously.
+*   **Learning Audio Mode**: Plays Arabic Verse followed immediately by Urdu Translation for comprehension.
+*   **Panj Surah**: dedicated quick-access to Surahs Yaseen, Mulk, Rahman, Waqi'ah, and Kahf.
 
-### 🕌 Islamic Sanctuary
-*   **Divine Inspiration**: Daily Quranic quotes and dynamic Masjid wallpapers.
-*   **The Noble Quran**: Full 114 Surah reader with Mishary Alafasy audio and translations.
-*   **Prayer Times**: Geo-located prayer times (Fajr, Dhuhr, Asr, Maghrib, Isha).
-*   **Hijri Calendar**: Integrated lunar calendar for tracking Islamic dates.
-*   **99 Names**: Interactive grid of Asma-ul-Husna with meanings.
-*   **Tasbih**: Digital counter for Dhikr.
+### 🧭 Precision Qibla Finder
+*   **Live Compass**: Advanced sensor integration (`deviceorientation`) for real-time Qibla tracking on mobile devices.
+*   **Visual Feedback**: Rotating compass dial with accurate Kaaba positioning relative to user heading.
 
-### 🛍️ Zaifa Islamic Store
-*   **Curated Collection**: Premium Ouds, Prayer Mats, and Tasbihs.
-*   **Seamless UI**: Modern "Add to Cart" interactions and product showcases.
+### 🎨 Atmospheric Design
+*   **Emerald & Gold Theme**: A professionally curated palette optimized for day and night readability.
+*   **Stardust Effect**: Subtle, animated sparkle background for a serene spiritual ambiance.
 
-### 🎧 Media Library
-*   **Audio Suite**: Custom playlist including Succession Theme, Frozen Piano, and Nasheeds.
-*   **Video Player**: Integrated video playback support.
-
-### 👨‍💻 Professional Profile
-*   **Senior Customer Support Associate**: Interactive resume and skills showcase.
-*   **Contact Integration**: Direct email and resume download links.
+### 🕌 Core Utilities
+*   **Prayer Times**: Geo-located timings (Fajr to Isha) with automatic city/country detection.
+*   **Ramadan 2026**: Countdown and Sehri/Iftar timings for the upcoming holy month.
+*   **99 Names & Duas**: Interactive grids for Asma-ul-Husna and daily supplications.
 
 ## 🛠️ Tech Stack
-*   **Frontend**: HTML5, Vanilla JavaScript, CSS3 (Glassmorphism Variables).
-*   **APIs**: Aladhan (Times/Calendar), Al Quran Cloud (Text/Audio).
-*   **Deployment**: Vercel (Auto-deployed from `main`).
+*   **Frontend**: HTML5, Vanilla JS, CSS3 (Tailwind + Custom variables).
+*   **APIs**: AlQuran Cloud, FawazAhmed0 (Hinglish), AlAdhan (Compass/Times).
+*   **Deployment**: Vercel.
 # ZAIFA ISLAMIC | Premium Sunnah Store
 
 ## Overview

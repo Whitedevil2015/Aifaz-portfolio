@@ -451,6 +451,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const quranModal = document.getElementById('quran-modal');
     const quranContentEl = document.getElementById('quran-content');
     const audioPlayer = document.getElementById('quran-audio');
+    let currentPlaylist = [];
+    let currentAudioIndex = 0;
 
     async function loadSurahDirectory() {
         const grid = document.getElementById('surah-index-grid');
@@ -498,9 +500,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const hiData = await hiRes.json();
 
             quranContentEl.innerHTML = arData.data.ayahs.map((a, i) => `
-                <div class="mb-8 border-b border-white/5 pb-8 group hover:bg-white/5 p-4 rounded-lg transition-colors">
+                <div class="mb-8 border-b border-white/5 pb-8 group hover:bg-white/5 p-4 rounded-lg transition-colors cursor-pointer" onclick="playVerse(${i})">
                     <div class="flex justify-between items-center mb-4">
-                        <span class="w-8 h-8 rounded-full border border-[#d4af37] text-[#d4af37] flex items-center justify-center text-xs ml-4 font-mono">${a.numberInSurah}</span>
+                        <span class="w-8 h-8 rounded-full border border-[#d4af37] text-[#d4af37] group-hover:bg-[#d4af37] group-hover:text-white flex items-center justify-center text-xs ml-4 font-mono transition-colors">${a.numberInSurah}</span>
                         <div class="text-right font-[Amiri] text-3xl leading-relaxed text-white drop-shadow-md" style="direction:rtl;">${a.text}</div>
                     </div>
                     
@@ -518,12 +520,52 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `).join('');
 
-            if (audioPlayer) audioPlayer.src = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${num}.mp3`;
+            // --- AUDIO PLAYLIST GENERATION (Verse + Tarjuma) ---
+            currentPlaylist = [];
+            currentAudioIndex = 0;
+            arData.data.ayahs.forEach(a => {
+                // Arabic (Alafasy)
+                currentPlaylist.push(`https://cdn.islamic.network/quran/audio/128/ar.alafasy/${a.number}.mp3`);
+                // Urdu/Hindi Translation (Shamshad Ali Khan)
+                currentPlaylist.push(`https://cdn.islamic.network/quran/audio/64/ur.khan/${a.number}.mp3`);
+            });
+
+            if (audioPlayer) {
+                // Initialize with first verse
+                audioPlayer.src = currentPlaylist[0];
+
+                // Chain Playback
+                audioPlayer.onended = () => {
+                    currentAudioIndex++;
+                    if (currentAudioIndex < currentPlaylist.length) {
+                        const isTarjuma = currentAudioIndex % 2 !== 0;
+                        // Optional: Highlight UI based on isTarjuma?
+                        audioPlayer.src = currentPlaylist[currentAudioIndex];
+                        audioPlayer.play();
+                    } else {
+                        // End of Surah
+                        currentAudioIndex = 0;
+                        audioPlayer.src = currentPlaylist[0];
+                        // Stop or repeat? Stop.
+                    }
+                };
+            }
         } catch (e) { console.error(e); }
     }
     // Standard listeners
     document.getElementById('close-quran-btn')?.addEventListener('click', () => { if (quranModal) quranModal.style.display = 'none'; if (audioPlayer) audioPlayer.pause(); });
     document.getElementById('play-pause-btn')?.addEventListener('click', () => { if (audioPlayer.paused) audioPlayer.play(); else audioPlayer.pause(); });
+
+    // Play Verse Handler
+    window.playVerse = function (index) {
+        if (!currentPlaylist || currentPlaylist.length === 0) return;
+        currentAudioIndex = index * 2;
+        const player = document.getElementById('quran-audio');
+        if (player) {
+            player.src = currentPlaylist[currentAudioIndex];
+            player.play();
+        }
+    };
 
     // Names
     async function loadNames() {
@@ -851,3 +893,79 @@ function displayRandomDua() {
 
 // Initialize Dua on Load
 setTimeout(displayRandomDua, 1000);
+initGlobalSparkles();
+
+// --- GLOBAL SPARKLE BACKGROUND ---
+function initGlobalSparkles() {
+    const canvas = document.createElement('canvas');
+    canvas.id = 'sparkle-bg';
+    Object.assign(canvas.style, {
+        position: 'fixed',
+        top: '0',
+        left: '0',
+        width: '100%',
+        height: '100%',
+        zIndex: '-1',
+        pointerEvents: 'none'
+    });
+    document.body.prepend(canvas);
+
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particles = [];
+
+    function resize() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+        initParticles();
+    }
+
+    function initParticles() {
+        particles = [];
+        const count = width < 768 ? 40 : 100; // Particle count
+        for (let i = 0; i < count; i++) {
+            particles.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                size: Math.random() * 2 + 0.5,
+                speedY: Math.random() * 0.4 - 0.2,
+                speedX: Math.random() * 0.4 - 0.2,
+                opacity: Math.random(),
+                fadeSpeed: Math.random() * 0.01 + 0.002,
+                color: Math.random() > 0.6 ? '#d4af37' : '#94a3b8' // Gold & Silver
+            });
+        }
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, width, height);
+
+        particles.forEach(p => {
+            p.x += p.speedX;
+            p.y += p.speedY;
+
+            if (p.x < 0) p.x = width;
+            if (p.x > width) p.x = 0;
+            if (p.y < 0) p.y = height;
+            if (p.y > height) p.y = 0;
+
+            p.opacity += p.fadeSpeed;
+            if (p.opacity > 1 || p.opacity < 0.1) p.fadeSpeed = -p.fadeSpeed;
+
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = p.opacity;
+            ctx.fill();
+        });
+        requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    animate();
+}
+
+

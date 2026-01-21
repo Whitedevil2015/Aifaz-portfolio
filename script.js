@@ -454,50 +454,90 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentPlaylist = [];
     let currentAudioIndex = 0;
 
-    async function loadSurahDirectory() {
+    // Quran Directory Logic
+    let currentDirType = 'surah';
+
+    window.switchQuranTab = function (type) {
+        currentDirType = type;
+        const btnSurah = document.getElementById('tab-surah-btn');
+        const btnPara = document.getElementById('tab-para-btn');
+        if (btnSurah) btnSurah.className = type === 'surah' ? "text-lg font-bold px-6 py-2 text-[#1a472a] border-b-2 border-[#1a472a] transition-all" : "text-lg font-bold px-6 py-2 text-gray-400 hover:text-[#1a472a] border-b-2 border-transparent hover:border-[#1a472a]/30 transition-all";
+        if (btnPara) btnPara.className = type === 'para' ? "text-lg font-bold px-6 py-2 text-[#1a472a] border-b-2 border-[#1a472a] transition-all" : "text-lg font-bold px-6 py-2 text-gray-400 hover:text-[#1a472a] border-b-2 border-transparent hover:border-[#1a472a]/30 transition-all";
+        loadDirectory(type);
+    }
+
+    async function loadDirectory(type = 'surah') {
         const grid = document.getElementById('surah-index-grid');
         if (!grid) return;
-        try {
-            const res = await fetch('https://api.alquran.cloud/v1/surah');
-            const data = await res.json();
-            grid.innerHTML = data.data.map(s => `
-                <div class="glass-container p-6 rounded-xl cursor-pointer hover:bg-white/50 transition-all hover-card-3d border border-transparent hover:border-[#d4af37]/30 dark:bg-gray-800 dark:border-gray-700" onclick="openReader(${s.number}, '${s.englishName}')">
-                     <div class="flex justify-between items-start">
-                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#1a472a] to-[#5D770F] text-white flex items-center justify-center font-bold text-sm mb-3 shadow-lg">${s.number}</div>
-                        <div class="text-right text-[#1a472a] font-serif text-2xl drop-shadow-sm dark:text-[#d4af37]">${s.name.replace('سُورَةُ ', '')}</div>
-                     </div>
-                     <h3 class="font-bold text-xl text-gray-800 dark:text-white">${s.englishName}</h3>
-                     <p class="text-sm text-gray-500 dark:text-gray-400">${s.englishNameTranslation}</p>
-                </div>
-            `).join('');
-            // Populate Sidebar List
+
+        grid.innerHTML = '<div class="col-span-full text-center py-10"><i class="fas fa-circle-notch fa-spin text-[#d4af37] text-2xl"></i></div>';
+
+        if (type === 'surah') {
+            try {
+                const res = await fetch('https://api.alquran.cloud/v1/surah');
+                const data = await res.json();
+                grid.innerHTML = data.data.map(s => `
+                    <div class="glass-container p-6 rounded-xl cursor-pointer hover:bg-white/50 transition-all hover-card-3d border border-transparent hover:border-[#d4af37]/30 dark:bg-gray-800 dark:border-gray-700" onclick="openReader(${s.number}, '${s.englishName}', 'surah')">
+                         <div class="flex justify-between items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#1a472a] to-[#5D770F] text-white flex items-center justify-center font-bold text-sm mb-3 shadow-lg">${s.number}</div>
+                            <div class="text-right text-[#1a472a] font-serif text-2xl drop-shadow-sm dark:text-[#d4af37]">${s.name.replace('سُورَةُ ', '')}</div>
+                         </div>
+                         <h3 class="font-bold text-xl text-gray-800 dark:text-white">${s.englishName}</h3>
+                         <p class="text-sm text-gray-500 dark:text-gray-400">${s.englishNameTranslation}</p>
+                    </div>
+                `).join('');
+                // Sidebar List Update
+                const list = document.getElementById('surah-list');
+                if (list) list.innerHTML = data.data.map(s => `<div class="cursor-pointer p-2 hover:bg-white/10 text-xs text-gray-300 hover:text-white" onclick="openReader(${s.number}, '${s.englishName}', 'surah')">${s.number}. ${s.englishName}</div>`).join('');
+            } catch (e) { grid.innerHTML = 'Error loading.'; }
+        } else {
+            // PARA / JUZ (1-30)
+            const paras = Array.from({ length: 30 }, (_, i) => i + 1);
+            grid.innerHTML = paras.map(p => `
+                 <div class="glass-container p-6 rounded-xl cursor-pointer hover:bg-white/50 transition-all hover-card-3d border border-transparent hover:border-[#d4af37]/30 dark:bg-gray-800 dark:border-gray-700" onclick="openReader(${p}, 'Juz ${p}', 'juz')">
+                      <div class="flex justify-between items-start">
+                         <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#1a472a] to-[#5D770F] text-white flex items-center justify-center font-bold text-sm mb-3 shadow-lg">${p}</div>
+                         <div class="text-right text-[#1a472a] font-serif text-2xl drop-shadow-sm dark:text-[#d4af37]">جزء ${p}</div>
+                      </div>
+                      <h3 class="font-bold text-xl text-gray-800 dark:text-white">Juz ${p}</h3>
+                      <p class="text-sm text-gray-500 dark:text-gray-400">Para ${p}</p>
+                 </div>
+             `).join('');
+            // Sidebar List Update for Para? Maybe skip or update.
             const list = document.getElementById('surah-list');
-            if (list) list.innerHTML = data.data.map(s => `<div class="cursor-pointer p-2 hover:bg-white/10 text-xs text-gray-300 hover:text-white" onclick="openReader(${s.number}, '${s.englishName}')">${s.number}. ${s.englishName}</div>`).join('');
-        } catch (e) { }
+            if (list) list.innerHTML = paras.map(p => `<div class="cursor-pointer p-2 hover:bg-white/10 text-xs text-gray-300 hover:text-white" onclick="openReader(${p}, 'Juz ${p}', 'juz')">Para ${p}</div>`).join('');
+        }
     }
 
-    window.openReader = function (num, name) {
+    window.openReader = function (num, name, type = 'surah') {
         if (quranModal) quranModal.style.display = 'flex';
-        document.getElementById('reader-title').textContent = `Surah ${name}`;
-        fetchSurahContent(num);
+        document.getElementById('reader-title').textContent = type === 'surah' ? `Surah ${name}` : `${name}`;
+        fetchQuranContent(num, type);
     }
 
-    async function fetchSurahContent(num) {
+    async function fetchQuranContent(num, type = 'surah') {
+        const quranContentEl = document.getElementById('quran-content');
         quranContentEl.innerHTML = '<div class="text-center mt-20"><i class="fas fa-circle-notch fa-spin text-4xl text-[#d4af37]"></i></div>';
         try {
+            const endpoint = type === 'juz' ? `juz/${num}` : `surah/${num}`;
+            // Hinglish only supported for Surah currently
+            const fetchHinglish = type === 'surah'
+                ? fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/urd-abulaalamaududi-la/${num}.json`)
+                : Promise.resolve({ json: () => ({ chapter: [] }) });
+
             const [arRes, enRes, trRes, urRes, hiRes] = await Promise.all([
-                fetch(`https://api.alquran.cloud/v1/surah/${num}`),
-                fetch(`https://api.alquran.cloud/v1/surah/${num}/en.sahih`),
-                fetch(`https://api.alquran.cloud/v1/surah/${num}/en.transliteration`),
-                fetch(`https://api.alquran.cloud/v1/surah/${num}/ur.jalandhry`),
-                fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/urd-abulaalamaududi-la/${num}.json`)
+                fetch(`https://api.alquran.cloud/v1/${endpoint}`),
+                fetch(`https://api.alquran.cloud/v1/${endpoint}/en.sahih`),
+                fetch(`https://api.alquran.cloud/v1/${endpoint}/en.transliteration`),
+                fetch(`https://api.alquran.cloud/v1/${endpoint}/ur.jalandhry`),
+                fetchHinglish
             ]);
 
             const arData = await arRes.json();
             const enData = await enRes.json();
             const trData = await trRes.json();
             const urData = await urRes.json();
-            const hiData = await hiRes.json();
+            const hiData = await hiRes.json(); // Might be partial for Juz or empty wrapper
 
             quranContentEl.innerHTML = arData.data.ayahs.map((a, i) => `
                 <div class="mb-8 border-b border-white/5 pb-8 group hover:bg-white/5 p-4 rounded-lg transition-colors cursor-pointer" onclick="playVerse(${i})">
@@ -520,41 +560,86 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `).join('');
 
-            // --- AUDIO PLAYLIST GENERATION (Verse + Tarjuma) ---
+            window.currentSurahData = arData; // Global Store
+
+            // --- AUDIO PLAYLIST GENERATION ---
+            // Default to Urdu
             currentPlaylist = [];
             currentAudioIndex = 0;
             arData.data.ayahs.forEach(a => {
-                // Arabic (Alafasy)
                 currentPlaylist.push(`https://cdn.islamic.network/quran/audio/128/ar.alafasy/${a.number}.mp3`);
-                // Urdu/Hindi Translation (Shamshad Ali Khan)
                 currentPlaylist.push(`https://cdn.islamic.network/quran/audio/64/ur.khan/${a.number}.mp3`);
             });
 
             if (audioPlayer) {
-                // Initialize with first verse
                 audioPlayer.src = currentPlaylist[0];
-
-                // Chain Playback
                 audioPlayer.onended = () => {
                     currentAudioIndex++;
                     if (currentAudioIndex < currentPlaylist.length) {
-                        const isTarjuma = currentAudioIndex % 2 !== 0;
-                        // Optional: Highlight UI based on isTarjuma?
                         audioPlayer.src = currentPlaylist[currentAudioIndex];
                         audioPlayer.play();
+                        highlightVerse(Math.floor(currentAudioIndex / 2));
                     } else {
-                        // End of Surah
                         currentAudioIndex = 0;
                         audioPlayer.src = currentPlaylist[0];
-                        // Stop or repeat? Stop.
+                        updatePlayIcon(false);
                     }
                 };
             }
         } catch (e) { console.error(e); }
     }
+
+    // Playback Helpers
+    window.highlightVerse = function (index) {
+        const verses = document.querySelectorAll('#quran-content > div');
+        verses.forEach(d => d.classList.remove('bg-white/10', 'border-l-4', 'border-[#d4af37]'));
+
+        if (verses[index]) {
+            verses[index].classList.add('bg-white/10', 'border-l-4', 'border-[#d4af37]');
+            verses[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+
+    window.playSurahAudio = function (lang) {
+        if (!window.currentSurahData) return;
+        const data = window.currentSurahData.data.ayahs;
+
+        currentPlaylist = [];
+        data.forEach(a => {
+            currentPlaylist.push(`https://cdn.islamic.network/quran/audio/128/ar.alafasy/${a.number}.mp3`);
+            if (lang === 'ur') currentPlaylist.push(`https://cdn.islamic.network/quran/audio/64/ur.khan/${a.number}.mp3`);
+            else if (lang === 'en') currentPlaylist.push(`https://cdn.islamic.network/quran/audio/192/en.walk/${a.number}.mp3`);
+        });
+
+        currentAudioIndex = 0;
+        const player = document.getElementById('quran-audio');
+        if (player) {
+            player.src = currentPlaylist[0];
+            player.play();
+            updatePlayIcon(true);
+            highlightVerse(0);
+        }
+    };
+
+    function updatePlayIcon(isPlaying) {
+        const icon = document.getElementById('play-icon');
+        if (icon) icon.className = isPlaying ? 'fas fa-pause' : 'fas fa-play ml-1';
+    }
     // Standard listeners
-    document.getElementById('close-quran-btn')?.addEventListener('click', () => { if (quranModal) quranModal.style.display = 'none'; if (audioPlayer) audioPlayer.pause(); });
-    document.getElementById('play-pause-btn')?.addEventListener('click', () => { if (audioPlayer.paused) audioPlayer.play(); else audioPlayer.pause(); });
+    document.getElementById('close-quran-btn')?.addEventListener('click', () => {
+        if (quranModal) quranModal.style.display = 'none';
+        if (audioPlayer) { audioPlayer.pause(); updatePlayIcon(false); }
+    });
+
+    document.getElementById('play-pause-btn')?.addEventListener('click', () => {
+        if (audioPlayer.paused) {
+            audioPlayer.play();
+            updatePlayIcon(true);
+        } else {
+            audioPlayer.pause();
+            updatePlayIcon(false);
+        }
+    });
 
     // Play Verse Handler
     window.playVerse = function (index) {
@@ -653,7 +738,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- BOOTSTRAP ---
     fetchPrayers();
     updateMasterDates();
-    loadSurahDirectory();
+    loadDirectory();
     loadNames();
     renderDuas();
     if (window.THREE) initThree();

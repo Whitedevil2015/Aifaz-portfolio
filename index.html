@@ -444,8 +444,15 @@
                 <div class="text-center mb-8">
                     <h2 class="text-4xl font-[Cormorant_Garamond] font-bold text-[#1a472a]">The Noble Quran</h2>
                     <p class="text-gray-500 mt-2">Read, Listen, and Reflect upon the Holy Verses</p>
-                    <button id="view-all-surahs-btn" class="mt-4 text-[#5D770F] font-bold text-sm hover:underline">View
-                        All Surahs</button>
+
+                    <div class="flex justify-center gap-4 mt-6 border-b border-gray-200/50 pb-1 w-fit mx-auto">
+                        <button id="tab-surah-btn"
+                            class="text-lg font-bold px-6 py-2 text-[#1a472a] border-b-2 border-[#1a472a] transition-all"
+                            onclick="switchQuranTab('surah')">Surah (114)</button>
+                        <button id="tab-para-btn"
+                            class="text-lg font-bold px-6 py-2 text-gray-400 hover:text-[#1a472a] border-b-2 border-transparent hover:border-[#1a472a]/30 transition-all"
+                            onclick="switchQuranTab('para')">Para (30)</button>
+                    </div>
                 </div>
                 <!-- Surah Grid -->
                 <div id="surah-index-grid"
@@ -709,10 +716,18 @@
                 <p id="surah-info" class="text-xs opacity-60">7 Ayahs | Meccan</p>
             </div>
 
-            <div class="flex items-center gap-4 bg-white/5 px-4 py-2 rounded-full backdrop-blur-md">
+            <div class="flex items-center gap-2 bg-white/5 px-4 py-2 rounded-full backdrop-blur-md">
+                <button onclick="playSurahAudio('ur')"
+                    class="px-3 py-1 bg-white/10 rounded-full text-xs font-bold hover:bg-[#d4af37] hover:text-black transition-colors flex items-center gap-1">
+                    <i class="fas fa-play"></i> Urdu
+                </button>
+                <button onclick="playSurahAudio('en')"
+                    class="px-3 py-1 bg-white/10 rounded-full text-xs font-bold hover:bg-[#d4af37] hover:text-black transition-colors flex items-center gap-1">
+                    <i class="fas fa-play"></i> Eng
+                </button>
                 <button id="play-pause-btn"
-                    class="w-10 h-10 flex items-center justify-center rounded-full bg-[#d4af37] text-black hover:scale-105 transition-transform">
-                    <i class="fas fa-play ml-1"></i>
+                    class="w-8 h-8 flex items-center justify-center rounded-full bg-[#d4af37] text-black hover:scale-105 transition-transform">
+                    <i class="fas fa-pause" id="play-icon"></i>
                 </button>
                 <audio id="quran-audio"></audio>
             </div>

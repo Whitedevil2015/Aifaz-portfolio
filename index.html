@@ -104,6 +104,13 @@
                 </a>
                 <a href="#"
                     class="nav-link group relative flex items-center px-6 py-3.5 hover:bg-white/5 border-r-4 border-transparent hover:border-white/20 transition-all"
+                    data-target="view-nafil">
+                    <i
+                        class="fas fa-praying-hands w-6 text-center text-[#d4af37]/80 group-hover:text-[#d4af37] transition-colors"></i>
+                    <span class="ml-3 font-medium">Salah</span>
+                </a>
+                <a href="#"
+                    class="nav-link group relative flex items-center px-6 py-3.5 hover:bg-white/5 border-r-4 border-transparent hover:border-white/20 transition-all"
                     data-target="view-qibla">
                     <i
                         class="fas fa-compass w-6 text-center text-[#d4af37]/80 group-hover:text-[#d4af37] transition-colors"></i>
@@ -277,6 +284,14 @@
                     <!-- Populated by JS -->
                 </div>
 
+                <!-- Expanded Guide Link -->
+                <div class="text-center my-6">
+                    <button data-target="view-nafil"
+                        class="nav-link inline-flex items-center gap-2 px-8 py-3 bg-white border border-[#d4af37] text-[#1a472a] rounded-full font-bold hover:bg-[#d4af37] hover:text-white transition-all transform hover:scale-105 shadow-sm dark:bg-gray-800 dark:text-[#d4af37] dark:hover:text-white">
+                        <i class="fas fa-book-reader"></i> View Salah Guide
+                    </button>
+                </div>
+
                 <!-- Extra Info Strip -->
                 <div class="grid md:grid-cols-3 gap-6">
                     <div
@@ -359,6 +374,47 @@
             </section>
 
             <!-- Qibla View (New) -->
+            </section>
+
+            <!-- Nafil Prayers View -->
+            <section id="view-nafil" class="view-section hidden p-4 md:p-8 space-y-12 animate-fade-in-up">
+                <div class="text-center mb-8">
+                    <h2 class="text-4xl font-[Cormorant_Garamond] font-bold text-[#1a472a] dark:text-[#d4af37]">
+                        Salah</h2>
+                    <p class="text-gray-500 mt-2 dark:text-gray-400">Timings, Rakats, and Methods for Farz, Sunnah &
+                        Nafil</p>
+                </div>
+
+                <!-- Farz Section -->
+                <div class="max-w-6xl mx-auto">
+                    <h3
+                        class="text-2xl font-bold text-[#1a472a] border-b border-[#d4af37]/30 pb-2 mb-6 dark:text-white flex items-center gap-2">
+                        <i class="fas fa-mosque text-[#d4af37]"></i> Obligatory (Farz) Prayers
+                    </h3>
+                    <div id="farz-guide-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Nafil Section -->
+                <div class="max-w-6xl mx-auto">
+                    <h3
+                        class="text-2xl font-bold text-[#1a472a] border-b border-[#d4af37]/30 pb-2 mb-6 dark:text-white flex items-center gap-2">
+                        <i class="fas fa-praying-hands text-[#d4af37]"></i> Voluntary (Nafil) Prayers
+                    </h3>
+                    <div id="nafil-guide-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <div class="mt-8 p-6 bg-[#d4af37]/10 rounded-xl border border-[#d4af37]/20 max-w-6xl mx-auto">
+                    <h4 class="font-bold text-[#1a472a] mb-2 dark:text-[#d4af37]"><i
+                            class="fas fa-info-circle mr-2"></i>Note</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">Timings are calculated based on solar position.
+                        Perform prayers with correct Niyyah and Method.</p>
+                </div>
+            </section>
+
             <section id="view-qibla"
                 class="view-section hidden p-4 md:p-8 flex flex-col items-center justify-center min-h-[70vh] text-center animate-fade-in-up">
                 <div
@@ -763,6 +819,39 @@
     <!-- Hidden audio for legacy compat -->
     <audio id="main-audio-element"></audio>
     <div id="global-player"></div>
+
+    <!-- Fazilat Modal -->
+    <div id="fazilat-modal"
+        class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4"
+        onclick="if(event.target===this){this.classList.add('hidden');this.classList.remove('flex');}">
+        <div
+            class="bg-white dark:bg-gray-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl transform scale-100 transition-all relative border-t-4 border-[#d4af37]">
+            <button class="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors"
+                onclick="document.getElementById('fazilat-modal').classList.add('hidden'); document.getElementById('fazilat-modal').classList.remove('flex');">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <div class="text-center mb-6">
+                <div
+                    class="w-16 h-16 mx-auto bg-[#d4af37]/10 rounded-full flex items-center justify-center text-[#d4af37] text-3xl mb-4 shadow-lg shadow-[#d4af37]/20">
+                    <i class="fas fa-star" id="fazilat-icon"></i>
+                </div>
+                <h3 class="text-3xl font-[Cormorant_Garamond] font-bold text-[#1a472a] dark:text-[#d4af37] mb-1"
+                    id="fazilat-title">Title</h3>
+                <p class="text-xs font-bold text-[#d4af37] tracking-[0.2em] uppercase">Virtue of Prayer</p>
+            </div>
+
+            <div
+                class="bg-gradient-to-br from-[#d4af37]/5 to-transparent p-6 rounded-xl border border-[#d4af37]/20 relative">
+                <i class="fas fa-quote-left text-[#d4af37]/20 text-4xl absolute top-2 left-2"></i>
+                <p class="text-lg text-gray-700 italic text-center font-serif leading-relaxed dark:text-gray-300 relative z-10"
+                    id="fazilat-text">
+                    Hadith text goes here...
+                </p>
+                <div class="text-right mt-4 text-xs font-bold text-[#1a472a] dark:text-[#d4af37] opacity-80"
+                    id="fazilat-ref">— Reference</div>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>

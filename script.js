@@ -145,9 +145,185 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.code === 200) {
                 prayerTimesRaw = data.data.timings;
                 renderPrayerGrid(prayerTimesRaw);
+                renderPrayerGuide(prayerTimesRaw);
                 updateNextPrayer();
             }
         } catch (e) { console.error("Prayer fetch failed", e); }
+    }
+
+    // Nafil Data & Virtue Logic
+    // Prayer Data & Virtue Logic
+    window.PRAYER_INFO = {
+        // Farz
+        'Fajr': {
+            hadith: "Whoever prays the dawn prayer (Fajr) is under the protection of Allah.",
+            ref: "Sahih Muslim",
+            icon: "fa-cloud-sun"
+        },
+        'Dhuhr': {
+            hadith: "This is an hour when the gates of heaven are opened, and I love that a righteous deed should rise up for me in it.",
+            ref: "Jami At-Tirmidhi",
+            icon: "fa-sun"
+        },
+        'Asr': {
+            hadith: "Whoever prays the two cool prayers (Asr and Fajr) will enter Paradise.",
+            ref: "Sahih Al-Bukhari",
+            icon: "fa-cloud-sun-rain"
+        },
+        'Maghrib': {
+            hadith: "My Ummah will continue to be upon good (Fitrah) as long as they hasten the Maghrib prayer.",
+            ref: "Sunan Abu Dawud",
+            icon: "fa-moon"
+        },
+        'Isha': {
+            hadith: "Whoever prays Isha in congregation, it is as if he has spent half the night in prayer.",
+            ref: "Sahih Muslim",
+            icon: "fa-star"
+        },
+        // Nafil
+        'Tahajjud': {
+            hadith: "The best prayer after the obligatory prayers is the night prayer.",
+            ref: "Sahih Muslim",
+            icon: "fa-cloud-moon"
+        },
+        'Ishraq': {
+            hadith: "Whoever prays Fajr in congregation, then sits remembering Allah until sunrise, then prays two rak'ahs, will get the reward of a complete Hajj and Umrah.",
+            ref: "Jami At-Tirmidhi",
+            icon: "fa-sun"
+        },
+        'Chasht (Duha)': {
+            hadith: "Charity is due upon every joint of the people for every day upon which the sun rises... and two rak'ahs which one prays in the Duha suffices for that.",
+            ref: "Sahih Muslim",
+            icon: "fa-sun"
+        },
+        'Awwabin': {
+            hadith: "Whoever prays six rak'ahs after Maghrib without speaking ill between them, it is equivalent to the worship of twelve years.",
+            ref: "Jami At-Tirmidhi",
+            icon: "fa-moon"
+        }
+    };
+
+    window.openFazilat = function (name) {
+        const info = window.PRAYER_INFO[name];
+        if (!info) return;
+        document.getElementById('fazilat-title').textContent = name;
+        document.getElementById('fazilat-text').textContent = `"${info.hadith}"`;
+        document.getElementById('fazilat-ref').textContent = `— ${info.ref}`;
+
+        const iconEl = document.getElementById('fazilat-icon');
+        iconEl.className = `fas ${info.icon}`;
+
+        const modal = document.getElementById('fazilat-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    };
+
+    function renderPrayerGuide(timings) {
+        const farzGrid = document.getElementById('farz-guide-grid');
+        const nafilGrid = document.getElementById('nafil-guide-grid');
+        if (!farzGrid) return;
+
+        // Helpers
+        const addMins = (t, m) => {
+            if (!t) return '--:--';
+            const [hh, mm] = t.split(':').map(Number);
+            const d = new Date(); d.setHours(hh, mm + m);
+            return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+        };
+        const getMidpoint = (t1, t2) => {
+            if (!t1 || !t2) return '--:--';
+            const [h1, m1] = t1.split(':').map(Number);
+            const [h2, m2] = t2.split(':').map(Number);
+            const min1 = h1 * 60 + m1;
+            const min2 = h2 * 60 + m2;
+            const mid = Math.floor((min1 + min2) / 2);
+            const h = Math.floor(mid / 60);
+            const m = mid % 60;
+            return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+        };
+        const fmt = (t) => t ? formatTo12Hour(t) : '--:--';
+
+        // -- CALCULATIONS --
+        // Farz
+        const farzData = [
+            { name: 'Fajr', time: `${fmt(timings.Fajr)} - ${fmt(timings.Sunrise)}`, rakat: '2 Sunnah, 2 Farz', icon: 'fa-cloud-sun' },
+            { name: 'Dhuhr', time: `${fmt(timings.Dhuhr)} - ${fmt(timings.Asr)}`, rakat: '4 Sunnah, 4 Farz, 2 Sunnah, 2 Nafl', icon: 'fa-sun' },
+            { name: 'Asr', time: `${fmt(timings.Asr)} - ${fmt(timings.Maghrib)}`, rakat: '4 Sunnah (Ghair Muakkada), 4 Farz', icon: 'fa-cloud-sun-rain' },
+            { name: 'Maghrib', time: `${fmt(timings.Maghrib)} - ${addMins(timings.Maghrib, 80)}`, rakat: '3 Farz, 2 Sunnah, 2 Nafl', icon: 'fa-moon' },
+            { name: 'Isha', time: `${fmt(timings.Isha)} - ${fmt(timings.Fajr)}`, rakat: '4 Sunnah, 4 Farz, 2 Sunnah, 2 Nafl, 3 Witr, 2 Nafl', icon: 'fa-star' }
+        ];
+
+        // Nafil
+        const ishraqStart = addMins(timings.Sunrise, 15);
+        const chashtStart = addMins(timings.Sunrise, 20);
+        const chashtEnd = addMins(timings.Dhuhr, -15);
+        const chashtMid = getMidpoint(chashtStart, chashtEnd);
+
+        const awwabinStart = addMins(timings.Maghrib, 20);
+        const tahajjudStart = timings.Lastthird || timings.Midnight;
+        const tahajjudEnd = timings.Fajr;
+
+        const nafilData = [
+            {
+                name: 'Tahajjud',
+                time: `${fmt(tahajjudStart)} - ${fmt(tahajjudEnd)}`,
+                rakat: '2 - 12 (Sets of 2)',
+                desc: 'The most virtuous Nafil prayer. Recite Quran extensively.',
+                icon: 'fa-cloud-moon',
+                badge: 'Best Time'
+            },
+            {
+                name: 'Ishraq',
+                time: `Starts ${fmt(ishraqStart)}`,
+                rakat: '2 or 4',
+                desc: 'Approx 15 mins after Sunrise.',
+                icon: 'fa-sun',
+                badge: 'Sunrise + 15m'
+            },
+            {
+                name: 'Chasht (Duha)',
+                time: `${fmt(chashtStart)} - ${fmt(chashtEnd)}`,
+                rakat: '2 - 8 (Sets of 2)',
+                desc: `Best time: ~${fmt(chashtMid)} (Midpoint).`,
+                icon: 'fa-sun',
+                badge: 'Recommended'
+            },
+            {
+                name: 'Awwabin',
+                time: `${fmt(awwabinStart)} - ${fmt(timings.Isha)}`,
+                rakat: '6 - 20 (Sets of 2)',
+                desc: 'After Maghrib Sunnah.',
+                icon: 'fa-moon'
+            }
+        ];
+
+        // RENDER FARZ
+        farzGrid.innerHTML = farzData.map(d => `
+            <div class="glass p-6 rounded-2xl border-l-4 border-emerald-500 relative overflow-hidden group hover:-translate-y-1 transition-transform dark:bg-gray-800 cursor-pointer hover:shadow-lg transition-all" onclick="openFazilat('${d.name}')">
+                <div class="absolute -right-4 -top-4 opacity-10 text-8xl text-emerald-500"><i class="fas ${d.icon}"></i></div>
+                <h3 class="text-2xl font-bold text-[#1a472a] mb-1 font-[Cormorant_Garamond] dark:text-white group-hover:underline decoration-emerald-500/50 underline-offset-4 decoration-2">${d.name} <i class="fas fa-info-circle text-xs text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity ml-2 align-middle"></i></h3>
+                <p class="text-sm text-gray-500 font-mono mb-3 dark:text-gray-400">${d.time}</p>
+                <div class="p-3 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
+                     <p class="text-xs font-bold text-emerald-700 uppercase mb-1 dark:text-emerald-400">Rakats</p>
+                     <p class="text-sm font-medium text-gray-800 dark:text-gray-200">${d.rakat}</p>
+                </div>
+            </div>
+        `).join('');
+
+        // RENDER NAFIL
+        nafilGrid.innerHTML = nafilData.map(d => `
+            <div class="glass p-6 rounded-2xl border-t-4 border-[#d4af37] bg-[#d4af37]/5 relative overflow-hidden group hover:-translate-y-1 transition-transform dark:bg-gray-800 cursor-pointer hover:shadow-lg transition-all" onclick="openFazilat('${d.name}')">
+                ${d.badge ? `<div class="absolute top-0 right-0 bg-[#d4af37] text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg uppercase tracking-wider shadow-sm">${d.badge}</div>` : ''}
+                <div class="absolute -right-4 -top-4 opacity-10 text-8xl text-[#d4af37]"><i class="fas ${d.icon}"></i></div>
+                <h3 class="text-2xl font-bold text-[#1a472a] mb-1 font-[Cormorant_Garamond] dark:text-[#d4af37] group-hover:underline decoration-[#d4af37]/50 underline-offset-4 decoration-2">${d.name} <i class="fas fa-info-circle text-xs text-[#d4af37] opacity-0 group-hover:opacity-100 transition-opacity ml-2 align-middle"></i></h3>
+                <p class="text-xs text-[#d4af37] uppercase tracking-widest font-bold mb-3">Window</p>
+                <div class="text-2xl font-mono font-bold text-gray-800 mb-3 dark:text-gray-200">${d.time}</div>
+                <div class="mb-3 p-2 bg-white/50 rounded border border-[#d4af37]/20 w-fit backdrop-blur-sm dark:bg-black/20">
+                    <span class="text-xs font-bold text-[#d4af37] uppercase">Rakat:</span> <span class="text-sm font-bold dark:text-white">${d.rakat}</span>
+                </div>
+                <p class="text-sm text-gray-600 italic leading-relaxed dark:text-gray-400">${d.desc}</p>
+            </div>
+        `).join('');
     }
 
     // Auto Location Logic
@@ -175,21 +351,56 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderPrayerGrid(timings) {
         const grid = document.getElementById('prayer-times-grid');
         if (!grid) return;
+
+        const isFriday = new Date().getDay() === 5;
+
+        // Friday Banner Logic
+        if (isFriday && !document.getElementById('friday-banner')) {
+            const banner = document.createElement('div');
+            banner.id = 'friday-banner';
+            banner.className = 'col-span-full bg-gradient-to-r from-[#1a472a] to-[#0f2b19] p-6 rounded-2xl shadow-xl border border-[#d4af37]/30 mb-6 text-white relative overflow-hidden animate-fade-in-up';
+            banner.innerHTML = `
+                <div class="absolute top-0 right-0 w-64 h-64 bg-[#d4af37] opacity-10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+                    <div class="text-center md:text-left">
+                        <h2 class="text-3xl font-[Cormorant_Garamond] font-bold text-[#d4af37] mb-2">Jumu'ah Mubarak!</h2>
+                        <p class="text-sm opacity-90 mb-4 font-light">Don't forget the Sunnah acts of this blessed day.</p>
+                        <div class="flex flex-wrap gap-3 justify-center md:justify-start">
+                            <span class="px-3 py-1 bg-white/10 rounded-full text-xs border border-[#d4af37]/30 flex items-center gap-2 backdrop-blur-md"><i class="fas fa-book-open text-[#d4af37]"></i> Surah Al-Kahf</span>
+                            <span class="px-3 py-1 bg-white/10 rounded-full text-xs border border-[#d4af37]/30 flex items-center gap-2 backdrop-blur-md"><i class="fas fa-comment-dots text-[#d4af37]"></i> Durood</span>
+                            <span class="px-3 py-1 bg-white/10 rounded-full text-xs border border-[#d4af37]/30 flex items-center gap-2 backdrop-blur-md"><i class="fas fa-hands-praying text-[#d4af37]"></i> Dua (Hour of Acceptance)</span>
+                        </div>
+                    </div>
+                    <div class="text-center shrink-0">
+                         <a href="#" onclick="document.querySelector('[data-target=view-quran]').click(); setTimeout(()=>loadSurah(18), 500);" class="inline-flex items-center px-6 py-2 bg-[#d4af37] text-[#0f2b19] font-bold rounded-full hover:bg-white transition-all shadow-lg shadow-[#d4af37]/20 transform hover:-translate-y-1">
+                             <i class="fas fa-quran mr-2"></i> Read Kahf
+                         </a>
+                    </div>
+                </div>
+            `;
+            // Insert before grid. Grid might be in a wrapper. 
+            // In index.html, grid is inside a div.
+            // I'll prepend to the parent of grid?
+            // Actually, inserting it simply BEFORE the grid element is safest.
+            grid.parentNode.insertBefore(banner, grid);
+        }
+
         const prayers = [
             { id: 'Fajr', icon: 'fa-cloud-sun' },
             { id: 'Sunrise', icon: 'fa-sun' },
-            { id: 'Dhuhr', icon: 'fa-sun' },
+            { id: 'Dhuhr', icon: 'fa-sun', label: isFriday ? "Jumu'ah" : "Dhuhr" },
             { id: 'Asr', icon: 'fa-cloud-sun-rain' },
             { id: 'Maghrib', icon: 'fa-moon' },
             { id: 'Isha', icon: 'fa-star' }
         ];
+
         grid.innerHTML = prayers.map(p => `
-            <div id="card-${p.id}" class="glass p-4 rounded-2xl text-center border border-white/20 relative group transition-all duration-500 hover:-translate-y-2 dark:bg-gray-800/40">
+            <div id="card-${p.id}" class="glass p-4 rounded-2xl text-center border border-white/20 relative group transition-all duration-500 hover:-translate-y-2 dark:bg-gray-800/40 ${p.label === "Jumu'ah" ? 'border-[#d4af37] shadow-[0_0_20px_rgba(212,175,55,0.15)]' : ''}">
                 <div class="absolute -right-6 -top-6 opacity-10 text-7xl text-[#d4af37] group-hover:rotate-12 transition-transform"><i class="fas ${p.icon}"></i></div>
                 <div class="w-10 h-10 mx-auto bg-[#d4af37]/10 rounded-full flex items-center justify-center text-[#d4af37] mb-3 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(212,175,55,0.2)]">
                     <i class="fas ${p.icon}"></i>
                 </div>
-                <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1 dark:text-gray-400">${p.id}</p>
+                <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1 dark:text-gray-400 ${p.label === "Jumu'ah" ? 'text-[#d4af37]' : ''}">${p.label || p.id}</p>
                 <p class="text-2xl font-[Amiri] font-bold text-gray-800 dark:text-white group-hover:text-[#d4af37] transition-colors">${formatTo12Hour(timings[p.id])}</p>
             </div>
         `).join('');
@@ -674,12 +885,64 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Duas
     const duas = [
-        { cat: 'morning', title: 'Start of Day', ar: 'أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ', en: 'We have entered a new morning...' },
-        { cat: 'evening', title: 'End of Day', ar: 'أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ', en: 'We have reached the evening...' },
-        { cat: 'food', title: 'Before Eating', ar: 'بِسْمِ اللَّهِ', en: 'In the name of Allah.' },
-        { cat: 'travel', title: 'Vehicle/Travel', ar: 'سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا', en: 'Glory to Him who has brought this vehicle under our control.' },
-        { cat: 'prayer', title: 'After Wudu', ar: 'أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللَّهُ', en: 'I testify that there is no deity except Allah.' }
+        {
+            cat: 'quranic',
+            title: 'Good of Both Worlds',
+            ar: 'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ',
+            tr: "Rabbana atina fid-dunya hasanatan wa fil 'akhirati hasanatan waqina 'adhaban-nar",
+            en: 'Our Lord, give us in this world [that which is] good and in the Hereafter [that which is] good and protect us from the punishment of the Fire.',
+            ref: 'Al-Baqarah 2:201'
+        },
+        {
+            cat: 'forgiveness',
+            title: 'Best Dua for Forgiveness (Sayyidul Istighfar)',
+            ar: 'اللَّهُمَّ أَنْتَ رَبِّي لا إِلَهَ إِلا أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ وَأَبُوءُ لَكَ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لا يَغْفِرُ الذُّنُوبَ إِلا أَنْتَ',
+            tr: "Allahumma anta Rabbi la ilaha illa anta, Khalaqtani wa ana 'abduka, wa ana 'ala 'ahdika wa wa'dika mastata'tu, A'udhu bika min sharri ma sana'tu, Abu'u laka bini'matika 'alayya, wa abu'u laka bidhanbi faghfir li fa-innahu la yaghfiru al-dhunuba illa anta",
+            en: 'O Allah, You are my Lord. There is no god but You. You created me and I am Your slave. I am abiding to Your covenant and promise as best as I can. I seek refuge in You from the evil I have committed. I acknowledge Your blessings upon me and I acknowledge my sin. So forgive me, for verily no one forgives sins except You.',
+            ref: 'Sahih Al-Bukhari'
+        },
+        {
+            cat: 'morning',
+            title: 'Upon Waking Up',
+            ar: 'الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ',
+            tr: "Alhamdu lillahil-ladhi ahyana ba'da ma amatana wa ilaihin-nushur",
+            en: 'All praise is for Allah who gave us life after having taken it from us and unto Him is the resurrection.',
+            ref: 'Sahih Al-Bukhari'
+        },
+        {
+            cat: 'evening',
+            title: 'Evening Protection',
+            ar: 'أَعُوذُ بِكَلِمَاتِ اللهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ',
+            tr: "A'udhu bikalimatillahi at-tammati min sharri ma khalaq",
+            en: 'I seek protection in the perfect words of Allah from every evil that He has created.',
+            ref: 'Sahih Muslim'
+        },
+        {
+            cat: 'travel',
+            title: 'Travel Dua',
+            ar: 'سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ وَإِنَّا إِلَى رَبِّنَا لَمُنْقَلِبُونَ',
+            tr: "Subhanal-ladhi sakh-khara lana hadha wa ma kunna lahu muqrinin. Wa inna ila Rabbina lamunqalibun",
+            en: 'Glory to Him who has brought this [vehicle] under our control, though we were unable to control it ourselves, and indeed, to our Lord we will surely return.',
+            ref: 'Az-Zukhruf 43:13-14'
+        },
+        {
+            cat: 'food',
+            title: 'Before Eating',
+            ar: 'بِسْمِ اللَّهِ وَعَلَى بَرَكَةِ اللَّهِ',
+            tr: "Bismillahi wa 'ala barakatillah",
+            en: 'In the name of Allah and with the blessings of Allah.',
+            ref: 'Sunan Abu Dawud'
+        },
+        {
+            cat: 'home',
+            title: 'Leaving Home',
+            ar: 'بِسْمِ اللَّهِ تَوَكَّلْتُ عَلَى اللَّهِ، لاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللَّهِ',
+            tr: "Bismillahi tawakkaltu 'alallahi la hawla wala quwwata illa billah",
+            en: 'In the name of Allah, I place my trust in Allah; there is no might and no power except by Allah.',
+            ref: 'Sunan Abi Dawud'
+        }
     ];
+
     function renderDuas(cat = 'all') {
         const grid = document.getElementById('duas-grid');
         if (!grid) return;
@@ -687,9 +950,11 @@ document.addEventListener('DOMContentLoaded', () => {
         grid.innerHTML = filtered.map(d => `
             <div class="bg-white p-6 rounded-xl shadow-sm relative overflow-hidden group hover:shadow-lg transition-shadow border-l-4 dark:bg-gray-800 dark:border-gray-700" style="border-left-color:#5D770F">
                  <div class="absolute top-0 right-0 p-2 bg-gray-500 rounded-bl-xl text-xs font-bold text-white uppercase shadow-sm">${d.cat}</div>
-                 <h3 class="font-bold text-lg mb-4 text-[#1a472a] dark:text-[#d4af37]">${d.title}</h3>
-                 <div class="text-right font-[Amiri] text-2xl mb-4 text-gray-700 leading-loose dark:text-gray-200">${d.ar}</div>
+                 <h3 class="font-bold text-lg mb-2 text-[#1a472a] dark:text-[#d4af37]">${d.title}</h3>
+                 <div class="text-right font-[Amiri] text-2xl mb-3 text-gray-700 leading-loose dark:text-gray-200" style="direction:rtl;">${d.ar}</div>
+                 <div class="font-medium text-[#d4af37] mb-2 italic text-sm font-serif opacity-90">${d.tr}</div>
                  <div class="text-gray-500 text-sm italic border-t border-gray-100 pt-3 dark:border-gray-700 dark:text-gray-400">"${d.en}"</div>
+                 <div class="text-xs text-gray-400 mt-2 text-right opacity-70">— ${d.ref}</div>
             </div>
         `).join('');
     }

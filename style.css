@@ -1,35 +1,37 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Amiri:wght@400;700&family=Cormorant+Garamond:wght@600;700&display=swap');
 
 :root {
-    --primary: #020617;
-    /* Deep Slate */
-    --secondary: #059669;
-    /* Emerald */
-    --gold: #d4af37;
-    /* Authentic Gold */
-    --text-dark: #1e293b;
-    --text-light: #f8fafc;
+    --primary: #24423a;
+    /* Deep Pine */
+    --secondary: #1a3c34;
+    /* Darker Pine */
+    --gold: #c5a059;
+    /* Muted Gold to match Sand */
+    --sand: #f3e9dc;
+    /* Desert Sand */
+    --text-dark: #2c3e50;
+    --text-light: #fdfaf6;
 }
 
 /* --- ANIMATED MESH BACKGROUND (OCEAN THEME) --- */
 body {
     font-family: 'Inter', sans-serif;
     color: var(--text-dark);
-    /* Light Mode: Clean Professional */
-    background: #f8fafc;
+    /* Light Mode: Desert Sand base */
+    background: var(--sand);
     background-image:
-        radial-gradient(at 0% 0%, rgba(5, 150, 105, 0.03) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(212, 175, 55, 0.05) 0px, transparent 50%);
+        radial-gradient(at 0% 0%, rgba(36, 66, 58, 0.05) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(197, 160, 89, 0.1) 0px, transparent 50%);
     min-height: 100vh;
     line-height: 1.6;
 }
 
 body.dark {
-    /* Dark Mode: Deep Professional */
-    background: #020617;
+    /* Dark Mode: Deep Pine base */
+    background: #12211d;
     background-image:
-        radial-gradient(circle at 50% 0%, #064e3b 0%, transparent 60%),
-        radial-gradient(at 100% 100%, rgba(20, 83, 45, 0.2) 0px, transparent 50%);
+        radial-gradient(circle at 50% 0%, #24423a 0%, transparent 60%),
+        radial-gradient(at 100% 100%, rgba(26, 60, 52, 0.2) 0px, transparent 50%);
     color: var(--text-light);
 }
 
@@ -207,47 +209,25 @@ h6 {
     }
 }
 
-/* --- WEATHER ATMOSPHERES --- */
-/* Clear / Sunny */
-/* Clear / Sunny */
-/* Backgrounds disabled to show Wavy Theme */
-body.weather-clear,
-.dark body.weather-clear {
-    /* background disabled */
-}
-
-body.weather-clouds,
-.dark body.weather-clouds {
-    /* background disabled */
-}
-
-body.weather-rain,
-.dark body.weather-rain {
-    /* background disabled */
-}
-
-body.weather-snow,
-.dark body.weather-snow {
-    /* background disabled */
-}
+/* Weather atmospheres handled dynamically or by mesh bg */
 
 /* --- ISLAMIC AESTHETICS --- */
 .islamic-pattern-bg {
-    background-color: #022c22;
+    background-color: var(--primary);
     /* geometric pattern overlay */
     background-image:
-        radial-gradient(rgba(255, 255, 255, 0.05) 2px, transparent 2px),
-        radial-gradient(rgba(255, 255, 255, 0.05) 2px, transparent 2px);
+        radial-gradient(rgba(243, 233, 220, 0.05) 2px, transparent 2px),
+        radial-gradient(rgba(243, 233, 220, 0.05) 2px, transparent 2px);
     background-size: 30px 30px;
     background-position: 0 0, 15px 15px;
 }
 
 .mihrab-arch {
     /* User Requested Style */
-    background: #ffffff;
-    color: #022c22;
+    background: var(--sand);
+    color: var(--primary);
     border-radius: 120px 120px 20px 20px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
     transition: border-radius 0.3s ease;
     border: none;
     overflow: hidden;
@@ -273,7 +253,7 @@ body.weather-snow,
     display: flex;
     align-items: center;
     text-align: center;
-    color: #d4af37;
+    color: var(--gold);
     margin: 1.5rem 0;
     font-family: 'Amiri', serif;
 }
@@ -292,15 +272,16 @@ body.weather-snow,
 
 .calligraphic-divider {
     height: 1px;
-    background: radial-gradient(circle, #d4af37 0%, transparent 100%);
+    background: radial-gradient(circle, var(--gold) 0%, transparent 100%);
     margin: 2rem auto;
     width: 80%;
     opacity: 0.6;
 }
+
 /* --- FRIDAY MODE SPECIAL --- */
 body.friday-mode {
     /* Enhanced Gold/Green Atmosphere for Jumu'ah */
-    background-image: 
+    background-image:
         radial-gradient(at 0% 0%, rgba(212, 175, 55, 0.08) 0px, transparent 60%),
         radial-gradient(at 100% 100%, rgba(5, 150, 105, 0.1) 0px, transparent 60%) !important;
 }

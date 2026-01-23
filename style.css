@@ -297,3 +297,20 @@ body.weather-snow,
     width: 80%;
     opacity: 0.6;
 }
+/* --- FRIDAY MODE SPECIAL --- */
+body.friday-mode {
+    /* Enhanced Gold/Green Atmosphere for Jumu'ah */
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(212, 175, 55, 0.08) 0px, transparent 60%),
+        radial-gradient(at 100% 100%, rgba(5, 150, 105, 0.1) 0px, transparent 60%) !important;
+}
+
+body.friday-mode .glass {
+    border-color: rgba(212, 175, 55, 0.25);
+    box-shadow: 0 8px 30px rgba(212, 175, 55, 0.08);
+}
+
+body.friday-mode .nav-link.active {
+    background: rgba(212, 175, 55, 0.15);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+}

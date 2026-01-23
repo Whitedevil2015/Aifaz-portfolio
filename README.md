@@ -10,9 +10,9 @@ An advanced Islamic portal combining spiritual resources with a premium aestheti
 *   **Learning Audio Mode**: Plays Arabic Verse followed immediately by Urdu Translation for comprehension.
 *   **Panj Surah**: dedicated quick-access to Surahs Yaseen, Mulk, Rahman, Waqi'ah, and Kahf.
 
-### 🧭 Precision Qibla Finder
-*   **Live Compass**: Advanced sensor integration (`deviceorientation`) for real-time Qibla tracking on mobile devices.
-*   **Visual Feedback**: Rotating compass dial with accurate Kaaba positioning relative to user heading.
+### 🕌 Salah Guide & Friday Mode
+*   **Complete Prayer Guide**: Detailed Rakats, Timings (including Ishraq, Chasht, Awwabin), and Virtue (Fazilat) popups.
+*   **Friday Mode**: Automatic "Jumu'ah" branding on Fridays with Sunnah reminders (Surah Al-Kahf, Durood).
 
 ### 🎨 Atmospheric Design
 *   **Emerald & Gold Theme**: A professionally curated palette optimized for day and night readability.

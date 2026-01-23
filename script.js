@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let nextPrayerName = '';
     let isAzaanPlaying = false;
     let allHadiths = []; // For search
+    let countdownInterval = null;
 
     // --- DOM ELEMENTS ---
     const navLinks = document.querySelectorAll('.nav-link');
@@ -38,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (targetSec) targetSec.classList.remove('hidden');
 
             if (targetId === 'view-library') loadLibrary();
-            if (targetId === 'view-qibla') initQibla();
+
         });
     });
 
@@ -353,6 +354,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!grid) return;
 
         const isFriday = new Date().getDay() === 5;
+        if (isFriday) document.body.classList.add('friday-mode');
+        else document.body.classList.remove('friday-mode');
 
         // Friday Banner Logic
         if (isFriday && !document.getElementById('friday-banner')) {
@@ -372,7 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
                     <div class="text-center shrink-0">
-                         <a href="#" onclick="document.querySelector('[data-target=view-quran]').click(); setTimeout(()=>loadSurah(18), 500);" class="inline-flex items-center px-6 py-2 bg-[#d4af37] text-[#0f2b19] font-bold rounded-full hover:bg-white transition-all shadow-lg shadow-[#d4af37]/20 transform hover:-translate-y-1">
+                         <a href="#" onclick="document.querySelector('[data-target=view-quran]').click(); setTimeout(() => openReader(18, 'Al-Kahf', 'surah'), 500);" class="inline-flex items-center px-6 py-2 bg-[#d4af37] text-[#0f2b19] font-bold rounded-full hover:bg-white transition-all shadow-lg shadow-[#d4af37]/20 transform hover:-translate-y-1">
                              <i class="fas fa-quran mr-2"></i> Read Kahf
                          </a>
                     </div>
@@ -395,7 +398,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
 
         grid.innerHTML = prayers.map(p => `
-            <div id="card-${p.id}" class="glass p-4 rounded-2xl text-center border border-white/20 relative group transition-all duration-500 hover:-translate-y-2 dark:bg-gray-800/40 ${p.label === "Jumu'ah" ? 'border-[#d4af37] shadow-[0_0_20px_rgba(212,175,55,0.15)]' : ''}">
+            <div id="card-${p.id}" onclick="openFazilat('${p.id}')" class="glass cursor-pointer p-4 rounded-2xl text-center border border-white/20 relative group transition-all duration-500 hover:-translate-y-2 dark:bg-gray-800/40 ${p.label === "Jumu'ah" ? 'border-[#d4af37] shadow-[0_0_20px_rgba(212,175,55,0.15)]' : ''}">
                 <div class="absolute -right-6 -top-6 opacity-10 text-7xl text-[#d4af37] group-hover:rotate-12 transition-transform"><i class="fas ${p.icon}"></i></div>
                 <div class="w-10 h-10 mx-auto bg-[#d4af37]/10 rounded-full flex items-center justify-center text-[#d4af37] mb-3 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(212,175,55,0.2)]">
                     <i class="fas ${p.icon}"></i>
@@ -418,7 +421,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const timings = prayerTimesRaw;
         const prayers = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
 
-        setInterval(() => {
+        if (countdownInterval) clearInterval(countdownInterval);
+        countdownInterval = setInterval(() => {
             const now = new Date();
             let next = 'Fajr';
             let nextTimeStr = timings.Fajr;
@@ -469,109 +473,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    // --- QIBLA LOGIC ---
-    // --- QIBLA & COMPASS LOGIC ---
-    let qiblaBearing = 0;
 
-    function initQibla() {
-        const degDisplay = document.getElementById('qibla-deg');
-        if (!coordinates || !coordinates.lat) {
-            if (degDisplay) degDisplay.innerText = "N/A";
-            return;
-        }
-
-        const kaabaLat = 21.4225;
-        const kaabaLng = 39.8262;
-
-        const phi1 = coordinates.lat * Math.PI / 180;
-        const phi2 = kaabaLat * Math.PI / 180;
-        const dLam = (kaabaLng - coordinates.lng) * Math.PI / 180;
-
-        const y = Math.sin(dLam) * Math.cos(phi2);
-        const x = Math.cos(phi1) * Math.sin(phi2) - Math.sin(phi1) * Math.cos(phi2) * Math.cos(dLam);
-        let bearing = Math.atan2(y, x) * 180 / Math.PI;
-        qiblaBearing = (bearing + 360) % 360;
-
-        if (degDisplay) degDisplay.innerText = qiblaBearing.toFixed(0) + '°';
-
-        // Position Kaaba Marker on the rotating plane
-        const kaabaContainer = document.getElementById('kaaba-marker-container');
-        if (kaabaContainer) {
-            kaabaContainer.style.transform = `rotate(${qiblaBearing}deg)`;
-        }
-
-        // Initialize Compass Button
-        initCompass();
-    }
-
-    function initCompass() {
-        const btn = document.getElementById('start-compass-btn');
-        if (!btn) return;
-
-        // Remove old listener to avoid dupes (clone node)
-        const newBtn = btn.cloneNode(true);
-        btn.parentNode.replaceChild(newBtn, btn);
-
-        newBtn.addEventListener('click', async () => {
-            newBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Calibrating...';
-
-            if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-                try {
-                    const permissionState = await DeviceOrientationEvent.requestPermission();
-                    if (permissionState === 'granted') {
-                        window.addEventListener('deviceorientation', handleOrientation);
-                        newBtn.style.display = 'none';
-                    } else {
-                        alert("Permission denied. Enable sensors in settings.");
-                        newBtn.innerHTML = 'Permission Denied';
-                    }
-                } catch (e) {
-                    console.error(e);
-                    newBtn.innerHTML = 'Error'; // HTTPS required mostly
-                }
-            } else {
-                // Android/Desktop
-                window.addEventListener('deviceorientation', handleOrientation);
-                newBtn.style.display = 'none';
-
-                // If no event fires after 1s, assume desktop
-                setTimeout(() => {
-                    const headingDisplay = document.getElementById('compass-heading');
-                    if (headingDisplay && headingDisplay.innerText === '--°') {
-                        // Desktop fallback or sensor fail
-                        // Maybe show manual controls? Or just leave it.
-                    }
-                }, 2000);
-            }
-        });
-    }
-
-    function handleOrientation(event) {
-        let alpha = event.alpha;
-        // iOS Webkit
-        if (event.webkitCompassHeading) {
-            alpha = event.webkitCompassHeading;
-            // Rotation is reversed for webkitCompassHeading? 
-            // webkitCompassHeading is 0 at North, increases CW. 
-            // alpha is 0 at North, increases ... ? alpha is z-axis rotation.
-            // Usually we use -alpha for visual rotation.
-        } else {
-            // Android alpha: 0 at North? Not always true North without calibration.
-            // Absolute orientation:
-            if (!event.absolute && event.alpha === null) return;
-            // alpha usually 0 when device top points North.
-        }
-
-        // Fallback for null (desktop)
-        if (alpha === null || isNaN(alpha)) return;
-
-        const compassPlane = document.getElementById('compass-plane');
-        const headingDisplay = document.getElementById('compass-heading');
-
-        // Visual Rotation: Rotate Plane OPPOSITE to Heading
-        if (compassPlane) compassPlane.style.transform = `rotate(-${alpha}deg)`;
-        if (headingDisplay) headingDisplay.innerText = Math.round(alpha) + '°';
-    }
 
 
 

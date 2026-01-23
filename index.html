@@ -109,13 +109,7 @@
                         class="fas fa-praying-hands w-6 text-center text-[#d4af37]/80 group-hover:text-[#d4af37] transition-colors"></i>
                     <span class="ml-3 font-medium">Salah</span>
                 </a>
-                <a href="#"
-                    class="nav-link group relative flex items-center px-6 py-3.5 hover:bg-white/5 border-r-4 border-transparent hover:border-white/20 transition-all"
-                    data-target="view-qibla">
-                    <i
-                        class="fas fa-compass w-6 text-center text-[#d4af37]/80 group-hover:text-[#d4af37] transition-colors"></i>
-                    <span class="ml-3 font-medium">Qibla Compass</span>
-                </a>
+
                 <a href="#"
                     class="nav-link group relative flex items-center px-6 py-3.5 hover:bg-white/5 border-r-4 border-transparent hover:border-white/20 transition-all"
                     data-target="view-quran">
@@ -415,85 +409,7 @@
                 </div>
             </section>
 
-            <section id="view-qibla"
-                class="view-section hidden p-4 md:p-8 flex flex-col items-center justify-center min-h-[70vh] text-center animate-fade-in-up">
-                <div
-                    class="glass p-8 rounded-3xl max-w-md w-full relative overflow-hidden dark:bg-gray-800/60 shadow-2xl border-t border-white/50">
-                    <h2 class="text-3xl font-[Cormorant_Garamond] font-bold text-[#1a472a] mb-2 dark:text-[#d4af37]">
-                        Qibla Finder</h2>
-                    <p class="text-sm text-gray-500 mb-8 dark:text-gray-400">Locate the Kaaba with precision</p>
 
-                    <div class="relative w-72 h-72 mx-auto mb-8">
-                        <!-- Outer Ring -->
-                        <div
-                            class="absolute inset-0 rounded-full border-[8px] border-gray-100 shadow-[inset_0_0_20px_rgba(0,0,0,0.05)] dark:border-gray-700">
-                        </div>
-                        <div class="absolute inset-0 rounded-full border border-gray-300 m-2 dark:border-gray-600">
-                        </div>
-
-                        <!-- Rotating Compass Plane (Rotates opposite to heading) -->
-                        <div id="compass-plane"
-                            class="absolute inset-4 transition-transform duration-300 ease-out origin-center will-change-transform">
-                            <!-- Cardinal Directions -->
-                            <div class="absolute top-2 left-1/2 -translate-x-1/2 text-red-500 font-bold text-lg">N</div>
-                            <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-gray-400 font-bold text-sm">S
-                            </div>
-                            <div class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-sm">W
-                            </div>
-                            <div class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-sm">E
-                            </div>
-
-                            <!-- Ticks -->
-                            <div class="absolute inset-0 rounded-full border-4 border-dashed border-gray-200/50"></div>
-
-                            <!-- Kaaba Marker (Placed dynamically by JS relative to North) -->
-                            <div id="kaaba-marker-container"
-                                class="absolute inset-0 transition-transform duration-1000">
-                                <div class="absolute top-4 left-1/2 -translate-x-1/2 flex flex-col items-center -mt-1">
-                                    <div
-                                        class="w-10 h-10 bg-[#d4af37]/20 rounded-full flex items-center justify-center animate-pulse">
-                                        <i class="fas fa-kaaba text-2xl text-[#d4af37] drop-shadow-md"></i>
-                                    </div>
-                                    <i class="fas fa-caret-down text-[#d4af37] -mt-1"></i>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Center Fixed Needle (Phone Direction) -->
-                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                            <div
-                                class="w-16 h-16 bg-white/80 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center z-20 border border-gray-100 dark:bg-gray-800 dark:border-gray-600">
-                                <div class="w-2 h-2 bg-red-500 rounded-full"></div>
-                            </div>
-                            <!-- Beam -->
-                            <div class="absolute top-0 bottom-1/2 w-0.5 bg-red-500/50 h-1/2 z-10"></div>
-                        </div>
-                    </div>
-
-                    <div
-                        class="bg-emerald-50 text-emerald-900 p-5 rounded-2xl mb-6 border border-emerald-100 flex items-center justify-between dark:bg-emerald-900/20 dark:text-emerald-100 dark:border-emerald-800/50">
-                        <div class="text-left">
-                            <div class="text-[10px] uppercase tracking-wider opacity-60">Target (Qibla)</div>
-                            <div class="text-3xl font-bold font-mono text-[#1a472a] dark:text-[#d4af37]" id="qibla-deg">
-                                --°</div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-[10px] uppercase tracking-wider opacity-60">Current Heading</div>
-                            <div class="text-2xl font-bold font-mono text-gray-600 dark:text-gray-300"
-                                id="compass-heading">--°</div>
-                        </div>
-                    </div>
-
-                    <button id="start-compass-btn"
-                        class="w-full py-4 bg-gradient-to-r from-[#1a472a] to-[#064e3b] text-white rounded-xl font-bold hover:shadow-lg hover:-translate-y-0.5 transition-all shadow-md flex items-center justify-center gap-3 border border-[#d4af37]/20">
-                        <i class="fas fa-compass fa-spin-hover"></i> Calibrate Sensor
-                    </button>
-                    <p class="text-[10px] text-gray-400 mt-4 leading-relaxed">
-                        For best results, lay device flat. Grant sensor permissions if asked. <br>
-                        Magnetic interference may affect accuracy.
-                    </p>
-                </div>
-            </section>
 
             <!-- Quran View -->
             <section id="view-quran" class="view-section hidden p-4 md:p-8 space-y-8 animate-fade-in-up">

@@ -29,15 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             document.querySelectorAll('.nav-link').forEach(l => {
-                l.classList.remove('active', 'bg-[#fdfaf6]/10', 'border-[#c5a059]');
-                l.classList.add('border-transparent');
-                l.querySelector('i').classList.remove('text-[#c5a059]');
-                l.querySelector('i').classList.add('text-[#c5a059]/80');
+                l.classList.remove('active');
             });
-            link.classList.add('active', 'bg-[#fdfaf6]/10', 'border-[#c5a059]');
-            link.classList.remove('border-transparent');
-            link.querySelector('i').classList.add('text-[#c5a059]');
-            link.querySelector('i').classList.remove('text-[#c5a059]/80');
+            link.classList.add('active');
 
             const targetId = link.getAttribute('data-target');
             sections.forEach(sec => sec.classList.add('hidden'));
@@ -75,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1000);
 
         const now = new Date();
-        if (headerDate) headerDate.innerHTML = `<span style="color:#24423a">${now.toLocaleDateString('en-US', { weekday: 'long' })}</span>, ${now.toLocaleDateString()}`;
+        if (headerDate) headerDate.innerHTML = `<span class="text-[#10b981] font-bold">${now.toLocaleDateString('en-US', { weekday: 'short' })}</span> • <span class="opacity-60">${now.toLocaleDateString()}</span>`;
 
         try {
             const res = await fetch(`https://api.aladhan.com/v1/gToH?date=${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()}`);
@@ -83,8 +77,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.code === 200) {
                 const h = data.data.hijri;
                 const g = data.data.gregorian;
-                if (hDateEl) hDateEl.innerHTML = `<span class="text-2xl font-bold text-[#c5a059]">${h.day}</span> ${h.month.en} ${h.year} AH`;
-                if (gDateEl) gDateEl.innerHTML = `<span class="text-2xl font-bold text-blue-600">${g.day}</span> ${g.month.en} ${g.year} AD`;
+                if (hDateEl) hDateEl.innerHTML = `<span class="text-3xl font-black text-[#10b981] [text-shadow:0_0_10px_rgba(16,185,129,0.5)]">${h.day}</span> <span class="uppercase tracking-widest text-xs">${h.month.en} ${h.year} AH</span>`;
+                if (gDateEl) gDateEl.innerHTML = `<span class="text-3xl font-black text-slate-400">${g.day}</span> <span class="uppercase tracking-widest text-xs">${g.month.en} ${g.year} AD</span>`;
             }
         } catch (e) { }
     }
@@ -306,29 +300,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // RENDER FARZ
         farzGrid.innerHTML = farzData.map(d => `
-            <div class="glass p-6 rounded-2xl border-l-4 border-emerald-500 relative overflow-hidden group hover:-translate-y-1 transition-transform dark:bg-gray-800 cursor-pointer hover:shadow-lg transition-all" onclick="openFazilat('${d.name}')">
-                <div class="absolute -right-4 -top-4 opacity-10 text-8xl text-emerald-500"><i class="fas ${d.icon}"></i></div>
-                <h3 class="text-2xl font-bold text-[#24423a] mb-1 font-[Cormorant_Garamond] dark:text-white group-hover:underline decoration-emerald-500/50 underline-offset-4 decoration-2">${d.name} <i class="fas fa-info-circle text-xs text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity ml-2 align-middle"></i></h3>
-                <p class="text-sm text-gray-500 font-mono mb-3 dark:text-gray-400">${d.time}</p>
-                <div class="p-3 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
-                     <p class="text-xs font-bold text-emerald-700 uppercase mb-1 dark:text-emerald-400">Rakats</p>
-                     <p class="text-sm font-medium text-gray-800 dark:text-gray-200">${d.rakat}</p>
+            <div class="glass p-6 rounded-2xl border-l-4 border-[#10b981] relative overflow-hidden group hover:-translate-y-1 transition-all cursor-pointer" onclick="openFazilat('${d.name}')">
+                <div class="absolute -right-4 -top-4 opacity-5 text-8xl text-[#10b981]"><i class="fas ${d.icon}"></i></div>
+                <h3 class="text-2xl font-black text-white mb-1 font-[Playfair_Display] group-hover:text-[#10b981] transition-colors">${d.name}</h3>
+                <p class="text-[10px] text-slate-500 font-mono tracking-widest uppercase mb-3">${d.time}</p>
+                <div class="p-3 bg-[#10b981]/10 rounded-lg border border-[#10b981]/20">
+                     <p class="text-[10px] font-black text-[#10b981] uppercase mb-1 tracking-widest">Protocol // Rakats</p>
+                     <p class="text-sm font-medium text-slate-300">${d.rakat}</p>
                 </div>
             </div>
         `).join('');
 
         // RENDER NAFIL
         nafilGrid.innerHTML = nafilData.map(d => `
-            <div class="glass p-6 rounded-2xl border-t-4 border-[#c5a059] bg-[#c5a059]/5 relative overflow-hidden group hover:-translate-y-1 transition-transform dark:bg-gray-800 cursor-pointer hover:shadow-lg transition-all" onclick="openFazilat('${d.name}')">
-                ${d.badge ? `<div class="absolute top-0 right-0 bg-[#c5a059] text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg uppercase tracking-wider shadow-sm">${d.badge}</div>` : ''}
-                <div class="absolute -right-4 -top-4 opacity-10 text-8xl text-[#c5a059]"><i class="fas ${d.icon}"></i></div>
-                <h3 class="text-2xl font-bold text-[#24423a] mb-1 font-[Cormorant_Garamond] dark:text-[#c5a059] group-hover:underline decoration-[#c5a059]/50 underline-offset-4 decoration-2">${d.name} <i class="fas fa-info-circle text-xs text-[#c5a059] opacity-0 group-hover:opacity-100 transition-opacity ml-2 align-middle"></i></h3>
-                <p class="text-xs text-[#c5a059] uppercase tracking-widest font-bold mb-3">Window</p>
-                <div class="text-2xl font-mono font-bold text-gray-800 mb-3 dark:text-gray-200">${d.time}</div>
-                <div class="mb-3 p-2 bg-[#fdfaf6]/50 rounded border border-[#c5a059]/20 w-fit backdrop-blur-sm dark:bg-black/20">
-                    <span class="text-xs font-bold text-[#c5a059] uppercase">Rakat:</span> <span class="text-sm font-bold dark:text-white">${d.rakat}</span>
+            <div class="glass p-6 rounded-2xl border-t-4 border-[#10b981] relative overflow-hidden group hover:-translate-y-1 transition-all cursor-pointer" onclick="openFazilat('${d.name}')">
+                ${d.badge ? `<div class="absolute top-0 right-0 bg-[#10b981] text-black text-[9px] font-black px-2 py-1 rounded-bl-lg uppercase tracking-wider">${d.badge}</div>` : ''}
+                <div class="absolute -right-4 -top-4 opacity-5 text-8xl text-[#10b981]"><i class="fas ${d.icon}"></i></div>
+                <h3 class="text-2xl font-black text-white mb-1 font-[Playfair_Display] group-hover:text-[#10b981] transition-colors">${d.name}</h3>
+                <p class="text-[10px] text-[#10b981] uppercase tracking-[0.2em] font-black mb-3">Sync Window</p>
+                <div class="text-3xl font-mono font-black text-slate-200 [text-shadow:0_0_10px_rgba(16,185,129,0.3)] mb-3">${d.time}</div>
+                <div class="mb-3 p-2 bg-white/5 rounded border border-[#10b981]/20 w-fit">
+                    <span class="text-[10px] font-black text-[#10b981] uppercase tracking-widest">Protocol:</span> <span class="text-xs font-medium text-white ml-2">${d.rakat}</span>
                 </div>
-                <p class="text-sm text-gray-600 italic leading-relaxed dark:text-gray-400">${d.desc}</p>
+                <p class="text-xs text-slate-400 italic leading-relaxed">${d.desc}</p>
             </div>
         `).join('');
     }
@@ -367,24 +361,21 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isFriday && !document.getElementById('friday-banner')) {
             const banner = document.createElement('div');
             banner.id = 'friday-banner';
-            banner.className = 'col-span-full bg-gradient-to-r from-[#24423a] to-[#0f2b19] p-6 rounded-2xl shadow-xl border border-[#c5a059]/30 mb-6 text-white relative overflow-hidden animate-fade-in-up';
+            banner.className = 'col-span-full bg-[#141414] p-8 rounded-3xl border border-[#10b981]/30 mb-8 relative overflow-hidden prayer-widget-glow';
             banner.innerHTML = `
-                <div class="absolute top-0 right-0 w-64 h-64 bg-[#c5a059] opacity-10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
+                <div class="isl-mesh opacity-20"></div>
                 <div class="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
                     <div class="text-center md:text-left">
-                        <h2 class="text-3xl font-[Cormorant_Garamond] font-bold text-[#c5a059] mb-2">Jumu'ah Mubarak!</h2>
-                        <p class="text-sm opacity-90 mb-4 font-light">Don't forget the Sunnah acts of this blessed day.</p>
-                        <div class="flex flex-wrap gap-3 justify-center md:justify-start">
-                            <span class="px-3 py-1 bg-[#fdfaf6]/10 rounded-full text-xs border border-[#c5a059]/30 flex items-center gap-2 backdrop-blur-md"><i class="fas fa-book-open text-[#c5a059]"></i> Surah Al-Kahf</span>
-                            <span class="px-3 py-1 bg-[#fdfaf6]/10 rounded-full text-xs border border-[#c5a059]/30 flex items-center gap-2 backdrop-blur-md"><i class="fas fa-comment-dots text-[#c5a059]"></i> Durood</span>
-                            <span class="px-3 py-1 bg-[#fdfaf6]/10 rounded-full text-xs border border-[#c5a059]/30 flex items-center gap-2 backdrop-blur-md"><i class="fas fa-hands-praying text-[#c5a059]"></i> Dua (Hour of Acceptance)</span>
+                        <h2 class="text-4xl font-[Playfair_Display] font-black text-white mb-2 [text-shadow:0_0_15px_rgba(16,185,129,0.5)]">Jumu'ah Mubarak!</h2>
+                        <p class="text-xs text-[#10b981] font-mono tracking-widest uppercase mb-4">Master Sync Active // Blessings Multiplied</p>
+                        <div class="flex flex-wrap gap-2 justify-center md:justify-start">
+                             <span class="px-3 py-1 bg-[#10b981]/10 rounded border border-[#10b981]/20 text-[10px] font-black text-[#10b981] uppercase tracking-widest">Surah Al-Kahf</span>
+                             <span class="px-3 py-1 bg-[#10b981]/10 rounded border border-[#10b981]/20 text-[10px] font-black text-[#10b981] uppercase tracking-widest">Durood ++</span>
                         </div>
                     </div>
-                    <div class="text-center shrink-0">
-                         <a href="#" onclick="document.querySelector('[data-target=view-quran]').click(); setTimeout(() => openReader(18, 'Al-Kahf', 'surah'), 500);" class="inline-flex items-center px-6 py-2 bg-[#c5a059] text-[#0f2b19] font-bold rounded-full hover:bg-[#fdfaf6] transition-all shadow-lg shadow-[#c5a059]/20 transform hover:-translate-y-1">
-                             <i class="fas fa-quran mr-2"></i> Read Kahf
-                         </a>
-                    </div>
+                    <button onclick="document.querySelector('[data-target=view-quran]').click()" class="bg-[#10b981] text-black px-10 py-3 rounded-full font-black uppercase tracking-widest hover:scale-105 transition-all">
+                        Execute Kahf
+                    </button>
                 </div>
             `;
             // Insert before grid. Grid might be in a wrapper. 
@@ -404,13 +395,13 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
 
         grid.innerHTML = prayers.map(p => `
-            <div id="card-${p.id}" onclick="openFazilat('${p.id}')" class="glass cursor-pointer p-4 rounded-2xl text-center border border-white/20 relative group transition-all duration-500 hover:-translate-y-2 dark:bg-gray-800/40 ${p.label === "Jumu'ah" ? 'border-[#c5a059] shadow-[0_0_20px_rgba(197,160,89,0.15)]' : ''}">
-                <div class="absolute -right-6 -top-6 opacity-10 text-7xl text-[#c5a059] group-hover:rotate-12 transition-transform"><i class="fas ${p.icon}"></i></div>
-                <div class="w-10 h-10 mx-auto bg-[#c5a059]/10 rounded-full flex items-center justify-center text-[#c5a059] mb-3 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(197,160,89,0.2)]">
+            <div id="card-${p.id}" onclick="openFazilat('${p.id}')" class="glass cursor-pointer p-6 rounded-2xl text-center border border-[#10b981]/10 relative group transition-all duration-500 hover:-translate-y-2 [box-shadow:0_8px_32_rgba(0,0,0,0.5)] hover:border-[#10b981]">
+                <div class="absolute -right-4 -top-4 opacity-10 text-6xl text-[#10b981] group-hover:rotate-12 transition-transform"><i class="fas ${p.icon}"></i></div>
+                <div class="w-10 h-10 mx-auto bg-[#10b981]/10 rounded-full flex items-center justify-center text-[#10b981] mb-3 group-hover:scale-110 transition-transform [box-shadow:0_0_15px_rgba(16,185,129,0.3)]">
                     <i class="fas ${p.icon}"></i>
                 </div>
-                <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1 dark:text-gray-400 ${p.label === "Jumu'ah" ? 'text-[#c5a059]' : ''}">${p.label || p.id}</p>
-                <p class="text-2xl font-[Amiri] font-bold text-gray-800 dark:text-white group-hover:text-[#c5a059] transition-colors">${formatTo12Hour(timings[p.id])}</p>
+                <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1 group-hover:text-[#10b981] transition-colors">${p.label || p.id}</p>
+                <p class="text-3xl font-mono font-black text-white group-hover:text-liquid-silver transition-colors">${formatTo12Hour(timings[p.id])}</p>
             </div>
         `).join('');
     }
@@ -453,9 +444,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Highlight Logic
             document.querySelectorAll('[id^="card-"]').forEach(el => {
-                el.classList.remove('ring-2', 'ring-[#c5a059]', 'neon-glow');
+                el.classList.remove('ring-1', 'ring-[#10b981]', 'prayer-widget-glow');
                 if (el.id === `card-${next}`) {
-                    el.classList.add('ring-2', 'ring-[#c5a059]', 'neon-glow');
+                    el.classList.add('ring-1', 'ring-[#10b981]', 'prayer-widget-glow');
                 }
             });
 
@@ -1830,13 +1821,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!grid) return;
         const filtered = cat === 'all' ? duas : duas.filter(d => d.cat === cat);
         grid.innerHTML = filtered.map(d => `
-            <div class="bg-[#fdfaf6] p-6 rounded-xl shadow-sm relative overflow-hidden group hover:shadow-lg transition-shadow border-l-4 dark:bg-gray-800 dark:border-gray-700" style="border-left-color:#24423a">
-                 <div class="absolute top-0 right-0 p-2 bg-gray-500 rounded-bl-xl text-xs font-bold text-white uppercase shadow-sm">${d.cat}</div>
-                 <h3 class="font-bold text-lg mb-2 text-[#24423a] dark:text-[#c5a059]">${d.title}</h3>
-                 <div class="text-right font-[Amiri] text-2xl mb-3 text-gray-700 leading-loose dark:text-gray-200" style="direction:rtl;">${d.ar}</div>
-                 <div class="font-medium text-[#c5a059] mb-2 italic text-sm font-serif opacity-90">${d.tr}</div>
-                 <div class="text-gray-500 text-sm italic border-t border-gray-100 pt-3 dark:border-gray-700 dark:text-gray-400">"${d.en}"</div>
-                 <div class="text-xs text-gray-400 mt-2 text-right opacity-70">— ${d.ref}</div>
+            <div class="glass p-8 rounded-2xl border border-[#10b981]/10 relative overflow-hidden group hover:border-[#10b981] transition-all duration-500">
+                 <div class="absolute top-0 right-0 p-2 bg-[#10b981]/10 text-[9px] font-black text-[#10b981] uppercase tracking-[0.2em] rounded-bl-lg">${d.cat}</div>
+                 <h3 class="font-black text-xl mb-4 text-white font-[Playfair_Display] group-hover:text-[#10b981] transition-colors">${d.title}</h3>
+                 <div class="text-right font-[Amiri] text-3xl mb-6 text-slate-100 leading-loose" style="direction:rtl;">${d.ar}</div>
+                 <div class="font-medium text-[#10b981] mb-3 italic text-xs tracking-wide opacity-90">${d.tr}</div>
+                 <div class="text-slate-400 text-sm italic border-t border-white/10 pt-4 font-light">"${d.en}"</div>
+                 <div class="text-[9px] font-black uppercase tracking-widest text-slate-500 mt-4 text-right">— ${d.ref}</div>
             </div>
         `).join('');
     }
@@ -1853,30 +1844,26 @@ document.addEventListener('DOMContentLoaded', () => {
         renderer.setSize(400, 400);
         cont.appendChild(renderer.domElement);
         const geo = new THREE.BoxGeometry(2, 2.2, 2);
-        const mat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.6 });
+        const mat = new THREE.MeshStandardMaterial({ color: 0x051a14, roughness: 0.2, metalness: 0.8 }); // Cyber Dark Green
         const cube = new THREE.Mesh(geo, mat);
         const goldGeo = new THREE.BoxGeometry(2.05, 0.4, 2.05);
-        const goldMat = new THREE.MeshStandardMaterial({ color: 0xc5a059, metalness: 0.8, roughness: 0.2 });
+        const goldMat = new THREE.MeshStandardMaterial({ color: 0x10b981, emissive: 0x10b981, emissiveIntensity: 0.5, metalness: 0.9 }); // Neon Emerald Band
         const band = new THREE.Mesh(goldGeo, goldMat);
         band.position.y = 0.5;
         const group = new THREE.Group(); group.add(cube); group.add(band); scene.add(group);
-        const light = new THREE.DirectionalLight(0xffffff, 1); light.position.set(5, 5, 5); scene.add(light); scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+        const light = new THREE.DirectionalLight(0x10b981, 1); light.position.set(5, 5, 5); scene.add(light); scene.add(new THREE.AmbientLight(0xffffff, 0.4));
         function animate() { requestAnimationFrame(animate); group.rotation.y += 0.005; group.rotation.x = Math.sin(Date.now() * 0.001) * 0.1; renderer.render(scene, camera); }
         animate();
     }
     function initEffects() {
-        const glow = document.createElement('div');
-        glow.id = 'noor-glow';
-        glow.style.cssText = 'position:fixed; pointer-events:none; width:500px; height:500px; border-radius:50%; background:radial-gradient(circle, rgba(197,160,89,0.15) 0%, rgba(255,255,255,0) 70%); transform:translate(-50%, -50%); z-index:9999; mix-blend-mode:screen;';
-        document.body.appendChild(glow);
-        document.addEventListener('mousemove', (e) => { glow.style.left = e.clientX + 'px'; glow.style.top = e.clientY + 'px'; });
+        // Soft Matte interactions - remove glowing cursor
         document.addEventListener('mousemove', (e) => {
             document.querySelectorAll('.hover-card-3d').forEach(card => {
                 const rect = card.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
                 if (x > 0 && x < rect.width && y > 0 && y < rect.height) {
-                    card.style.transform = `perspective(1000px) rotateX(${((y - rect.height / 2) / (rect.height / 2)) * -5}deg) rotateY(${((x - rect.width / 2) / (rect.width / 2)) * 5}deg) scale(1.02)`;
+                    card.style.transform = `perspective(1000px) rotateX(${((y - rect.height / 2) / (rect.height / 2)) * -2}deg) rotateY(${((x - rect.width / 2) / (rect.width / 2)) * 2}deg) scale(1.01)`;
                 } else card.style.transform = 'perspective(1000px) scale(1)';
             });
         });
@@ -2082,9 +2069,9 @@ window.updateAtmosphere = function () {
     if (!section) return;
 
     // Apply background color to the section based on time
-    if (hour >= 17 && hour < 19) section.style.backgroundColor = "#1d352f"; // Sunset Deep Pine
-    else if (hour >= 19 || hour < 5) section.style.backgroundColor = "#12211d"; // Night Dark Pine
-    else section.style.backgroundColor = "#24423a"; // Day Bright Pine
+    if (hour >= 17 && hour < 19) section.style.backgroundColor = "#064e3b"; // Sunset Cyber Emerald
+    else if (hour >= 19 || hour < 5) section.style.backgroundColor = "#051a14"; // Night Cyber Gunmetal
+    else section.style.backgroundColor = "#0a0a0a"; // Day Gunmetal
 }
 // Init Atmosphere
 setInterval(window.updateAtmosphere, 60000); // Check every minute
@@ -2169,79 +2156,12 @@ function displayRandomDua() {
 
 // Initialize Dua on Load
 setTimeout(displayRandomDua, 1000);
-initGlobalSparkles();
+// Sparkles disabled for Matte UI
+// initGlobalSparkles();
 
-// --- GLOBAL SPARKLE BACKGROUND ---
+// --- GLOBAL SPARKLE BACKGROUND (Disabled) ---
 function initGlobalSparkles() {
-    const canvas = document.createElement('canvas');
-    canvas.id = 'sparkle-bg';
-    Object.assign(canvas.style, {
-        position: 'fixed',
-        top: '0',
-        left: '0',
-        width: '100%',
-        height: '100%',
-        zIndex: '-1',
-        pointerEvents: 'none'
-    });
-    document.body.prepend(canvas);
-
-    const ctx = canvas.getContext('2d');
-    let width, height;
-    let particles = [];
-
-    function resize() {
-        width = window.innerWidth;
-        height = window.innerHeight;
-        canvas.width = width;
-        canvas.height = height;
-        initParticles();
-    }
-
-    function initParticles() {
-        particles = [];
-        const count = width < 768 ? 40 : 100; // Particle count
-        for (let i = 0; i < count; i++) {
-            particles.push({
-                x: Math.random() * width,
-                y: Math.random() * height,
-                size: Math.random() * 2 + 0.5,
-                speedY: Math.random() * 0.4 - 0.2,
-                speedX: Math.random() * 0.4 - 0.2,
-                opacity: Math.random(),
-                fadeSpeed: Math.random() * 0.01 + 0.002,
-                color: Math.random() > 0.6 ? '#c5a059' : '#94a3b8' // Gold & Silver
-            });
-        }
-    }
-
-    function animate() {
-        ctx.clearRect(0, 0, width, height);
-
-        particles.forEach(p => {
-            p.x += p.speedX;
-            p.y += p.speedY;
-
-            if (p.x < 0) p.x = width;
-            if (p.x > width) p.x = 0;
-            if (p.y < 0) p.y = height;
-            if (p.y > height) p.y = 0;
-
-            p.opacity += p.fadeSpeed;
-            if (p.opacity > 1 || p.opacity < 0.1) p.fadeSpeed = -p.fadeSpeed;
-
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-            ctx.fillStyle = p.color;
-            ctx.globalAlpha = p.opacity;
-            ctx.fill();
-        });
-        requestAnimationFrame(animate);
-    }
-
-    window.addEventListener('resize', resize);
-    resize();
-    animate();
+    // Purposefully left empty for soft paper aesthetic
 }
 
 

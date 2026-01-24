@@ -1,297 +1,215 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Amiri:wght@400;700&family=Cormorant+Garamond:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Amiri:wght@400;700&family=Playfair+Display:wght@600;700;800&display=swap');
 
 :root {
-    --primary: #24423a;
-    /* Deep Pine */
-    --secondary: #1a3c34;
-    /* Darker Pine */
-    --gold: #c5a059;
-    /* Muted Gold to match Sand */
-    --sand: #f3e9dc;
-    /* Desert Sand */
-    --text-dark: #2c3e50;
-    --text-light: #fdfaf6;
+    --primary: #10b981;
+    /* Emerald Neon */
+    --primary-glow: rgba(16, 185, 129, 0.4);
+    --secondary: #064e3b;
+    /* Dark Emerald */
+    --accent: #e2e8f0;
+    /* Liquid Silver / Slate 200 */
+    --bg-dark: #0a0a0a;
+    /* Deep Gunmetal */
+    --bg-secondary: #141414;
+    /* Gunmetal */
+    --text-silver: #f8fafc;
+    --text-muted: #94a3b8;
+    --glass: rgba(20, 20, 20, 0.7);
+    --glass-border: rgba(16, 185, 129, 0.15);
 }
 
-/* --- ANIMATED MESH BACKGROUND (OCEAN THEME) --- */
+/* --- CYBER-SACRED BACKGROUND --- */
 body {
     font-family: 'Inter', sans-serif;
-    color: var(--text-dark);
-    /* Light Mode: Desert Sand base */
-    background: var(--sand);
+    color: var(--text-silver);
+    background-color: var(--bg-dark);
     background-image:
-        radial-gradient(at 0% 0%, rgba(36, 66, 58, 0.05) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(197, 160, 89, 0.1) 0px, transparent 50%);
+        radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%),
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l30 30-30 30-30-30L30 0zm0 10L10 30l20 20 20-20-20-20z' fill='%2310b981' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
     min-height: 100vh;
     line-height: 1.6;
+    overflow-x: hidden;
 }
 
-body.dark {
-    /* Dark Mode: Deep Pine base */
-    background: #12211d;
-    background-image:
-        radial-gradient(circle at 50% 0%, #24423a 0%, transparent 60%),
-        radial-gradient(at 100% 100%, rgba(26, 60, 52, 0.2) 0px, transparent 50%);
-    color: var(--text-light);
-}
-
-@keyframes gradientBG {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-/* Typography Defaults */
+/* Typography */
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Playfair Display', serif;
+    letter-spacing: -0.02em;
 }
 
 .arabic-font {
     font-family: 'Amiri', serif;
 }
 
-/* --- GLASSMORPHISM & NEON --- */
+/* --- LIQUID SILVER TEXT --- */
+.text-liquid-silver {
+    background: linear-gradient(180deg, #ffffff 0%, #94a3b8 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
 
-/* Glass Cards (Light Mode) */
-/* Glass Cards (Light Mode) */
+/* --- FROSTED CYBER GLASS --- */
 .glass,
 .bg-white {
-    background: rgba(255, 255, 255, 0.95) !important;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(226, 232, 240, 0.8);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    background: var(--glass) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
 }
 
-/* Glass Cards (Dark Mode) */
-.dark .glass,
-.dark .bg-white,
-.dark .bg-gray-800 {
-    background: rgba(15, 23, 42, 0.85) !important;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(212, 175, 55, 0.15);
-    /* Subtle Gold */
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-    color: #f1f5f9;
+/* --- EMERALD NEON GLOW --- */
+.neon-glow-emerald {
+    box-shadow: 0 0 15px var(--primary-glow), inset 0 0 5px var(--primary-glow);
+    border: 1px solid var(--primary);
 }
 
-/* Neon Glows (Teal) */
-.neon-glow {
-    box-shadow: 0 0 15px rgba(45, 212, 191, 0.3), inset 0 0 10px rgba(45, 212, 191, 0.05);
-    border: 1px solid rgba(45, 212, 191, 0.4);
+.prayer-widget-glow {
+    box-shadow: 0 0 30px rgba(16, 185, 129, 0.2);
+    border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
-.dark .neon-glow {
-    box-shadow: 0 0 25px rgba(45, 212, 191, 0.25), inset 0 0 15px rgba(45, 212, 191, 0.1);
-    border: 1px solid rgba(45, 212, 191, 0.5);
+/* Navigation Links */
+.nav-link {
+    color: var(--text-muted);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Active Nav Link Glow */
+.nav-link:hover {
+    color: var(--primary);
+    background: rgba(16, 185, 129, 0.05);
+}
+
 .nav-link.active {
-    background: rgba(212, 175, 55, 0.1);
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
-    border-right: 4px solid var(--gold);
+    color: var(--primary) !important;
+    background: rgba(16, 185, 129, 0.1);
+    border-right: 3px solid var(--primary);
+    text-shadow: 0 0 10px var(--primary-glow);
 }
 
 .nav-link.active i {
-    filter: drop-shadow(0 0 8px rgba(45, 212, 191, 0.6));
-    color: var(--gold) !important;
+    color: var(--primary) !important;
+    filter: drop-shadow(0 0 5px var(--primary));
 }
 
-/* Texts in Dark Mode */
-.dark .text-gray-800 {
-    color: #f0f9ff !important;
-}
-
-.dark .text-gray-500 {
-    color: #94a3b8 !important;
-}
-
-/* Scrollbar (Teal) */
+/* Scrollbar */
 ::-webkit-scrollbar {
     width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-    background: transparent;
+    background: var(--bg-dark);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgba(45, 212, 191, 0.5);
+    background: var(--secondary);
     border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: rgba(45, 212, 191, 0.9);
+    background: var(--primary);
 }
 
-/* Hover Effects */
+/* --- UI ELEMENTS --- */
 .hover-card-3d:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(15, 23, 42, 0.1);
+    transform: translateY(-5px) scale(1.02);
+    border-color: var(--primary);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 20px var(--primary-glow);
 }
 
-/* Utils */
 .view-section {
-    animation: fadeIn 0.6s ease-out;
+    animation: cyberFadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-@keyframes fadeIn {
+@keyframes cyberFadeIn {
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: scale(0.98) translateY(10px);
+        filter: blur(10px);
     }
 
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: scale(1) translateY(0);
+        filter: blur(0);
     }
 }
 
-/* --- SILK/GLASS SHIMMER EFFECT --- */
-.shimmer-card {
-    position: relative;
-    overflow: hidden;
-}
-
-.shimmer-card::after {
-    content: '';
+/* --- ISLAMIC AESTHETICS REDESIGNED --- */
+.isl-mesh {
     position: absolute;
-    top: 0;
-    left: -150%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to right,
-            rgba(255, 255, 255, 0) 0%,
-            rgba(255, 255, 255, 0.1) 40%,
-            rgba(255, 255, 255, 0.4) 50%,
-            rgba(255, 255, 255, 0.1) 60%,
-            rgba(255, 255, 255, 0) 100%);
-    transform: skewX(-25deg);
-    animation: silkShimmer 6s infinite ease-in-out;
-    z-index: 20;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2310b981' fill-opacity='0.05' fill-rule='evenodd'%3E%3Cpath d='M0 0h40v40H0V0zm40 40h40v40H40V40zm0-40h40v40H40V0zM0 40h40v40H0V40z'/%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.3;
     pointer-events: none;
-    mix-blend-mode: overlay;
-}
-
-@keyframes silkShimmer {
-    0% {
-        left: -150%;
-        opacity: 0;
-    }
-
-    30% {
-        opacity: 1;
-    }
-
-    50% {
-        left: 150%;
-        opacity: 0;
-    }
-
-    100% {
-        left: 150%;
-        opacity: 0;
-    }
-}
-
-/* Weather atmospheres handled dynamically or by mesh bg */
-
-/* --- ISLAMIC AESTHETICS --- */
-.islamic-pattern-bg {
-    background-color: var(--primary);
-    /* geometric pattern overlay */
-    background-image:
-        radial-gradient(rgba(243, 233, 220, 0.05) 2px, transparent 2px),
-        radial-gradient(rgba(243, 233, 220, 0.05) 2px, transparent 2px);
-    background-size: 30px 30px;
-    background-position: 0 0, 15px 15px;
 }
 
 .mihrab-arch {
-    /* User Requested Style */
-    background: var(--sand);
-    color: var(--primary);
-    border-radius: 120px 120px 20px 20px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
-    transition: border-radius 0.3s ease;
-    border: none;
-    overflow: hidden;
-}
-
-@media (min-width: 768px) {
-    .mihrab-arch {
-        border-radius: 250px 250px 40px 40px;
-    }
-}
-
-.whatsapp-btn {
-    background-color: #25D366;
-    color: white;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.whatsapp-btn:active {
-    transform: scale(0.95);
+    background: var(--bg-secondary);
+    border: 1px solid var(--glass-border);
+    border-radius: 150px 150px 30px 30px;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+    color: var(--text-silver);
 }
 
 .ornamental-separator {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    color: var(--gold);
-    margin: 1.5rem 0;
+    color: var(--primary);
     font-family: 'Amiri', serif;
+    opacity: 0.8;
 }
 
 .ornamental-separator::before,
 .ornamental-separator::after {
-    content: '';
-    flex: 1;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-}
-
-.ornamental-separator span {
-    padding: 0 1rem;
-    font-size: 1.5rem;
+    border-bottom: 1px solid var(--primary-glow);
 }
 
 .calligraphic-divider {
-    height: 1px;
-    background: radial-gradient(circle, var(--gold) 0%, transparent 100%);
-    margin: 2rem auto;
-    width: 80%;
-    opacity: 0.6;
+    background: radial-gradient(circle, var(--primary) 0%, transparent 100%);
+    height: 1.5px;
+    opacity: 0.5;
 }
 
-/* --- FRIDAY MODE SPECIAL --- */
+/* --- SEARCH & INPUTS --- */
+input {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+}
+
+input:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 10px var(--primary-glow) !important;
+}
+
+button.primary {
+    background: var(--primary);
+    color: black;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    box-shadow: 0 0 15px var(--primary-glow);
+}
+
+button.primary:hover {
+    background: #34d399;
+    transform: translateY(-2px);
+    box-shadow: 0 0 25px var(--primary-glow);
+}
+
+/* --- FRIDAY MODE --- */
 body.friday-mode {
-    /* Enhanced Gold/Green Atmosphere for Jumu'ah */
-    background-image:
-        radial-gradient(at 0% 0%, rgba(212, 175, 55, 0.08) 0px, transparent 60%),
-        radial-gradient(at 100% 100%, rgba(5, 150, 105, 0.1) 0px, transparent 60%) !important;
+    background-color: #051a14;
 }
 
 body.friday-mode .glass {
-    border-color: rgba(212, 175, 55, 0.25);
-    box-shadow: 0 8px 30px rgba(212, 175, 55, 0.08);
-}
-
-body.friday-mode .nav-link.active {
-    background: rgba(212, 175, 55, 0.15);
-    box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+    border-color: var(--primary);
+    box-shadow: 0 0 20px var(--primary-glow);
 }

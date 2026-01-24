@@ -1,215 +1,182 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Amiri:wght@400;700&family=Playfair+Display:wght@600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Amiri:wght@400;700&family=Cormorant+Garamond:wght@600;700&display=swap');
 
 :root {
-    --primary: #10b981;
-    /* Emerald Neon */
-    --primary-glow: rgba(16, 185, 129, 0.4);
-    --secondary: #064e3b;
-    /* Dark Emerald */
-    --accent: #e2e8f0;
-    /* Liquid Silver / Slate 200 */
-    --bg-dark: #0a0a0a;
-    /* Deep Gunmetal */
-    --bg-secondary: #141414;
-    /* Gunmetal */
-    --text-silver: #f8fafc;
-    --text-muted: #94a3b8;
-    --glass: rgba(20, 20, 20, 0.7);
-    --glass-border: rgba(16, 185, 129, 0.15);
+    --primary: #24423a;
+    /* Deep Pine */
+    --secondary: #1a3c34;
+    /* Darker Pine */
+    --gold: #c5a059;
+    /* Muted Gold to match Sand */
+    --sand: #f3e9dc;
+    /* Desert Sand */
+    --text-dark: #2c3e50;
+    --text-light: #fdfaf6;
 }
 
-/* --- CYBER-SACRED BACKGROUND --- */
+/* --- BASE STYLES --- */
 body {
     font-family: 'Inter', sans-serif;
-    color: var(--text-silver);
-    background-color: var(--bg-dark);
+    color: var(--text-dark);
+    /* Light Mode: Desert Sand paper-like base */
+    background-color: var(--sand);
     background-image:
-        radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%),
-        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l30 30-30 30-30-30L30 0zm0 10L10 30l20 20 20-20-20-20z' fill='%2310b981' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+        linear-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.2) 1px, transparent 1px),
+        radial-gradient(at 0% 0%, rgba(36, 66, 58, 0.03) 0px, transparent 50%);
+    background-size: 50px 50px, 50px 50px, 100% 100%;
     min-height: 100vh;
     line-height: 1.6;
-    overflow-x: hidden;
 }
 
-/* Typography */
+body.dark {
+    /* Dark Mode: Deep Pine base */
+    background: #12211d;
+    background-image:
+        radial-gradient(circle at 50% 0%, #24423a 0%, transparent 60%),
+        radial-gradient(at 100% 100%, rgba(26, 60, 52, 0.2) 0px, transparent 50%);
+    color: var(--text-light);
+}
+
+/* Typography Defaults */
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-    font-family: 'Playfair Display', serif;
-    letter-spacing: -0.02em;
+    font-family: 'Cormorant Garamond', serif;
 }
 
 .arabic-font {
     font-family: 'Amiri', serif;
 }
 
-/* --- LIQUID SILVER TEXT --- */
-.text-liquid-silver {
-    background: linear-gradient(180deg, #ffffff 0%, #94a3b8 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-}
-
-/* --- FROSTED CYBER GLASS --- */
+/* --- MATTE GLASS & PAPER CARDS --- */
 .glass,
 .bg-white {
-    background: var(--glass) !important;
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+    background: rgba(253, 250, 246, 0.98) !important;
+    /* Soft Paper White */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(36, 66, 58, 0.08);
+    /* More subtle ink-like border */
+    box-shadow: 0 10px 30px -15px rgba(36, 66, 58, 0.1);
+    /* Deep, soft shadow */
 }
 
-/* --- EMERALD NEON GLOW --- */
-.neon-glow-emerald {
-    box-shadow: 0 0 15px var(--primary-glow), inset 0 0 5px var(--primary-glow);
-    border: 1px solid var(--primary);
+.dark .glass,
+.dark .bg-white,
+.dark .bg-gray-800 {
+    background: rgba(26, 35, 33, 0.95) !important;
+    /* Matte Dark Pine */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(197, 160, 89, 0.1);
+    box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.4);
+    color: #f1f5f9;
 }
 
-.prayer-widget-glow {
-    box-shadow: 0 0 30px rgba(16, 185, 129, 0.2);
-    border: 1px solid rgba(16, 185, 129, 0.3);
-}
-
-/* Navigation Links */
-.nav-link {
-    color: var(--text-muted);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.nav-link:hover {
-    color: var(--primary);
-    background: rgba(16, 185, 129, 0.05);
-}
-
+/* Active Nav Link */
 .nav-link.active {
-    color: var(--primary) !important;
-    background: rgba(16, 185, 129, 0.1);
-    border-right: 3px solid var(--primary);
-    text-shadow: 0 0 10px var(--primary-glow);
+    background: rgba(212, 175, 55, 0.1);
+    border-right: 4px solid var(--gold);
 }
 
 .nav-link.active i {
-    color: var(--primary) !important;
-    filter: drop-shadow(0 0 5px var(--primary));
+    color: var(--gold) !important;
 }
 
-/* Scrollbar */
+/* Scrollbar (Pine Style) */
 ::-webkit-scrollbar {
     width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--bg-dark);
+    background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--secondary);
+    background: rgba(36, 66, 58, 0.2);
     border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--primary);
+    background: rgba(36, 66, 58, 0.5);
 }
 
-/* --- UI ELEMENTS --- */
+/* Hover Effects */
 .hover-card-3d:hover {
-    transform: translateY(-5px) scale(1.02);
-    border-color: var(--primary);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 20px var(--primary-glow);
+    transform: translateY(-3px);
+    box-shadow: 0 20px 40px -15px rgba(36, 66, 58, 0.15);
 }
 
+/* --- ANIMATIONS --- */
 .view-section {
-    animation: cyberFadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    animation: fadeIn 0.6s ease-out;
 }
 
-@keyframes cyberFadeIn {
+@keyframes fadeIn {
     from {
         opacity: 0;
-        transform: scale(0.98) translateY(10px);
-        filter: blur(10px);
+        transform: translateY(10px);
     }
 
     to {
         opacity: 1;
-        transform: scale(1) translateY(0);
-        filter: blur(0);
+        transform: translateY(0);
     }
 }
 
-/* --- ISLAMIC AESTHETICS REDESIGNED --- */
-.isl-mesh {
-    position: absolute;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2310b981' fill-opacity='0.05' fill-rule='evenodd'%3E%3Cpath d='M0 0h40v40H0V0zm40 40h40v40H40V40zm0-40h40v40H40V0zM0 40h40v40H0V40z'/%3E%3C/g%3E%3C/svg%3E");
-    opacity: 0.3;
-    pointer-events: none;
+/* --- ISLAMIC AESTHETICS --- */
+.islamic-pattern-bg {
+    background-color: var(--primary);
+    background-image:
+        radial-gradient(rgba(243, 233, 220, 0.05) 2px, transparent 2px),
+        radial-gradient(rgba(243, 233, 220, 0.05) 2px, transparent 2px);
+    background-size: 30px 30px;
+    background-position: 0 0, 15px 15px;
 }
 
 .mihrab-arch {
-    background: var(--bg-secondary);
-    border: 1px solid var(--glass-border);
-    border-radius: 150px 150px 30px 30px;
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
-    color: var(--text-silver);
+    background: var(--sand);
+    color: var(--primary);
+    border-radius: 120px 120px 20px 20px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+    transition: border-radius 0.3s ease;
+    overflow: hidden;
+}
+
+@media (min-width: 768px) {
+    .mihrab-arch {
+        border-radius: 250px 250px 40px 40px;
+    }
 }
 
 .ornamental-separator {
-    color: var(--primary);
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: var(--gold);
+    margin: 1.5rem 0;
     font-family: 'Amiri', serif;
-    opacity: 0.8;
 }
 
 .ornamental-separator::before,
 .ornamental-separator::after {
-    border-bottom: 1px solid var(--primary-glow);
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.ornamental-separator span {
+    padding: 0 1rem;
+    font-size: 1.5rem;
 }
 
 .calligraphic-divider {
-    background: radial-gradient(circle, var(--primary) 0%, transparent 100%);
-    height: 1.5px;
-    opacity: 0.5;
-}
-
-/* --- SEARCH & INPUTS --- */
-input {
-    background: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    color: white !important;
-}
-
-input:focus {
-    border-color: var(--primary) !important;
-    box-shadow: 0 0 10px var(--primary-glow) !important;
-}
-
-button.primary {
-    background: var(--primary);
-    color: black;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    box-shadow: 0 0 15px var(--primary-glow);
-}
-
-button.primary:hover {
-    background: #34d399;
-    transform: translateY(-2px);
-    box-shadow: 0 0 25px var(--primary-glow);
-}
-
-/* --- FRIDAY MODE --- */
-body.friday-mode {
-    background-color: #051a14;
-}
-
-body.friday-mode .glass {
-    border-color: var(--primary);
-    box-shadow: 0 0 20px var(--primary-glow);
+    height: 1px;
+    background: radial-gradient(circle, var(--gold) 0%, transparent 100%);
+    margin: 2rem auto;
+    width: 80%;
+    opacity: 0.6;
 }

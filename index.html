@@ -7,7 +7,7 @@
     <title>Noor Islamic Portal - Premium Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Amiri:wght@400;700&family=Playfair+Display:wght@600;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Amiri:wght@400;700&family=Cormorant+Garamond:wght@600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
@@ -48,37 +48,37 @@
             animation: fadeInUp 0.6s ease-out forwards;
         }
 
-        /* Cyber Glows and Utilities */
+        /* 3D Text Effects for Names */
         .name-3d {
-            text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
-            background: linear-gradient(180deg, #ffffff 0%, #94a3b8 100%);
+            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.04);
+            background: linear-gradient(45deg, #24423a, #3a5c53);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        /* Frosted Glass Override */
+        /* Matte Glassmorphism Cards */
         .glass-container {
-            background: rgba(20, 20, 20, 0.7);
-            backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(16, 185, 129, 0.1);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            background: rgba(253, 250, 246, 0.95);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(36, 66, 58, 0.05);
+            box-shadow: 0 4px 20px -10px rgba(36, 66, 58, 0.1);
         }
 
         .glass-container:hover {
-            border-color: #10b981;
+            background: rgba(255, 255, 255, 1);
             transform: translateY(-2px);
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+            box-shadow: 0 15px 30px -15px rgba(36, 66, 58, 0.15);
         }
     </style>
 </head>
 
-<body class="bg-[#0a0a0a] text-[#f8fafc] font-sans overflow-hidden">
+<body class="bg-[#f3e9dc] text-[#24423a] font-sans overflow-hidden">
 
     <div class="flex h-screen">
         <!-- Sidebar (Desktop) -->
         <aside
-            class="hidden md:flex w-64 bg-[#0a0a0a] border-r border-[#10b981]/10 text-white flex-col shrink-0 relative z-10 transition-all duration-300"
+            class="hidden md:flex w-64 bg-gradient-to-b from-[#24423a] to-[#1d352f] border-r border-[#c5a059]/0 text-white flex-col shrink-0 shadow-2xl relative z-10 transition-all duration-300"
             id="main-sidebar">
             <div class="p-8 text-center border-b border-white/10 relative overflow-hidden">
                 <div
@@ -86,11 +86,11 @@
                 </div>
                 <div class="relative z-10">
                     <div
-                        class="mx-auto mb-4 w-20 h-20 bg-[#10b981]/10 backdrop-blur-sm rounded-full flex items-center justify-center border border-[#10b981]/20 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
-                        <i class="fas fa-kaaba text-3xl text-[#10b981]"></i>
+                        class="mx-auto mb-4 w-20 h-20 bg-[#fdfaf6]/10 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/10 shadow-sm">
+                        <i class="fas fa-kaaba text-3xl text-[#c5a059]"></i>
                     </div>
-                    <h1 class="text-3xl font-[Amiri] font-bold tracking-wide text-white mb-1">صراط القلب</h1>
-                    <p class="text-[10px] text-[#10b981] font-sans uppercase tracking-[0.3em] font-black mt-0">Sirat
+                    <h1 class="text-3xl font-[Amiri] font-bold tracking-wide text-[#c5a059] mb-1">صراط القلب</h1>
+                    <p class="text-xs text-[#c5a059]/80 font-[Cormorant_Garamond] uppercase tracking-widest mt-0">Sirat
                         al-Qalb</p>
                 </div>
             </div>
@@ -162,7 +162,7 @@
 
         <!-- Mobile Bottom Navigation -->
         <nav
-            class="md:hidden fixed bottom-0 left-0 w-full bg-[#0a0a0a]/90 backdrop-blur-xl border-t border-[#10b981]/20 flex justify-around items-center py-2 z-50 shadow-[0_-5px_30px_rgba(0,0,0,0.8)] pb-safe">
+            class="md:hidden fixed bottom-0 left-0 w-full bg-[#1d352f]/95 backdrop-blur-md border-t border-[#c5a059]/30 flex justify-around items-center py-2 z-50 shadow-[0_-5px_20px_rgba(0,0,0,0.3)] pb-safe">
             <a href="#" class="nav-link flex flex-col items-center p-2 text-[#c5a059]" data-target="view-dashboard">
                 <i class="fas fa-clock text-xl mb-1"></i>
                 <span class="text-[10px] tracking-wide">Prayers</span>
@@ -194,11 +194,10 @@
         </nav>
 
         <!-- Main Content Area -->
-        <main class="flex-1 relative overflow-y-auto bg-[#0a0a0a] scroll-smooth pb-24 md:pb-0" id="main-scroll-area">
-            <div class="isl-mesh"></div>
+        <main class="flex-1 relative overflow-y-auto bg-[#f3e9dc] scroll-smooth pb-24 md:pb-0" id="main-scroll-area">
             <!-- Top Header (Search & Date) -->
             <header
-                class="sticky top-0 z-20 bg-[#0a0a0a]/70 backdrop-blur-2xl border-b border-[#10b981]/10 px-4 md:px-8 py-4 flex justify-between items-center transition-colors duration-300">
+                class="sticky top-0 z-20 bg-[#fdfaf6]/80 backdrop-blur-md border-b border-gray-200 px-4 md:px-8 py-4 flex justify-between items-center shadow-sm transition-colors duration-300 dark:bg-gray-900/80 dark:border-gray-800">
                 <div class="flex items-center gap-2 md:gap-4 w-full max-w-2xl">
                     <div class="relative flex-1 flex gap-2">
                         <div class="relative w-2/3">
@@ -212,7 +211,7 @@
                         </div>
                     </div>
                     <button id="portal-search-btn"
-                        class="bg-[#10b981] text-black px-4 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-black shadow-[0_0_15px_rgba(16,185,129,0.4)] hover:shadow-[0_0_25px_rgba(16,185,129,0.6)] hover:-translate-y-0.5 transition-all">
+                        class="bg-[#24423a] text-white px-4 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-bold shadow-lg hover:shadow-[#24423a]/30 hover:-translate-y-0.5 transition-all">
                         Search
                     </button>
                     <!-- Hide Auto button on very small screens if needed, or keep icon only -->
@@ -226,12 +225,9 @@
                     </button>
                 </div>
                 <div class="text-right hidden lg:block"> <!-- Hide time on mobile/tablet to save space -->
-                    <div id="local-time"
-                        class="text-xl font-bold font-mono text-[#10b981] [text-shadow:0_0_10px_rgba(16,185,129,0.5)]">
-                        --:--:--
+                    <div id="local-time" class="text-xl font-bold font-mono text-[#24423a] dark:text-[#c5a059]">--:--:--
                     </div>
-                    <div id="portal-current-date"
-                        class="text-[10px] text-slate-500 uppercase tracking-widest font-black">--</div>
+                    <div id="portal-current-date" class="text-xs text-gray-500 font-medium dark:text-gray-400">--</div>
                 </div>
             </header>
 
@@ -240,11 +236,13 @@
 
                 <!-- Hero Section -->
                 <div
-                    class="relative rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] min-h-[400px] flex items-center justify-center text-center text-white border border-[#10b981]/20">
+                    class="relative rounded-3xl overflow-hidden shadow-2xl min-h-[400px] flex items-center justify-center text-center text-white shimmer-card">
                     <!-- Dynamic Background -->
                     <div class="absolute inset-0 z-0">
-                        <div class="absolute inset-0 bg-gradient-to-br from-[#064e3b] via-[#0a0a0a] to-[#0a0a0a]"></div>
-                        <div class="isl-mesh opacity-20"></div>
+                        <div class="absolute inset-0 bg-gradient-to-r from-[#24423a] to-[#2d5a3f]"></div>
+                        <div
+                            class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]">
+                        </div>
                         <!-- 3D Canvas Placeholder -->
                         <div id="canvas-container"
                             class="absolute right-0 top-1/2 -translate-y-1/2 w-[400px] h-[400px] opacity-40 mix-blend-overlay pointer-events-none">
@@ -254,22 +252,19 @@
                     <div class="relative z-10 p-8 space-y-6 max-w-2xl">
                         <div>
                             <span
-                                class="inline-block px-4 py-1.5 rounded-full bg-[#10b981]/10 backdrop-blur border border-[#10b981]/30 text-[10px] uppercase font-black tracking-[0.2em] mb-4 text-[#10b981] [text-shadow:0_0_10px_rgba(16,185,129,0.5)]">
-                                Mission Control // Next Prayer
+                                class="inline-block px-4 py-1.5 rounded-full bg-[#fdfaf6]/10 backdrop-blur border border-white/20 text-sm font-medium mb-4 text-[#c5a059]">
+                                Upcoming Prayer
                             </span>
-                            <h2 class="text-6xl md:text-8xl font-[Playfair_Display] font-black mb-2 text-liquid-silver"
+                            <h2 class="text-5xl md:text-7xl font-[Cormorant_Garamond] font-bold mb-2 drop-shadow-lg"
                                 id="next-prayer-name">Fajr</h2>
-                            <p class="text-sm text-[#10b981]/80 font-mono tracking-widest uppercase">System Online //
-                                Remembrance Active</p>
+                            <p class="text-xl opacity-90 font-light">Remembrance of Allah is the greatest deed.</p>
                         </div>
 
                         <div
-                            class="bg-black/40 backdrop-blur-2xl rounded-2xl p-6 border border-[#10b981]/20 inline-block min-w-[320px] prayer-widget-glow">
-                            <div class="text-6xl font-mono font-black tracking-tighter text-[#10b981] [text-shadow:0_0_20px_rgba(16,185,129,0.5)]"
-                                id="countdown">
+                            class="bg-[#fdfaf6]/10 backdrop-blur-md rounded-2xl p-6 border border-white/10 inline-block min-w-[300px]">
+                            <div class="text-6xl font-mono font-bold tracking-tight drop-shadow-md" id="countdown">
                                 00:00:00</div>
-                            <div class="text-[10px] uppercase tracking-[0.3em] mt-2 text-slate-500 font-bold">
-                                Synchronizing Time...</div>
+                            <div class="text-xs uppercase tracking-[0.2em] mt-2 opacity-70">Time Remaining</div>
                         </div>
 
                         <div id="portal-location-label" class="text-white/80 font-medium text-lg mt-4">Pune, India</div>
@@ -287,8 +282,8 @@
                 <!-- Expanded Guide Link -->
                 <div class="text-center my-6">
                     <button data-target="view-nafil"
-                        class="nav-link inline-flex items-center gap-2 px-10 py-4 bg-[#10b981] text-black rounded-full font-black uppercase tracking-widest hover:scale-105 transition-all shadow-[0_0_20px_rgba(16,185,129,0.4)]">
-                        <i class="fas fa-terminal"></i> Enter Salah Guide
+                        class="nav-link inline-flex items-center gap-2 px-8 py-3 bg-[#fdfaf6] border border-[#c5a059] text-[#24423a] rounded-full font-bold hover:bg-[#c5a059] hover:text-white transition-all transform hover:scale-105 shadow-sm dark:bg-gray-800 dark:text-[#c5a059] dark:hover:text-white">
+                        <i class="fas fa-book-reader"></i> View Salah Guide
                     </button>
                 </div>
 

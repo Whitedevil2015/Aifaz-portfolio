@@ -1,32 +1,39 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Amiri:wght@400;700&family=Cormorant+Garamond:wght@600;700&display=swap');
 
 :root {
-    /* Majestic Decency Palette */
+    /* Majestic Decency Palette - Restored */
     --emerald: #064e3b;
+    --emerald-light: #0d7056;
     --gold-leaf: #af944d;
+    --gold-glow: rgba(175, 148, 77, 0.4);
     --pearl: #fcfdfd;
-    --pearl-shadow: rgba(6, 78, 59, 0.05);
+    --pearl-dark: #f0f2f2;
 
     --primary: var(--emerald);
     --secondary: #042f24;
     --gold: var(--gold-leaf);
     --text-dark: #1a2e29;
+    --text-muted: #64748b;
     --text-light: #f8f9fa;
     --radius-hyper: 40px;
+    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* --- BASE STYLES --- */
+* {
+    -webkit-tap-highlight-color: transparent;
+    outline: none !important;
+}
+
 body {
     font-family: 'Inter', sans-serif;
     color: var(--text-dark);
     background-color: var(--pearl);
-    /* Shimmering White Pearl Texture */
     background-image:
         radial-gradient(at 0% 0%, rgba(255, 255, 255, 0.8) 0px, transparent 50%),
-        radial-gradient(at 100% 0%, rgba(212, 175, 55, 0.03) 0px, transparent 50%),
-        radial-gradient(at 50% 50%, rgba(6, 78, 59, 0.02) 0px, transparent 80%),
-        linear-gradient(135deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%),
-        linear-gradient(225deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%);
+        radial-gradient(at 100% 0%, rgba(212, 175, 55, 0.05) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(6, 78, 59, 0.03) 0px, transparent 80%),
+        url('https://www.transparenttextures.com/patterns/arabesque.png');
     background-attachment: fixed;
     min-height: 100vh;
     line-height: 1.6;
@@ -37,11 +44,12 @@ body.dark {
     background: #0b1a16;
     background-image:
         radial-gradient(circle at 50% 0%, #064e3b 0%, transparent 70%),
-        radial-gradient(at 100% 100%, rgba(175, 148, 77, 0.1) 0px, transparent 50%);
+        radial-gradient(at 100% 100%, rgba(175, 148, 77, 0.1) 0px, transparent 50%),
+        url('https://www.transparenttextures.com/patterns/arabesque.png');
     color: var(--text-light);
 }
 
-/* Typography Defaults */
+/* Typography Refinement */
 h1,
 h2,
 h3,
@@ -50,97 +58,115 @@ h5,
 h6 {
     font-family: 'Cormorant Garamond', serif;
     font-weight: 700;
+    letter-spacing: -0.01em;
 }
 
 .arabic-font {
     font-family: 'Amiri', serif;
 }
 
-/* --- BENTO GRID & HYPER-ROUNDED CARDS --- */
+/* --- BENTO GRID SYSTEM --- */
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
 .glass,
 .bg-white,
 .glass-container {
-    background: rgba(255, 255, 255, 0.6) !important;
+    background: rgba(255, 255, 255, 0.75) !important;
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: var(--radius-hyper) !important;
     box-shadow:
-        0 8px 32px 0 rgba(31, 38, 135, 0.07),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.2);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        0 10px 30px -10px rgba(6, 78, 59, 0.08),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+    transition: var(--transition-smooth);
 }
 
 .dark .glass,
 .dark .bg-white,
 .dark .bg-gray-800,
 .dark .glass-container {
-    background: rgba(11, 26, 22, 0.7) !important;
-    border: 1px solid rgba(175, 148, 77, 0.15);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    background: rgba(11, 26, 22, 0.75) !important;
+    border: 1px solid rgba(175, 148, 77, 0.1);
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.4);
     color: #e2e8f0;
 }
 
-/* Apple-inspired Hover States */
+/* Hover Physics */
 .glass-container:hover,
 .hover-card-3d:hover {
-    transform: translateY(-8px) scale(1.01);
-    background: rgba(255, 255, 255, 0.8) !important;
-    box-shadow: 0 20px 40px rgba(6, 78, 59, 0.1);
+    transform: translateY(-6px) scale(1.02);
+    background: rgba(255, 255, 255, 0.9) !important;
+    box-shadow: 0 25px 50px -15px rgba(6, 78, 59, 0.12);
+    border-color: rgba(175, 148, 77, 0.2);
 }
 
-/* Active Nav Link */
+/* --- PREMIUM NAVIGATION --- */
+
+/* Mobile "Floating Island" Nav */
+@media (max-width: 767px) {
+    .md\:hidden.fixed.bottom-0 {
+        bottom: 20px;
+        left: 20px;
+        right: 20px;
+        width: auto;
+        border-radius: 30px;
+        background: rgba(4, 47, 36, 0.9);
+        border: 1px solid rgba(175, 148, 77, 0.3);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        padding: 8px 10px;
+    }
+}
+
 .nav-link.active {
     background: var(--emerald) !important;
     color: white !important;
     border-radius: 20px;
-    box-shadow: 0 8px 20px rgba(6, 78, 59, 0.2);
+    box-shadow: 0 10px 25px rgba(6, 78, 59, 0.3);
+    transform: scale(1.05);
 }
 
 .nav-link.active i {
     color: var(--gold-leaf) !important;
+    transform: scale(1.2);
 }
 
-/* Polished Elegance Gold Icons */
-.text-gold,
-.fa-kaaba,
-.fa-star,
-.fa-moon,
-.fa-sun {
-    color: var(--gold-leaf) !important;
-    filter: drop-shadow(0 2px 4px rgba(175, 148, 77, 0.2));
+/* Sidebar Desktop Glow */
+#main-sidebar .nav-link:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.05);
+    padding-left: 30px;
+    color: var(--gold-leaf);
 }
 
-/* Scrollbar (Apple Style) */
-::-webkit-scrollbar {
-    width: 8px;
+/* --- BUTTON & ACTION POLISH --- */
+.btn-primary {
+    background: var(--emerald);
+    color: white;
+    border-radius: 99px;
+    padding: 12px 28px;
+    font-weight: 600;
+    box-shadow: 0 10px 20px rgba(6, 78, 59, 0.2);
 }
 
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-    background: rgba(6, 78, 59, 0.1);
-    border-radius: 20px;
-    border: 2px solid transparent;
-    background-clip: content-box;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: rgba(6, 78, 59, 0.3);
-    background-clip: content-box;
+.btn-primary:hover {
+    background: var(--emerald-light);
+    box-shadow: 0 15px 30px rgba(6, 78, 59, 0.3);
+    transform: translateY(-2px);
 }
 
 /* --- ANIMATIONS --- */
 .view-section {
-    animation: slideUpFade 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    animation: entranceFade 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-@keyframes slideUpFade {
+@keyframes entranceFade {
     from {
         opacity: 0;
-        transform: translateY(30px) scale(0.98);
+        transform: translateY(40px) scale(0.95);
     }
 
     to {
@@ -149,67 +175,97 @@ h6 {
     }
 }
 
-/* --- ISLAMIC AESTHETICS --- */
-.islamic-pattern-bg {
-    background-color: var(--emerald);
-    background-image:
-        radial-gradient(circle at 2px 2px, rgba(175, 148, 77, 0.1) 1px, transparent 0);
-    background-size: 40px 40px;
-}
-
-.mihrab-arch {
-    background: var(--pearl);
-    color: var(--emerald);
-    border-radius: 300px 300px 100px 100px !important;
-    box-shadow: 0 30px 60px rgba(6, 78, 59, 0.12);
-    border: 1px solid rgba(175, 148, 77, 0.1);
-}
-
-.ornamental-separator {
+/* --- SACRED PULSE & BENTO GLOW --- */
+.live-indicator {
+    position: relative;
     display: flex;
     align-items: center;
-    text-align: center;
-    color: var(--gold-leaf);
-    margin: 2.5rem 0;
+    gap: 10px;
 }
 
-.ornamental-separator::before,
-.ornamental-separator::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--gold-leaf), transparent);
+.live-ripple {
+    width: 10px;
+    height: 10px;
+    background: #10b981;
+    border-radius: 50%;
+    position: relative;
 }
 
-.ornamental-separator span {
-    padding: 0 1.5rem;
-    font-size: 2rem;
-    font-family: 'Amiri', serif;
-}
-
-.calligraphic-divider {
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold-leaf), transparent);
-    margin: 3rem auto;
-    width: 60%;
-    opacity: 0.4;
-}
-
-/* Bento Shimmer Tooltip */
-.shimmer-card::before {
+.live-ripple::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: -100%;
-    width: 200%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
     height: 100%;
-    background: linear-gradient(90deg,
-            transparent,
-            rgba(255, 255, 255, 0.2),
-            transparent);
-    transition: 0.5s;
+    border: 2px solid #10b981;
+    border-radius: 50%;
+    animation: sacredPulse 2s infinite;
 }
 
-.shimmer-card:hover::before {
-    left: 100%;
+@keyframes sacredPulse {
+    0% {
+        width: 100%;
+        height: 100%;
+        opacity: 0.8;
+    }
+
+    100% {
+        width: 300%;
+        height: 300%;
+        opacity: 0;
+    }
+}
+
+.bento-glow:hover {
+    box-shadow:
+        0 20px 60px -15px rgba(45, 74, 65, 0.1),
+        0 0 20px 0 rgba(176, 141, 87, 0.2);
+    border-color: var(--bronze);
+}
+
+
+.ornamental-separator span {
+    font-size: 2.5rem;
+    color: var(--bronze);
+    font-family: 'Amiri', serif;
+    opacity: 0.8;
+}
+
+/* Subtle Shimmer */
+.shimmer-card::after {
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+}
+
+/* Text Effects */
+.gold-accent {
+    background: linear-gradient(135deg, #b08d57, #d4af37, #b08d57);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* --- WEATHER REFLECTIONS --- */
+body.weather-clear {
+    background-color: #fcfdfd;
+}
+
+body.weather-clouds {
+    background-color: #e8eceb;
+}
+
+body.weather-rain {
+    background-color: #dee4e3;
+}
+
+body.weather-snow {
+    background-color: #f0f4f4;
+}
+
+.text-gradient-emerald {
+    background: linear-gradient(135deg, #064e3b, #0d7056);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }

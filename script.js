@@ -60,31 +60,27 @@ document.addEventListener('DOMContentLoaded', () => {
         // Close any lingering modals when navigating views
         closeAllModals(false);
 
-        // Update nav links styling
+        // Update nav links styling for both Desktop Sidebar and Mobile Bottom Nav
         navLinks.forEach(l => {
             const linkTarget = l.getAttribute('data-target');
             const icon = l.querySelector('i');
             const isMatch = linkTarget === targetId;
 
             if (isMatch) {
-                l.classList.add('active', 'bg-[#fcfdfd]/10', 'border-[#af944d]');
-                l.classList.remove('border-transparent');
-                if (icon) {
-                    icon.classList.add('text-[#af944d]');
-                    icon.classList.remove('text-[#af944d]/80');
-                }
+                l.classList.add('active', 'scale-105');
+                l.classList.remove('text-white/50', 'text-[#af944d]/80');
+                if (icon) icon.classList.add('text-[#af944d]');
             } else {
-                l.classList.remove('active', 'bg-[#fcfdfd]/10', 'border-[#af944d]');
-                l.classList.add('border-transparent');
-                if (icon) {
-                    icon.classList.remove('text-[#af944d]');
-                    icon.classList.add('text-[#af944d]/80');
-                }
+                l.classList.remove('active', 'scale-105');
+                if (icon) icon.classList.remove('text-[#af944d]');
             }
         });
 
         // Specific view callbacks
         if (targetId === 'view-library') loadLibrary();
+        if (targetId === 'view-names') loadNames();
+        if (targetId === 'view-quran') loadDirectory();
+        if (targetId === 'view-duas') renderDuas();
 
         // Manage Browser History
         if (updateHistory) {
@@ -375,32 +371,43 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
 
         // RENDER FARZ
-        farzGrid.innerHTML = farzData.map(d => `
-            <div class="glass p-6 rounded-[40px] border-l-4 border-emerald-500 relative overflow-hidden group hover:-translate-y-1 transition-transform dark:bg-gray-800 cursor-pointer hover:shadow-lg transition-all" onclick="openFazilat('${d.name}')">
-                <div class="absolute -right-4 -top-4 opacity-10 text-8xl text-emerald-500"><i class="fas ${d.icon}"></i></div>
-                <h3 class="text-2xl font-bold text-[#064e3b] mb-1 font-[Cormorant_Garamond] dark:text-white group-hover:underline decoration-emerald-500/50 underline-offset-4 decoration-2">${d.name} <i class="fas fa-info-circle text-xs text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity ml-2 align-middle"></i></h3>
-                <p class="text-sm text-gray-500 font-mono mb-3 dark:text-gray-400">${d.time}</p>
-                <div class="p-3 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
-                     <p class="text-xs font-bold text-emerald-700 uppercase mb-1 dark:text-emerald-400">Rakats</p>
-                     <p class="text-sm font-medium text-gray-800 dark:text-gray-200">${d.rakat}</p>
+        farzGrid.innerHTML = farzData.map((d, i) => {
+            const hue = (i * 40) % 360;
+            return `
+            <div class="bg-[#fcfdfd] p-8 rounded-[40px] shadow-sm text-center border-t-4 hover:-translate-y-1.5 transition-all duration-500 cursor-pointer group dark:bg-gray-800 dark:border-gray-700" 
+                style="border-color:hsl(${hue}, 50%, 40%)" onclick="openFazilat('${d.name}')">
+                <div class="w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-6 transition-transform group-hover:scale-110 shadow-inner" style="background:hsl(${hue}, 50%, 95%); color:hsl(${hue}, 50%, 30%)">
+                    <i class="fas ${d.icon} text-2xl"></i>
+                </div>
+                <h3 class="text-3xl font-black mb-1 font-[Cormorant_Garamond]" style="color:hsl(${hue}, 50%, 25%)">${d.name}</h3>
+                <p class="text-[10px] uppercase font-black tracking-widest opacity-40 mb-4">Obligatory Prayer</p>
+                <div class="text-2xl font-black text-gray-800 mb-6 dark:text-white">${d.time}</div>
+                <div class="p-4 bg-gray-50 dark:bg-black/20 rounded-2xl border border-gray-100 dark:border-white/5">
+                     <p class="text-[9px] font-black uppercase tracking-widest opacity-40 mb-2">Structure</p>
+                     <p class="text-sm font-bold text-gray-700 dark:text-gray-200 italic">"${d.rakat}"</p>
                 </div>
             </div>
-        `).join('');
+        `}).join('');
 
         // RENDER NAFIL
-        nafilGrid.innerHTML = nafilData.map(d => `
-            <div class="glass p-6 rounded-[40px] border-t-4 border-[#af944d] bg-[#af944d]/5 relative overflow-hidden group hover:-translate-y-1 transition-transform dark:bg-gray-800 cursor-pointer hover:shadow-lg transition-all" onclick="openFazilat('${d.name}')">
-                ${d.badge ? `<div class="absolute top-0 right-0 bg-[#af944d] text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg uppercase tracking-wider shadow-sm">${d.badge}</div>` : ''}
-                <div class="absolute -right-4 -top-4 opacity-10 text-8xl text-[#af944d]"><i class="fas ${d.icon}"></i></div>
-                <h3 class="text-2xl font-bold text-[#064e3b] mb-1 font-[Cormorant_Garamond] dark:text-[#af944d] group-hover:underline decoration-[#af944d]/50 underline-offset-4 decoration-2">${d.name} <i class="fas fa-info-circle text-xs text-[#af944d] opacity-0 group-hover:opacity-100 transition-opacity ml-2 align-middle"></i></h3>
-                <p class="text-xs text-[#af944d] uppercase tracking-widest font-bold mb-3">Window</p>
-                <div class="text-2xl font-mono font-bold text-gray-800 mb-3 dark:text-gray-200">${d.time}</div>
-                <div class="mb-3 p-2 bg-[#fcfdfd]/50 rounded border border-[#af944d]/20 w-fit backdrop-blur-sm dark:bg-black/20">
-                    <span class="text-xs font-bold text-[#af944d] uppercase">Rakat:</span> <span class="text-sm font-bold dark:text-white">${d.rakat}</span>
+        nafilGrid.innerHTML = nafilData.map((d, i) => {
+            const hue = (i * 60 + 180) % 360;
+            return `
+            <div class="bg-[#fcfdfd] p-8 rounded-[40px] shadow-sm text-center border-t-4 hover:-translate-y-1.5 transition-all duration-500 cursor-pointer group dark:bg-gray-800 dark:border-gray-700" 
+                style="border-color:hsl(${hue}, 40%, 50%)" onclick="openFazilat('${d.name}')">
+                ${d.badge ? `<div class="absolute top-0 right-10 bg-gray-800 text-white text-[8px] font-black px-3 py-1 rounded-b-xl uppercase tracking-widest shadow-lg z-10">${d.badge}</div>` : ''}
+                <div class="w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-6 transition-transform group-hover:scale-110 shadow-inner" style="background:hsl(${hue}, 40%, 95%); color:hsl(${hue}, 40%, 30%)">
+                    <i class="fas ${d.icon} text-2xl"></i>
                 </div>
-                <p class="text-sm text-gray-600 italic leading-relaxed dark:text-gray-400">${d.desc}</p>
+                <h3 class="text-3xl font-black mb-1 font-[Cormorant_Garamond]" style="color:hsl(${hue}, 40%, 30%)">${d.name}</h3>
+                <p class="text-[10px] uppercase font-black tracking-widest opacity-40 mb-4">Voluntary Prayer</p>
+                <div class="text-2xl font-black text-gray-800 mb-6 dark:text-white">${d.time}</div>
+                <div class="mb-4">
+                    <span class="px-4 py-1.5 bg-gray-50 dark:bg-black/20 rounded-full text-[10px] font-black text-gray-500 uppercase tracking-widest border border-gray-100 dark:border-white/5">Rakats: ${d.rakat}</span>
+                </div>
+                <p class="text-xs text-gray-500 italic leading-relaxed pt-4 border-t border-gray-50 dark:border-white/5">"${d.desc}"</p>
             </div>
-        `).join('');
+        `}).join('');
     }
 
     // Auto Location Logic
@@ -445,13 +452,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h2 class="text-3xl font-[Cormorant_Garamond] font-bold text-[#af944d] mb-2">Jumu'ah Mubarak!</h2>
                         <p class="text-sm opacity-90 mb-4 font-light">Don't forget the Sunnah acts of this blessed day.</p>
                         <div class="flex flex-wrap gap-3 justify-center md:justify-start">
-                            <span class="px-3 py-1 bg-[#fcfdfd]/10 rounded-full text-xs border border-[#af944d]/30 flex items-center gap-2 backdrop-blur-md"><i class="fas fa-book-open text-[#af944d]"></i> Surah Al-Kahf</span>
-                            <span class="px-3 py-1 bg-[#fcfdfd]/10 rounded-full text-xs border border-[#af944d]/30 flex items-center gap-2 backdrop-blur-md"><i class="fas fa-comment-dots text-[#af944d]"></i> Durood</span>
-                            <span class="px-3 py-1 bg-[#fcfdfd]/10 rounded-full text-xs border border-[#af944d]/30 flex items-center gap-2 backdrop-blur-md"><i class="fas fa-hands-praying text-[#af944d]"></i> Dua (Hour of Acceptance)</span>
+                            <span class="px-3 py-1 bg-[#f5f2eb]/10 rounded-full text-xs border border-[#af944d]/30 flex items-center gap-2 backdrop-blur-md"><i class="fas fa-book-open text-[#af944d]"></i> Surah Al-Kahf</span>
+                            <span class="px-3 py-1 bg-[#f5f2eb]/10 rounded-full text-xs border border-[#af944d]/30 flex items-center gap-2 backdrop-blur-md"><i class="fas fa-comment-dots text-[#af944d]"></i> Durood</span>
+                            <span class="px-3 py-1 bg-[#f5f2eb]/10 rounded-full text-xs border border-[#af944d]/30 flex items-center gap-2 backdrop-blur-md"><i class="fas fa-hands-praying text-[#af944d]"></i> Dua (Hour of Acceptance)</span>
                         </div>
                     </div>
                     <div class="text-center shrink-0">
-                         <a href="#" onclick="document.querySelector('[data-target=view-quran]').click(); setTimeout(() => openReader(18, 'Al-Kahf', 'surah'), 500);" class="inline-flex items-center px-6 py-2 bg-[#af944d] text-[#0f2b19] font-bold rounded-full hover:bg-[#fcfdfd] transition-all shadow-lg shadow-[#af944d]/20 transform hover:-translate-y-1">
+                         <a href="#" onclick="document.querySelector('[data-target=view-quran]').click(); setTimeout(() => openReader(18, 'Al-Kahf', 'surah'), 500);" class="inline-flex items-center px-6 py-2 bg-[#af944d] text-[#0f2b19] font-bold rounded-full hover:bg-[#f5f2eb] transition-all shadow-lg shadow-[#af944d]/20 transform hover:-translate-y-1">
                              <i class="fas fa-quran mr-2"></i> Read Kahf
                          </a>
                     </div>
@@ -473,16 +480,20 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: 'Isha', icon: 'fa-star' }
         ];
 
-        grid.innerHTML = prayers.map(p => `
-            <div id="card-${p.id}" onclick="openFazilat('${p.id}')" class="glass cursor-pointer p-4 rounded-[40px] text-center border border-white/20 relative group transition-all duration-500 hover:-translate-y-2 dark:bg-gray-800/40 ${p.label === "Jumu'ah" ? 'border-[#af944d] shadow-[0_0_20px_rgba(197,160,89,0.15)]' : ''}">
-                <div class="absolute -right-6 -top-6 opacity-10 text-7xl text-[#af944d] group-hover:rotate-12 transition-transform"><i class="fas ${p.icon}"></i></div>
-                <div class="w-10 h-10 mx-auto bg-[#af944d]/10 rounded-full flex items-center justify-center text-[#af944d] mb-3 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(197,160,89,0.2)]">
-                    <i class="fas ${p.icon}"></i>
+        grid.innerHTML = prayers.map((p, i) => {
+            const hue = (i * 45) % 360;
+            return `
+            <div id="card-${p.id}" onclick="openFazilat('${p.id}')" 
+                class="bg-[#fcfdfd] p-6 rounded-[40px] shadow-sm text-center border-t-4 hover:-translate-y-2 transition-all duration-500 cursor-pointer group dark:bg-gray-800 dark:border-gray-700" 
+                style="border-color:hsl(${hue}, 60%, 40%)">
+                <div class="absolute -right-4 -top-4 opacity-[0.03] text-7xl" style="color:hsl(${hue}, 60%, 40%)"><i class="fas ${p.icon}"></i></div>
+                <div class="w-12 h-12 mx-auto rounded-2xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110 shadow-inner" style="background:hsl(${hue}, 60%, 95%); color:hsl(${hue}, 60%, 40%)">
+                    <i class="fas ${p.icon} text-xl"></i>
                 </div>
-                <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1 dark:text-gray-400 ${p.label === "Jumu'ah" ? 'text-[#af944d]' : ''}">${p.label || p.id}</p>
-                <p class="text-2xl font-[Amiri] font-bold text-gray-800 dark:text-white group-hover:text-[#af944d] transition-colors">${formatTo12Hour(timings[p.id])}</p>
+                <p class="text-[10px] font-black uppercase tracking-widest mb-1 opacity-40">${p.label || p.id}</p>
+                <p class="text-2xl font-black text-gray-800 dark:text-white" style="color:hsl(${hue}, 60%, 25%)">${formatTo12Hour(timings[p.id])}</p>
             </div>
-        `).join('');
+        `}).join('');
     }
 
     function formatTo12Hour(time24) {
@@ -521,11 +532,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 nextTimeStr = timings.Fajr;
             }
 
-            // Highlight Logic
+            // Highlight Logic with Premium Polish
             document.querySelectorAll('[id^="card-"]').forEach(el => {
-                el.classList.remove('ring-2', 'ring-[#af944d]', 'neon-glow');
+                el.classList.remove('ring-4', 'ring-[#af944d]/30', 'scale-105', 'bg-white/90');
                 if (el.id === `card-${next}`) {
-                    el.classList.add('ring-2', 'ring-[#af944d]', 'neon-glow');
+                    el.classList.add('ring-4', 'ring-[#af944d]/30', 'scale-105', 'bg-white/90');
                 }
             });
 
@@ -591,18 +602,20 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         view.innerHTML = `
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-20">
-                ${list.map(h => `
-                    <div class="bg-[#fffbf0] p-8 rounded-tr-3xl rounded-bl-3xl shadow-md border border-[#af944d]/20 hover:shadow-lg transition-all relative dark:bg-gray-800 dark:border-gray-700">
-                        <i class="fas fa-quote-right absolute top-4 right-4 text-[#af944d]/20 text-4xl"></i>
-                        <h4 class="font-bold text-[#064e3b] mb-4 uppercase tracking-widest text-xs dark:text-[#af944d]">Hadith #${h.id}</h4>
-                        <p class="text-xl font-serif text-gray-800 leading-relaxed mb-4 dark:text-gray-200">"${h.text}"</p>
-                        <div class="text-sm font-bold text-[#af944d] border-t border-[#af944d]/20 pt-4 flex justify-between items-center">
-                            <span>Reference: ${h.ref}</span>
-                            <button class="text-gray-400 hover:text-[#064e3b]"><i class="fas fa-share-alt"></i></button>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20">
+                ${list.map((h, i) => {
+            const hue = (i * 30) % 360;
+            return `
+                    <div class="bg-[#fcfdfd] p-8 rounded-[40px] shadow-sm text-center border-t-4 hover:-translate-y-1 transition-all relative group dark:bg-gray-800 dark:border-gray-700" style="border-color:hsl(${hue}, 50%, 45%)">
+                        <i class="fas fa-quote-right absolute top-4 right-4 opacity-5 text-4xl" style="color:hsl(${hue}, 50%, 45%)"></i>
+                        <h4 class="font-black mb-4 uppercase tracking-[0.2em] text-[10px] opacity-40">Knowledge #${h.id}</h4>
+                        <p class="text-lg font-medium text-gray-700 leading-relaxed mb-6 dark:text-gray-200">"${h.text}"</p>
+                        <div class="text-[11px] font-black border-t border-gray-50 dark:border-white/5 pt-4 flex justify-between items-center uppercase tracking-widest" style="color:hsl(${hue}, 50%, 40%)">
+                            <span>REF: ${h.ref}</span>
+                            <button class="opacity-30 hover:opacity-100 transition-opacity"><i class="fas fa-bookmark"></i></button>
                         </div>
                     </div>
-                `).join('')}
+                `}).join('')}
             </div>
         `;
     }
@@ -618,7 +631,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const modal = document.createElement('div');
         modal.className = 'fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm opacity-0 transition-opacity duration-700';
         modal.innerHTML = `
-            <div class="bg-[#fcfdfd] rounded-[40px] max-w-lg w-full p-10 text-center relative transform scale-90 transition-transform duration-500 shadow-2xl border-4 border-[#af944d]/30 dark:bg-gray-900 border-gray-700">
+            <div class="bg-[#f5f2eb] rounded-[40px] max-w-lg w-full p-10 text-center relative transform scale-90 transition-transform duration-500 shadow-2xl border-4 border-[#af944d]/30 dark:bg-gray-900 border-gray-700">
                 <button onclick="this.closest('.fixed').remove()" class="absolute top-4 right-4 text-gray-400 hover:text-red-500"><i class="fas fa-times text-xl"></i></button>
                 <div class="w-16 h-1 bg-[#af944d] mx-auto mb-6 rounded-full"></div>
                 <h3 class="text-gray-500 uppercase tracking-widest text-xs font-bold mb-4 dark:text-gray-400">Verse of the Moment</h3>
@@ -654,6 +667,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function loadDirectory(type = 'surah') {
         const grid = document.getElementById('surah-index-grid');
+        const list = document.getElementById('surah-list');
         if (!grid) return;
 
         grid.innerHTML = '<div class="col-span-full text-center py-10"><i class="fas fa-circle-notch fa-spin text-[#af944d] text-2xl"></i></div>';
@@ -662,25 +676,25 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const res = await fetch('https://api.alquran.cloud/v1/surah');
                 const data = await res.json();
-                grid.innerHTML = data.data.map(s => `
-                    <div class="glass-container p-6 rounded-[40px] cursor-pointer hover:bg-[#fcfdfd]/50 transition-all hover-card-3d border border-transparent hover:border-[#af944d]/30 dark:bg-gray-800 dark:border-gray-700" onclick="openReader(${s.number}, '${s.englishName}', 'surah')">
-                         <div class="flex justify-between items-start">
-                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#064e3b] to-[#064e3b] text-white flex items-center justify-center font-bold text-sm mb-3 shadow-lg">${s.number}</div>
-                            <div class="text-right text-[#064e3b] font-serif text-2xl drop-shadow-sm dark:text-[#af944d]">${s.name.replace('سُورَةُ ', '')}</div>
-                         </div>
-                         <h3 class="font-bold text-xl text-gray-800 dark:text-white">${s.englishName}</h3>
-                         <p class="text-sm text-gray-500 dark:text-gray-400">${s.englishNameTranslation}</p>
+                if (list) list.innerHTML = data.data.map(s => `<div class="cursor-pointer p-4 rounded-xl mb-1 hover:bg-[#af944d]/10 text-xs font-bold text-gray-400 hover:text-[#af944d] transition-all border border-transparent hover:border-[#af944d]/20" onclick="openReader(${s.number}, '${s.englishName}', 'surah')">${s.number}. ${s.englishName}</div>`).join('');
+
+                grid.innerHTML = data.data.map((s, i) => {
+                    const hue = (i * 12) % 360;
+                    return `
+                    <div class="bg-[#fcfdfd] p-6 rounded-[40px] shadow-sm text-center border-t-4 hover:-translate-y-1.5 transition-all cursor-pointer group dark:bg-gray-800 dark:border-gray-700" 
+                        style="border-color:hsl(${hue}, 40%, 50%)" onclick="openReader(${s.number}, '${s.englishName}', 'surah')">
+                         <div class="text-[10px] font-black opacity-30 mb-2">CHAPTER ${s.number}</div>
+                         <h3 class="font-[Amiri] text-4xl mb-2" style="color:hsl(${hue}, 40%, 30%)">${s.name.replace('سُورَةُ ', '')}</h3>
+                         <h4 class="font-black text-lg text-gray-800 dark:text-white uppercase tracking-tighter">${s.englishName}</h4>
+                         <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mt-1">${s.englishNameTranslation}</p>
                     </div>
-                `).join('');
-                // Sidebar List Update
-                const list = document.getElementById('surah-list');
-                if (list) list.innerHTML = data.data.map(s => `<div class="cursor-pointer p-2 hover:bg-[#fcfdfd]/10 text-xs text-gray-300 hover:text-white" onclick="openReader(${s.number}, '${s.englishName}', 'surah')">${s.number}. ${s.englishName}</div>`).join('');
+                `}).join('');
             } catch (e) { grid.innerHTML = 'Error loading.'; }
         } else {
             // PARA / JUZ (1-30)
             const paras = Array.from({ length: 30 }, (_, i) => i + 1);
             grid.innerHTML = paras.map(p => `
-                 <div class="glass-container p-6 rounded-[40px] cursor-pointer hover:bg-[#fcfdfd]/50 transition-all hover-card-3d border border-transparent hover:border-[#af944d]/30 dark:bg-gray-800 dark:border-gray-700" onclick="openReader(${p}, 'Juz ${p}', 'juz')">
+                 <div class="glass-container p-6 rounded-[40px] cursor-pointer hover:bg-[#f5f2eb]/50 transition-all hover-card-3d border border-transparent hover:border-[#af944d]/30 dark:bg-gray-800 dark:border-gray-700" onclick="openReader(${p}, 'Juz ${p}', 'juz')">
                       <div class="flex justify-between items-start">
                          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#064e3b] to-[#064e3b] text-white flex items-center justify-center font-bold text-sm mb-3 shadow-lg">${p}</div>
                          <div class="text-right text-[#064e3b] font-serif text-2xl drop-shadow-sm dark:text-[#af944d]">جزء ${p}</div>
@@ -691,7 +705,7 @@ document.addEventListener('DOMContentLoaded', () => {
              `).join('');
             // Sidebar List Update for Para? Maybe skip or update.
             const list = document.getElementById('surah-list');
-            if (list) list.innerHTML = paras.map(p => `<div class="cursor-pointer p-2 hover:bg-[#fcfdfd]/10 text-xs text-gray-300 hover:text-white" onclick="openReader(${p}, 'Juz ${p}', 'juz')">Para ${p}</div>`).join('');
+            if (list) list.innerHTML = paras.map(p => `<div class="cursor-pointer p-2 hover:bg-[#f5f2eb]/10 text-xs text-gray-300 hover:text-white" onclick="openReader(${p}, 'Juz ${p}', 'juz')">Para ${p}</div>`).join('');
         }
     }
 
@@ -728,25 +742,34 @@ document.addEventListener('DOMContentLoaded', () => {
             const hiData = await hiRes.json(); // Might be partial for Juz or empty wrapper
 
             quranContentEl.innerHTML = arData.data.ayahs.map((a, i) => `
-                <div class="mb-8 border-b border-white/5 pb-8 group hover:bg-[#fcfdfd]/5 p-4 rounded-lg transition-colors cursor-pointer" onclick="playVerse(${i})">
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="w-8 h-8 rounded-full border border-[#af944d] text-[#af944d] group-hover:bg-[#af944d] group-hover:text-white flex items-center justify-center text-xs ml-4 font-mono transition-colors">${a.numberInSurah}</span>
-                        <div class="text-right font-[Amiri] text-3xl leading-relaxed text-white drop-shadow-md" style="direction:rtl;">${a.text}</div>
+                <div class="mb-12 border-b border-white/5 pb-12 group hover:bg-white/5 p-6 rounded-[30px] transition-all cursor-pointer relative" onclick="playVerse(${i})">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
+                        <div class="flex items-center gap-4">
+                            <span class="w-10 h-10 rounded-full bg-[#af944d]/10 border border-[#af944d]/30 text-[#af944d] flex items-center justify-center text-sm font-black shadow-inner shadow-[#af944d]/20">${a.numberInSurah}</span>
+                            <button class="md:hidden text-[#af944d] bg-white/5 w-10 h-10 rounded-full flex items-center justify-center"><i class="fas fa-play text-[10px]"></i></button>
+                        </div>
+                        <div class="text-right font-[Amiri] text-4xl md:text-5xl leading-[1.8] text-white drop-shadow-2xl w-full" style="direction:rtl;">${a.text}</div>
                     </div>
                     
-                    <!-- Roman English (Transliteration) -->
-                    <div class="text-[#af944d] text-sm mb-2 italic font-serif opacity-90 tracking-wide">${trData.data.ayahs[i].text}</div>
-                    
-                    <!-- English Translation -->
-                    <div class="text-gray-300 text-lg leading-relaxed mb-3">${enData.data.ayahs[i].text}</div>
+                    <div class="space-y-6 max-w-4xl">
+                        <!-- Roman English (Transliteration) -->
+                        <div class="text-[#af944d] text-sm md:text-base mb-2 italic font-serif opacity-80 tracking-wide border-l-2 border-[#af944d]/30 pl-4">${trData.data.ayahs[i].text}</div>
+                        
+                        <!-- English Translation -->
+                        <div class="text-gray-100 text-lg md:text-xl leading-relaxed font-light">${enData.data.ayahs[i].text}</div>
 
-                    <!-- Hinglish Tarjuma (Roman Urdu) -->
-                    <div class="text-emerald-300 text-lg mb-2 italic font-medium leading-relaxed" style="font-family: 'Inter', sans-serif;">"${hiData.chapter[i]?.text || ''}"</div>
-                    
-                    <!-- Urdu Script Tarjuma -->
-                    <div class="text-emerald-100/90 text-xl font-[Amiri] leading-loose text-right dir-rtl border-t border-white/5 pt-2 mt-2" style="direction:rtl;">${urData.data.ayahs[i].text}</div>
+                        <!-- Hinglish Tarjuma (Roman Urdu) -->
+                        <div class="text-emerald-400 text-lg md:text-xl italic font-medium leading-relaxed bg-[#042f24] p-4 rounded-2xl border border-emerald-500/10">"${hiData.chapter[i]?.text || ''}"</div>
+                        
+                        <!-- Urdu Script Tarjuma -->
+                        <div class="text-emerald-50/90 text-2xl font-[Amiri] leading-[2] text-right dir-rtl" style="direction:rtl;">${urData.data.ayahs[i].text}</div>
+                    </div>
                 </div>
             `).join('');
+
+            // Sync Mobile Play Button
+            const mobPlayBtn = document.getElementById('play-pause-btn-mob');
+            if (mobPlayBtn) mobPlayBtn.onclick = () => document.getElementById('play-pause-btn').click();
 
             window.currentSurahData = arData; // Global Store
 
@@ -780,10 +803,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Playback Helpers
     window.highlightVerse = function (index) {
         const verses = document.querySelectorAll('#quran-content > div');
-        verses.forEach(d => d.classList.remove('bg-[#fcfdfd]/10', 'border-l-4', 'border-[#af944d]'));
+        verses.forEach(d => d.classList.remove('bg-[#f5f2eb]/10', 'border-l-4', 'border-[#af944d]'));
 
         if (verses[index]) {
-            verses[index].classList.add('bg-[#fcfdfd]/10', 'border-l-4', 'border-[#af944d]');
+            verses[index].classList.add('bg-[#f5f2eb]/10', 'border-l-4', 'border-[#af944d]');
             verses[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     }
@@ -850,7 +873,7 @@ document.addEventListener('DOMContentLoaded', () => {
             grid.innerHTML = data.data.map((n, i) => {
                 const hue = (i * 15) % 360;
                 return `
-                <div class="bg-[#fcfdfd] p-6 rounded-[40px] shadow-sm text-center border-t-4 hover:-translate-y-1 transition-transform relative overflow-hidden group dark:bg-gray-800 dark:border-gray-700" style="border-color:hsl(${hue}, 60%, 40%)">
+                <div class="bg-[#f5f2eb] p-6 rounded-[40px] shadow-sm text-center border-t-4 hover:-translate-y-1 transition-transform relative overflow-hidden group dark:bg-gray-800 dark:border-gray-700" style="border-color:hsl(${hue}, 60%, 40%)">
                     <div class="text-xs text-gray-400 mb-2">#${n.number}</div>
                     <h3 class="name-3d text-4xl font-[Amiri] mb-2" style="color:hsl(${hue}, 70%, 30%)">${n.name}</h3>
                     <div class="font-bold text-gray-800 text-lg dark:text-white">${n.transliteration}</div>
@@ -966,7 +989,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             cat: 'morning-evening',
             title: 'Before Sleeping',
-            ar: 'بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا',
+            ar: 'بِاسْمِ اللَّهُمَّ أَمُوتُ وَأَحْيَا',
             tr: "Bismika Allahumma amutu wa ahya",
             en: 'In Your name, O Allah, I die and I live.',
             ref: 'Sahih Al-Bukhari'
@@ -1894,22 +1917,74 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     ];
 
-    function renderDuas(cat = 'all') {
+    function renderDuas(cat = 'all', searchTerm = '') {
         const grid = document.getElementById('duas-grid');
         if (!grid) return;
-        const filtered = cat === 'all' ? duas : duas.filter(d => d.cat === cat);
-        grid.innerHTML = filtered.map(d => `
-            <div class="bg-[#fcfdfd] p-6 rounded-[40px] shadow-sm relative overflow-hidden group hover:shadow-lg transition-shadow border-l-4 dark:bg-gray-800 dark:border-gray-700" style="border-left-color:#064e3b">
-                 <div class="absolute top-0 right-0 p-2 bg-gray-500 rounded-bl-xl text-xs font-bold text-white uppercase shadow-sm">${d.cat}</div>
-                 <h3 class="font-bold text-lg mb-2 text-[#064e3b] dark:text-[#af944d]">${d.title}</h3>
-                 <div class="text-right font-[Amiri] text-2xl mb-3 text-gray-700 leading-loose dark:text-gray-200" style="direction:rtl;">${d.ar}</div>
-                 <div class="font-medium text-[#af944d] mb-2 italic text-sm font-serif opacity-90">${d.tr}</div>
-                 <div class="text-gray-500 text-sm italic border-t border-gray-100 pt-3 dark:border-gray-700 dark:text-gray-400">"${d.en}"</div>
-                 <div class="text-xs text-gray-400 mt-2 text-right opacity-70">— ${d.ref}</div>
+
+        // Update active button state (only if we're not just searching)
+        if (!searchTerm) {
+            document.querySelectorAll('.dua-cat-btn').forEach(btn => {
+                if (btn.dataset.cat === cat) {
+                    btn.classList.add('bg-[#064e3b]', 'text-white', 'shadow-lg');
+                    btn.classList.remove('bg-[#f5f2eb]', 'text-gray-700');
+                } else {
+                    btn.classList.remove('bg-[#064e3b]', 'text-white', 'shadow-lg');
+                    btn.classList.add('bg-[#f5f2eb]', 'text-gray-700');
+                }
+            });
+        }
+
+        let filtered = cat === 'all' ? duas : duas.filter(d => d.cat === cat);
+
+        if (searchTerm) {
+            const term = searchTerm.toLowerCase();
+            filtered = duas.filter(d =>
+                d.title.toLowerCase().includes(term) ||
+                d.en.toLowerCase().includes(term) ||
+                d.cat.toLowerCase().includes(term)
+            );
+        }
+
+        if (filtered.length === 0) {
+            grid.innerHTML = `
+                <div class="col-span-full text-center py-20 opacity-40">
+                    <i class="fas fa-search-minus text-6xl mb-4"></i>
+                    <p class="text-xl font-bold">No Duas found matching "${searchTerm}"</p>
+                </div>
+            `;
+            return;
+        }
+
+        grid.innerHTML = filtered.map((d, i) => {
+            const hue = (i * 20) % 360;
+            return `
+            <div class="bg-[#fcfdfd] p-10 rounded-[40px] shadow-lg text-center border-t-4 hover:-translate-y-2 transition-all duration-500 relative group dark:bg-gray-800 dark:border-[#af944d]" style="border-color:hsl(${hue}, 50%, 40%)">
+                 <div class="absolute top-0 right-0 p-3 bg-gray-50 rounded-bl-3xl text-[10px] font-black uppercase tracking-widest opacity-30 group-hover:opacity-100 transition-opacity">${d.cat}</div>
+                 <h3 class="font-black text-xl mb-6 border-b border-gray-50 dark:border-white/5 pb-4" style="color:hsl(${hue}, 50%, 30%)">${d.title}</h3>
+                 <div class="font-[Amiri] text-4xl mb-8 leading-relaxed drop-shadow-sm text-gray-800 dark:text-gray-100" style="direction:rtl;">${d.ar}</div>
+                 
+                 <div class="space-y-4">
+                    <div class="font-bold italic text-base font-serif opacity-70 border-l-2 pl-4 text-left" style="border-color:hsl(${hue}, 50%, 40%)">${d.tr}</div>
+                    <div class="text-gray-600 text-lg leading-relaxed dark:text-gray-300 font-light text-left">"${d.en}"</div>
+                    <div class="text-[10px] font-black opacity-30 uppercase tracking-[0.2em] text-right mt-6 group-hover:opacity-60 transition-opacity">— SOURCE: ${d.ref}</div>
+                 </div>
             </div>
-        `).join('');
+        `}).join('');
     }
-    document.querySelectorAll('.dua-cat-btn').forEach(btn => btn.addEventListener('click', () => { renderDuas(btn.dataset.cat); }));
+
+    // Attach click listeners
+    document.querySelectorAll('.dua-cat-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.getElementById('dua-keyword-search').value = ''; // Reset search on cat change
+            renderDuas(btn.dataset.cat);
+            document.getElementById('dua-categories').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
+    // Handle Search Bar
+    document.getElementById('dua-keyword-search')?.addEventListener('input', (e) => {
+        renderDuas('all', e.target.value);
+    });
 
     // 3D & Mouse
     function initThree() {
@@ -1920,17 +1995,32 @@ document.addEventListener('DOMContentLoaded', () => {
         camera.position.z = 6;
         const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
         renderer.setSize(400, 400);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         cont.appendChild(renderer.domElement);
+
         const geo = new THREE.BoxGeometry(2, 2.2, 2);
         const mat = new THREE.MeshStandardMaterial({ color: 0x064e3b, roughness: 0.1, metalness: 0.5 }); // Emerald base
         const cube = new THREE.Mesh(geo, mat);
+
         const goldGeo = new THREE.BoxGeometry(2.05, 0.4, 2.05);
-        const goldMat = new THREE.MeshStandardMaterial({ color: 0xaf944d, metalness: 1.0, roughness: 0.1 }); // Polished Gold leaf
+        const goldMat = new THREE.MeshStandardMaterial({ color: 0xaf944d, metalness: 1.0, roughness: 0.1 }); // Polished Gold
         const band = new THREE.Mesh(goldGeo, goldMat);
         band.position.y = 0.5;
-        const group = new THREE.Group(); group.add(cube); group.add(band); scene.add(group);
-        const light = new THREE.DirectionalLight(0xffffff, 0.8); light.position.set(5, 5, 5); scene.add(light); scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-        function animate() { requestAnimationFrame(animate); group.rotation.y += 0.003; group.rotation.x = Math.sin(Date.now() * 0.001) * 0.05; renderer.render(scene, camera); }
+
+        const group = new THREE.Group();
+        group.add(cube);
+        group.add(band);
+        scene.add(group);
+
+        const light = new THREE.DirectionalLight(0xffffff, 0.8); light.position.set(5, 5, 5); scene.add(light);
+        scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+
+        function animate() {
+            requestAnimationFrame(animate);
+            group.rotation.y += 0.003;
+            group.rotation.x = Math.sin(Date.now() * 0.001) * 0.05;
+            renderer.render(scene, camera);
+        }
         animate();
     }
     function initEffects() {
@@ -2032,13 +2122,44 @@ window.getRamadanTimes = async function () {
 
         if (data.code === 200) {
             const timings = data.data.timings;
+            const hijriDate = data.data.date.hijri;
+
             // Populate View Elements
             if (document.getElementById('saheriVal')) document.getElementById('saheriVal').innerText = timings.Fajr;
             if (document.getElementById('iftarVal')) document.getElementById('iftarVal').innerText = timings.Maghrib;
 
+            // Update Ramadan Day
+            const dayNumEl = document.querySelector('#view-ramadan .text-4xl.font-black.text-gray-800');
+            if (dayNumEl && hijriDate.month.number === 9) {
+                dayNumEl.innerText = hijriDate.day;
+            }
+
             startRamadanCountdown(timings.Fajr, timings.Maghrib);
+            updateAshraTracker(hijriDate.day);
         }
     } catch (e) { console.error("API Error", e); }
+}
+
+function updateAshraTracker(day) {
+    const dayInt = parseInt(day);
+    const ashras = document.querySelectorAll('#view-ramadan .grid.grid-cols-1.md\\:grid-cols-3.gap-6.mb-16 > div');
+    ashras.forEach((a, i) => {
+        a.classList.remove('scale-105', 'z-10', 'outline', 'ring-8', 'opacity-50', 'grayscale');
+        a.querySelector('.bg-\\[\\#af944d\\]\\/10')?.remove(); // Remove "Active Phase" badge if exists
+
+        const currentAshra = Math.floor((dayInt - 1) / 10);
+        if (i === currentAshra) {
+            a.classList.add('scale-105', 'z-10', 'outline', 'outline-4', 'outline-[#af944d]/20', 'ring-8', 'ring-[#af944d]/5');
+            const badge = document.createElement('div');
+            badge.className = "mt-4 px-3 py-1 bg-[#af944d]/10 text-[#af944d] rounded-full text-[10px] font-black inline-block uppercase tracking-widest";
+            badge.innerText = "Active Phase";
+            a.appendChild(badge);
+        } else if (i < currentAshra) {
+            a.classList.add('opacity-40');
+        } else {
+            a.classList.add('opacity-50', 'grayscale');
+        }
+    });
 }
 
 window.autoDetectRamadanContent = function () {
@@ -2105,7 +2226,7 @@ window.fetchMonthlyCalendar = async function () {
             tbody.innerHTML = results.map(day => {
                 const isRamadan = day.date.hijri.month.number === 9;
                 return `
-                <tr class="hover:bg-[#fcfdfd]/5 transition-colors ${isRamadan ? 'bg-emerald-900/30' : ''}">
+                <tr class="hover:bg-[#f5f2eb]/5 transition-colors ${isRamadan ? 'bg-emerald-900/30' : ''}">
                     <td class="px-4 py-3 border-r border-[#af944d]/10">
                         <span class="font-bold text-white">${day.date.gregorian.day}</span>
                         <span class="text-xs opacity-50 block">${day.date.gregorian.weekday.en}</span>
@@ -2143,13 +2264,22 @@ window.shareToWhatsApp = function () {
 window.updateAtmosphere = function () {
     const hour = new Date().getHours();
     const section = document.getElementById('view-ramadan');
-    // Only update if section exists
     if (!section) return;
 
-    // Apply background color to the section based on time
-    if (hour >= 17 && hour < 19) section.style.backgroundColor = "#042f24"; // Sunset Deep Emerald
-    else if (hour >= 19 || hour < 5) section.style.backgroundColor = "#021a14"; // Night Dark Emerald
-    else section.style.backgroundColor = "#064e3b"; // Day Bright Emerald
+    const layer = section.querySelector('.absolute.inset-0.z-0.opacity-20');
+    if (!layer) return;
+
+    // Apply high-end atmospheric gradients
+    if (hour >= 17 && hour < 19) {
+        // Maghrib/Sunset: Deep Orange to Purple
+        layer.style.background = "linear-gradient(135deg, #f59e0b 0%, #7c3aed 50%, #064e3b 100%)";
+    } else if (hour >= 19 || hour < 4) {
+        // Isha/Tahajjud: Midnight Indigo to Emerald
+        layer.style.background = "radial-gradient(circle at 50% 0%, #1e1b4b 0%, #020617 70%, #064e3b 100%)";
+    } else {
+        // Fajr/Morning: Dawn Teal to Gold
+        layer.style.background = "linear-gradient(to bottom, #064e3b 0%, #042f24 100%)";
+    }
 }
 // Init Atmosphere
 setInterval(window.updateAtmosphere, 60000); // Check every minute
@@ -2186,8 +2316,8 @@ function startRamadanCountdown(fajr, maghrib) {
         const m = Math.floor((diff % 3600000) / 60000);
         const s = Math.floor((diff % 60000) / 1000);
 
-        // Update Label if it exists
-        const labelEl = document.querySelector('.mihrab-arch p.tracking-widest');
+        // Update Label
+        const labelEl = document.querySelector('#view-ramadan .opacity-40.mt-2'); // Refers to "Remaining in Fast"
         if (labelEl) labelEl.innerText = label;
 
         const timerEl = document.getElementById('timer');

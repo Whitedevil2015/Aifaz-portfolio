@@ -23,31 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const autoLocBtn = document.getElementById('update-location-btn');
     const searchInput = document.getElementById('hadith-search');
     const themeBtn = document.getElementById('theme-toggle');
-
-    // --- NAVIGATION LOGIC ---
-    navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            document.querySelectorAll('.nav-link').forEach(l => {
-                l.classList.remove('active', 'bg-[#fdfaf6]/10', 'border-[#c5a059]');
-                l.classList.add('border-transparent');
-                l.querySelector('i').classList.remove('text-[#c5a059]');
-                l.querySelector('i').classList.add('text-[#c5a059]/80');
-            });
-            link.classList.add('active', 'bg-[#fdfaf6]/10', 'border-[#c5a059]');
-            link.classList.remove('border-transparent');
-            link.querySelector('i').classList.add('text-[#c5a059]');
-            link.querySelector('i').classList.remove('text-[#c5a059]/80');
-
-            const targetId = link.getAttribute('data-target');
-            sections.forEach(sec => sec.classList.add('hidden'));
-            const targetSec = document.getElementById(targetId);
-            if (targetSec) targetSec.classList.remove('hidden');
-
-            if (targetId === 'view-library') loadLibrary();
-
-        });
-    });
+    const quranModal = document.getElementById('quran-modal');
+    const quranContentEl = document.getElementById('quran-content');
+    const audioPlayer = document.getElementById('quran-audio');
 
     // --- THEME TOGGLE ---
     themeBtn?.addEventListener('click', () => {
@@ -63,31 +41,120 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // --- PRAYER ENGINE (REAL-TIME) ---
-    async function updateMasterDates() {
-        const hDateEl = document.getElementById('hero-hijri-date');
-        const gDateEl = document.getElementById('hero-greg-date');
-        const headerDate = document.getElementById('portal-current-date');
-        const localTimeEl = document.getElementById('local-time');
+    // --- NAVIGATION & MODAL LOGIC ---
+    let currentView = 'view-dashboard';
 
-        setInterval(() => {
-            if (localTimeEl) localTimeEl.textContent = new Date().toLocaleTimeString();
-        }, 1000);
+    function navigateToView(targetId, updateHistory = true) {
+        if (!targetId) return;
+        currentView = targetId;
 
-        const now = new Date();
-        if (headerDate) headerDate.innerHTML = `<span style="color:#24423a">${now.toLocaleDateString('en-US', { weekday: 'long' })}</span>, ${now.toLocaleDateString()}`;
+        // Target Section logic
+        sections.forEach(sec => sec.classList.add('hidden'));
+        const targetSec = document.getElementById(targetId);
+        if (targetSec) targetSec.classList.remove('hidden');
 
-        try {
-            const res = await fetch(`https://api.aladhan.com/v1/gToH?date=${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()}`);
-            const data = await res.json();
-            if (data.code === 200) {
-                const h = data.data.hijri;
-                const g = data.data.gregorian;
-                if (hDateEl) hDateEl.innerHTML = `<span class="text-2xl font-bold text-[#c5a059]">${h.day}</span> ${h.month.en} ${h.year} AH`;
-                if (gDateEl) gDateEl.innerHTML = `<span class="text-2xl font-bold text-blue-600">${g.day}</span> ${g.month.en} ${g.year} AD`;
+        // Scroll to top of main area
+        const mainScroll = document.getElementById('main-scroll-area');
+        if (mainScroll) mainScroll.scrollTop = 0;
+
+        // Close any lingering modals when navigating views
+        closeAllModals(false);
+
+        // Update nav links styling
+        navLinks.forEach(l => {
+            const linkTarget = l.getAttribute('data-target');
+            const icon = l.querySelector('i');
+            const isMatch = linkTarget === targetId;
+
+            if (isMatch) {
+                l.classList.add('active', 'bg-[#fcfdfd]/10', 'border-[#af944d]');
+                l.classList.remove('border-transparent');
+                if (icon) {
+                    icon.classList.add('text-[#af944d]');
+                    icon.classList.remove('text-[#af944d]/80');
+                }
+            } else {
+                l.classList.remove('active', 'bg-[#fcfdfd]/10', 'border-[#af944d]');
+                l.classList.add('border-transparent');
+                if (icon) {
+                    icon.classList.remove('text-[#af944d]');
+                    icon.classList.add('text-[#af944d]/80');
+                }
             }
-        } catch (e) { }
+        });
+
+        // Specific view callbacks
+        if (targetId === 'view-library') loadLibrary();
+
+        // Manage Browser History
+        if (updateHistory) {
+            history.pushState({ targetId, modalId: null }, "", `#${targetId}`);
+        }
     }
+
+    function closeAllModals(updateHistory = true) {
+        const modals = ['fazilat-modal', 'quran-modal'];
+        modals.forEach(id => {
+            const m = document.getElementById(id);
+            if (m) {
+                m.classList.add('hidden');
+                m.classList.remove('flex');
+                if (id === 'quran-modal') m.style.display = 'none';
+            }
+        });
+        if (updateHistory && history.state && history.state.modalId) {
+            history.back();
+        }
+    }
+
+    // Exported for use in inline HTML
+    window.closePortalModal = closeAllModals;
+
+    // CLICK HANDLERS
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute('data-target');
+            navigateToView(targetId);
+        });
+    });
+
+    // BACK/FORWARD NAVIGATION HANDLER
+    window.addEventListener('popstate', (e) => {
+        if (e.state) {
+            if (e.state.modalId) {
+                // Should show modal
+                if (e.state.modalId === 'fazilat-modal') {
+                    // Note: opening without state push to avoid loops
+                    const m = document.getElementById('fazilat-modal');
+                    if (m) { m.classList.remove('hidden'); m.classList.add('flex'); }
+                } else if (e.state.modalId === 'quran-modal') {
+                    if (quranModal) quranModal.style.display = 'flex';
+                }
+            } else {
+                // No modal in this state, close all
+                closeAllModals(false);
+            }
+
+            if (e.state.targetId) {
+                navigateToView(e.state.targetId, false);
+            }
+        } else {
+            // Default to dashboard if no state (e.g. back to start)
+            navigateToView('view-dashboard', false);
+        }
+    });
+
+    // INITIAL STATE HANDLING
+    const hash = window.location.hash.replace('#', '');
+    if (hash && document.getElementById(hash)) {
+        navigateToView(hash, false);
+    } else {
+        // Record initial state for back button to work correctly
+        history.replaceState({ targetId: 'view-dashboard', modalId: null }, "", "#view-dashboard");
+    }
+
+    // --- ATMOSPHERIC WEATHER ---
 
     // --- ATMOSPHERIC WEATHER ---
     async function fetchAtmosphere(lat, lng) {
@@ -223,6 +290,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const modal = document.getElementById('fazilat-modal');
         modal.classList.remove('hidden');
         modal.classList.add('flex');
+
+        // History API
+        history.pushState({ targetId: currentView, modalId: 'fazilat-modal' }, "", "#fazilat");
     };
 
     function renderPrayerGuide(timings) {
@@ -306,9 +376,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // RENDER FARZ
         farzGrid.innerHTML = farzData.map(d => `
-            <div class="glass p-6 rounded-2xl border-l-4 border-emerald-500 relative overflow-hidden group hover:-translate-y-1 transition-transform dark:bg-gray-800 cursor-pointer hover:shadow-lg transition-all" onclick="openFazilat('${d.name}')">
+            <div class="glass p-6 rounded-[40px] border-l-4 border-emerald-500 relative overflow-hidden group hover:-translate-y-1 transition-transform dark:bg-gray-800 cursor-pointer hover:shadow-lg transition-all" onclick="openFazilat('${d.name}')">
                 <div class="absolute -right-4 -top-4 opacity-10 text-8xl text-emerald-500"><i class="fas ${d.icon}"></i></div>
-                <h3 class="text-2xl font-bold text-[#24423a] mb-1 font-[Cormorant_Garamond] dark:text-white group-hover:underline decoration-emerald-500/50 underline-offset-4 decoration-2">${d.name} <i class="fas fa-info-circle text-xs text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity ml-2 align-middle"></i></h3>
+                <h3 class="text-2xl font-bold text-[#064e3b] mb-1 font-[Cormorant_Garamond] dark:text-white group-hover:underline decoration-emerald-500/50 underline-offset-4 decoration-2">${d.name} <i class="fas fa-info-circle text-xs text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity ml-2 align-middle"></i></h3>
                 <p class="text-sm text-gray-500 font-mono mb-3 dark:text-gray-400">${d.time}</p>
                 <div class="p-3 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
                      <p class="text-xs font-bold text-emerald-700 uppercase mb-1 dark:text-emerald-400">Rakats</p>
@@ -319,14 +389,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // RENDER NAFIL
         nafilGrid.innerHTML = nafilData.map(d => `
-            <div class="glass p-6 rounded-2xl border-t-4 border-[#c5a059] bg-[#c5a059]/5 relative overflow-hidden group hover:-translate-y-1 transition-transform dark:bg-gray-800 cursor-pointer hover:shadow-lg transition-all" onclick="openFazilat('${d.name}')">
-                ${d.badge ? `<div class="absolute top-0 right-0 bg-[#c5a059] text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg uppercase tracking-wider shadow-sm">${d.badge}</div>` : ''}
-                <div class="absolute -right-4 -top-4 opacity-10 text-8xl text-[#c5a059]"><i class="fas ${d.icon}"></i></div>
-                <h3 class="text-2xl font-bold text-[#24423a] mb-1 font-[Cormorant_Garamond] dark:text-[#c5a059] group-hover:underline decoration-[#c5a059]/50 underline-offset-4 decoration-2">${d.name} <i class="fas fa-info-circle text-xs text-[#c5a059] opacity-0 group-hover:opacity-100 transition-opacity ml-2 align-middle"></i></h3>
-                <p class="text-xs text-[#c5a059] uppercase tracking-widest font-bold mb-3">Window</p>
+            <div class="glass p-6 rounded-[40px] border-t-4 border-[#af944d] bg-[#af944d]/5 relative overflow-hidden group hover:-translate-y-1 transition-transform dark:bg-gray-800 cursor-pointer hover:shadow-lg transition-all" onclick="openFazilat('${d.name}')">
+                ${d.badge ? `<div class="absolute top-0 right-0 bg-[#af944d] text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg uppercase tracking-wider shadow-sm">${d.badge}</div>` : ''}
+                <div class="absolute -right-4 -top-4 opacity-10 text-8xl text-[#af944d]"><i class="fas ${d.icon}"></i></div>
+                <h3 class="text-2xl font-bold text-[#064e3b] mb-1 font-[Cormorant_Garamond] dark:text-[#af944d] group-hover:underline decoration-[#af944d]/50 underline-offset-4 decoration-2">${d.name} <i class="fas fa-info-circle text-xs text-[#af944d] opacity-0 group-hover:opacity-100 transition-opacity ml-2 align-middle"></i></h3>
+                <p class="text-xs text-[#af944d] uppercase tracking-widest font-bold mb-3">Window</p>
                 <div class="text-2xl font-mono font-bold text-gray-800 mb-3 dark:text-gray-200">${d.time}</div>
-                <div class="mb-3 p-2 bg-[#fdfaf6]/50 rounded border border-[#c5a059]/20 w-fit backdrop-blur-sm dark:bg-black/20">
-                    <span class="text-xs font-bold text-[#c5a059] uppercase">Rakat:</span> <span class="text-sm font-bold dark:text-white">${d.rakat}</span>
+                <div class="mb-3 p-2 bg-[#fcfdfd]/50 rounded border border-[#af944d]/20 w-fit backdrop-blur-sm dark:bg-black/20">
+                    <span class="text-xs font-bold text-[#af944d] uppercase">Rakat:</span> <span class="text-sm font-bold dark:text-white">${d.rakat}</span>
                 </div>
                 <p class="text-sm text-gray-600 italic leading-relaxed dark:text-gray-400">${d.desc}</p>
             </div>
@@ -367,21 +437,21 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isFriday && !document.getElementById('friday-banner')) {
             const banner = document.createElement('div');
             banner.id = 'friday-banner';
-            banner.className = 'col-span-full bg-gradient-to-r from-[#24423a] to-[#0f2b19] p-6 rounded-2xl shadow-xl border border-[#c5a059]/30 mb-6 text-white relative overflow-hidden animate-fade-in-up';
+            banner.className = 'col-span-full bg-gradient-to-r from-[#064e3b] to-[#0f2b19] p-6 rounded-[40px] shadow-xl border border-[#af944d]/30 mb-6 text-white relative overflow-hidden animate-fade-in-up';
             banner.innerHTML = `
-                <div class="absolute top-0 right-0 w-64 h-64 bg-[#c5a059] opacity-10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
+                <div class="absolute top-0 right-0 w-64 h-64 bg-[#af944d] opacity-10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
                 <div class="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
                     <div class="text-center md:text-left">
-                        <h2 class="text-3xl font-[Cormorant_Garamond] font-bold text-[#c5a059] mb-2">Jumu'ah Mubarak!</h2>
+                        <h2 class="text-3xl font-[Cormorant_Garamond] font-bold text-[#af944d] mb-2">Jumu'ah Mubarak!</h2>
                         <p class="text-sm opacity-90 mb-4 font-light">Don't forget the Sunnah acts of this blessed day.</p>
                         <div class="flex flex-wrap gap-3 justify-center md:justify-start">
-                            <span class="px-3 py-1 bg-[#fdfaf6]/10 rounded-full text-xs border border-[#c5a059]/30 flex items-center gap-2 backdrop-blur-md"><i class="fas fa-book-open text-[#c5a059]"></i> Surah Al-Kahf</span>
-                            <span class="px-3 py-1 bg-[#fdfaf6]/10 rounded-full text-xs border border-[#c5a059]/30 flex items-center gap-2 backdrop-blur-md"><i class="fas fa-comment-dots text-[#c5a059]"></i> Durood</span>
-                            <span class="px-3 py-1 bg-[#fdfaf6]/10 rounded-full text-xs border border-[#c5a059]/30 flex items-center gap-2 backdrop-blur-md"><i class="fas fa-hands-praying text-[#c5a059]"></i> Dua (Hour of Acceptance)</span>
+                            <span class="px-3 py-1 bg-[#fcfdfd]/10 rounded-full text-xs border border-[#af944d]/30 flex items-center gap-2 backdrop-blur-md"><i class="fas fa-book-open text-[#af944d]"></i> Surah Al-Kahf</span>
+                            <span class="px-3 py-1 bg-[#fcfdfd]/10 rounded-full text-xs border border-[#af944d]/30 flex items-center gap-2 backdrop-blur-md"><i class="fas fa-comment-dots text-[#af944d]"></i> Durood</span>
+                            <span class="px-3 py-1 bg-[#fcfdfd]/10 rounded-full text-xs border border-[#af944d]/30 flex items-center gap-2 backdrop-blur-md"><i class="fas fa-hands-praying text-[#af944d]"></i> Dua (Hour of Acceptance)</span>
                         </div>
                     </div>
                     <div class="text-center shrink-0">
-                         <a href="#" onclick="document.querySelector('[data-target=view-quran]').click(); setTimeout(() => openReader(18, 'Al-Kahf', 'surah'), 500);" class="inline-flex items-center px-6 py-2 bg-[#c5a059] text-[#0f2b19] font-bold rounded-full hover:bg-[#fdfaf6] transition-all shadow-lg shadow-[#c5a059]/20 transform hover:-translate-y-1">
+                         <a href="#" onclick="document.querySelector('[data-target=view-quran]').click(); setTimeout(() => openReader(18, 'Al-Kahf', 'surah'), 500);" class="inline-flex items-center px-6 py-2 bg-[#af944d] text-[#0f2b19] font-bold rounded-full hover:bg-[#fcfdfd] transition-all shadow-lg shadow-[#af944d]/20 transform hover:-translate-y-1">
                              <i class="fas fa-quran mr-2"></i> Read Kahf
                          </a>
                     </div>
@@ -404,13 +474,13 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
 
         grid.innerHTML = prayers.map(p => `
-            <div id="card-${p.id}" onclick="openFazilat('${p.id}')" class="glass cursor-pointer p-4 rounded-2xl text-center border border-white/20 relative group transition-all duration-500 hover:-translate-y-2 dark:bg-gray-800/40 ${p.label === "Jumu'ah" ? 'border-[#c5a059] shadow-[0_0_20px_rgba(197,160,89,0.15)]' : ''}">
-                <div class="absolute -right-6 -top-6 opacity-10 text-7xl text-[#c5a059] group-hover:rotate-12 transition-transform"><i class="fas ${p.icon}"></i></div>
-                <div class="w-10 h-10 mx-auto bg-[#c5a059]/10 rounded-full flex items-center justify-center text-[#c5a059] mb-3 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(197,160,89,0.2)]">
+            <div id="card-${p.id}" onclick="openFazilat('${p.id}')" class="glass cursor-pointer p-4 rounded-[40px] text-center border border-white/20 relative group transition-all duration-500 hover:-translate-y-2 dark:bg-gray-800/40 ${p.label === "Jumu'ah" ? 'border-[#af944d] shadow-[0_0_20px_rgba(197,160,89,0.15)]' : ''}">
+                <div class="absolute -right-6 -top-6 opacity-10 text-7xl text-[#af944d] group-hover:rotate-12 transition-transform"><i class="fas ${p.icon}"></i></div>
+                <div class="w-10 h-10 mx-auto bg-[#af944d]/10 rounded-full flex items-center justify-center text-[#af944d] mb-3 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(197,160,89,0.2)]">
                     <i class="fas ${p.icon}"></i>
                 </div>
-                <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1 dark:text-gray-400 ${p.label === "Jumu'ah" ? 'text-[#c5a059]' : ''}">${p.label || p.id}</p>
-                <p class="text-2xl font-[Amiri] font-bold text-gray-800 dark:text-white group-hover:text-[#c5a059] transition-colors">${formatTo12Hour(timings[p.id])}</p>
+                <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1 dark:text-gray-400 ${p.label === "Jumu'ah" ? 'text-[#af944d]' : ''}">${p.label || p.id}</p>
+                <p class="text-2xl font-[Amiri] font-bold text-gray-800 dark:text-white group-hover:text-[#af944d] transition-colors">${formatTo12Hour(timings[p.id])}</p>
             </div>
         `).join('');
     }
@@ -453,9 +523,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Highlight Logic
             document.querySelectorAll('[id^="card-"]').forEach(el => {
-                el.classList.remove('ring-2', 'ring-[#c5a059]', 'neon-glow');
+                el.classList.remove('ring-2', 'ring-[#af944d]', 'neon-glow');
                 if (el.id === `card-${next}`) {
-                    el.classList.add('ring-2', 'ring-[#c5a059]', 'neon-glow');
+                    el.classList.add('ring-2', 'ring-[#af944d]', 'neon-glow');
                 }
             });
 
@@ -488,7 +558,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const view = document.getElementById('library-content');
         if (allHadiths.length > 0) return; // Already loaded
 
-        view.innerHTML = '<div class="text-center py-20"><i class="fas fa-circle-notch fa-spin text-4xl text-[#c5a059]"></i> <p class="mt-4">Loading Knowledge Base...</p></div>';
+        view.innerHTML = '<div class="text-center py-20"><i class="fas fa-circle-notch fa-spin text-4xl text-[#af944d]"></i> <p class="mt-4">Loading Knowledge Base...</p></div>';
 
         // Mock Large Data for Searchability
         // In production, fetch this from the JSON endpoint provided
@@ -523,13 +593,13 @@ document.addEventListener('DOMContentLoaded', () => {
         view.innerHTML = `
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-20">
                 ${list.map(h => `
-                    <div class="bg-[#fffbf0] p-8 rounded-tr-3xl rounded-bl-3xl shadow-md border border-[#c5a059]/20 hover:shadow-lg transition-all relative dark:bg-gray-800 dark:border-gray-700">
-                        <i class="fas fa-quote-right absolute top-4 right-4 text-[#c5a059]/20 text-4xl"></i>
-                        <h4 class="font-bold text-[#24423a] mb-4 uppercase tracking-widest text-xs dark:text-[#c5a059]">Hadith #${h.id}</h4>
+                    <div class="bg-[#fffbf0] p-8 rounded-tr-3xl rounded-bl-3xl shadow-md border border-[#af944d]/20 hover:shadow-lg transition-all relative dark:bg-gray-800 dark:border-gray-700">
+                        <i class="fas fa-quote-right absolute top-4 right-4 text-[#af944d]/20 text-4xl"></i>
+                        <h4 class="font-bold text-[#064e3b] mb-4 uppercase tracking-widest text-xs dark:text-[#af944d]">Hadith #${h.id}</h4>
                         <p class="text-xl font-serif text-gray-800 leading-relaxed mb-4 dark:text-gray-200">"${h.text}"</p>
-                        <div class="text-sm font-bold text-[#c5a059] border-t border-[#c5a059]/20 pt-4 flex justify-between items-center">
+                        <div class="text-sm font-bold text-[#af944d] border-t border-[#af944d]/20 pt-4 flex justify-between items-center">
                             <span>Reference: ${h.ref}</span>
-                            <button class="text-gray-400 hover:text-[#24423a]"><i class="fas fa-share-alt"></i></button>
+                            <button class="text-gray-400 hover:text-[#064e3b]"><i class="fas fa-share-alt"></i></button>
                         </div>
                     </div>
                 `).join('')}
@@ -548,13 +618,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const modal = document.createElement('div');
         modal.className = 'fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm opacity-0 transition-opacity duration-700';
         modal.innerHTML = `
-            <div class="bg-[#fdfaf6] rounded-2xl max-w-lg w-full p-10 text-center relative transform scale-90 transition-transform duration-500 shadow-2xl border-4 border-[#c5a059]/30 dark:bg-gray-900 border-gray-700">
+            <div class="bg-[#fcfdfd] rounded-[40px] max-w-lg w-full p-10 text-center relative transform scale-90 transition-transform duration-500 shadow-2xl border-4 border-[#af944d]/30 dark:bg-gray-900 border-gray-700">
                 <button onclick="this.closest('.fixed').remove()" class="absolute top-4 right-4 text-gray-400 hover:text-red-500"><i class="fas fa-times text-xl"></i></button>
-                <div class="w-16 h-1 bg-[#c5a059] mx-auto mb-6 rounded-full"></div>
+                <div class="w-16 h-1 bg-[#af944d] mx-auto mb-6 rounded-full"></div>
                 <h3 class="text-gray-500 uppercase tracking-widest text-xs font-bold mb-4 dark:text-gray-400">Verse of the Moment</h3>
-                <p class="text-3xl font-[Cormorant_Garamond] font-bold text-[#24423a] mb-6 leading-tight dark:text-white">"${verse.t}"</p>
-                <p class="text-[#c5a059] font-semibold font-serif italic">— ${verse.r}</p>
-                <button onclick="this.closest('.fixed').remove()" class="mt-8 px-8 py-3 bg-[#24423a] text-white rounded-full font-bold hover:bg-[#24423a] transition-colors shadow-lg">Bismillah</button>
+                <p class="text-3xl font-[Cormorant_Garamond] font-bold text-[#064e3b] mb-6 leading-tight dark:text-white">"${verse.t}"</p>
+                <p class="text-[#af944d] font-semibold font-serif italic">— ${verse.r}</p>
+                <button onclick="this.closest('.fixed').remove()" class="mt-8 px-8 py-3 bg-[#064e3b] text-white rounded-full font-bold hover:bg-[#064e3b] transition-colors shadow-lg">Bismillah</button>
             </div>
         `;
         document.body.appendChild(modal);
@@ -567,9 +637,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- OTHER LOGIC (QURAN, NAMES, DUAS) ---
     // (Preserved from previous, just re-rendering to ensure scope)
-    const quranModal = document.getElementById('quran-modal');
-    const quranContentEl = document.getElementById('quran-content');
-    const audioPlayer = document.getElementById('quran-audio');
     let currentPlaylist = [];
     let currentAudioIndex = 0;
 
@@ -580,8 +647,8 @@ document.addEventListener('DOMContentLoaded', () => {
         currentDirType = type;
         const btnSurah = document.getElementById('tab-surah-btn');
         const btnPara = document.getElementById('tab-para-btn');
-        if (btnSurah) btnSurah.className = type === 'surah' ? "text-lg font-bold px-6 py-2 text-[#24423a] border-b-2 border-[#24423a] transition-all" : "text-lg font-bold px-6 py-2 text-gray-400 hover:text-[#24423a] border-b-2 border-transparent hover:border-[#24423a]/30 transition-all";
-        if (btnPara) btnPara.className = type === 'para' ? "text-lg font-bold px-6 py-2 text-[#24423a] border-b-2 border-[#24423a] transition-all" : "text-lg font-bold px-6 py-2 text-gray-400 hover:text-[#24423a] border-b-2 border-transparent hover:border-[#24423a]/30 transition-all";
+        if (btnSurah) btnSurah.className = type === 'surah' ? "text-lg font-bold px-6 py-2 text-[#064e3b] border-b-2 border-[#064e3b] transition-all" : "text-lg font-bold px-6 py-2 text-gray-400 hover:text-[#064e3b] border-b-2 border-transparent hover:border-[#064e3b]/30 transition-all";
+        if (btnPara) btnPara.className = type === 'para' ? "text-lg font-bold px-6 py-2 text-[#064e3b] border-b-2 border-[#064e3b] transition-all" : "text-lg font-bold px-6 py-2 text-gray-400 hover:text-[#064e3b] border-b-2 border-transparent hover:border-[#064e3b]/30 transition-all";
         loadDirectory(type);
     }
 
@@ -589,17 +656,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const grid = document.getElementById('surah-index-grid');
         if (!grid) return;
 
-        grid.innerHTML = '<div class="col-span-full text-center py-10"><i class="fas fa-circle-notch fa-spin text-[#c5a059] text-2xl"></i></div>';
+        grid.innerHTML = '<div class="col-span-full text-center py-10"><i class="fas fa-circle-notch fa-spin text-[#af944d] text-2xl"></i></div>';
 
         if (type === 'surah') {
             try {
                 const res = await fetch('https://api.alquran.cloud/v1/surah');
                 const data = await res.json();
                 grid.innerHTML = data.data.map(s => `
-                    <div class="glass-container p-6 rounded-xl cursor-pointer hover:bg-[#fdfaf6]/50 transition-all hover-card-3d border border-transparent hover:border-[#c5a059]/30 dark:bg-gray-800 dark:border-gray-700" onclick="openReader(${s.number}, '${s.englishName}', 'surah')">
+                    <div class="glass-container p-6 rounded-[40px] cursor-pointer hover:bg-[#fcfdfd]/50 transition-all hover-card-3d border border-transparent hover:border-[#af944d]/30 dark:bg-gray-800 dark:border-gray-700" onclick="openReader(${s.number}, '${s.englishName}', 'surah')">
                          <div class="flex justify-between items-start">
-                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#24423a] to-[#24423a] text-white flex items-center justify-center font-bold text-sm mb-3 shadow-lg">${s.number}</div>
-                            <div class="text-right text-[#24423a] font-serif text-2xl drop-shadow-sm dark:text-[#c5a059]">${s.name.replace('سُورَةُ ', '')}</div>
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#064e3b] to-[#064e3b] text-white flex items-center justify-center font-bold text-sm mb-3 shadow-lg">${s.number}</div>
+                            <div class="text-right text-[#064e3b] font-serif text-2xl drop-shadow-sm dark:text-[#af944d]">${s.name.replace('سُورَةُ ', '')}</div>
                          </div>
                          <h3 class="font-bold text-xl text-gray-800 dark:text-white">${s.englishName}</h3>
                          <p class="text-sm text-gray-500 dark:text-gray-400">${s.englishNameTranslation}</p>
@@ -607,16 +674,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 `).join('');
                 // Sidebar List Update
                 const list = document.getElementById('surah-list');
-                if (list) list.innerHTML = data.data.map(s => `<div class="cursor-pointer p-2 hover:bg-[#fdfaf6]/10 text-xs text-gray-300 hover:text-white" onclick="openReader(${s.number}, '${s.englishName}', 'surah')">${s.number}. ${s.englishName}</div>`).join('');
+                if (list) list.innerHTML = data.data.map(s => `<div class="cursor-pointer p-2 hover:bg-[#fcfdfd]/10 text-xs text-gray-300 hover:text-white" onclick="openReader(${s.number}, '${s.englishName}', 'surah')">${s.number}. ${s.englishName}</div>`).join('');
             } catch (e) { grid.innerHTML = 'Error loading.'; }
         } else {
             // PARA / JUZ (1-30)
             const paras = Array.from({ length: 30 }, (_, i) => i + 1);
             grid.innerHTML = paras.map(p => `
-                 <div class="glass-container p-6 rounded-xl cursor-pointer hover:bg-[#fdfaf6]/50 transition-all hover-card-3d border border-transparent hover:border-[#c5a059]/30 dark:bg-gray-800 dark:border-gray-700" onclick="openReader(${p}, 'Juz ${p}', 'juz')">
+                 <div class="glass-container p-6 rounded-[40px] cursor-pointer hover:bg-[#fcfdfd]/50 transition-all hover-card-3d border border-transparent hover:border-[#af944d]/30 dark:bg-gray-800 dark:border-gray-700" onclick="openReader(${p}, 'Juz ${p}', 'juz')">
                       <div class="flex justify-between items-start">
-                         <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#24423a] to-[#24423a] text-white flex items-center justify-center font-bold text-sm mb-3 shadow-lg">${p}</div>
-                         <div class="text-right text-[#24423a] font-serif text-2xl drop-shadow-sm dark:text-[#c5a059]">جزء ${p}</div>
+                         <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#064e3b] to-[#064e3b] text-white flex items-center justify-center font-bold text-sm mb-3 shadow-lg">${p}</div>
+                         <div class="text-right text-[#064e3b] font-serif text-2xl drop-shadow-sm dark:text-[#af944d]">جزء ${p}</div>
                       </div>
                       <h3 class="font-bold text-xl text-gray-800 dark:text-white">Juz ${p}</h3>
                       <p class="text-sm text-gray-500 dark:text-gray-400">Para ${p}</p>
@@ -624,7 +691,7 @@ document.addEventListener('DOMContentLoaded', () => {
              `).join('');
             // Sidebar List Update for Para? Maybe skip or update.
             const list = document.getElementById('surah-list');
-            if (list) list.innerHTML = paras.map(p => `<div class="cursor-pointer p-2 hover:bg-[#fdfaf6]/10 text-xs text-gray-300 hover:text-white" onclick="openReader(${p}, 'Juz ${p}', 'juz')">Para ${p}</div>`).join('');
+            if (list) list.innerHTML = paras.map(p => `<div class="cursor-pointer p-2 hover:bg-[#fcfdfd]/10 text-xs text-gray-300 hover:text-white" onclick="openReader(${p}, 'Juz ${p}', 'juz')">Para ${p}</div>`).join('');
         }
     }
 
@@ -632,11 +699,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (quranModal) quranModal.style.display = 'flex';
         document.getElementById('reader-title').textContent = type === 'surah' ? `Surah ${name}` : `${name}`;
         fetchQuranContent(num, type);
+        // History API
+        history.pushState({ targetId: currentView, modalId: 'quran-modal' }, "", "#reader");
     }
 
     async function fetchQuranContent(num, type = 'surah') {
         const quranContentEl = document.getElementById('quran-content');
-        quranContentEl.innerHTML = '<div class="text-center mt-20"><i class="fas fa-circle-notch fa-spin text-4xl text-[#c5a059]"></i></div>';
+        quranContentEl.innerHTML = '<div class="text-center mt-20"><i class="fas fa-circle-notch fa-spin text-4xl text-[#af944d]"></i></div>';
         try {
             const endpoint = type === 'juz' ? `juz/${num}` : `surah/${num}`;
             // Hinglish only supported for Surah currently
@@ -659,14 +728,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const hiData = await hiRes.json(); // Might be partial for Juz or empty wrapper
 
             quranContentEl.innerHTML = arData.data.ayahs.map((a, i) => `
-                <div class="mb-8 border-b border-white/5 pb-8 group hover:bg-[#fdfaf6]/5 p-4 rounded-lg transition-colors cursor-pointer" onclick="playVerse(${i})">
+                <div class="mb-8 border-b border-white/5 pb-8 group hover:bg-[#fcfdfd]/5 p-4 rounded-lg transition-colors cursor-pointer" onclick="playVerse(${i})">
                     <div class="flex justify-between items-center mb-4">
-                        <span class="w-8 h-8 rounded-full border border-[#c5a059] text-[#c5a059] group-hover:bg-[#c5a059] group-hover:text-white flex items-center justify-center text-xs ml-4 font-mono transition-colors">${a.numberInSurah}</span>
+                        <span class="w-8 h-8 rounded-full border border-[#af944d] text-[#af944d] group-hover:bg-[#af944d] group-hover:text-white flex items-center justify-center text-xs ml-4 font-mono transition-colors">${a.numberInSurah}</span>
                         <div class="text-right font-[Amiri] text-3xl leading-relaxed text-white drop-shadow-md" style="direction:rtl;">${a.text}</div>
                     </div>
                     
                     <!-- Roman English (Transliteration) -->
-                    <div class="text-[#c5a059] text-sm mb-2 italic font-serif opacity-90 tracking-wide">${trData.data.ayahs[i].text}</div>
+                    <div class="text-[#af944d] text-sm mb-2 italic font-serif opacity-90 tracking-wide">${trData.data.ayahs[i].text}</div>
                     
                     <!-- English Translation -->
                     <div class="text-gray-300 text-lg leading-relaxed mb-3">${enData.data.ayahs[i].text}</div>
@@ -711,10 +780,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Playback Helpers
     window.highlightVerse = function (index) {
         const verses = document.querySelectorAll('#quran-content > div');
-        verses.forEach(d => d.classList.remove('bg-[#fdfaf6]/10', 'border-l-4', 'border-[#c5a059]'));
+        verses.forEach(d => d.classList.remove('bg-[#fcfdfd]/10', 'border-l-4', 'border-[#af944d]'));
 
         if (verses[index]) {
-            verses[index].classList.add('bg-[#fdfaf6]/10', 'border-l-4', 'border-[#c5a059]');
+            verses[index].classList.add('bg-[#fcfdfd]/10', 'border-l-4', 'border-[#af944d]');
             verses[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     }
@@ -781,7 +850,7 @@ document.addEventListener('DOMContentLoaded', () => {
             grid.innerHTML = data.data.map((n, i) => {
                 const hue = (i * 15) % 360;
                 return `
-                <div class="bg-[#fdfaf6] p-6 rounded-xl shadow-sm text-center border-t-4 hover:-translate-y-1 transition-transform relative overflow-hidden group dark:bg-gray-800 dark:border-gray-700" style="border-color:hsl(${hue}, 60%, 40%)">
+                <div class="bg-[#fcfdfd] p-6 rounded-[40px] shadow-sm text-center border-t-4 hover:-translate-y-1 transition-transform relative overflow-hidden group dark:bg-gray-800 dark:border-gray-700" style="border-color:hsl(${hue}, 60%, 40%)">
                     <div class="text-xs text-gray-400 mb-2">#${n.number}</div>
                     <h3 class="name-3d text-4xl font-[Amiri] mb-2" style="color:hsl(${hue}, 70%, 30%)">${n.name}</h3>
                     <div class="font-bold text-gray-800 text-lg dark:text-white">${n.transliteration}</div>
@@ -1830,11 +1899,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!grid) return;
         const filtered = cat === 'all' ? duas : duas.filter(d => d.cat === cat);
         grid.innerHTML = filtered.map(d => `
-            <div class="bg-[#fdfaf6] p-6 rounded-xl shadow-sm relative overflow-hidden group hover:shadow-lg transition-shadow border-l-4 dark:bg-gray-800 dark:border-gray-700" style="border-left-color:#24423a">
+            <div class="bg-[#fcfdfd] p-6 rounded-[40px] shadow-sm relative overflow-hidden group hover:shadow-lg transition-shadow border-l-4 dark:bg-gray-800 dark:border-gray-700" style="border-left-color:#064e3b">
                  <div class="absolute top-0 right-0 p-2 bg-gray-500 rounded-bl-xl text-xs font-bold text-white uppercase shadow-sm">${d.cat}</div>
-                 <h3 class="font-bold text-lg mb-2 text-[#24423a] dark:text-[#c5a059]">${d.title}</h3>
+                 <h3 class="font-bold text-lg mb-2 text-[#064e3b] dark:text-[#af944d]">${d.title}</h3>
                  <div class="text-right font-[Amiri] text-2xl mb-3 text-gray-700 leading-loose dark:text-gray-200" style="direction:rtl;">${d.ar}</div>
-                 <div class="font-medium text-[#c5a059] mb-2 italic text-sm font-serif opacity-90">${d.tr}</div>
+                 <div class="font-medium text-[#af944d] mb-2 italic text-sm font-serif opacity-90">${d.tr}</div>
                  <div class="text-gray-500 text-sm italic border-t border-gray-100 pt-3 dark:border-gray-700 dark:text-gray-400">"${d.en}"</div>
                  <div class="text-xs text-gray-400 mt-2 text-right opacity-70">— ${d.ref}</div>
             </div>
@@ -1853,10 +1922,10 @@ document.addEventListener('DOMContentLoaded', () => {
         renderer.setSize(400, 400);
         cont.appendChild(renderer.domElement);
         const geo = new THREE.BoxGeometry(2, 2.2, 2);
-        const mat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.9 }); // Matte black
+        const mat = new THREE.MeshStandardMaterial({ color: 0x064e3b, roughness: 0.1, metalness: 0.5 }); // Emerald base
         const cube = new THREE.Mesh(geo, mat);
         const goldGeo = new THREE.BoxGeometry(2.05, 0.4, 2.05);
-        const goldMat = new THREE.MeshStandardMaterial({ color: 0xc5a059, metalness: 0.1, roughness: 0.8 }); // Matte gold
+        const goldMat = new THREE.MeshStandardMaterial({ color: 0xaf944d, metalness: 1.0, roughness: 0.1 }); // Polished Gold leaf
         const band = new THREE.Mesh(goldGeo, goldMat);
         band.position.y = 0.5;
         const group = new THREE.Group(); group.add(cube); group.add(band); scene.add(group);
@@ -2036,15 +2105,15 @@ window.fetchMonthlyCalendar = async function () {
             tbody.innerHTML = results.map(day => {
                 const isRamadan = day.date.hijri.month.number === 9;
                 return `
-                <tr class="hover:bg-[#fdfaf6]/5 transition-colors ${isRamadan ? 'bg-emerald-900/30' : ''}">
-                    <td class="px-4 py-3 border-r border-[#c5a059]/10">
+                <tr class="hover:bg-[#fcfdfd]/5 transition-colors ${isRamadan ? 'bg-emerald-900/30' : ''}">
+                    <td class="px-4 py-3 border-r border-[#af944d]/10">
                         <span class="font-bold text-white">${day.date.gregorian.day}</span>
                         <span class="text-xs opacity-50 block">${day.date.gregorian.weekday.en}</span>
                     </td>
-                    <td class="px-4 py-3 border-r border-[#c5a059]/10 font-serif">
-                        <span class="text-[#c5a059] font-bold">${day.date.hijri.day}</span> ${day.date.hijri.month.en}
+                    <td class="px-4 py-3 border-r border-[#af944d]/10 font-serif">
+                        <span class="text-[#af944d] font-bold">${day.date.hijri.day}</span> ${day.date.hijri.month.en}
                     </td>
-                    <td class="px-4 py-3 text-center border-r border-[#c5a059]/10 font-mono text-emerald-200">
+                    <td class="px-4 py-3 text-center border-r border-[#af944d]/10 font-mono text-emerald-200">
                         ${day.timings.Fajr.split(' ')[0]}
                     </td>
                     <td class="px-4 py-3 text-center font-mono text-amber-200">
@@ -2078,9 +2147,9 @@ window.updateAtmosphere = function () {
     if (!section) return;
 
     // Apply background color to the section based on time
-    if (hour >= 17 && hour < 19) section.style.backgroundColor = "#1d352f"; // Sunset Deep Pine
-    else if (hour >= 19 || hour < 5) section.style.backgroundColor = "#12211d"; // Night Dark Pine
-    else section.style.backgroundColor = "#24423a"; // Day Bright Pine
+    if (hour >= 17 && hour < 19) section.style.backgroundColor = "#042f24"; // Sunset Deep Emerald
+    else if (hour >= 19 || hour < 5) section.style.backgroundColor = "#021a14"; // Night Dark Emerald
+    else section.style.backgroundColor = "#064e3b"; // Day Bright Emerald
 }
 // Init Atmosphere
 setInterval(window.updateAtmosphere, 60000); // Check every minute

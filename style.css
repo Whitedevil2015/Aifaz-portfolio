@@ -1,39 +1,43 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Amiri:wght@400;700&family=Cormorant+Garamond:wght@600;700&display=swap');
 
 :root {
-    --primary: #24423a;
-    /* Deep Pine */
-    --secondary: #1a3c34;
-    /* Darker Pine */
-    --gold: #c5a059;
-    /* Muted Gold to match Sand */
-    --sand: #f3e9dc;
-    /* Desert Sand */
-    --text-dark: #2c3e50;
-    --text-light: #fdfaf6;
+    /* Majestic Decency Palette */
+    --emerald: #064e3b;
+    --gold-leaf: #af944d;
+    --pearl: #fcfdfd;
+    --pearl-shadow: rgba(6, 78, 59, 0.05);
+
+    --primary: var(--emerald);
+    --secondary: #042f24;
+    --gold: var(--gold-leaf);
+    --text-dark: #1a2e29;
+    --text-light: #f8f9fa;
+    --radius-hyper: 40px;
 }
 
 /* --- BASE STYLES --- */
 body {
     font-family: 'Inter', sans-serif;
     color: var(--text-dark);
-    /* Light Mode: Desert Sand paper-like base */
-    background-color: var(--sand);
+    background-color: var(--pearl);
+    /* Shimmering White Pearl Texture */
     background-image:
-        linear-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.2) 1px, transparent 1px),
-        radial-gradient(at 0% 0%, rgba(36, 66, 58, 0.03) 0px, transparent 50%);
-    background-size: 50px 50px, 50px 50px, 100% 100%;
+        radial-gradient(at 0% 0%, rgba(255, 255, 255, 0.8) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(212, 175, 55, 0.03) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(6, 78, 59, 0.02) 0px, transparent 80%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%),
+        linear-gradient(225deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%);
+    background-attachment: fixed;
     min-height: 100vh;
     line-height: 1.6;
+    overflow-x: hidden;
 }
 
 body.dark {
-    /* Dark Mode: Deep Pine base */
-    background: #12211d;
+    background: #0b1a16;
     background-image:
-        radial-gradient(circle at 50% 0%, #24423a 0%, transparent 60%),
-        radial-gradient(at 100% 100%, rgba(26, 60, 52, 0.2) 0px, transparent 50%);
+        radial-gradient(circle at 50% 0%, #064e3b 0%, transparent 70%),
+        radial-gradient(at 100% 100%, rgba(175, 148, 77, 0.1) 0px, transparent 50%);
     color: var(--text-light);
 }
 
@@ -45,50 +49,71 @@ h4,
 h5,
 h6 {
     font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
 }
 
 .arabic-font {
     font-family: 'Amiri', serif;
 }
 
-/* --- MATTE GLASS & PAPER CARDS --- */
+/* --- BENTO GRID & HYPER-ROUNDED CARDS --- */
 .glass,
-.bg-white {
-    background: rgba(253, 250, 246, 0.98) !important;
-    /* Soft Paper White */
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(36, 66, 58, 0.08);
-    /* More subtle ink-like border */
-    box-shadow: 0 10px 30px -15px rgba(36, 66, 58, 0.1);
-    /* Deep, soft shadow */
+.bg-white,
+.glass-container {
+    background: rgba(255, 255, 255, 0.6) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: var(--radius-hyper) !important;
+    box-shadow:
+        0 8px 32px 0 rgba(31, 38, 135, 0.07),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dark .glass,
 .dark .bg-white,
-.dark .bg-gray-800 {
-    background: rgba(26, 35, 33, 0.95) !important;
-    /* Matte Dark Pine */
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(197, 160, 89, 0.1);
-    box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.4);
-    color: #f1f5f9;
+.dark .bg-gray-800,
+.dark .glass-container {
+    background: rgba(11, 26, 22, 0.7) !important;
+    border: 1px solid rgba(175, 148, 77, 0.15);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    color: #e2e8f0;
+}
+
+/* Apple-inspired Hover States */
+.glass-container:hover,
+.hover-card-3d:hover {
+    transform: translateY(-8px) scale(1.01);
+    background: rgba(255, 255, 255, 0.8) !important;
+    box-shadow: 0 20px 40px rgba(6, 78, 59, 0.1);
 }
 
 /* Active Nav Link */
 .nav-link.active {
-    background: rgba(212, 175, 55, 0.1);
-    border-right: 4px solid var(--gold);
+    background: var(--emerald) !important;
+    color: white !important;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(6, 78, 59, 0.2);
 }
 
 .nav-link.active i {
-    color: var(--gold) !important;
+    color: var(--gold-leaf) !important;
 }
 
-/* Scrollbar (Pine Style) */
+/* Polished Elegance Gold Icons */
+.text-gold,
+.fa-kaaba,
+.fa-star,
+.fa-moon,
+.fa-sun {
+    color: var(--gold-leaf) !important;
+    filter: drop-shadow(0 2px 4px rgba(175, 148, 77, 0.2));
+}
+
+/* Scrollbar (Apple Style) */
 ::-webkit-scrollbar {
-    width: 6px;
+    width: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -96,87 +121,95 @@ h6 {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgba(36, 66, 58, 0.2);
-    border-radius: 10px;
+    background: rgba(6, 78, 59, 0.1);
+    border-radius: 20px;
+    border: 2px solid transparent;
+    background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: rgba(36, 66, 58, 0.5);
-}
-
-/* Hover Effects */
-.hover-card-3d:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 20px 40px -15px rgba(36, 66, 58, 0.15);
+    background: rgba(6, 78, 59, 0.3);
+    background-clip: content-box;
 }
 
 /* --- ANIMATIONS --- */
 .view-section {
-    animation: fadeIn 0.6s ease-out;
+    animation: slideUpFade 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-@keyframes fadeIn {
+@keyframes slideUpFade {
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(30px) scale(0.98);
     }
 
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
     }
 }
 
 /* --- ISLAMIC AESTHETICS --- */
 .islamic-pattern-bg {
-    background-color: var(--primary);
+    background-color: var(--emerald);
     background-image:
-        radial-gradient(rgba(243, 233, 220, 0.05) 2px, transparent 2px),
-        radial-gradient(rgba(243, 233, 220, 0.05) 2px, transparent 2px);
-    background-size: 30px 30px;
-    background-position: 0 0, 15px 15px;
+        radial-gradient(circle at 2px 2px, rgba(175, 148, 77, 0.1) 1px, transparent 0);
+    background-size: 40px 40px;
 }
 
 .mihrab-arch {
-    background: var(--sand);
-    color: var(--primary);
-    border-radius: 120px 120px 20px 20px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
-    transition: border-radius 0.3s ease;
-    overflow: hidden;
-}
-
-@media (min-width: 768px) {
-    .mihrab-arch {
-        border-radius: 250px 250px 40px 40px;
-    }
+    background: var(--pearl);
+    color: var(--emerald);
+    border-radius: 300px 300px 100px 100px !important;
+    box-shadow: 0 30px 60px rgba(6, 78, 59, 0.12);
+    border: 1px solid rgba(175, 148, 77, 0.1);
 }
 
 .ornamental-separator {
     display: flex;
     align-items: center;
     text-align: center;
-    color: var(--gold);
-    margin: 1.5rem 0;
-    font-family: 'Amiri', serif;
+    color: var(--gold-leaf);
+    margin: 2.5rem 0;
 }
 
 .ornamental-separator::before,
 .ornamental-separator::after {
     content: '';
     flex: 1;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-leaf), transparent);
 }
 
 .ornamental-separator span {
-    padding: 0 1rem;
-    font-size: 1.5rem;
+    padding: 0 1.5rem;
+    font-size: 2rem;
+    font-family: 'Amiri', serif;
 }
 
 .calligraphic-divider {
-    height: 1px;
-    background: radial-gradient(circle, var(--gold) 0%, transparent 100%);
-    margin: 2rem auto;
-    width: 80%;
-    opacity: 0.6;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold-leaf), transparent);
+    margin: 3rem auto;
+    width: 60%;
+    opacity: 0.4;
+}
+
+/* Bento Shimmer Tooltip */
+.shimmer-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent);
+    transition: 0.5s;
+}
+
+.shimmer-card:hover::before {
+    left: 100%;
 }

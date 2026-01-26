@@ -1,19 +1,18 @@
-
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- STATE VARIABLES ---
-    let coordinates = { lat: 18.5204, lng: 73.8567 }; // Default: Pune
-    let prayerTimesRaw = {};
-    let nextPrayerName = '';
-    let isAzaanPlaying = false;
-    let allHadiths = []; // For search
-    let countdownInterval = null;
+    // --- GLOBAL STATE ---
+    window.coordinates = { lat: 18.5204, lng: 73.8567 }; // Default: Pune
+    window.ramadanLat = 18.5204;
+    window.ramadanLng = 73.8567;
+    window.prayerTimesRaw = {};
+    window.nextPrayerName = '';
+    window.isAzaanPlaying = false;
+
     // Ramadan State
     window.ramadanUseCoords = false;
-    window.ramadanLat = 0;
-    window.ramadanLng = 0;
     window.globalCity = "Hyderabad";
     window.globalCountry = "India";
+    let countdownInterval = null;
 
     // --- DOM ELEMENTS ---
     const navLinks = document.querySelectorAll('.nav-link');
@@ -151,19 +150,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- ATMOSPHERIC WEATHER ---
-
-    // --- ATMOSPHERIC WEATHER ---
     async function fetchAtmosphere(lat, lng) {
         try {
-            console.log(`Fetching weather: ${lat}, ${lng}`);
             const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`);
             const data = await res.json();
             const code = data.current_weather.weathercode;
-            console.log(`Weather Code: ${code}`);
 
             document.body.classList.remove('weather-clear', 'weather-clouds', 'weather-rain', 'weather-snow');
 
-            let theme = 'weather-clear'; // Default
+            let theme = 'weather-clear';
             let icon = '☀️';
 
             if (code <= 3) { theme = 'weather-clear'; icon = '☀️'; }
@@ -173,57 +168,76 @@ document.addEventListener('DOMContentLoaded', () => {
 
             document.body.classList.add(theme);
 
-            // Visual Confirmation in UI
             const locLabel = document.getElementById('portal-location-label');
             if (locLabel) {
-                const currentText = locLabel.textContent.split(' • ')[0]; // Keep city
+                const currentText = locLabel.textContent.split(' • ')[0];
                 locLabel.innerHTML = `${currentText} • <span class="text-sm font-normal">${icon} ${theme.replace('weather-', '').toUpperCase()}</span>`;
             }
-
         } catch (e) {
             console.warn("Atmosphere update failed", e);
-            // Fallback
             document.body.classList.add('weather-clear');
         }
     }
 
-    async function fetchPrayers(lat = null, lng = null, city = null, country = null) {
+    // --- PRAYER FETCHING ---
+    window.fetchPrayers = async function (lat = null, lng = null, city = null, country = null) {
         let url = '';
         if (lat && lng) {
             url = `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=1`;
-            coordinates = { lat, lng };
+            window.coordinates = { lat, lng };
+            window.ramadanLat = lat;
+            window.ramadanLng = lng;
+            window.ramadanUseCoords = true;
+
+            // Cache location
+            localStorage.setItem('portal_lat', lat);
+            localStorage.setItem('portal_lng', lng);
+            localStorage.removeItem('portal_city');
+
             fetchAtmosphere(lat, lng);
-            document.getElementById('portal-location-label').textContent = `${lat.toFixed(2)}, ${lng.toFixed(2)}`;
+            const locLabel = document.getElementById('portal-location-label');
+            if (locLabel) locLabel.textContent = `${lat.toFixed(2)}, ${lng.toFixed(2)}`;
         } else {
             const c = city || "Delhi";
             const co = country || "India";
             url = `https://api.aladhan.com/v1/timingsByCity?city=${c}&country=${co}&method=1`;
-            document.getElementById('portal-location-label').textContent = `${c}, ${co}`;
+
+            // Cache city
+            localStorage.setItem('portal_city', c);
+            localStorage.removeItem('portal_lat');
+            localStorage.removeItem('portal_lng');
+
+            const locLabel = document.getElementById('portal-location-label');
+            if (locLabel) locLabel.textContent = `${c}, ${co}`;
         }
 
         try {
             const res = await fetch(url);
             const data = await res.json();
 
-            // Coordinate Update for Qibla
             if (!lat && data.data && data.data.meta) {
-                coordinates = { lat: data.data.meta.latitude, lng: data.data.meta.longitude };
-                fetchAtmosphere(data.data.meta.latitude, data.data.meta.longitude);
+                window.coordinates = { lat: data.data.meta.latitude, lng: data.data.meta.longitude };
+                fetchAtmosphere(window.coordinates.lat, window.coordinates.lng);
                 if (typeof initQibla === 'function') initQibla();
             }
 
             if (data.code === 200) {
-                prayerTimesRaw = data.data.timings;
-                renderPrayerGrid(prayerTimesRaw);
-                renderPrayerGuide(prayerTimesRaw);
+                window.prayerTimesRaw = data.data.timings;
+                renderPrayerGrid(window.prayerTimesRaw);
+                renderPrayerGuide(window.prayerTimesRaw);
                 updateNextPrayer();
 
-                // Update Dashboard Dates
                 const dateInfo = data.data.date;
                 const gregEl = document.getElementById('hero-greg-date');
                 const hijriEl = document.getElementById('hero-hijri-date');
                 if (gregEl) gregEl.textContent = `${dateInfo.gregorian.day} ${dateInfo.gregorian.month.en} ${dateInfo.gregorian.year}`;
                 if (hijriEl) hijriEl.textContent = `${dateInfo.hijri.day} ${dateInfo.hijri.month.en} ${dateInfo.hijri.year}`;
+
+                // Also update Ramadan Day Status if we are in Ramadan view
+                const ramDayStatus = document.getElementById('ramadan-day-status');
+                if (ramDayStatus && dateInfo.hijri.month.number === 9) {
+                    ramDayStatus.innerText = dateInfo.hijri.day;
+                }
             }
         } catch (e) { console.error("Prayer fetch failed", e); }
     }
@@ -426,19 +440,59 @@ document.addEventListener('DOMContentLoaded', () => {
         `}).join('');
     }
 
-    // Auto Location Logic
-    autoLocBtn?.addEventListener('click', () => {
-        if (navigator.geolocation) {
-            autoLocBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Finding...';
-            navigator.geolocation.getCurrentPosition(pos => {
-                fetchPrayers(pos.coords.latitude, pos.coords.longitude);
-                autoLocBtn.innerHTML = '<i class="fas fa-location-arrow"></i> Auto';
-            }, () => {
-                alert("Location access denied. Using default.");
-                autoLocBtn.innerHTML = '<i class="fas fa-location-arrow"></i> Auto';
-                fetchPrayers(null, null, "Pune");
-            });
+    // Robust Auto Location Handler
+    window.detectAndSyncLocation = function (source = 'dashboard') {
+        const dashboardBtn = document.getElementById('update-location-btn');
+        const ramadanBtn = document.querySelector('button[onclick="autoDetectRamadanContent()"]');
+        const dashIcon = dashboardBtn?.querySelector('i');
+
+        if (dashIcon) dashIcon.className = "fas fa-spinner fa-spin";
+        if (dashboardBtn) dashboardBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Finding...';
+
+        if (!navigator.geolocation) {
+            alert("Geolocation is not supported by your browser.");
+            return;
         }
+
+        navigator.geolocation.getCurrentPosition(async (pos) => {
+            const lat = pos.coords.latitude;
+            const lng = pos.coords.longitude;
+
+            // Sync all global coordinates
+            window.coordinates = { lat, lng };
+            window.ramadanLat = lat;
+            window.ramadanLng = lng;
+            window.ramadanUseCoords = true;
+
+            // Trigger fetches for both contexts
+            await window.fetchPrayers(lat, lng);
+            if (source === 'ramadan' || document.getElementById('view-ramadan').offsetParent !== null) {
+                await window.getRamadanTimes();
+            }
+
+            // Restore UI States
+            if (dashboardBtn) {
+                dashboardBtn.innerHTML = '<i class="fas fa-location-arrow"></i> Auto';
+                if (dashIcon) dashIcon.className = "fas fa-location-arrow";
+            }
+
+            // Success alert (optional but good for user feedback)
+            console.log("Location synchronized:", lat, lng);
+
+        }, (err) => {
+            console.warn("Location error:", err);
+            alert("Location access denied or unavailable. Please check your browser settings and try again.");
+            if (dashboardBtn) dashboardBtn.innerHTML = '<i class="fas fa-location-arrow"></i> Auto';
+        }, {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+        });
+    };
+
+    // Auto Location Logic (Dashboard Hook)
+    autoLocBtn?.addEventListener('click', () => {
+        window.detectAndSyncLocation('dashboard');
     });
 
     // Manual Search
@@ -498,18 +552,72 @@ document.addEventListener('DOMContentLoaded', () => {
 
         grid.innerHTML = prayers.map((p, i) => {
             const hue = (i * 45) % 360;
+            const isEnabled = localStorage.getItem(`azaan_${p.id}`) === 'true';
+            const hideAzaan = p.id === 'Sunrise'; // No azaan for sunrise
+
             return `
-            <div id="card-${p.id}" onclick="openFazilat('${p.id}')" 
-                class="bg-[#fcfdfd] p-6 rounded-[40px] shadow-sm text-center border-t-4 hover:-translate-y-2 transition-all duration-500 cursor-pointer group dark:bg-gray-800 dark:border-gray-700" 
-                style="border-color:hsl(${hue}, 60%, 40%)">
+            <div id="card-${p.id}" class="bg-[#fcfdfd] p-6 rounded-[40px] shadow-sm text-center border-t-4 hover:-translate-y-2 transition-all duration-500 cursor-pointer group dark:bg-gray-800 dark:border-gray-700 relative" 
+                style="border-color:hsl(${hue}, 60%, 40%)" onclick="openFazilat('${p.id}')">
+                
                 <div class="absolute -right-4 -top-4 opacity-[0.03] text-7xl" style="color:hsl(${hue}, 60%, 40%)"><i class="fas ${p.icon}"></i></div>
+                
                 <div class="w-12 h-12 mx-auto rounded-2xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110 shadow-inner" style="background:hsl(${hue}, 60%, 95%); color:hsl(${hue}, 60%, 40%)">
                     <i class="fas ${p.icon} text-xl"></i>
                 </div>
+                
                 <p class="text-[10px] font-black uppercase tracking-widest mb-1 opacity-40">${p.label || p.id}</p>
-                <p class="text-2xl font-black text-gray-800 dark:text-white" style="color:hsl(${hue}, 60%, 25%)">${formatTo12Hour(timings[p.id])}</p>
+                <p class="text-2xl font-black text-gray-800 dark:text-white" style="color:hsl(${hue}, 60%, 25%)">${window.formatTo12Hour ? window.formatTo12Hour(timings[p.id]) : timings[p.id]}</p>
+                
+                ${!hideAzaan ? `
+                <div class="mt-4 flex justify-center items-center gap-2 pt-4 border-t border-gray-50 dark:border-white/5">
+                    <button onclick="event.stopPropagation(); window.toggleAzaan('${p.id}')" 
+                        id="azaan-btn-${p.id}"
+                        class="px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${isEnabled ? 'bg-[#064e3b] text-white shadow-lg' : 'bg-gray-100 text-gray-400 dark:bg-black/20'}">
+                        <i class="fas ${isEnabled ? 'fa-volume-up' : 'fa-volume-mute'}"></i>
+                        <span>Azaan ${isEnabled ? 'ON' : 'OFF'}</span>
+                    </button>
+                </div>
+                ` : '<div class="mt-4 h-8 invisible"></div>'}
             </div>
         `}).join('');
+    }
+
+    window.toggleAzaan = function (id) {
+        const current = localStorage.getItem(`azaan_${id}`) === 'true';
+        const newState = !current;
+        localStorage.setItem(`azaan_${id}`, newState);
+
+        // Update UI
+        const btn = document.getElementById(`azaan-btn-${id}`);
+        if (btn) {
+            btn.className = `px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${newState ? 'bg-[#064e3b] text-white shadow-lg' : 'bg-gray-100 text-gray-400 dark:bg-black/20'}`;
+            btn.innerHTML = `<i class="fas ${newState ? 'fa-volume-up' : 'fa-volume-mute'}"></i><span>Azaan ${newState ? 'ON' : 'OFF'}</span>`;
+        }
+
+        if (newState) {
+            // Test Play
+            window.playAzaan(id, true); // brief test
+        }
+    }
+
+    const azaanAudio = new Audio('https://www.islamcan.com/audio/adhan/azan1.mp3');
+
+    window.playAzaan = function (id, isTest = false) {
+        azaanAudio.pause();
+        azaanAudio.currentTime = 0;
+
+        // Use Fajr Azaan if Fajr
+        if (id === 'Fajr') {
+            azaanAudio.src = 'https://www.islamcan.com/audio/adhan/azan2.mp3'; // Usually a specific Fajr azaan
+        } else {
+            azaanAudio.src = 'https://www.islamcan.com/audio/adhan/azan1.mp3';
+        }
+
+        azaanAudio.play().catch(e => console.warn("Azaan play blocked by browser", e));
+
+        if (isTest) {
+            setTimeout(() => { azaanAudio.pause(); azaanAudio.currentTime = 0; }, 5000);
+        }
     }
 
     function formatTo12Hour(time24) {
@@ -521,8 +629,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateNextPrayer() {
-        const timings = prayerTimesRaw;
-        const prayers = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+        const timings = window.prayerTimesRaw;
+        if (!timings || !timings.Fajr) return;
+        const prayers = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
 
         if (countdownInterval) clearInterval(countdownInterval);
         countdownInterval = setInterval(() => {
@@ -534,8 +643,12 @@ document.addEventListener('DOMContentLoaded', () => {
             let found = false;
 
             for (let p of prayers) {
-                const [h, m] = timings[p].split(':');
-                const pMins = parseInt(h) * 60 + parseInt(m);
+                if (!timings[p]) continue;
+                const [hStr, mStr] = timings[p].split(':');
+                const h = parseInt(hStr);
+                const m = parseInt(mStr);
+                const pMins = h * 60 + m;
+
                 if (pMins > curMins) {
                     next = p;
                     nextTimeStr = timings[p];
@@ -558,9 +671,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             document.getElementById('next-prayer-name').textContent = next;
 
-            const [th, tm] = nextTimeStr.split(':');
+            const [thStr, tmStr] = nextTimeStr.split(':');
             const target = new Date();
-            target.setHours(th, tm, 0);
+            target.setHours(parseInt(thStr), parseInt(tmStr), 0, 0);
             if (!found) target.setDate(target.getDate() + 1);
             const diff = target - now;
 
@@ -568,6 +681,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 const hrs = Math.floor(diff / 3600000);
                 const mins = Math.floor((diff % 3600000) / 60000);
                 const secs = Math.floor((diff % 60000) / 1000);
+
+                // Automatic Azaan Trigger
+                if (hrs === 0 && mins === 0 && secs === 0) {
+                    const isEnabled = localStorage.getItem(`azaan_${next}`) === 'true';
+                    if (isEnabled) {
+                        window.playAzaan(next);
+                    }
+                }
+
                 document.getElementById('countdown').textContent = `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
             }
         }, 1000);
@@ -764,31 +886,79 @@ document.addEventListener('DOMContentLoaded', () => {
             const urData = await urRes.json();
             const hiData = await hiRes.json(); // Might be partial for Juz or empty wrapper
 
-            quranContentEl.innerHTML = arData.data.ayahs.map((a, i) => `
-                <div class="mb-12 border-b border-white/5 pb-12 group hover:bg-white/5 p-6 rounded-[30px] transition-all cursor-pointer relative" onclick="playVerse(${i})">
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
-                        <div class="flex items-center gap-4">
-                            <span class="w-10 h-10 rounded-full bg-[#af944d]/10 border border-[#af944d]/30 text-[#af944d] flex items-center justify-center text-sm font-black shadow-inner shadow-[#af944d]/20">${a.numberInSurah}</span>
-                            <button class="md:hidden text-[#af944d] bg-white/5 w-10 h-10 rounded-full flex items-center justify-center"><i class="fas fa-play text-[10px]"></i></button>
-                        </div>
-                        <div class="text-right font-[Amiri] text-4xl md:text-5xl leading-[1.8] text-white drop-shadow-2xl w-full" style="direction:rtl;">${a.text}</div>
-                    </div>
-                    
-                    <div class="space-y-6 max-w-4xl">
-                        <!-- Roman English (Transliteration) -->
-                        <div class="text-[#af944d] text-sm md:text-base mb-2 italic font-serif opacity-80 tracking-wide border-l-2 border-[#af944d]/30 pl-4">${trData.data.ayahs[i].text}</div>
-                        
-                        <!-- English Translation -->
-                        <div class="text-gray-100 text-lg md:text-xl leading-relaxed font-light">${enData.data.ayahs[i].text}</div>
+            let lastRuku = -1;
+            let lastJuz = -1;
+            let lastManzil = -1;
 
-                        <!-- Hinglish Tarjuma (Roman Urdu) -->
-                        <div class="text-emerald-400 text-lg md:text-xl italic font-medium leading-relaxed bg-[#042f24] p-4 rounded-2xl border border-emerald-500/10">"${hiData.chapter[i]?.text || ''}"</div>
-                        
-                        <!-- Urdu Script Tarjuma -->
-                        <div class="text-emerald-50/90 text-2xl font-[Amiri] leading-[2] text-right dir-rtl" style="direction:rtl;">${urData.data.ayahs[i].text}</div>
+            const fazail = SURAH_FAZAIL[arData.data.number] || null;
+            const fazailHtml = fazail ? `
+                <div class="col-span-full mb-10 p-10 rounded-[50px] bg-[#af944d]/10 border border-[#af944d]/30 relative overflow-hidden group">
+                    <div class="absolute -right-10 -bottom-10 text-[10rem] opacity-5 text-[#af944d] group-hover:rotate-12 transition-transform duration-1000"><i class="fas fa-scroll"></i></div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="px-4 py-1 bg-[#064e3b] text-white rounded-full text-[9px] font-black uppercase tracking-widest">Sahih Reference</div>
+                        <div class="text-[10px] font-black underline uppercase tracking-widest text-[#af944d]">Verified by Jamia Nizamia Scholars</div>
                     </div>
+                    <h5 class="text-2xl font-[Cormorant_Garamond] font-bold text-[#064e3b] mb-3">Virtue of Surah ${arData.data.englishName}</h5>
+                    <p class="text-xl italic font-serif text-gray-700 leading-relaxed">"${fazail.t}"</p>
+                    <p class="text-[10px] font-black uppercase tracking-widest mt-6 opacity-40">— SOURCE: ${fazail.r}</p>
                 </div>
-            `).join('');
+            ` : `
+                <div class="col-span-full mb-10 p-6 rounded-[30px] bg-gray-50 border border-gray-100 text-center opacity-40">
+                    <p class="text-[9px] font-black uppercase tracking-widest">Islamic Center Academic Layout • Reference: Bukhari Sharif & Jamia Nizamia</p>
+                </div>
+            `;
+
+            quranContentEl.innerHTML = `
+                <div class="quran-split-layout">
+                    ${fazailHtml}
+                    ${arData.data.ayahs.map((a, i) => {
+                let markers = '';
+                if (a.juz !== lastJuz) {
+                    markers += `<div class="col-span-full section-divider-ornamental"><div></div><span class="text-[10px] font-black text-[#af944d] uppercase tracking-[0.4em]">Start of Juz ${a.juz}</span><div></div></div>`;
+                    lastJuz = a.juz;
+                }
+
+                const rukuMarker = (a.ruku !== lastRuku && i !== 0) ? `<span class="ruku-marker" title="End of Ruku ${lastRuku}">${lastRuku}</span>` : '';
+                lastRuku = a.ruku;
+
+                const isSajdah = a.sajdah && a.sajdah !== false;
+                const sajdahMarker = isSajdah ? `<span class="sajdah-marker"><i class="fas fa-star mr-1"></i> Sajdah</span>` : '';
+
+                return `
+                        ${markers}
+                        <div class="col-span-full grid grid-cols-1 md:grid-cols-2 group hover:bg-white/5 transition-all border-b border-white/5" id="ayah-row-${i}" onclick="playVerse(${i})">
+                            <!-- Left: High Contrast Arabic Pane -->
+                            <div class="arabic-pane border-r border-[#af944d]/10">
+                                <div class="flex items-start gap-6">
+                                    <div class="flex flex-col gap-2 pt-4">
+                                        <span class="w-10 h-10 rounded-full bg-[#af944d]/10 border border-[#af944d]/30 text-[#af944d] flex items-center justify-center text-sm font-black shadow-inner">${a.numberInSurah}</span>
+                                        ${rukuMarker}
+                                        ${sajdahMarker}
+                                    </div>
+                                    <div class="arabic-text-sharp flex-1" style="color: #000 !important; font-weight: 900;">${a.text}</div>
+                                </div>
+                            </div>
+                            <!-- Right: Glassmorphic Translation Pane -->
+                            <div class="translation-pane">
+                                <div class="space-y-6 translation-block">
+                                    <div class="text-[#af944d] text-sm italic font-serif opacity-80 border-l-2 border-[#af944d]/30 pl-4">${trData.data.ayahs[i].text}</div>
+                                    <div class="text-gray-100 text-lg font-light leading-relaxed">${enData.data.ayahs[i].text}</div>
+                                    <div class="text-emerald-400 text-lg italic bg-[#042f24] p-4 rounded-xl border border-emerald-500/10">"${hiData.chapter[i]?.text || ''}"</div>
+                                    <div class="text-emerald-50/90 text-2xl font-[Amiri] leading-[2] text-right" style="direction:rtl;">${urData.data.ayahs[i].text}</div>
+                                </div>
+                            </div>
+                        </div>
+                        `}).join('')}
+                </div>
+            `;
+
+            // Update Floating Meta
+            const firstAyah = arData.data.ayahs[0];
+            if (document.getElementById('meta-juz')) document.getElementById('meta-juz').innerText = firstAyah.juz;
+            if (document.getElementById('meta-manzil')) document.getElementById('meta-manzil').innerText = firstAyah.manzil;
+
+            // Perform Hurf Analysis
+            performHurfAnalysis(arData.data.ayahs);
 
             // Sync Mobile Play Button
             const mobPlayBtn = document.getElementById('play-pause-btn-mob');
@@ -797,28 +967,49 @@ document.addEventListener('DOMContentLoaded', () => {
             window.currentSurahData = arData; // Global Store
 
             // --- AUDIO PLAYLIST GENERATION ---
-            // Default to Urdu
+            const hideTranslations = localStorage.getItem('hide_translations') === 'true';
             currentPlaylist = [];
             currentAudioIndex = 0;
 
-            // Add Bismillah preamble if not Surah Fatiha (1) or Surah Tawbah (9)
-            if (arData.data.number && arData.data.number !== 1 && arData.data.number !== 9) {
+            const surahNum = arData.data.number || 1;
+            const hasPreamble = (surahNum !== 1 && surahNum !== 9);
+
+            // Add Bismillah preamble
+            if (hasPreamble) {
                 currentPlaylist.push(`https://cdn.islamic.network/quran/audio/128/ar.alafasy/1.mp3`);
             }
 
             arData.data.ayahs.forEach(a => {
                 currentPlaylist.push(`https://cdn.islamic.network/quran/audio/128/ar.alafasy/${a.number}.mp3`);
-                currentPlaylist.push(`https://cdn.islamic.network/quran/audio/64/ur.khan/${a.number}.mp3`);
+                if (!hideTranslations) {
+                    currentPlaylist.push(`https://cdn.islamic.network/quran/audio/64/ur.khan/${a.number}.mp3`);
+                }
             });
 
             if (audioPlayer) {
                 audioPlayer.src = currentPlaylist[0];
                 audioPlayer.onended = () => {
+                    const hideTrans = localStorage.getItem('hide_translations') === 'true';
+                    const tracksPerAyah = hideTrans ? 1 : 2;
+
                     currentAudioIndex++;
                     if (currentAudioIndex < currentPlaylist.length) {
                         audioPlayer.src = currentPlaylist[currentAudioIndex];
                         audioPlayer.play();
-                        highlightVerse(Math.floor(currentAudioIndex / 2));
+
+                        // Calculate which verse to highlight
+                        let verseIdx = 0;
+                        if (hasPreamble) {
+                            verseIdx = Math.floor((currentAudioIndex - 1) / tracksPerAyah);
+                            if (currentAudioIndex === 0) verseIdx = 0; // Preamble case
+                        } else {
+                            verseIdx = Math.floor(currentAudioIndex / tracksPerAyah);
+                        }
+
+                        // Prevent negative or logic errors on preamble track
+                        if (currentAudioIndex > 0 || !hasPreamble) {
+                            highlightVerse(Math.max(0, verseIdx));
+                        }
                     } else {
                         currentAudioIndex = 0;
                         audioPlayer.src = currentPlaylist[0];
@@ -831,11 +1022,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Playback Helpers
     window.highlightVerse = function (index) {
-        const verses = document.querySelectorAll('#quran-content > div');
-        verses.forEach(d => d.classList.remove('bg-[#f5f2eb]/10', 'border-l-4', 'border-[#af944d]'));
+        const verses = document.querySelectorAll('[id^="ayah-row-"]');
+        verses.forEach(d => d.classList.remove('active-verse-row'));
 
         if (verses[index]) {
-            verses[index].classList.add('bg-[#f5f2eb]/10', 'border-l-4', 'border-[#af944d]');
+            verses[index].classList.add('active-verse-row');
             verses[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     }
@@ -844,6 +1035,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!window.currentSurahData) return;
         const data = window.currentSurahData.data.ayahs;
         const surahNum = window.currentSurahData.data.number;
+        const hideTranslations = localStorage.getItem('hide_translations') === 'true';
 
         currentPlaylist = [];
 
@@ -854,15 +1046,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         data.forEach(a => {
             currentPlaylist.push(`https://cdn.islamic.network/quran/audio/128/ar.alafasy/${a.number}.mp3`);
-            if (lang === 'ur') currentPlaylist.push(`https://cdn.islamic.network/quran/audio/64/ur.khan/${a.number}.mp3`);
-            else if (lang === 'en') currentPlaylist.push(`https://cdn.islamic.network/quran/audio/192/en.walk/${a.number}.mp3`);
+            if (!hideTranslations) {
+                if (lang === 'ur') currentPlaylist.push(`https://cdn.islamic.network/quran/audio/64/ur.khan/${a.number}.mp3`);
+                else if (lang === 'en') currentPlaylist.push(`https://cdn.islamic.network/quran/audio/192/en.walk/${a.number}.mp3`);
+            }
         });
 
         currentAudioIndex = 0;
         const player = document.getElementById('quran-audio');
         if (player) {
             player.src = currentPlaylist[0];
-            player.play();
+            player.play().catch(e => console.warn("Audio play blocked", e));
             updatePlayIcon(true);
             highlightVerse(0);
         }
@@ -2074,14 +2268,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- BOOTSTRAP ---
-    fetchPrayers();
-    updateMasterDates();
-    loadDirectory();
-    loadNames();
-    renderDuas();
-    if (window.THREE) initThree();
-    initEffects();
-    setTimeout(showDailyVerse, 1000);
+    const startPortal = async () => {
+        const sLat = localStorage.getItem('portal_lat');
+        const sLng = localStorage.getItem('portal_lng');
+        const sCity = localStorage.getItem('portal_city');
+
+        if (sLat && sLng) {
+            await window.fetchPrayers(parseFloat(sLat), parseFloat(sLng));
+        } else if (sCity) {
+            await window.fetchPrayers(null, null, sCity);
+        } else {
+            await window.fetchPrayers(); // Default
+        }
+
+        updateMasterDates();
+        loadDirectory();
+        loadNames();
+        renderDuas();
+        if (window.THREE) initThree();
+        initEffects();
+        setTimeout(showDailyVerse, 1000);
+    };
+
+    startPortal();
 
 
 
@@ -2235,33 +2444,7 @@ function updateAshraTracker(day) {
 }
 
 window.autoDetectRamadanContent = function () {
-    const btn = document.querySelector('button[onclick="autoDetectRamadanContent()"]');
-    const icon = btn.querySelector('i');
-    const originalClass = icon.className;
-    icon.className = "fas fa-spinner fa-spin";
-
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(async (pos) => {
-            window.ramadanLat = pos.coords.latitude;
-            window.ramadanLng = pos.coords.longitude;
-            window.ramadanUseCoords = true;
-
-            const input = document.getElementById('ramadan-city');
-            if (input) input.value = "My Location";
-
-            icon.className = "fas fa-check";
-            setTimeout(() => icon.className = "fas fa-location-arrow", 2000);
-
-            await getRamadanTimes();
-
-        }, (err) => {
-            alert("Could not get location. Ensure GPS is enabled.");
-            icon.className = "fas fa-location-arrow";
-        });
-    } else {
-        alert("Geolocation not supported.");
-        icon.className = "fas fa-location-arrow";
-    }
+    window.detectAndSyncLocation('ramadan');
 }
 
 window.changeCalendarMonth = function (delta) {
@@ -2398,6 +2581,16 @@ function startRamadanCountdown(fajr, maghrib) {
     }, 1000);
 }
 
+const SURAH_FAZAIL = {
+    1: { t: "Prophet (ﷺ) said: 'The Seven Oft-Repeated Verses is Al-Fatiha.'", r: "Bukhari Sharif" },
+    18: { t: "Protection from Dajjal and light until the next Jumu'ah.", r: "Jamia Nizamia / Muslim" },
+    36: { t: "The Heart of the Quran. Intercedes for his reciter.", r: "Tirmidhi / Nizamia Core" },
+    55: { t: "The Adornment of the Quran (Uroosu-l-Quran).", r: "Baihaqi" },
+    56: { t: "Protects from poverty if recited every night.", r: "Jamia Nizamia / Baihaqi" },
+    67: { t: "Shield from the punishment of the grave.", r: "Bukhari Sharif / Abu Dawud" },
+    112: { t: "Equal to one-third of the whole Quran.", r: "Bukhari Sharif" }
+};
+
 // --- DUA OF THE DAY ---
 const ramadanDuas = [
     {
@@ -2480,4 +2673,58 @@ window.addEventListener('load', () => {
     if (document.getElementById('alarm-taraweeh')) document.getElementById('alarm-taraweeh').checked = t;
 });
 
+function performHurfAnalysis(ayahs) {
+    const fullText = ayahs.map(a => a.text).join(' ');
+    // Common letters in Muqatta'at or significant ones
+    const chars = ['ا', 'ل', 'م', 'ر', 'ك', 'ه', 'ي', 'ع', 'ص', 'ط', 'ق', 'ن'];
+    const names = ['Alif', 'Lam', 'Meem', 'Ra', 'Kaf', 'Ha', 'Ya', 'Ain', 'Sad', 'Ta', 'Qaf', 'Nun'];
+    const container = document.getElementById('meta-hurf-list');
+    if (!container) return;
 
+    container.innerHTML = '';
+    chars.forEach((char, idx) => {
+        const count = (fullText.split(char).length - 1);
+        if (count > 0) {
+            const chip = document.createElement('div');
+            chip.className = 'hurf-chip';
+            chip.innerHTML = `<span class="opacity-40 mr-1 text-[8px] tracking-tight">${names[idx]}</span> <span class="font-[Amiri] text-sm">${char}</span> <span class="ml-1 text-white font-black">${count}</span>`;
+            container.appendChild(chip);
+        }
+    });
+}
+
+window.toggleTranslations = function () {
+    const content = document.getElementById('quran-content');
+    const btn = document.getElementById('translation-toggle');
+    if (!content) return;
+    const isHidden = content.classList.toggle('translations-hidden');
+
+    if (btn) {
+        btn.innerText = isHidden ? 'TRANSLATIONS: OFF' : 'TRANSLATIONS: ON';
+        btn.classList.toggle('text-emerald-400', !isHidden);
+        btn.classList.toggle('text-red-400', isHidden);
+    }
+
+    localStorage.setItem('hide_translations', isHidden);
+
+    // Refresh playlist if something is playing or loaded
+    if (window.currentSurahData) {
+        // We only rebuild the playlist, we don't necessarily restart audio 
+        // to avoid jarring experience, but playSurahAudio will use new state
+    }
+}
+
+// Apply persisted translation state on loads
+window.addEventListener('load', () => {
+    const hide = localStorage.getItem('hide_translations') === 'true';
+    if (hide) {
+        const content = document.getElementById('quran-content');
+        const btn = document.getElementById('translation-toggle');
+        if (content) content.classList.add('translations-hidden');
+        if (btn) {
+            btn.innerText = 'TRANSLATIONS: OFF';
+            btn.classList.remove('text-emerald-400');
+            btn.classList.add('text-red-400');
+        }
+    }
+});

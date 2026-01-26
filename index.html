@@ -637,209 +637,246 @@
             </section>
 
             <section id="view-ramadan"
-                class="view-section hidden space-y-12 animate-fade-in-up bg-[#064e3b] min-h-screen relative overflow-hidden pb-12">
-                <!-- Atmospheric Background layer -->
-                <div class="absolute inset-0 z-0 opacity-20 pointer-events-none">
-                    <div class="absolute inset-0 bg-gradient-to-br from-[#064e3b] via-[#042f24] to-black"></div>
-                    <div
-                        class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]">
-                    </div>
-                </div>
+                class="view-section hidden ramadan-geometric-bg min-h-screen relative overflow-hidden pb-20">
+                <!-- High-End UI Elements -->
+                <div class="max-w-7xl mx-auto px-6 py-12 relative z-10">
 
-                <div class="max-w-6xl mx-auto px-4 py-12 relative z-10">
+                    <!-- Apple-Style Header -->
                     <header class="text-center mb-16">
                         <div
-                            class="inline-block px-6 py-2 bg-[#af944d]/10 rounded-full border border-[#af944d]/20 text-[10px] font-black uppercase tracking-[0.3em] text-[#af944d] mb-6">
-                            Holy Month 2026</div>
-                        <h1
-                            class="font-[Cormorant_Garamond] text-6xl md:text-8xl font-black text-white drop-shadow-2xl mb-4">
-                            Ramadan Kareem</h1>
-                        <p class="text-[#af944d] text-lg font-serif italic mb-10">May the light of this month guide your
-                            path.</p>
-
-                        <div class="flex flex-col md:flex-row justify-center items-center gap-4">
-                            <div
-                                class="bg-white/10 backdrop-blur-xl border border-white/10 rounded-[30px] p-2 pl-6 flex items-center gap-4 shadow-2xl overflow-hidden min-w-[320px]">
-                                <i class="fas fa-location-dot text-[#af944d]"></i>
-                                <input id="ramadan-city" type="text" placeholder="Enter City, Country"
-                                    class="bg-transparent border-none text-white focus:outline-none placeholder:text-white/30 font-medium text-sm flex-1">
-                                <button onclick="getRamadanTimes()"
-                                    class="bg-[#af944d] text-white px-6 py-3 rounded-[25px] font-black uppercase text-[10px] tracking-widest hover:scale-105 transition-transform">Update</button>
-                            </div>
-                            <button onclick="autoDetectRamadanContent()"
-                                class="w-14 h-14 rounded-full bg-white/5 border border-white/10 text-[#af944d] hover:bg-[#af944d] hover:text-white transition-all shadow-xl flex items-center justify-center">
-                                <i class="fas fa-location-arrow"></i>
-                            </button>
-                        </div>
+                            class="inline-block px-4 py-1.5 bg-[#064e3b]/5 rounded-full text-[9px] font-black uppercase tracking-[0.4em] text-[#064e3b] mb-4">
+                            Serene Ramadan Experience</div>
+                        <h1 class="text-5xl md:text-7xl font-[Cormorant_Garamond] font-bold text-[#064e3b] mb-4">Ramadan
+                            Special</h1>
+                        <p class="text-[#af944d] font-serif text-xl italic">A journey of spiritual elevation and deep
+                            reflection.</p>
                     </header>
 
-                    <!-- Ashra Phase Tracker -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-                        <div
-                            class="bg-[#fcfdfd] p-8 rounded-[40px] shadow-sm text-center border-t-8 border-[#10b981] relative overflow-hidden group">
-                            <div
-                                class="absolute -right-4 -bottom-4 opacity-[0.03] text-8xl text-[#10b981] transition-transform group-hover:scale-125 duration-700">
-                                <i class="fas fa-heart"></i></div>
-                            <p class="text-[10px] font-black uppercase tracking-widest opacity-40 mb-2">First Ashra
-                                (Days 1-10)</p>
-                            <h3 class="text-3xl font-black text-[#10b981] mb-2 font-[Cormorant_Garamond]">Mercy</h3>
-                            <p class="text-[10px] text-gray-500 font-black uppercase tracking-tighter italic">Rehmat —
-                                Phase of Compassion</p>
-                        </div>
-                        <div
-                            class="bg-[#fcfdfd] p-8 rounded-[40px] shadow-sm text-center border-t-8 border-[#af944d] relative overflow-hidden group scale-105 z-10 ring-8 ring-[#af944d]/10 outline outline-2 outline-[#af944d]/20">
-                            <div
-                                class="absolute -right-4 -bottom-4 opacity-[0.03] text-8xl text-[#af944d] transition-transform group-hover:scale-125 duration-700">
-                                <i class="fas fa-hand-holding-heart"></i></div>
-                            <p class="text-[10px] font-black uppercase tracking-widest opacity-40 mb-2">Second Ashra
-                                (Days 11-20)</p>
-                            <h3 class="text-4xl font-black text-[#af944d] mb-2 font-[Cormorant_Garamond]">Forgiveness
-                            </h3>
-                            <p class="text-[10px] text-gray-500 font-black uppercase tracking-tighter italic">Maghfirat
-                                — Active Phase</p>
-                        </div>
-                        <div
-                            class="bg-[#fcfdfd] p-8 rounded-[40px] shadow-sm text-center border-t-8 border-[#f43f5e] relative overflow-hidden group opacity-50 grayscale">
-                            <div
-                                class="absolute -right-4 -bottom-4 opacity-[0.03] text-8xl text-[#f43f5e] transition-transform group-hover:scale-125 duration-700">
-                                <i class="fas fa-fire-extinguisher"></i></div>
-                            <p class="text-[10px] font-black uppercase tracking-widest opacity-40 mb-2">Third Ashra
-                                (Days 21-30)</p>
-                            <h3 class="text-3xl font-black text-[#f43f5e] mb-2 font-[Cormorant_Garamond]">Protection
-                            </h3>
-                            <p class="text-[10px] text-gray-500 font-black uppercase tracking-tighter italic">Najat —
-                                Freedom from Fire</p>
-                        </div>
-                    </div>
+                    <!-- Main Bento Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-8 mb-12">
 
-                    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-12">
-                        <!-- Suhoor Info -->
+                        <!-- Iftar Countdown Central (Lg Span) -->
                         <div
-                            class="bg-[#fcfdfd] p-8 rounded-[40px] shadow-sm text-center border-t-4 border-[#3b82f6] hover:-translate-y-1 transition-all">
-                            <div class="text-[10px] font-black opacity-30 mb-2 uppercase tracking-widest">Next Suhoor
-                                Info</div>
-                            <div class="text-5xl font-black text-gray-800" id="saheriVal">--:--</div>
-                            <p class="text-[9px] font-bold text-blue-500 mt-4 uppercase tracking-[0.2em]">Sehri Duration
-                                Logic active</p>
-                        </div>
-
-                        <!-- Main Countdown Central -->
-                        <div
-                            class="lg:col-span-2 bg-[#fcfdfd] p-10 rounded-[50px] shadow-2xl border-t-8 border-[#064e3b] text-center relative group overflow-hidden">
-                            <div
-                                class="absolute inset-0 bg-gradient-to-b from-[#064e3b]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                            class="md:col-span-8 ramadan-pearl-surface p-12 rounded-[50px] flex flex-col items-center justify-center text-center relative overflow-hidden group">
+                            <div class="absolute top-0 right-0 p-8">
+                                <i class="fas fa-mosque gold-line-art opacity-20"></i>
                             </div>
-                            <p class="text-[10px] font-black uppercase tracking-widest opacity-30 mb-4">Divine Iftar
-                                Countdown</p>
-                            <div class="text-7xl md:text-9xl font-black text-[#064e3b] drop-shadow-sm mb-4"
-                                id="iftarVal">--:--</div>
-                            <div class="mt-4 border-t border-gray-100 dark:border-white/5 pt-8">
-                                <div class="text-5xl font-mono font-black text-[#af944d] tracking-tighter" id="timer">
-                                    --:--:--</div>
-                                <div class="text-[9px] font-black uppercase tracking-[0.4em] opacity-30 mt-3"
-                                    id="ramadan-timer-label">Remaining in Current Fast</div>
+
+                            <div class="timer-glowing-ring mb-8 scale-75 md:scale-100">
+                                <div class="relative z-10">
+                                    <div class="text-7xl md:text-8xl font-black text-[#064e3b] tracking-tighter"
+                                        id="timer">--:--:--</div>
+                                    <div class="text-[10px] font-black uppercase tracking-[0.4em] text-[#af944d] mt-2"
+                                        id="ramadan-timer-label">Iftar Countdown</div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-12 w-full max-w-md border-t border-[#064e3b]/5 pt-10">
+                                <div>
+                                    <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Sehri
+                                        Ends</p>
+                                    <p class="text-3xl font-black text-[#064e3b]" id="saheriVal">--:--</p>
+                                </div>
+                                <div>
+                                    <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Iftar
+                                        Opens</p>
+                                    <p class="text-3xl font-black text-[#af944d]" id="iftarVal">--:--</p>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Date Info & Dynamic Stats -->
-                        <div
-                            class="bg-[#fcfdfd] p-8 rounded-[40px] shadow-sm text-center border-t-4 border-[#af944d] hover:-translate-y-1 transition-all">
-                            <div class="text-[10px] font-black opacity-30 mb-2 uppercase tracking-widest">Islamic Fast #
+                        <!-- Side Bento Column -->
+                        <div class="md:col-span-4 space-y-8">
+                            <!-- Notification Alarms Card -->
+                            <div class="ramadan-pearl-surface p-8 rounded-[40px] space-y-6">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="text-[10px] font-black text-[#064e3b] uppercase tracking-widest">Prayer
+                                        Alarms</h4>
+                                    <i class="fas fa-bell gold-line-art !text-lg"></i>
+                                </div>
+
+                                <div class="space-y-4">
+                                    <div
+                                        class="flex items-center justify-between p-3 bg-gray-50 rounded-2xl border border-gray-100">
+                                        <span
+                                            class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Suhoor
+                                            Wakeup</span>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" class="sr-only peer" id="alarm-suhoor">
+                                            <div
+                                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#10b981]">
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div
+                                        class="flex items-center justify-between p-3 bg-gray-50 rounded-2xl border border-gray-100">
+                                        <span
+                                            class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Taraweeh
+                                            Alert</span>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" class="sr-only peer" id="alarm-taraweeh">
+                                            <div
+                                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#af944d]">
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="text-5xl font-black text-gray-800" id="ramadan-day-status">14</div>
-                            <button onclick="shareToWhatsApp()"
-                                class="mt-8 w-full py-3 bg-[#25D366] text-white rounded-full text-[9px] font-black uppercase tracking-widest hover:brightness-110 shadow-lg">Share
-                                Times</button>
-                        </div>
-                    </div>
 
-                    <!-- Recommended Sunnah Activities Grid -->
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-20">
-                        <div
-                            class="bg-white/10 backdrop-blur-md p-6 rounded-[35px] border border-white/5 text-center hover:bg-white/20 transition-all cursor-pointer group">
-                            <i
-                                class="fas fa-bone text-[#af944d] text-2xl mb-3 group-hover:rotate-45 transition-transform"></i>
-                            <h4 class="text-white text-[10px] font-black uppercase tracking-widest">Miswak Sunnah</h4>
-                        </div>
-                        <div class="bg-white/10 backdrop-blur-md p-6 rounded-[35px] border border-white/5 text-center hover:bg-white/20 transition-all cursor-pointer group"
-                            onclick="navigateToView('view-dashboard'); setTimeout(() => document.getElementById('zakat-section').scrollIntoView({behavior:'smooth'}), 500)">
-                            <i
-                                class="fas fa-coins text-[#10b981] text-2xl mb-3 group-hover:scale-110 transition-transform"></i>
-                            <h4 class="text-white text-[10px] font-black uppercase tracking-widest">Calculate Zakat</h4>
-                        </div>
-                        <div class="bg-white/10 backdrop-blur-md p-6 rounded-[35px] border border-white/5 text-center hover:bg-white/20 transition-all cursor-pointer group"
-                            onclick="navigateToView('view-quran')">
-                            <i
-                                class="fas fa-book-quran text-blue-400 text-2xl mb-3 group-hover:-scale-x-100 transition-transform"></i>
-                            <h4 class="text-white text-[10px] font-black uppercase tracking-widest">Daily Tilawat</h4>
-                        </div>
-                        <div
-                            class="bg-white/10 backdrop-blur-md p-6 rounded-[35px] border border-white/5 text-center hover:bg-white/20 transition-all cursor-pointer group">
-                            <i
-                                class="fas fa-moon-stars text-purple-400 text-2xl mb-3 group-hover:rotate-180 transition-transform duration-700"></i>
-                            <h4 class="text-white text-[10px] font-black uppercase tracking-widest">Tahajjud Prep</h4>
-                        </div>
-                    </div>
-
-                    <!-- Ramadan Dua Centerpiece -->
-                    <div
-                        class="bg-[#fcfdfd] p-12 rounded-[60px] shadow-2xl border-t-8 border-[#af944d] text-center dark:bg-gray-800 dark:border-gray-700 relative overflow-hidden mb-16">
-                        <div
-                            class="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]">
-                        </div>
-                        <div class="relative z-10 max-w-3xl mx-auto">
+                            <!-- Day Counter Card -->
                             <div
-                                class="w-16 h-1 bg-gradient-to-r from-transparent via-[#af944d] to-transparent mx-auto mb-8">
+                                class="ramadan-pearl-surface p-10 rounded-[40px] text-center group hover:-translate-y-2 transition-all">
+                                <div
+                                    class="w-16 h-16 bg-[#064e3b]/5 rounded-full flex items-center justify-center mx-auto mb-6">
+                                    <i class="fas fa-moon-stars gold-line-art"></i>
+                                </div>
+                                <h3 class="text-sm font-black text-gray-400 uppercase tracking-widest mb-2">Holy
+                                    Progress</h3>
+                                <div class="text-6xl font-black text-[#064e3b]" id="ramadan-day-status">15</div>
+                                <p class="font-[Cormorant_Garamond] text-2xl font-bold text-[#af944d] mt-2">Day of
+                                    Ramadan</p>
                             </div>
-                            <p class="text-3xl font-[Amiri] text-[#af944d] mb-4">الدعاء اليومي</p>
-                            <h2 class="text-4xl md:text-6xl font-[Amiri] text-gray-800 leading-[1.6] mb-8 dark:text-gray-100"
-                                id="duaArabic" style="direction:rtl;">--</h2>
-                            <p class="text-xl italic text-[#064e3b] font-serif border-l-4 border-[#af944d]/30 pl-6 dark:text-[#af944d]"
-                                id="duaTranslation">--</p>
-                            <p class="text-[10px] uppercase font-black tracking-[0.3em] opacity-30 mt-6"
-                                id="duaReference">--</p>
-                            <button onclick="displayRandomDua()"
-                                class="mt-10 px-8 py-3 bg-gray-50 dark:bg-black/10 hover:bg-[#af944d] hover:text-white rounded-full text-[9px] font-black uppercase tracking-widest transition-all">Next
-                                Supplication</button>
-                        </div>
-                    </div>
-
-                    <!-- Monthly Visual Schedule -->
-                    <div
-                        class="bg-[#fcfdfd] p-10 rounded-[50px] shadow-2xl border-t-8 border-[#064e3b] dark:bg-gray-800">
-                        <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
-                            <h3 class="text-3xl font-black text-gray-800 dark:text-white uppercase tracking-tighter"
-                                id="calendar-month-label">Holy Calendar</h3>
-                            <div class="flex gap-4">
-                                <button onclick="changeCalendarMonth(-1)"
-                                    class="w-12 h-12 rounded-full border border-gray-100 hover:bg-gray-50 flex items-center justify-center text-[#af944d] hover:scale-110 transition-all shadow-sm"><i
-                                        class="fas fa-chevron-left"></i></button>
-                                <button onclick="changeCalendarMonth(1)"
-                                    class="w-12 h-12 rounded-full border border-gray-100 hover:bg-gray-50 flex items-center justify-center text-[#af944d] hover:scale-110 transition-all shadow-sm"><i
-                                        class="fas fa-chevron-right"></i></button>
+                            <div
+                                class="w-14 h-14 bg-[#af944d] text-white rounded-2xl flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
+                                <i class="fas fa-location-arrow"></i>
                             </div>
-                        </div>
-                        <div class="overflow-x-auto rounded-3xl border border-gray-50 dark:border-white/5">
-                            <table class="w-full text-left">
-                                <thead class="bg-gray-50 dark:bg-black/20">
-                                    <tr class="text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                                        <th class="p-6">Date Info</th>
-                                        <th class="p-6">Islamic Orbit</th>
-                                        <th class="p-6 text-center">Saheri Limit</th>
-                                        <th class="p-6 text-center">Iftar Opening</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="monthly-calendar-body" class="divide-y divide-gray-50 dark:divide-white/5">
-                                    <!-- Populated by JS -->
-                                </tbody>
-                            </table>
+                            <div>
+                                <h4 class="text-xs font-black uppercase tracking-widest text-[#064e3b]">Location
+                                </h4>
+                                <p class="text-sm text-gray-500 font-medium truncate" id="cityLabel">Detecting...
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <p id="cityLabel" class="hidden">--</p>
-            </section>
 
-        </main>
+                <!-- The Quran Journey Section -->
+                <div class="mb-12">
+                    <header class="flex justify-between items-end mb-8 px-2">
+                        <div>
+                            <h3 class="text-2xl font-black text-[#064e3b] uppercase tracking-tighter">The Quran
+                                Journey</h3>
+                            <p class="text-[10px] font-black text-[#af944d] uppercase tracking-[0.2em] mt-1">
+                                Spiritual Milestone Tracker</p>
+                        </div>
+                        <div class="hidden md:block h-[1px] flex-1 bg-[#064e3b]/5 mx-8 mb-3"></div>
+                    </header>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <!-- Juz of the Day -->
+                        <div class="ramadan-pearl-surface p-8 rounded-[40px] relative overflow-hidden group hover:scale-[1.02] transition-all cursor-pointer"
+                            onclick="openJuzOfTheDay()">
+                            <div
+                                class="absolute -right-4 -bottom-4 opacity-[0.05] text-8xl text-[#af944d] group-hover:rotate-12 transition-transform duration-500">
+                                <i class="fas fa-book-open"></i>
+                            </div>
+                            <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2">
+                                Recommended Reading</p>
+                            <h4 class="text-2xl font-black text-[#064e3b] mb-1">Juz of the Day</h4>
+                            <div class="flex items-center gap-2 mt-4">
+                                <span class="px-4 py-1 bg-[#af944d] text-white rounded-full text-[10px] font-bold"
+                                    id="juz-num-label">Juz 15</span>
+                                <span class="text-[10px] font-black text-[#af944d] uppercase tracking-widest">Open
+                                    Now <i class="fas fa-arrow-right ml-1"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- Progress Bar Card -->
+                        <div
+                            class="md:col-span-2 ramadan-pearl-surface p-8 rounded-[40px] flex flex-col justify-center">
+                            <div class="flex justify-between items-center mb-6">
+                                <div>
+                                    <h4 class="text-lg font-black text-[#064e3b]">Your Reading Progress</h4>
+                                    <p class="text-xs text-gray-500 font-medium">Keep going, every Ayah counts.</p>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-3xl font-black text-[#af944d]" id="quran-progress-val">45%</span>
+                                </div>
+                            </div>
+
+                            <div class="w-full h-4 bg-[#064e3b]/5 rounded-full overflow-hidden mb-6 p-[2px]">
+                                <div id="quran-progress-bar"
+                                    class="h-full bg-gradient-to-r from-[#10b981] to-[#af944d] rounded-full shadow-lg transition-all duration-1000"
+                                    style="width: 45%;"></div>
+                            </div>
+
+                            <div class="flex gap-4">
+                                <button onclick="updateQuranProgress(1)"
+                                    class="px-6 py-2 bg-[#064e3b]/5 hover:bg-[#064e3b] hover:text-white rounded-full text-[9px] font-black uppercase tracking-widest transition-all">+
+                                    Add Juz</button>
+                                <button onclick="updateQuranProgress(-1)"
+                                    class="px-6 py-2 border border-[#064e3b]/10 hover:bg-red-50 text-red-400 rounded-full text-[9px] font-black uppercase tracking-widest transition-all">Undo</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Daily Quran Verse Central Bento -->
+                <div class="ramadan-gold-section p-12 md:p-20 rounded-[60px] relative overflow-hidden group">
+                    <div
+                        class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]">
+                    </div>
+                    <div
+                        class="absolute top-0 right-0 p-12 opacity-20 text-[12rem] pointer-events-none group-hover:rotate-12 transition-transform duration-1000">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+
+                    <div class="relative z-10 max-w-4xl mx-auto text-center">
+                        <div
+                            class="inline-block px-6 py-2 bg-white/10 rounded-full text-[10px] font-black uppercase tracking-widest mb-8 border border-white/20">
+                            Daily Quran Verse</div>
+                        <h2 class="text-4xl md:text-6xl font-[Amiri] leading-relaxed mb-10 drop-shadow-xl"
+                            id="duaArabic" style="direction:rtl;">--</h2>
+                        <p class="text-xl md:text-2xl font-serif italic mb-6 opacity-90 leading-relaxed max-w-3xl mx-auto"
+                            id="duaTranslation">--</p>
+                        <div class="w-20 h-1 bg-white/30 mx-auto mb-6 rounded-full"></div>
+                        <p class="text-[10px] font-black uppercase tracking-[0.4em] opacity-60" id="duaReference">--
+                        </p>
+
+                        <button onclick="displayRandomDua()"
+                            class="mt-12 px-10 py-4 bg-white text-[#af944d] rounded-full text-[10px] font-black uppercase tracking-widest shadow-2xl hover:scale-105 transition-transform active:scale-95">Next
+                            Reflection</button>
+                    </div>
+                </div>
+
+                <!-- Footer Table - Re-unified -->
+                <div class="mt-12 ramadan-pearl-surface p-10 rounded-[50px]">
+                    <div class="flex justify-between items-center mb-8">
+                        <h3 class="text-2xl font-black text-[#064e3b] uppercase tracking-tighter"
+                            id="calendar-month-label">Full Schedule</h3>
+                        <div class="flex gap-3">
+                            <button onclick="window.printRamadanTable()"
+                                class="px-6 py-2 bg-[#064e3b] text-white rounded-full text-[9px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg hidden md:block">
+                                <i class="fas fa-download mr-2"></i> Download PDF
+                            </button>
+                            <button onclick="changeCalendarMonth(-1)"
+                                class="w-12 h-12 rounded-full border border-[#064e3b]/10 flex items-center justify-center text-[#af944d] hover:bg-white transition-all shadow-sm"><i
+                                    class="fas fa-chevron-left"></i></button>
+                            <button onclick="changeCalendarMonth(1)"
+                                class="w-12 h-12 rounded-full border border-[#064e3b]/10 flex items-center justify-center text-[#af944d] hover:bg-white transition-all shadow-sm"><i
+                                    class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto rounded-3xl overflow-hidden">
+                        <table class="w-full text-left">
+                            <thead class="bg-[#064e3b]/5">
+                                <tr class="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                                    <th class="p-6">Holy Date</th>
+                                    <th class="p-6">Islamic Cycle</th>
+                                    <th class="p-6 text-center">Sehri</th>
+                                    <th class="p-6 text-center">Iftar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="monthly-calendar-body" class="divide-y divide-[#064e3b]/5">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+    </div>
+    </section>
+
+    </main>
     </div>
 
     <!-- QURAN READER MODAL (Overlay) -->

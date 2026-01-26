@@ -9,11 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let allHadiths = []; // For search
     let countdownInterval = null;
     // Ramadan State
-    let ramadanUseCoords = false;
-    let ramadanLat = 0;
-    let ramadanLng = 0;
-    let globalCity = "Hyderabad";
-    let globalCountry = "India";
+    window.ramadanUseCoords = false;
+    window.ramadanLat = 0;
+    window.ramadanLng = 0;
+    window.globalCity = "Hyderabad";
+    window.globalCountry = "India";
 
     // --- DOM ELEMENTS ---
     const navLinks = document.querySelectorAll('.nav-link');
@@ -217,8 +217,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderPrayerGrid(prayerTimesRaw);
                 renderPrayerGuide(prayerTimesRaw);
                 updateNextPrayer();
+
+                // Update Dashboard Dates
+                const dateInfo = data.data.date;
+                const gregEl = document.getElementById('hero-greg-date');
+                const hijriEl = document.getElementById('hero-hijri-date');
+                if (gregEl) gregEl.textContent = `${dateInfo.gregorian.day} ${dateInfo.gregorian.month.en} ${dateInfo.gregorian.year}`;
+                if (hijriEl) hijriEl.textContent = `${dateInfo.hijri.day} ${dateInfo.hijri.month.en} ${dateInfo.hijri.year}`;
             }
         } catch (e) { console.error("Prayer fetch failed", e); }
+    }
+
+    function updateMasterDates() {
+        // Fallback for initial load before API returns
+        const now = new Date();
+        const gregEl = document.getElementById('hero-greg-date');
+        if (gregEl && gregEl.textContent.trim() === "Loading...") {
+            gregEl.textContent = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+        }
     }
 
     // Nafil Data & Virtue Logic
@@ -624,7 +640,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const dailyVerses = [
         { t: "Indeed, with hardship [will be] ease.", r: "Surah Ash-Sharh 94:6" },
         { t: "So remember Me; I will remember you.", r: "Surah Al-Baqarah 2:152" },
-        { t: "And He is with you wherever you are.", r: "Surah Al-Hadid 57:4" }
+        { t: "And He is with you wherever you are.", r: "Surah Al-Hadid 57:4" },
+        { t: "My mercy encompasses all things.", r: "Surah Al-A'raf 7:156" },
+        { t: "Allah does not burden a soul beyond that it can bear.", r: "Surah Al-Baqarah 2:286" },
+        { t: "Unquestionably, by the remembrance of Allah hearts are assured.", r: "Surah Ar-Ra'd 13:28" },
+        { t: "Indeed, my Lord is near and responsive.", r: "Surah Hud 11:61" },
+        { t: "And your Lord is the Most Generous.", r: "Surah Al-'Alaq 96:3" },
+        { t: "He created the heavens and earth in truth.", r: "Surah Az-Zumar 39:5" },
+        { t: "Hold firmly to the rope of Allah all together.", r: "Surah Ali 'Imran 3:103" }
     ];
     function showDailyVerse() {
         const verse = dailyVerses[Math.floor(Math.random() * dailyVerses.length)];
@@ -777,6 +800,12 @@ document.addEventListener('DOMContentLoaded', () => {
             // Default to Urdu
             currentPlaylist = [];
             currentAudioIndex = 0;
+
+            // Add Bismillah preamble if not Surah Fatiha (1) or Surah Tawbah (9)
+            if (arData.data.number && arData.data.number !== 1 && arData.data.number !== 9) {
+                currentPlaylist.push(`https://cdn.islamic.network/quran/audio/128/ar.alafasy/1.mp3`);
+            }
+
             arData.data.ayahs.forEach(a => {
                 currentPlaylist.push(`https://cdn.islamic.network/quran/audio/128/ar.alafasy/${a.number}.mp3`);
                 currentPlaylist.push(`https://cdn.islamic.network/quran/audio/64/ur.khan/${a.number}.mp3`);
@@ -814,8 +843,15 @@ document.addEventListener('DOMContentLoaded', () => {
     window.playSurahAudio = function (lang) {
         if (!window.currentSurahData) return;
         const data = window.currentSurahData.data.ayahs;
+        const surahNum = window.currentSurahData.data.number;
 
         currentPlaylist = [];
+
+        // Add Bismillah preamble if not Surah Fatiha (1) or Surah Tawbah (9)
+        if (surahNum && surahNum !== 1 && surahNum !== 9) {
+            currentPlaylist.push(`https://cdn.islamic.network/quran/audio/128/ar.alafasy/1.mp3`);
+        }
+
         data.forEach(a => {
             currentPlaylist.push(`https://cdn.islamic.network/quran/audio/128/ar.alafasy/${a.number}.mp3`);
             if (lang === 'ur') currentPlaylist.push(`https://cdn.islamic.network/quran/audio/64/ur.khan/${a.number}.mp3`);
@@ -2092,24 +2128,24 @@ window.getRamadanTimes = async function () {
 
     let url = '';
 
-    if (ramadanUseCoords) {
-        url = `https://api.aladhan.com/v1/timings?latitude=${ramadanLat}&longitude=${ramadanLng}&method=1&school=1`;
+    if (window.ramadanUseCoords) {
+        url = `https://api.aladhan.com/v1/timings?latitude=${window.ramadanLat}&longitude=${window.ramadanLng}&method=1&school=1`;
         if (document.getElementById('cityLabel')) document.getElementById('cityLabel').innerText = "My Location";
     } else {
         if (rawCity.includes(',')) {
             const parts = rawCity.split(',');
-            globalCity = parts[0].trim();
-            globalCountry = parts[1].trim();
+            window.globalCity = parts[0].trim();
+            window.globalCountry = parts[1].trim();
         } else {
-            if (rawCity !== "My Location") globalCity = rawCity;
+            if (rawCity !== "My Location") window.globalCity = rawCity;
             // Auto-assign India for Hyderabad default
-            if (globalCity.toLowerCase() === 'hyderabad') globalCountry = 'India';
+            if (window.globalCity.toLowerCase() === 'hyderabad') window.globalCountry = 'India';
         }
 
         const cityLabel = document.getElementById('cityLabel');
-        if (cityLabel) cityLabel.innerText = globalCity;
+        if (cityLabel) cityLabel.innerText = window.globalCity;
 
-        url = `https://api.aladhan.com/v1/timingsByCity?city=${globalCity}&country=${globalCountry}&method=1&school=1`;
+        url = `https://api.aladhan.com/v1/timingsByCity?city=${window.globalCity}&country=${window.globalCountry}&method=1&school=1`;
     }
 
     // Reset Calendar to today
@@ -2136,8 +2172,44 @@ window.getRamadanTimes = async function () {
 
             startRamadanCountdown(timings.Fajr, timings.Maghrib);
             updateAshraTracker(hijriDate.day);
+
+            // Sync Quran Journey
+            if (document.getElementById('juz-num-label')) {
+                document.getElementById('juz-num-label').innerText = `Juz ${hijriDate.day}`;
+            }
+            initQuranProgress();
         }
     } catch (e) { console.error("API Error", e); }
+}
+
+window.openJuzOfTheDay = function () {
+    const dayLabel = document.getElementById('juz-num-label')?.innerText || "Juz 1";
+    const juzNum = parseInt(dayLabel.replace('Juz ', '')) || 1;
+    // Assuming navigateToView and openReader are available
+    if (typeof navigateToView === 'function') navigateToView('view-quran');
+    setTimeout(() => {
+        if (typeof openReader === 'function') openReader(juzNum, `Juz ${juzNum}`, 'juz');
+    }, 500);
+}
+
+window.updateQuranProgress = function (delta) {
+    let currentJuz = parseInt(localStorage.getItem('quran_juz_completed')) || 0;
+    currentJuz = Math.max(0, Math.min(30, currentJuz + delta));
+    localStorage.setItem('quran_juz_completed', currentJuz);
+    renderQuranProgress(currentJuz);
+}
+
+function initQuranProgress() {
+    const juz = parseInt(localStorage.getItem('quran_juz_completed')) || 0;
+    renderQuranProgress(juz);
+}
+
+function renderQuranProgress(completedJuz) {
+    const percent = Math.round((completedJuz / 30) * 100);
+    const valEl = document.getElementById('quran-progress-val');
+    const barEl = document.getElementById('quran-progress-bar');
+    if (valEl) valEl.innerText = `${percent}%`;
+    if (barEl) barEl.style.width = `${percent}%`;
 }
 
 function updateAshraTracker(day) {
@@ -2170,9 +2242,9 @@ window.autoDetectRamadanContent = function () {
 
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(async (pos) => {
-            ramadanLat = pos.coords.latitude;
-            ramadanLng = pos.coords.longitude;
-            ramadanUseCoords = true;
+            window.ramadanLat = pos.coords.latitude;
+            window.ramadanLng = pos.coords.longitude;
+            window.ramadanUseCoords = true;
 
             const input = document.getElementById('ramadan-city');
             if (input) input.value = "My Location";
@@ -2206,10 +2278,10 @@ window.fetchMonthlyCalendar = async function () {
     if (label) label.innerText = "Loading...";
 
     let url = '';
-    if (ramadanUseCoords) {
-        url = `https://api.aladhan.com/v1/calendar?latitude=${ramadanLat}&longitude=${ramadanLng}&method=1&school=1&month=${month}&year=${year}`;
+    if (window.ramadanUseCoords) {
+        url = `https://api.aladhan.com/v1/calendar?latitude=${window.ramadanLat}&longitude=${window.ramadanLng}&method=1&school=1&month=${month}&year=${year}`;
     } else {
-        url = `https://api.aladhan.com/v1/calendarByCity/${year}/${month}?city=${globalCity}&country=${globalCountry}&method=1&school=1`;
+        url = `https://api.aladhan.com/v1/calendarByCity/${year}/${month}?city=${window.globalCity}&country=${window.globalCountry}&method=1&school=1`;
     }
 
     try {
@@ -2226,18 +2298,19 @@ window.fetchMonthlyCalendar = async function () {
             tbody.innerHTML = results.map(day => {
                 const isRamadan = day.date.hijri.month.number === 9;
                 return `
-                <tr class="hover:bg-[#f5f2eb]/5 transition-colors ${isRamadan ? 'bg-emerald-900/30' : ''}">
-                    <td class="px-4 py-3 border-r border-[#af944d]/10">
-                        <span class="font-bold text-white">${day.date.gregorian.day}</span>
-                        <span class="text-xs opacity-50 block">${day.date.gregorian.weekday.en}</span>
+                <tr class="hover:bg-[#064e3b]/5 transition-colors ${isRamadan ? 'bg-[#064e3b]/10' : ''}">
+                    <td class="px-6 py-5">
+                        <span class="font-black text-[#064e3b]">${day.date.gregorian.day}</span>
+                        <span class="text-[9px] opacity-40 block uppercase font-bold tracking-widest">${day.date.gregorian.weekday.en}</span>
                     </td>
-                    <td class="px-4 py-3 border-r border-[#af944d]/10 font-serif">
-                        <span class="text-[#af944d] font-bold">${day.date.hijri.day}</span> ${day.date.hijri.month.en}
+                    <td class="px-6 py-5">
+                        <span class="text-[#af944d] font-black">${day.date.hijri.day}</span>
+                        <span class="text-[9px] opacity-40 uppercase font-bold ml-1">${day.date.hijri.month.en}</span>
                     </td>
-                    <td class="px-4 py-3 text-center border-r border-[#af944d]/10 font-mono text-emerald-200">
+                    <td class="px-6 py-5 text-center font-mono text-lg font-bold text-gray-700">
                         ${day.timings.Fajr.split(' ')[0]}
                     </td>
-                    <td class="px-4 py-3 text-center font-mono text-amber-200">
+                    <td class="px-6 py-5 text-center font-mono text-lg font-bold text-[#af944d]">
                         ${day.timings.Maghrib.split(' ')[0]}
                     </td>
                 </tr>
@@ -2317,8 +2390,8 @@ function startRamadanCountdown(fajr, maghrib) {
         const s = Math.floor((diff % 60000) / 1000);
 
         // Update Label
-        const labelEl = document.querySelector('#view-ramadan .opacity-40.mt-2'); // Refers to "Remaining in Fast"
-        if (labelEl) labelEl.innerText = label;
+        const labelEl = document.getElementById('ramadan-timer-label');
+        if (labelEl) labelEl.innerText = label.toUpperCase();
 
         const timerEl = document.getElementById('timer');
         if (timerEl) timerEl.innerText = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
@@ -2367,9 +2440,44 @@ setTimeout(displayRandomDua, 1000);
 // Sparkles disabled for Matte UI
 // initGlobalSparkles();
 
-// --- GLOBAL SPARKLE BACKGROUND (Disabled) ---
-function initGlobalSparkles() {
-    // Purposefully left empty for soft paper aesthetic
+// --- RAMADAN UTILITIES ---
+window.printRamadanTable = function () {
+    const table = document.getElementById('monthly-calendar-body').closest('table').cloneNode(true);
+    const label = document.getElementById('calendar-month-label').innerText;
+    const printWindow = window.open('', '', 'height=600,width=800');
+    printWindow.document.write(`
+        <html><head><title>Ramadan Timetable</title>
+        <style>
+            body { font-family: sans-serif; padding: 40px; color: #064e3b; }
+            h1 { text-align: center; border-bottom: 2px solid #af944d; padding-bottom: 10px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            th, td { border: 1px solid #eee; padding: 12px; text-align: left; }
+            th { background: #f8f9fa; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; }
+            .hijri { color: #af944d; font-weight: bold; }
+        </style></head>
+        <body><h1>${label}</h1>`);
+    printWindow.document.write(table.outerHTML);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.print();
 }
+
+// Alarm States
+document.getElementById('alarm-suhoor')?.addEventListener('change', (e) => {
+    localStorage.setItem('alarm_suhoor', e.target.checked);
+    if (e.target.checked) alert("Suhoor alarm set based on your local time.");
+});
+document.getElementById('alarm-taraweeh')?.addEventListener('change', (e) => {
+    localStorage.setItem('alarm_taraweeh', e.target.checked);
+    if (e.target.checked) alert("Taraweeh reminder set for 15 minutes after Isha.");
+});
+
+// Load Alarm States
+window.addEventListener('load', () => {
+    const s = localStorage.getItem('alarm_suhoor') === 'true';
+    const t = localStorage.getItem('alarm_taraweeh') === 'true';
+    if (document.getElementById('alarm-suhoor')) document.getElementById('alarm-suhoor').checked = s;
+    if (document.getElementById('alarm-taraweeh')) document.getElementById('alarm-taraweeh').checked = t;
+});
 
 

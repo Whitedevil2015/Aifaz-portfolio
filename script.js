@@ -703,60 +703,164 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // --- LIBRARY & SEARCH ---
+    // --- LIBRARY & SEARCH ---
+    let fullHadithCache = [];
+    let displayedCount = 50;
+
     async function loadLibrary() {
         const view = document.getElementById('library-content');
-        if (allHadiths.length > 0) return; // Already loaded
+        // If we have data, just ensure we are rendering it
+        if (fullHadithCache.length > 0) {
+            renderHadiths(fullHadithCache.slice(0, displayedCount));
+            return;
+        }
 
-        view.innerHTML = '<div class="text-center py-20"><i class="fas fa-circle-notch fa-spin text-4xl text-[#af944d]"></i> <p class="mt-4">Loading Knowledge Base...</p></div>';
+        view.innerHTML = `
+            <div class="text-center py-20 animate-pulse">
+                <i class="fas fa-book-quran fa-spin text-5xl text-[#af944d] mb-6"></i> 
+                <h3 class="text-2xl font-bold text-[#064e3b] dark:text-[#af944d]">Connecting to Bukhari Archives...</h3>
+                <p class="mt-4 text-gray-500">Fetching 7,000+ authentic narrations...</p>
+            </div>
+        `;
 
-        // Mock Large Data for Searchability
-        // In production, fetch this from the JSON endpoint provided
-        const mockData = Array.from({ length: 50 }, (_, i) => ({
-            id: i + 1,
-            text: `Hadith text sample ${i + 1}. Whoever does good is like the one who guides to it. Example text for search functionality.`,
-            ref: `Bukhari ${1000 + i}`
-        }));
-        // Add some real ones
-        mockData.unshift(
-            { id: 999, text: "The reward of deeds depends upon the intentions and every person will get the reward according to what he has intended.", ref: "Bukhari 1" },
-            { id: 998, text: "A Muslim is the one who avoids harming Muslims with his tongue and hands.", ref: "Bukhari 10" },
-            { id: 997, text: "None of you will have faith till he wishes for his (Muslim) brother what he likes for himself.", ref: "Bukhari 13" }
-        );
-        allHadiths = mockData;
-        renderHadiths(allHadiths);
+        try {
+            // Fetch Arabic and Urdu datasets in parallel
+            const [araRes, urdRes] = await Promise.all([
+                fetch('https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/ara-bukhari.min.json'),
+                fetch('https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/urd-bukhari.min.json')
+            ]);
 
-        // Init Search Listener
+            if (!araRes.ok || !urdRes.ok) throw new Error("Failed to fetch library");
+
+            const araData = await araRes.json();
+            const urdData = await urdRes.json();
+
+            // Merge datasets efficiently
+            // Assuming both arrays are sorted or roughly aligned, but we map by hadithnumber for safety
+            const araMap = new Map(araData.hadiths.map(h => [h.hadithnumber, h.text]));
+
+            fullHadithCache = urdData.hadiths.map(h => ({
+                id: h.hadithnumber,
+                arabic: araMap.get(h.hadithnumber) || "النص العربي غير متوفر حاليا", // Fallback if missing
+                urdu: h.text,
+                ref: `Sahih Bukhari ${h.hadithnumber}`
+            }));
+
+            // Initial Render
+            renderHadiths(fullHadithCache.slice(0, displayedCount));
+
+            // Init Search
+            setupSearch();
+
+        } catch (err) {
+            console.error("Library Error:", err);
+            // Fallback to static authentic set if API fails
+            loadStaticFallback(view);
+        }
+    }
+
+    function setupSearch() {
+        const searchInput = document.getElementById('hadith-search');
         searchInput?.addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
-            const filtered = allHadiths.filter(h => h.text.toLowerCase().includes(term) || h.ref.toLowerCase().includes(term));
-            renderHadiths(filtered);
+            if (!term) {
+                renderHadiths(fullHadithCache.slice(0, displayedCount));
+                return;
+            }
+            // Search entire cache
+            const filtered = fullHadithCache.filter(h =>
+                h.urdu.includes(term) ||
+                String(h.id).includes(term) ||
+                h.arabic.includes(term)
+            ).slice(0, 100); // Limit search results to 100 for perf
+            renderHadiths(filtered, true); // true = isSearchResult
         });
     }
 
-    function renderHadiths(list) {
+    function loadStaticFallback(view) {
+        const fallback = [
+            { id: 1, arabic: "إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ", urd: "تمام اعمال کا دارومدار نیت پر ہے۔", ref: "Sahih Bukhari 1" },
+            { id: 5027, arabic: "خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ", urd: "تم میں بہترین وہ ہے جو قرآن سیکھے اور سکھائے۔", ref: "Sahih Bukhari 5027" }
+        ];
+        fullHadithCache = fallback.map(h => ({ ...h, urdu: h.urd })); // normalize key
+        renderHadiths(fullHadithCache);
+    }
+
+    // Voice Synthesis
+    window.playUrduSpeech = function (text) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel(); // Stop previous
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'ur-PK'; // Try Pakistani Urdu
+            // Fallback voice options could be iterated here
+            utterance.rate = 0.9;
+            window.speechSynthesis.speak(utterance);
+        } else {
+            alert("Text-to-Speech not supported in this browser.");
+        }
+    };
+
+    function renderHadiths(list, isSearch = false) {
         const view = document.getElementById('library-content');
         if (list.length === 0) {
-            view.innerHTML = '<div class="text-center py-10 opacity-50">No Hadiths found matching your search.</div>';
+            view.innerHTML = '<div class="text-center py-10 opacity-50">No Hadiths found.</div>';
             return;
         }
-        view.innerHTML = `
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20">
-                ${list.map((h, i) => {
+
+        const cardsHtml = list.map((h, i) => {
             const hue = (i * 30) % 360;
             return `
                     <div class="bg-[#fcfdfd] p-8 rounded-[40px] shadow-sm text-center border-t-4 hover:-translate-y-1 transition-all relative group dark:bg-gray-800 dark:border-gray-700" style="border-color:hsl(${hue}, 50%, 45%)">
-                        <i class="fas fa-quote-right absolute top-4 right-4 opacity-5 text-4xl" style="color:hsl(${hue}, 50%, 45%)"></i>
-                        <h4 class="font-black mb-4 uppercase tracking-[0.2em] text-[10px] opacity-40">Knowledge #${h.id}</h4>
-                        <p class="text-lg font-medium text-gray-700 leading-relaxed mb-6 dark:text-gray-200">"${h.text}"</p>
+                        <i class="fas fa-quote-right absolute top-6 right-6 opacity-5 text-4xl" style="color:hsl(${hue}, 50%, 45%)"></i>
+                        
+                        <div class="mb-6 mt-2">
+                             <p class="text-2xl font-bold font-amiri leading-loose text-[#064e3b] dark:text-[#af944d] drop-shadow-sm select-all" dir="rtl">${h.arabic}</p>
+                        </div>
+
+                         <div class="relative py-4 mb-4">
+                             <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                                <div class="w-full border-t border-gray-100 dark:border-gray-700"></div>
+                             </div>
+                             <div class="relative flex justify-center">
+                                <span class="bg-[#fcfdfd] dark:bg-gray-800 px-3 text-xs text-gray-400 uppercase tracking-widest">Translation</span>
+                             </div>
+                        </div>
+
+                        <p class="text-lg font-medium text-gray-600 leading-relaxed mb-6 dark:text-gray-300 font-urdu" dir="rtl">${h.urdu}</p>
+                        
                         <div class="text-[11px] font-black border-t border-gray-50 dark:border-white/5 pt-4 flex justify-between items-center uppercase tracking-widest" style="color:hsl(${hue}, 50%, 40%)">
-                            <span>REF: ${h.ref}</span>
-                            <button class="opacity-30 hover:opacity-100 transition-opacity"><i class="fas fa-bookmark"></i></button>
+                            <span class="bg-gray-50 dark:bg-white/5 px-2 py-1 rounded">REF: ${h.ref}</span>
+                            <div class="flex gap-2">
+                                <button onclick="window.playUrduSpeech('${h.urdu.replace(/'/g, "\\'")}')" class="opacity-40 hover:opacity-100 transition-opacity p-2 hover:bg-gray-100 rounded-full" title="Listen to Urdu"><i class="fas fa-volume-up"></i></button>
+                                <button class="opacity-30 hover:opacity-100 transition-opacity p-2"><i class="fas fa-bookmark"></i></button>
+                            </div>
                         </div>
                     </div>
-                `}).join('')}
+                `}).join('');
+
+        let loadMoreHtml = '';
+        if (!isSearch && fullHadithCache.length > displayedCount) {
+            loadMoreHtml = `
+                <div class="col-span-full text-center mt-8">
+                    <button onclick="loadMoreHadiths()" class="px-8 py-3 bg-[#af944d] text-white rounded-full font-bold hover:scale-105 transition-transform shadow-lg">
+                        Load More from Library (+50)
+                    </button>
+                </div>
+             `;
+        }
+
+        view.innerHTML = `
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20">
+                ${cardsHtml}
+                ${loadMoreHtml}
             </div>
         `;
     }
+
+    window.loadMoreHadiths = function () {
+        displayedCount += 50;
+        renderHadiths(fullHadithCache.slice(0, displayedCount));
+    };
 
     // --- DAILY VERSE MODAL ---
     const dailyVerses = [
@@ -2623,15 +2727,32 @@ function displayRandomDua() {
     const trEl = document.getElementById('duaTranslation');
     const refEl = document.getElementById('duaReference');
 
-    if (arEl) arEl.innerText = selectedDua.arabic;
+    if (arEl) {
+        arEl.innerText = selectedDua.arabic;
+    }
     if (trEl) trEl.innerText = `"${selectedDua.translation}"`;
     if (refEl) refEl.innerText = `— ${selectedDua.ref}`;
 }
 
+window.voiceDua = function () {
+    const arEl = document.getElementById('duaArabic');
+    if (!arEl || !arEl.innerText || arEl.innerText === '--') return;
+
+    const msg = new SpeechSynthesisUtterance();
+    msg.text = arEl.innerText;
+    msg.lang = 'ar-SA';
+    msg.rate = 0.8;
+
+    const voices = window.speechSynthesis.getVoices();
+    const arVoice = voices.find(v => v.lang.startsWith('ar'));
+    if (arVoice) msg.voice = arVoice;
+
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(msg);
+}
+
 // Initialize Dua on Load
 setTimeout(displayRandomDua, 1000);
-// Sparkles disabled for Matte UI
-// initGlobalSparkles();
 
 // --- RAMADAN UTILITIES ---
 window.printRamadanTable = function () {

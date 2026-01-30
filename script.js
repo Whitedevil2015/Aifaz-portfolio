@@ -196,7 +196,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             fetchAtmosphere(lat, lng);
             const locLabel = document.getElementById('portal-location-label');
-            if (locLabel) locLabel.textContent = `${lat.toFixed(2)}, ${lng.toFixed(2)}`;
+            if (locLabel) {
+                // Prioritize City Name if we have it from Reverse Geo
+                if (window.globalCity) {
+                    locLabel.innerHTML = `<i class="fas fa-location-dot mr-1"></i> ${window.globalCity}`;
+                } else {
+                    locLabel.textContent = `${lat.toFixed(2)}, ${lng.toFixed(2)}`;
+                }
+            }
         } else {
             const c = city || "Delhi";
             const co = country || "India";
@@ -469,19 +476,36 @@ document.addEventListener('DOMContentLoaded', () => {
             window.ramadanUseCoords = true;
 
             try {
-                // Trigger fetches
+                // 1. Trigger Prayer Times Fetch (based on coords)
                 await window.fetchPrayers(lat, lng);
 
-                // If in Ramadan view or requested specifically
+                // 2. Reverse Geocoding (Get City Name for UI)
+                const geoRes = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`);
+                const geoData = await geoRes.json();
+
+                const detectedCity = geoData.city || geoData.locality || "Detected Location";
+                const detectedCountry = geoData.countryName || "";
+
+                // Update Global State
+                window.globalCity = detectedCity;
+                window.globalCountry = detectedCountry;
+
+                // Update UI Labels
+                const ramadanLabel = document.getElementById('cityLabel');
+                if (ramadanLabel) ramadanLabel.innerText = `${detectedCity}, ${detectedCountry}`;
+
+                console.log(`Location Locked: ${detectedCity}`);
+
+                // 3. Ramadan Data Fetch
                 if (source === 'ramadan' || !document.getElementById('view-ramadan').classList.contains('hidden')) {
                     await window.getRamadanTimes();
                 }
 
-                // Reverse Geocoding for City Name (Optional Enhancement)
-                // Could fetch city name here if desired
+                alert(`Location successfully updated to: ${detectedCity}, ${detectedCountry}`);
 
             } catch (e) {
                 console.error("Sync failed", e);
+                alert("Coordinates locked, but city name could not be fetched.");
             } finally {
                 resetBtn();
             }
@@ -1114,71 +1138,161 @@ document.addEventListener('DOMContentLoaded', () => {
             currentPlaylist = [];
             currentAudioIndex = 0;
 
-            const surahNum = arData.data.number || 1;
-            const hasPreamble = (surahNum !== 1 && surahNum !== 9);
+            // Helper for MP3 Quran ID
+            const pad3 = n => String(n).padStart(3, '0');
 
-            // Add Bismillah preamble
-            if (hasPreamble) {
-                currentPlaylist.push(`https://cdn.islamic.network/quran/audio/128/ar.alafasy/1.mp3`);
+            const surahNum = arData.data.number || 1;
+            const surahName = arData.data.englishName;
+            const isSurahMode = (type === 'surah'); // juz mode must use verses
+
+            // SEAMLESS MODE: If Translations OFF and in Surah View -> Play Full Audio File
+            // This solves the 'gap' issue completely.
+            const useSeamless = (hideTranslations && isSurahMode);
+
+            // Show Player Bar
+            const playerBar = document.getElementById('quran-player-bar');
+            if (playerBar) playerBar.classList.remove('translate-y-full');
+
+            if (useSeamless) {
+                // Single File from Mishary Rashid (Gapless)
+                currentPlaylist.push(`https://server8.mp3quran.net/afs/${pad3(surahNum)}.mp3`);
+                document.getElementById('player-sub').innerText = "Seamless Recitation (Mishary Alafasy)";
+
+                // Disable Verse Highlighting/Seeking logic for now in this mode
+                // or we could implementing complex timestamp mapping later
+            } else {
+                // Verse by Verse (Study Mode / Dual Audio)
+                const hasPreamble = (surahNum !== 1 && surahNum !== 9);
+                if (hasPreamble) {
+                    currentPlaylist.push(`https://cdn.islamic.network/quran/audio/128/ar.alafasy/1.mp3`);
+                }
+                arData.data.ayahs.forEach(a => {
+                    currentPlaylist.push(`https://cdn.islamic.network/quran/audio/128/ar.alafasy/${a.number}.mp3`);
+                    if (!hideTranslations) {
+                        currentPlaylist.push(`https://cdn.islamic.network/quran/audio/64/ur.khan/${a.number}.mp3`);
+                    }
+                });
+                document.getElementById('player-sub').innerText = "Verse-by-Verse (Study Mode)";
             }
 
-            arData.data.ayahs.forEach(a => {
-                currentPlaylist.push(`https://cdn.islamic.network/quran/audio/128/ar.alafasy/${a.number}.mp3`);
-                if (!hideTranslations) {
-                    currentPlaylist.push(`https://cdn.islamic.network/quran/audio/64/ur.khan/${a.number}.mp3`);
-                }
-            });
-
+            // AUDIO PLAYER LOGIC
+            // ------------------
             if (audioPlayer) {
                 audioPlayer.src = currentPlaylist[0];
+                updatePlayerInfo(0);
 
-                // Preload the second track immediately
-                if (currentPlaylist.length > 1) {
+                // Double Buffer Strategy (Only for Verse Mode)
+                if (!useSeamless && currentPlaylist.length > 1) {
                     new Audio(currentPlaylist[1]).load();
                 }
 
-                audioPlayer.onended = () => {
-                    const hideTrans = localStorage.getItem('hide_translations') === 'true';
+                audioPlayer.ontimeupdate = () => {
+                    const seek = document.getElementById('player-seek');
+                    const curr = document.getElementById('time-current');
+                    const tot = document.getElementById('time-total');
+                    if (audioPlayer.duration) {
+                        const pct = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+                        if (seek) seek.value = pct;
+                        if (curr) curr.innerText = fmtTime(audioPlayer.currentTime);
+                        if (tot) tot.innerText = fmtTime(audioPlayer.duration);
+                    }
+                };
 
+                audioPlayer.onended = () => {
+                    // COMMON END LOIGC
+                    // Check if we reached the end of the "Recitation Unit" (Surah or Juz)
+
+                    const isEndSeamless = useSeamless;
+                    const isEndVerseMode = (!useSeamless && currentAudioIndex >= currentPlaylist.length - 1);
+
+                    if (isEndSeamless || isEndVerseMode) {
+                        // End of Surah reached
+                        if (window.repeatMode) {
+                            // REPEAT CURRENT
+                            currentAudioIndex = 0;
+                            audioPlayer.src = currentPlaylist[0];
+                            audioPlayer.play();
+                            updatePlayerInfo(0);
+                            return;
+                        } else {
+                            // AUTO NEXT SURAH
+                            updatePlayerUI(false);
+                            // Slight delay for UX
+                            setTimeout(() => window.autoNextSurah(), 1000);
+                            return;
+                        }
+                    }
+
+                    // Verse Mode: Continue to Next Verse
                     currentAudioIndex++;
                     if (currentAudioIndex < currentPlaylist.length) {
                         const nextUrl = currentPlaylist[currentAudioIndex];
                         audioPlayer.src = nextUrl;
-                        audioPlayer.play().catch(e => console.error("Auto-play blocked:", e));
+                        audioPlayer.play().catch(console.warn);
 
-                        // Preload the NEXT track (Lookahead)
+                        updatePlayerUI(true);
+                        updatePlayerInfo(currentAudioIndex);
+
+                        // Buffer Next
                         if (currentAudioIndex + 1 < currentPlaylist.length) {
                             new Audio(currentPlaylist[currentAudioIndex + 1]).load();
                         }
 
-                        // Intelligent Highlighting
-                        let effectiveIndex = currentAudioIndex;
-                        if (hasPreamble) effectiveIndex--; // Ignore Bismillah for math
-
-                        // If translations are ON, every verse takes 2 slots (Arabic, Urdu)
-                        // If OFF, every verse takes 1 slot
-                        let verseIdx = hideTrans ? effectiveIndex : Math.floor(effectiveIndex / 2);
-
-                        // Edge case: if we are playing the translation of a verse, we are still on that verse
-                        // We only update highlight when the Arabic (start of pair) plays? 
-                        // Actually, logic:
-                        // Seq: [Bism], [V1 Ar], [V1 Ur], [V2 Ar], [V2 Ur]...
-                        // Idx:   0       1        2        3        4
-
-                        if (currentAudioIndex === 0 && hasPreamble) {
-                            // Playing Bismillah - no highlight or highlight first?
-                        } else {
-                            highlightVerse(verseIdx);
-                        }
-
-                    } else {
-                        currentAudioIndex = 0;
-                        audioPlayer.src = currentPlaylist[0];
-                        updatePlayIcon(false);
+                        // Highlight Logic (Approximate)
+                        highlightVerse(Math.floor(currentAudioIndex / (hideTranslations ? 1 : 2)));
                     }
                 };
             }
         } catch (e) { console.error(e); }
+    }
+
+    // --- PLAYER CONTROLS ---
+    function fmtTime(s) {
+        if (isNaN(s)) return "0:00";
+        const m = Math.floor(s / 60);
+        const sec = Math.floor(s % 60);
+        return `${m}:${sec < 10 ? '0' : ''}${sec}`;
+    }
+
+    window.togglePlay = function () {
+        const p = document.getElementById('quran-audio');
+        if (p.paused) {
+            p.play();
+            updatePlayerUI(true);
+        } else {
+            p.pause();
+            updatePlayerUI(false);
+        }
+    };
+
+    window.changeTrack = function (delta) {
+        const p = document.getElementById('quran-audio');
+        const newIdx = currentAudioIndex + delta;
+        if (newIdx >= 0 && newIdx < currentPlaylist.length) {
+            currentAudioIndex = newIdx;
+            p.src = currentPlaylist[newIdx];
+            p.play();
+            updatePlayerUI(true);
+            updatePlayerInfo(newIdx);
+        }
+    };
+
+    window.seekAudio = function (val) {
+        const p = document.getElementById('quran-audio');
+        if (p.duration) {
+            p.currentTime = (val / 100) * p.duration;
+        }
+    };
+
+    function updatePlayerUI(isPlaying) {
+        const btn = document.getElementById('player-play-btn');
+        if (btn) btn.innerHTML = isPlaying ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play pl-1"></i>';
+    }
+
+    function updatePlayerInfo(idx) {
+        // Rudimentary info update
+        // In a real app, 'currentPlaylist' would be objects with titles
+        document.getElementById('player-sub').innerText = `Track ${idx + 1} / ${currentPlaylist.length}`;
     }
 
     // Playback Helpers
@@ -1243,37 +1357,51 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Play Verse Handler
+    // Updated Play Verse to handle Seamless Toggle
     window.playVerse = function (index) {
         if (!currentPlaylist || currentPlaylist.length === 0) return;
 
-        const hideTrans = localStorage.getItem('hide_translations') === 'true';
-        const hasPreamble = (window.currentSurahData?.data?.number !== 1 && window.currentSurahData?.data?.number !== 9);
+        const player = document.getElementById('quran-audio');
+        const hideTranslations = localStorage.getItem('hide_translations') === 'true';
+        const isSurahMode = (window.currentDirType !== 'juz'); // inferred from context or check global
 
+        // Seamless Mode Check based on Playlist
+        if (currentPlaylist.length === 1 && hideTranslations) {
+            // Seamless Mode active: Just play from start
+            // (Seeking would require timestamps we don't have yet)
+            console.log("Seamless Mode: Restarting Surah");
+            player.currentTime = 0;
+            player.play();
+            updatePlayerUI(true);
+            return;
+        }
+
+        // Verse Mode Logic
         // Calculate Index
         // Base: if preamble, start at 1. Else 0.
+        // We need to know if there's a preamble. 
+        // We can infer it from the playlist length vs data length?
+        // Or re-check surah number.
+        const surahNum = window.currentSurahData?.data?.number;
+        const hasPreamble = (surahNum && surahNum !== 1 && surahNum !== 9);
+
         let targetIndex = hasPreamble ? 1 : 0;
 
-        // Add verse offset
-        if (hideTrans) {
-            targetIndex += index; // 1 track per verse
+        if (hideTranslations) {
+            targetIndex += index;
         } else {
-            targetIndex += (index * 2); // 2 tracks per verse
+            targetIndex += (index * 2);
         }
 
         if (targetIndex < currentPlaylist.length) {
             currentAudioIndex = targetIndex;
-            const player = document.getElementById('quran-audio');
+            player.src = currentPlaylist[currentAudioIndex];
+            player.play();
+            updatePlayerUI(true);
 
-            // Preload next immediately for seamlessness
-            if (targetIndex + 1 < currentPlaylist.length) {
-                new Audio(currentPlaylist[targetIndex + 1]).load();
-            }
-
-            if (player) {
-                player.src = currentPlaylist[currentAudioIndex];
-                player.play();
-                updatePlayIcon(true);
+            // Buffer Next
+            if (currentAudioIndex + 1 < currentPlaylist.length) {
+                new Audio(currentPlaylist[currentAudioIndex + 1]).load();
             }
         }
     };
@@ -2524,7 +2652,11 @@ window.getRamadanTimes = async function () {
 
     if (window.ramadanUseCoords) {
         url = `https://api.aladhan.com/v1/timings?latitude=${window.ramadanLat}&longitude=${window.ramadanLng}&method=1&school=1`;
-        if (document.getElementById('cityLabel')) document.getElementById('cityLabel').innerText = "My Location";
+
+        // Use detected global city if available
+        if (document.getElementById('cityLabel')) {
+            document.getElementById('cityLabel').innerText = window.globalCity || "My Location";
+        }
     } else {
         if (rawCity.includes(',')) {
             const parts = rawCity.split(',');
@@ -2632,10 +2764,36 @@ window.autoDetectRamadanContent = function () {
     window.detectAndSyncLocation('ramadan');
 }
 
+// Updated Repeat & Auto-Next Logic
+window.repeatMode = false; // false = Auto-Next, true = Repeat Current
+
+window.toggleRepeat = function () {
+    window.repeatMode = !window.repeatMode;
+    const btn = document.getElementById('player-repeat-btn');
+    if (btn) {
+        btn.className = window.repeatMode
+            ? "text-[#af944d] transition-colors text-sm shadow-inner bg-[#af944d]/10 px-2 py-1 rounded-full"
+            : "text-white/40 hover:text-[#af944d] transition-colors text-sm";
+        btn.innerHTML = window.repeatMode ? '<i class="fas fa-repeat"></i> <span>1</span>' : '<i class="fas fa-repeat"></i>';
+    }
+};
+
+window.autoNextSurah = function () {
+    if (!window.currentSurahData) return;
+    const currentNum = window.currentSurahData.data.number;
+    if (currentNum < 114) {
+        openReader(currentNum + 1, 'Loading...', 'surah');
+    } else {
+        console.log("Quran Completed");
+        updatePlayerUI(false);
+    }
+};
+
 window.changeCalendarMonth = function (delta) {
+    // Adjust month safely handling year rollover
     calendarCurrentDate.setMonth(calendarCurrentDate.getMonth() + delta);
     fetchMonthlyCalendar();
-}
+};
 
 window.fetchMonthlyCalendar = async function () {
     const month = calendarCurrentDate.getMonth() + 1;

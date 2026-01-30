@@ -442,15 +442,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Robust Auto Location Handler
     window.detectAndSyncLocation = function (source = 'dashboard') {
-        const dashboardBtn = document.getElementById('update-location-btn');
-        const ramadanBtn = document.querySelector('button[onclick="autoDetectRamadanContent()"]');
-        const dashIcon = dashboardBtn?.querySelector('i');
+        // Target the NEW icon button in the Hero Section
+        const heroBtn = document.querySelector('#portal-location-label button');
+        const icon = heroBtn?.querySelector('i');
 
-        if (dashIcon) dashIcon.className = "fas fa-spinner fa-spin";
-        if (dashboardBtn) dashboardBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Finding...';
+        // Visual Feedback
+        if (icon) {
+            icon.className = "fas fa-spinner fa-spin";
+            heroBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
 
         if (!navigator.geolocation) {
             alert("Geolocation is not supported by your browser.");
+            resetBtn();
             return;
         }
 
@@ -464,25 +468,28 @@ document.addEventListener('DOMContentLoaded', () => {
             window.ramadanLng = lng;
             window.ramadanUseCoords = true;
 
-            // Trigger fetches for both contexts
-            await window.fetchPrayers(lat, lng);
-            if (source === 'ramadan' || document.getElementById('view-ramadan').offsetParent !== null) {
-                await window.getRamadanTimes();
-            }
+            try {
+                // Trigger fetches
+                await window.fetchPrayers(lat, lng);
 
-            // Restore UI States
-            if (dashboardBtn) {
-                dashboardBtn.innerHTML = '<i class="fas fa-location-arrow"></i> Auto';
-                if (dashIcon) dashIcon.className = "fas fa-location-arrow";
-            }
+                // If in Ramadan view or requested specifically
+                if (source === 'ramadan' || !document.getElementById('view-ramadan').classList.contains('hidden')) {
+                    await window.getRamadanTimes();
+                }
 
-            // Success alert (optional but good for user feedback)
-            console.log("Location synchronized:", lat, lng);
+                // Reverse Geocoding for City Name (Optional Enhancement)
+                // Could fetch city name here if desired
+
+            } catch (e) {
+                console.error("Sync failed", e);
+            } finally {
+                resetBtn();
+            }
 
         }, (err) => {
-            console.warn("Location error:", err);
-            alert("Location access denied or unavailable. Please check your browser settings and try again.");
-            if (dashboardBtn) dashboardBtn.innerHTML = '<i class="fas fa-location-arrow"></i> Auto';
+            console.error("Geo Error:", err);
+            alert("Could not access location. Please enable permissions.");
+            resetBtn();
         }, {
             enableHighAccuracy: true,
             timeout: 10000,
@@ -735,22 +742,23 @@ document.addEventListener('DOMContentLoaded', () => {
             const araData = await araRes.json();
             const urdData = await urdRes.json();
 
-            // Merge datasets efficiently
-            // Assuming both arrays are sorted or roughly aligned, but we map by hadithnumber for safety
-            const araMap = new Map(araData.hadiths.map(h => [h.hadithnumber, h.text]));
+            // Defer processing to avoid UI freeze
+            setTimeout(() => {
+                const araMap = new Map(araData.hadiths.map(h => [h.hadithnumber, h.text]));
 
-            fullHadithCache = urdData.hadiths.map(h => ({
-                id: h.hadithnumber,
-                arabic: araMap.get(h.hadithnumber) || "النص العربي غير متوفر حاليا", // Fallback if missing
-                urdu: h.text,
-                ref: `Sahih Bukhari ${h.hadithnumber}`
-            }));
+                fullHadithCache = urdData.hadiths.map(h => ({
+                    id: h.hadithnumber,
+                    arabic: araMap.get(h.hadithnumber) || "النص العربي غير متوفر حاليا",
+                    urdu: h.text,
+                    ref: `Sahih Bukhari ${h.hadithnumber}`
+                }));
 
-            // Initial Render
-            renderHadiths(fullHadithCache.slice(0, displayedCount));
+                // Initial Render
+                renderHadiths(fullHadithCache.slice(0, displayedCount));
 
-            // Init Search
-            setupSearch();
+                // Init Search
+                setupSearch();
+            }, 50);
 
         } catch (err) {
             console.error("Library Error:", err);
@@ -786,19 +794,47 @@ document.addEventListener('DOMContentLoaded', () => {
         renderHadiths(fullHadithCache);
     }
 
-    // Voice Synthesis
-    window.playUrduSpeech = function (text) {
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel(); // Stop previous
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'ur-PK'; // Try Pakistani Urdu
-            // Fallback voice options could be iterated here
-            utterance.rate = 0.9;
-            window.speechSynthesis.speak(utterance);
-        } else {
-            alert("Text-to-Speech not supported in this browser.");
+    // Voice Synthesis - Dual Language Sequence
+    let currentUtterance = null;
+    window.playHadithAudio = function (btnId, arabic, urdu) {
+        const btn = document.getElementById(btnId);
+
+        // Stop if playing
+        if (window.speechSynthesis.speaking) {
+            window.speechSynthesis.cancel();
+            resetAllAudioBtns();
+            return;
         }
+
+        resetAllAudioBtns();
+        if (btn) btn.innerHTML = '<i class="fas fa-stop text-red-400"></i> <span class="text-red-400">Stop</span>';
+
+        // 1. Arabic Utterance
+        const u1 = new SpeechSynthesisUtterance(arabic);
+        u1.lang = 'ar-SA';
+        u1.rate = 0.9;
+
+        // 2. Urdu Utterance
+        const u2 = new SpeechSynthesisUtterance(urdu);
+        u2.lang = 'ur-PK';
+        u2.rate = 0.95;
+
+        u1.onend = () => {
+            window.speechSynthesis.speak(u2);
+        };
+
+        u2.onend = () => {
+            resetAllAudioBtns();
+        };
+
+        window.speechSynthesis.speak(u1);
     };
+
+    function resetAllAudioBtns() {
+        document.querySelectorAll('.hadith-audio-btn').forEach(b => {
+            b.innerHTML = '<i class="fas fa-play"></i> <span>Listen</span>';
+        });
+    }
 
     function renderHadiths(list, isSearch = false) {
         const view = document.getElementById('library-content');
@@ -831,7 +867,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="text-[11px] font-black border-t border-gray-50 dark:border-white/5 pt-4 flex justify-between items-center uppercase tracking-widest" style="color:hsl(${hue}, 50%, 40%)">
                             <span class="bg-gray-50 dark:bg-white/5 px-2 py-1 rounded">REF: ${h.ref}</span>
                             <div class="flex gap-2">
-                                <button onclick="window.playUrduSpeech('${h.urdu.replace(/'/g, "\\'")}')" class="opacity-40 hover:opacity-100 transition-opacity p-2 hover:bg-gray-100 rounded-full" title="Listen to Urdu"><i class="fas fa-volume-up"></i></button>
+                                <button id="btn-audio-${i}" onclick="window.playHadithAudio('btn-audio-${i}', '${h.arabic.replace(/'/g, "\\'")}', '${h.urdu.replace(/'/g, "\\'")}')" 
+                                    class="hadith-audio-btn flex items-center gap-2 bg-[#fcfdfd] dark:bg-white/5 border border-gray-200 dark:border-gray-600 px-3 py-1.5 rounded-full hover:bg-gray-100 transition-all text-[10px] font-bold">
+                                    <i class="fas fa-play"></i> <span>Listen</span>
+                                </button>
                                 <button class="opacity-30 hover:opacity-100 transition-opacity p-2"><i class="fas fa-bookmark"></i></button>
                             </div>
                         </div>
@@ -1092,28 +1131,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (audioPlayer) {
                 audioPlayer.src = currentPlaylist[0];
+
+                // Preload the second track immediately
+                if (currentPlaylist.length > 1) {
+                    new Audio(currentPlaylist[1]).load();
+                }
+
                 audioPlayer.onended = () => {
                     const hideTrans = localStorage.getItem('hide_translations') === 'true';
-                    const tracksPerAyah = hideTrans ? 1 : 2;
 
                     currentAudioIndex++;
                     if (currentAudioIndex < currentPlaylist.length) {
-                        audioPlayer.src = currentPlaylist[currentAudioIndex];
-                        audioPlayer.play();
+                        const nextUrl = currentPlaylist[currentAudioIndex];
+                        audioPlayer.src = nextUrl;
+                        audioPlayer.play().catch(e => console.error("Auto-play blocked:", e));
 
-                        // Calculate which verse to highlight
-                        let verseIdx = 0;
-                        if (hasPreamble) {
-                            verseIdx = Math.floor((currentAudioIndex - 1) / tracksPerAyah);
-                            if (currentAudioIndex === 0) verseIdx = 0; // Preamble case
+                        // Preload the NEXT track (Lookahead)
+                        if (currentAudioIndex + 1 < currentPlaylist.length) {
+                            new Audio(currentPlaylist[currentAudioIndex + 1]).load();
+                        }
+
+                        // Intelligent Highlighting
+                        let effectiveIndex = currentAudioIndex;
+                        if (hasPreamble) effectiveIndex--; // Ignore Bismillah for math
+
+                        // If translations are ON, every verse takes 2 slots (Arabic, Urdu)
+                        // If OFF, every verse takes 1 slot
+                        let verseIdx = hideTrans ? effectiveIndex : Math.floor(effectiveIndex / 2);
+
+                        // Edge case: if we are playing the translation of a verse, we are still on that verse
+                        // We only update highlight when the Arabic (start of pair) plays? 
+                        // Actually, logic:
+                        // Seq: [Bism], [V1 Ar], [V1 Ur], [V2 Ar], [V2 Ur]...
+                        // Idx:   0       1        2        3        4
+
+                        if (currentAudioIndex === 0 && hasPreamble) {
+                            // Playing Bismillah - no highlight or highlight first?
                         } else {
-                            verseIdx = Math.floor(currentAudioIndex / tracksPerAyah);
+                            highlightVerse(verseIdx);
                         }
 
-                        // Prevent negative or logic errors on preamble track
-                        if (currentAudioIndex > 0 || !hasPreamble) {
-                            highlightVerse(Math.max(0, verseIdx));
-                        }
                     } else {
                         currentAudioIndex = 0;
                         audioPlayer.src = currentPlaylist[0];
@@ -1189,11 +1246,35 @@ document.addEventListener('DOMContentLoaded', () => {
     // Play Verse Handler
     window.playVerse = function (index) {
         if (!currentPlaylist || currentPlaylist.length === 0) return;
-        currentAudioIndex = index * 2;
-        const player = document.getElementById('quran-audio');
-        if (player) {
-            player.src = currentPlaylist[currentAudioIndex];
-            player.play();
+
+        const hideTrans = localStorage.getItem('hide_translations') === 'true';
+        const hasPreamble = (window.currentSurahData?.data?.number !== 1 && window.currentSurahData?.data?.number !== 9);
+
+        // Calculate Index
+        // Base: if preamble, start at 1. Else 0.
+        let targetIndex = hasPreamble ? 1 : 0;
+
+        // Add verse offset
+        if (hideTrans) {
+            targetIndex += index; // 1 track per verse
+        } else {
+            targetIndex += (index * 2); // 2 tracks per verse
+        }
+
+        if (targetIndex < currentPlaylist.length) {
+            currentAudioIndex = targetIndex;
+            const player = document.getElementById('quran-audio');
+
+            // Preload next immediately for seamlessness
+            if (targetIndex + 1 < currentPlaylist.length) {
+                new Audio(currentPlaylist[targetIndex + 1]).load();
+            }
+
+            if (player) {
+                player.src = currentPlaylist[currentAudioIndex];
+                player.play();
+                updatePlayIcon(true);
+            }
         }
     };
 

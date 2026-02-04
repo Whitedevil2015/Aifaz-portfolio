@@ -553,23 +553,26 @@ body.weather-snow {
     margin: 0 auto;
 }
 
-/* Golden Light Highlight */
+/* Golden Light Highlight - Eye Friendly */
 .active-verse-row {
-    background: rgba(175, 148, 77, 0.15) !important;
-    box-shadow: 0 0 25px rgba(175, 148, 77, 0.2), inset 4px 0 0 #af944d !important;
+    background: rgba(175, 148, 77, 0.08) !important;
+    /* Softer background */
+    box-shadow: 0 0 12px rgba(175, 148, 77, 0.12), inset 3px 0 0 rgba(175, 148, 77, 0.5) !important;
+    /* Gentler glow */
     border-radius: 12px;
-    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: all 0.8s ease;
+    /* Slower transition */
     z-index: 10;
     position: relative;
-    backdrop-filter: brightness(1.1);
 }
 
-/* Golden Text Color for Active Verse */
+/* Golden Text Color for Active Verse - Softer */
 .active-verse-row .arabic-text-sharp {
-    color: #d4af37 !important;
-    /* Pure Gold */
-    text-shadow: 0 0 20px rgba(212, 175, 55, 0.6), 0 0 40px rgba(218, 165, 32, 0.3);
-    transition: color 0.5s ease, text-shadow 0.5s ease;
+    color: #b8994f !important;
+    /* Muted warm gold */
+    text-shadow: 0 0 6px rgba(184, 153, 79, 0.15);
+    /* Very subtle glow */
+    transition: color 0.8s ease, text-shadow 0.8s ease;
 }
 
 /* Mushaf Mode Highlight Polish */
@@ -582,12 +585,13 @@ body.weather-snow {
     box-shadow: inset 0 0 20px rgba(255, 215, 0, 0.1);
 }
 
-/* Enhanced Golden Text in Mushaf Mode */
+/* Enhanced Golden Text in Mushaf Mode - Softer */
 .mushaf-mode .active-verse-row .arabic-text-sharp {
-    color: #f4c542 !important;
-    /* Brighter Gold for Page Mode */
-    text-shadow: 0 0 25px rgba(244, 197, 66, 0.7);
+    color: #c9a959 !important;
+    /* Gentler warm gold */
+    text-shadow: 0 0 8px rgba(201, 169, 89, 0.2);
 }
+
 /* Word-by-Word Highlighting */
 .quran-word {
     display: inline-block;
@@ -597,18 +601,30 @@ body.weather-snow {
 }
 
 .quran-word.active-word {
-    color: #ffd700 !important; /* Bright Gold */
-    background: rgba(255, 215, 0, 0.15);
-    text-shadow: 
-        0 0 20px rgba(255, 215, 0, 0.8),
-        0 0 30px rgba(255, 215, 0, 0.5),
-        0 0 40px rgba(255, 215, 0, 0.3);
-    transform: scale(1.05);
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
-    animation: wordPulse 0.3s ease-in-out;
+    color: #c9a959 !important;
+    /* Softer gold - easier on eyes */
+    background: rgba(201, 169, 89, 0.08);
+    /* Reduced opacity */
+    text-shadow: 0 0 8px rgba(201, 169, 89, 0.2);
+    /* Gentle glow only */
+    transform: scale(1.02);
+    /* Minimal scale */
+    box-shadow: 0 0 6px rgba(201, 169, 89, 0.15);
+    /* Subtle shadow */
+    animation: wordPulseGentle 0.5s ease-in-out;
+    /* Slower animation */
 }
 
-@keyframes wordPulse {
-    0%, 100% { transform: scale(1.05); }
-    50% { transform: scale(1.08); }
+@keyframes wordPulseGentle {
+
+    0%,
+    100% {
+        transform: scale(1.02);
+    }
+
+    50% {
+        transform: scale(1.03);
+    }
+
+    /* Minimal pulse */
 }

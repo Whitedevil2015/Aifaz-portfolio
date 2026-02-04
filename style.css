@@ -234,6 +234,74 @@ h6 {
     -webkit-font-smoothing: antialiased;
 }
 
+/* MUSHAF MODE (Traditional Page Layout) */
+.mushaf-mode {
+    display: block !important;
+    background: #fffbef url('https://www.transparenttextures.com/patterns/cream-paper.png') !important;
+    max-width: 1000px;
+    margin: 2rem auto;
+    border: 12px double #af944d;
+    outline: 2px solid #064e3b;
+    outline-offset: -16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    padding: 3rem;
+    min-height: 100vh;
+}
+
+.mushaf-mode>div {
+    /* Targeting the Ayah Rows */
+    flex-direction: column !important;
+    border-bottom: 2px dashed rgba(175, 148, 77, 0.3) !important;
+    padding: 2rem 0 !important;
+    background: transparent !important;
+    min-height: auto !important;
+}
+
+.mushaf-mode .arabic-pane {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    width: 100% !important;
+}
+
+.mushaf-mode .translation-pane {
+    background: transparent !important;
+    padding: 1rem 0 !important;
+    width: 100% !important;
+}
+
+.mushaf-mode .arabic-text-sharp {
+    text-align: center !important;
+    font-size: 2.8rem !important;
+    /* Slightly smaller for density */
+    line-height: 2 !important;
+}
+
+.mushaf-mode .translation-block {
+    text-align: center !important;
+    max-width: 85% !important;
+    margin: 0 auto !important;
+}
+
+.mushaf-mode .translation-block div {
+    /* Force Dark Text for Readability on Paper */
+    color: #4b5563 !important;
+    /* Gray-600 */
+    text-shadow: none !important;
+}
+
+.mushaf-mode .translation-block div:nth-child(4) {
+    /* Urdu Text */
+    color: #1f2937 !important;
+    /* Gray-800 */
+}
+
+/* Specific Highlight for Mushaf Mode */
+.mushaf-mode .highlight-active {
+    background: rgba(175, 148, 77, 0.15) !important;
+    border-radius: 12px;
+    border: 1px solid rgba(175, 148, 77, 0.3);
+}
 
 .quran-floating-meta {
     position: fixed;
@@ -485,7 +553,62 @@ body.weather-snow {
     margin: 0 auto;
 }
 
+/* Golden Light Highlight */
 .active-verse-row {
-    background: rgba(175, 148, 77, 0.08) !important;
-    box-shadow: inset 6px 0 0 #af944d;
+    background: rgba(175, 148, 77, 0.15) !important;
+    box-shadow: 0 0 25px rgba(175, 148, 77, 0.2), inset 4px 0 0 #af944d !important;
+    border-radius: 12px;
+    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: 10;
+    position: relative;
+    backdrop-filter: brightness(1.1);
+}
+
+/* Golden Text Color for Active Verse */
+.active-verse-row .arabic-text-sharp {
+    color: #d4af37 !important;
+    /* Pure Gold */
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.6), 0 0 40px rgba(218, 165, 32, 0.3);
+    transition: color 0.5s ease, text-shadow 0.5s ease;
+}
+
+/* Mushaf Mode Highlight Polish */
+.mushaf-mode .active-verse-row {
+    background: rgba(255, 215, 0, 0.12) !important;
+    /* Rich Gold Tint */
+    box-shadow: 0 0 50px rgba(218, 165, 32, 0.25) !important;
+    border: 1px solid rgba(218, 165, 32, 0.3);
+    transform: scale(1.02);
+    box-shadow: inset 0 0 20px rgba(255, 215, 0, 0.1);
+}
+
+/* Enhanced Golden Text in Mushaf Mode */
+.mushaf-mode .active-verse-row .arabic-text-sharp {
+    color: #f4c542 !important;
+    /* Brighter Gold for Page Mode */
+    text-shadow: 0 0 25px rgba(244, 197, 66, 0.7);
+}
+/* Word-by-Word Highlighting */
+.quran-word {
+    display: inline-block;
+    transition: all 0.3s ease;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.quran-word.active-word {
+    color: #ffd700 !important; /* Bright Gold */
+    background: rgba(255, 215, 0, 0.15);
+    text-shadow: 
+        0 0 20px rgba(255, 215, 0, 0.8),
+        0 0 30px rgba(255, 215, 0, 0.5),
+        0 0 40px rgba(255, 215, 0, 0.3);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+    animation: wordPulse 0.3s ease-in-out;
+}
+
+@keyframes wordPulse {
+    0%, 100% { transform: scale(1.05); }
+    50% { transform: scale(1.08); }
 }

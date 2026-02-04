@@ -924,8 +924,13 @@
                 <div
                     class="hidden sm:flex items-center gap-2 bg-black/40 px-4 py-1.5 rounded-full border border-white/5">
                     <button onclick="window.toggleTranslations()" id="translation-toggle"
-                        class="text-[10px] font-black text-emerald-400 hover:text-[#af944d] mr-2">TRANSLATIONS:
-                        ON</button>
+                        class="text-xs font-bold tracking-widest text-emerald-400 hover:text-[#af944d] transition-colors border border-emerald-400/30 px-3 py-1 rounded-full uppercase">
+                        TRANSLATIONS: ON
+                    </button>
+                    <button onclick="window.toggleMushafMode()" id="mushaf-toggle"
+                        class="ml-2 text-xs font-bold tracking-widest text-[#af944d] hover:text-white transition-colors border border-[#af944d]/30 px-3 py-1 rounded-full uppercase">
+                        VIEW: CARD
+                    </button>
                     <div class="w-[1px] h-3 bg-white/10"></div>
                     <button onclick="playSurahAudio('ur')"
                         class="text-[10px] font-bold text-gray-400 hover:text-[#af944d]">URDU</button>

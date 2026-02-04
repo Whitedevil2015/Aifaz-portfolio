@@ -1029,29 +1029,44 @@ document.addEventListener('DOMContentLoaded', () => {
         history.pushState({ targetId: currentView, modalId: 'quran-modal' }, "", "#reader");
     }
 
+    const surahCache = new Map();
+
     async function fetchQuranContent(num, type = 'surah') {
         const quranContentEl = document.getElementById('quran-content');
-        quranContentEl.innerHTML = '<div class="text-center mt-20"><i class="fas fa-circle-notch fa-spin text-4xl text-[#af944d]"></i></div>';
+        quranContentEl.innerHTML = '<div class="text-center mt-32"><i class="fas fa-circle-notch fa-spin text-5xl text-[#af944d]"></i><p class="mt-4 text-emerald-400 font-bold uppercase tracking-widest animate-pulse">Summoning Wisdom...</p></div>';
+
+        const cacheKey = `${type}-${num}`;
+
         try {
-            const endpoint = type === 'juz' ? `juz/${num}` : `surah/${num}`;
-            // Hinglish only supported for Surah currently
-            const fetchHinglish = type === 'surah'
-                ? fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/urd-abulaalamaududi-la/${num}.json`)
-                : Promise.resolve({ json: () => ({ chapter: [] }) });
+            let arData, enData, trData, urData, hiData;
 
-            const [arRes, enRes, trRes, urRes, hiRes] = await Promise.all([
-                fetch(`https://api.alquran.cloud/v1/${endpoint}`),
-                fetch(`https://api.alquran.cloud/v1/${endpoint}/en.sahih`),
-                fetch(`https://api.alquran.cloud/v1/${endpoint}/en.transliteration`),
-                fetch(`https://api.alquran.cloud/v1/${endpoint}/ur.jalandhry`),
-                fetchHinglish
-            ]);
+            if (surahCache.has(cacheKey)) {
+                console.log("Using Cached Surah Data");
+                const cached = surahCache.get(cacheKey);
+                ({ arData, enData, trData, urData, hiData } = cached);
+            } else {
+                const endpoint = type === 'juz' ? `juz/${num}` : `surah/${num}`;
+                const fetchHinglish = type === 'surah'
+                    ? fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/urd-abulaalamaududi-la/${num}.json`)
+                    : Promise.resolve({ json: () => ({ chapter: [] }) });
 
-            const arData = await arRes.json();
-            const enData = await enRes.json();
-            const trData = await trRes.json();
-            const urData = await urRes.json();
-            const hiData = await hiRes.json(); // Might be partial for Juz or empty wrapper
+                const [arRes, enRes, trRes, urRes, hiRes] = await Promise.all([
+                    fetch(`https://api.alquran.cloud/v1/${endpoint}`),
+                    fetch(`https://api.alquran.cloud/v1/${endpoint}/en.sahih`),
+                    fetch(`https://api.alquran.cloud/v1/${endpoint}/en.transliteration`),
+                    fetch(`https://api.alquran.cloud/v1/${endpoint}/ur.jalandhry`),
+                    fetchHinglish
+                ]);
+
+                arData = await arRes.json();
+                enData = await enRes.json();
+                trData = await trRes.json();
+                urData = await urRes.json();
+                hiData = await hiRes.json();
+
+                // Cache the Full Result
+                surahCache.set(cacheKey, { arData, enData, trData, urData, hiData });
+            }
 
             let lastRuku = -1;
             let lastJuz = -1;
@@ -1102,7 +1117,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                         ${rukuMarker}
                                         ${sajdahMarker}
                                     </div>
-                                    <div class="arabic-text-sharp flex-1" style="color: #000 !important; font-weight: 900;">${a.text}</div>
+                                    <div class="arabic-text-sharp flex-1" style="color: #000 !important; font-weight: 900;" data-verse-index="${i}">
+                                        ${a.text.split(' ').map((word, wordIdx) =>
+                    `<span class="quran-word" data-verse="${i}" data-word="${wordIdx}">${word}</span>`
+                ).join(' ')}
+                                    </div>
                                 </div>
                             </div>
                             <!-- Right: Glassmorphic Translation Pane -->
@@ -1145,9 +1164,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const surahName = arData.data.englishName;
             const isSurahMode = (type === 'surah'); // juz mode must use verses
 
-            // SEAMLESS MODE: If Translations OFF and in Surah View -> Play Full Audio File
-            // This solves the 'gap' issue completely.
-            const useSeamless = (hideTranslations && isSurahMode);
+            // SEAMLESS MODE:
+            // Disabled to ensure Highlighting/Scrolling works (Verse-by-Verse events needed)
+            // const useSeamless = (hideTranslations && isSurahMode);
+            const useSeamless = false; // Forced Verse Mode for visual sync
 
             // Show Player Bar
             const playerBar = document.getElementById('quran-player-bar');
@@ -1195,6 +1215,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (seek) seek.value = pct;
                         if (curr) curr.innerText = fmtTime(audioPlayer.currentTime);
                         if (tot) tot.innerText = fmtTime(audioPlayer.duration);
+
+                        // Word-by-word highlighting
+                        updateWordHighlight(audioPlayer.currentTime, audioPlayer.duration);
                     }
                 };
 
@@ -1238,8 +1261,22 @@ document.addEventListener('DOMContentLoaded', () => {
                             new Audio(currentPlaylist[currentAudioIndex + 1]).load();
                         }
 
-                        // Highlight Logic (Approximate)
-                        highlightVerse(Math.floor(currentAudioIndex / (hideTranslations ? 1 : 2)));
+                        // Highlight Logic - Calculate correct verse index
+                        const surahNum = arData.data.number || 1;
+                        const hasPreamble = (surahNum !== 1 && surahNum !== 9);
+                        let verseIdx = currentAudioIndex;
+
+                        // Adjust for Bismillah preamble
+                        if (hasPreamble && verseIdx > 0) {
+                            verseIdx--;
+                        }
+
+                        // Adjust for dual audio (Arabic + Translation)
+                        if (!hideTranslations) {
+                            verseIdx = Math.floor(verseIdx / 2);
+                        }
+
+                        highlightVerse(verseIdx);
                     }
                 };
             }
@@ -1290,9 +1327,69 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updatePlayerInfo(idx) {
-        // Rudimentary info update
-        // In a real app, 'currentPlaylist' would be objects with titles
-        document.getElementById('player-sub').innerText = `Track ${idx + 1} / ${currentPlaylist.length}`;
+        // Sync Title with current Surah
+        const titleEl = document.getElementById('player-title');
+        if (titleEl && window.currentSurahData) {
+            titleEl.innerText = window.currentSurahData.data.englishName || "Quran Recitation";
+        }
+
+        // Update Track Status
+        const subEl = document.getElementById('player-sub');
+        if (subEl) {
+            const isSeamless = (currentPlaylist.length === 1);
+            if (isSeamless) {
+                subEl.innerText = "Seamless Recitation (Mishary Alafasy)";
+            } else {
+                subEl.innerText = `Verse ${idx + 1} / ${Math.floor(currentPlaylist.length / 2)}`;
+            }
+        }
+    }
+
+    // Word-by-word highlighting system
+    let currentVerseIndex = -1;
+    let verseWords = [];
+
+    function updateWordHighlight(currentTime, duration) {
+        if (!window.currentSurahData || currentAudioIndex < 0) return;
+
+        // Determine which verse is playing (accounting for preamble)
+        const hideTranslations = localStorage.getItem('hide_translations') === 'true';
+        let effectiveIndex = currentAudioIndex;
+
+        const surahNum = window.currentSurahData.data.number;
+        const hasPreamble = (surahNum && surahNum !== 1 && surahNum !== 9);
+        if (hasPreamble && effectiveIndex > 0) effectiveIndex--;
+
+        const verseIdx = hideTranslations ? effectiveIndex : Math.floor(effectiveIndex / 2);
+
+        // Safety check - don't highlight if playing Bismillah or invalid index
+        if (verseIdx < 0) return;
+
+        // If changed to new verse, update word list
+        if (verseIdx !== currentVerseIndex) {
+            currentVerseIndex = verseIdx;
+            verseWords = document.querySelectorAll(`[data-verse="${verseIdx}"]`);
+
+            // Clear all previous word highlights
+            document.querySelectorAll('.quran-word.active-word').forEach(w =>
+                w.classList.remove('active-word')
+            );
+        }
+
+        if (verseWords.length === 0) return;
+
+        // Calculate which word should be highlighted based on time
+        const progress = currentTime / duration;
+        const wordIndex = Math.floor(progress * verseWords.length);
+
+        // Clear previous highlights and set new one
+        verseWords.forEach((word, idx) => {
+            if (idx === wordIndex) {
+                word.classList.add('active-word');
+            } else {
+                word.classList.remove('active-word');
+            }
+        });
     }
 
     // Playback Helpers
@@ -3067,14 +3164,54 @@ window.toggleTranslations = function () {
 
     localStorage.setItem('hide_translations', isHidden);
 
-    // Refresh playlist if something is playing or loaded
+    // Rebuild Playlist dynamically
     if (window.currentSurahData) {
-        // We only rebuild the playlist, we don't necessarily restart audio 
-        // to avoid jarring experience, but playSurahAudio will use new state
+        const arData = window.currentSurahData;
+        const hideTranslations = isHidden;
+        const surahNum = arData.data.number || 1;
+        const pad3 = n => String(n).padStart(3, '0');
+        const isSurahMode = (window.currentDirType !== 'juz'); // Ensure this var is accessible
+
+        currentPlaylist = [];
+        currentAudioIndex = 0;
+
+        const useSeamless = (hideTranslations && isSurahMode);
+
+        if (useSeamless) {
+            // Seamless Mode
+            currentPlaylist.push(`https://server8.mp3quran.net/afs/${pad3(surahNum)}.mp3`);
+            document.getElementById('player-sub').innerText = "Seamless Recitation (Mishary Alafasy)";
+        } else {
+            // Verse Mode
+            const hasPreamble = (surahNum !== 1 && surahNum !== 9);
+            if (hasPreamble) {
+                currentPlaylist.push(`https://cdn.islamic.network/quran/audio/128/ar.alafasy/1.mp3`);
+            }
+            arData.data.ayahs.forEach(a => {
+                currentPlaylist.push(`https://cdn.islamic.network/quran/audio/128/ar.alafasy/${a.number}.mp3`);
+                if (!hideTranslations) {
+                    currentPlaylist.push(`https://cdn.islamic.network/quran/audio/64/ur.khan/${a.number}.mp3`);
+                }
+            });
+            document.getElementById('player-sub').innerText = "Verse-by-Verse (Study Mode)";
+        }
+
+        // Reset Player
+        const player = document.getElementById('quran-audio');
+        if (player) {
+            player.pause();
+            player.src = currentPlaylist[0];
+            updatePlayerUI(false);
+            updatePlayerInfo(0);
+        }
+
+        // Notify User
+        const mode = useSeamless ? "Seamless Recitation" : "Study Mode (Dual Audio)";
+        console.log(`Switched to ${mode}`);
     }
 }
 
-// Apply persisted translation state on loads
+// Apply persisted translation and view state on loads
 window.addEventListener('load', () => {
     const hide = localStorage.getItem('hide_translations') === 'true';
     if (hide) {
@@ -3087,4 +3224,22 @@ window.addEventListener('load', () => {
             btn.classList.add('text-red-400');
         }
     }
+
+    const isMushaf = localStorage.getItem('mushaf_mode') === 'true';
+    if (isMushaf) {
+        const content = document.getElementById('quran-content');
+        const btn = document.getElementById('mushaf-toggle');
+        if (content) content.classList.add('mushaf-mode');
+        if (btn) btn.innerText = 'VIEW: PAGE';
+    }
 });
+
+window.toggleMushafMode = function () {
+    const content = document.getElementById('quran-content');
+    const btn = document.getElementById('mushaf-toggle');
+    if (!content) return;
+
+    const isMushaf = content.classList.toggle('mushaf-mode');
+    if (btn) btn.innerText = isMushaf ? 'VIEW: PAGE' : 'VIEW: CARD';
+    localStorage.setItem('mushaf_mode', isMushaf);
+}

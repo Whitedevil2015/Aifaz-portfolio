@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // --- GLOBAL STATE ---
-    window.coordinates = { lat: 18.5204, lng: 73.8567 }; // Default: Pune
-    window.ramadanLat = 18.5204;
-    window.ramadanLng = 73.8567;
+    window.coordinates = { lat: 17.3850, lng: 78.4867 }; // Default: Hyderabad
+    window.ramadanLat = 17.3850;
+    window.ramadanLng = 78.4867;
     window.prayerTimesRaw = {};
     window.nextPrayerName = '';
     window.isAzaanPlaying = false;
@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         } else {
-            const c = city || "Delhi";
+            const c = city || "Hyderabad";
             const co = country || "India";
             url = `https://api.aladhan.com/v1/timingsByCity?city=${c}&country=${co}&method=1`;
 
@@ -2691,6 +2691,11 @@ document.addEventListener('DOMContentLoaded', () => {
             await window.fetchPrayers(); // Default
         }
 
+        // Initialize Ramadan Data for Hyderabad (Default)
+        if (typeof window.getRamadanTimes === 'function') {
+            await window.getRamadanTimes();
+        }
+
         updateMasterDates();
         loadDirectory();
         loadNames();
@@ -2786,6 +2791,18 @@ window.getRamadanTimes = async function () {
             // Populate View Elements
             if (document.getElementById('saheriVal')) document.getElementById('saheriVal').innerText = timings.Fajr;
             if (document.getElementById('iftarVal')) document.getElementById('iftarVal').innerText = timings.Maghrib;
+
+            // Updated Status Bar
+            const dayStatus = document.getElementById('ramadan-day-status');
+            const dateStatus = document.getElementById('ramadan-date-status');
+
+            if (dayStatus) dayStatus.innerText = hijriDate.day;
+            if (dateStatus) dateStatus.innerText = `${data.data.date.gregorian.day} ${data.data.date.gregorian.month.en} • ${hijriDate.month.en} ${hijriDate.year}`;
+
+            const locSync = document.getElementById('ramadan-loc-sync');
+            if (locSync) locSync.innerText = `${window.globalCity}, ${window.globalCountry}`;
+
+
 
             // Update Ramadan Day
             const dayNumEl = document.querySelector('#view-ramadan .text-4xl.font-black.text-gray-800');
@@ -2924,7 +2941,7 @@ window.fetchMonthlyCalendar = async function () {
     const tbody = document.getElementById('monthly-calendar-body');
 
     if (label) label.innerText = "Loading...";
-    
+
     // Sync year input field
     const yearInput = document.getElementById('calendar-year-input');
     if (yearInput) yearInput.value = year;

@@ -2886,11 +2886,36 @@ window.autoNextSurah = function () {
     }
 };
 
+
 window.changeCalendarMonth = function (delta) {
     // Adjust month safely handling year rollover
     calendarCurrentDate.setMonth(calendarCurrentDate.getMonth() + delta);
     fetchMonthlyCalendar();
 };
+
+window.changeCalendarYear = function (delta) {
+    // Navigate by year (±100 year range)
+    const newYear = calendarCurrentDate.getFullYear() + delta;
+    if (newYear >= 1926 && newYear <= 2126) {
+        calendarCurrentDate.setFullYear(newYear);
+        fetchMonthlyCalendar();
+    }
+};
+
+window.jumpToYear = function (year) {
+    // Jump to specific year from input
+    const targetYear = parseInt(year);
+    if (!isNaN(targetYear) && targetYear >= 1926 && targetYear <= 2126) {
+        calendarCurrentDate.setFullYear(targetYear);
+        fetchMonthlyCalendar();
+    } else {
+        alert('Please enter a year between 1926 and 2126');
+        // Reset input to current year
+        const input = document.getElementById('calendar-year-input');
+        if (input) input.value = calendarCurrentDate.getFullYear();
+    }
+};
+
 
 window.fetchMonthlyCalendar = async function () {
     const month = calendarCurrentDate.getMonth() + 1;
@@ -2899,6 +2924,11 @@ window.fetchMonthlyCalendar = async function () {
     const tbody = document.getElementById('monthly-calendar-body');
 
     if (label) label.innerText = "Loading...";
+    
+    // Sync year input field
+    const yearInput = document.getElementById('calendar-year-input');
+    if (yearInput) yearInput.value = year;
+
 
     let url = '';
     if (window.ramadanUseCoords) {

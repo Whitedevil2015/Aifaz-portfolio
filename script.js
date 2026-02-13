@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- NAVIGATION & MODAL LOGIC ---
     let currentView = 'view-dashboard';
 
-    function navigateToView(targetId, updateHistory = true) {
+    window.navigateToView = function (targetId, updateHistory = true) {
         if (!targetId) return;
         currentView = targetId;
 
@@ -76,10 +76,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Specific view callbacks
-        if (targetId === 'view-library') loadLibrary();
+        // if (targetId === 'view-library') loadLibrary();
         if (targetId === 'view-names') loadNames();
         if (targetId === 'view-quran') loadDirectory();
         if (targetId === 'view-duas') renderDuas();
+        if (targetId === 'view-ramadan') getRamadanTimes();
 
         // Manage Browser History
         if (updateHistory) {
@@ -748,9 +749,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         view.innerHTML = `
             <div class="text-center py-20 animate-pulse">
-                <i class="fas fa-book-quran fa-spin text-5xl text-[#af944d] mb-6"></i> 
-                <h3 class="text-2xl font-bold text-[#064e3b] dark:text-[#af944d]">Connecting to Bukhari Archives...</h3>
-                <p class="mt-4 text-gray-500">Fetching 7,000+ authentic narrations...</p>
+                <i class="fas fa-hand-holding-heart fa-spin text-5xl text-[#af944d] mb-6"></i> 
+                <h3 class="text-2xl font-bold text-[#064e3b] dark:text-[#af944d]">Loading Durood Collection...</h3>
+                <p class="mt-4 text-gray-500">Preparing authentic blessings and salutations...</p>
             </div>
         `;
 
@@ -2705,7 +2706,6 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(showDailyVerse, 1000);
     };
 
-    startPortal();
 
 
 
@@ -2744,11 +2744,11 @@ window.getRamadanTimes = async function () {
 
     // If input changed manually, disable coords mode
     if (rawCity && rawCity !== "My Location") {
-        ramadanUseCoords = false;
+        window.ramadanUseCoords = false;
     }
 
     // Default to Hyderabad if empty & no coords
-    if (!rawCity && !ramadanUseCoords) rawCity = "Hyderabad, IN";
+    if (!rawCity && !window.ramadanUseCoords) rawCity = "Hyderabad, IN";
 
     let url = '';
 
@@ -3279,6 +3279,7 @@ window.addEventListener('load', () => {
         if (content) content.classList.add('mushaf-mode');
         if (btn) btn.innerText = 'VIEW: PAGE';
     }
+    startPortal();
 });
 
 window.toggleMushafMode = function () {

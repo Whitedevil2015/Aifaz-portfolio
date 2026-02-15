@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelectorAll('.nav-link');
     const sections = document.querySelectorAll('.view-section');
     const cityInput = document.getElementById('prayer-city-input');
+    const countryInput = document.getElementById('prayer-country-input');
     const searchBtn = document.getElementById('portal-search-btn');
     const autoLocBtn = document.getElementById('update-location-btn');
     const searchInput = document.getElementById('hadith-search');
@@ -26,18 +27,120 @@ document.addEventListener('DOMContentLoaded', () => {
     const quranContentEl = document.getElementById('quran-content');
     const audioPlayer = document.getElementById('quran-audio');
 
-    // --- THEME TOGGLE ---
-    themeBtn?.addEventListener('click', () => {
-        document.body.classList.toggle('dark');
-        const isDark = document.body.classList.contains('dark');
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        themeBtn.innerHTML = isDark ? '<i class="fas fa-sun text-yellow-400"></i>' : '<i class="fas fa-moon"></i>';
-    });
-    // Init Theme
-    if (localStorage.getItem('theme') === 'dark') {
-        document.body.classList.add('dark');
-        themeBtn.innerHTML = '<i class="fas fa-sun text-yellow-400"></i>';
+    // --- COUNTRY AND CITY DATA ---
+    const locationData = {
+        "India": ["Mumbai", "Delhi", "Bangalore", "Hyderabad", "Chennai", "Kolkata", "Pune", "Ahmedabad", "Jaipur", "Lucknow"],
+        "Pakistan": ["Karachi", "Lahore", "Islamabad", "Rawalpindi", "Faisalabad", "Multan", "Peshawar", "Quetta"],
+        "Bangladesh": ["Dhaka", "Chittagong", "Khulna", "Rajshahi", "Sylhet"],
+        "Saudi Arabia": ["Mecca", "Medina", "Riyadh", "Jeddah", "Dammam", "Khobar"],
+        "UAE": ["Dubai", "Abu Dhabi", "Sharjah", "Ajman", "Ras Al Khaimah"],
+        "USA": ["New York", "Los Angeles", "Chicago", "Houston", "Phoenix", "Philadelphia", "San Antonio", "Dallas"],
+        "UK": ["London", "Birmingham", "Manchester", "Liverpool", "Leeds", "Sheffield"],
+        "Canada": ["Toronto", "Montreal", "Vancouver", "Calgary", "Edmonton", "Ottawa"],
+        "Australia": ["Sydney", "Melbourne", "Brisbane", "Perth", "Adelaide"],
+        "Malaysia": ["Kuala Lumpur", "George Town", "Ipoh", "Shah Alam", "Johor Bahru"],
+        "Indonesia": ["Jakarta", "Surabaya", "Bandung", "Medan", "Semarang"],
+        "Turkey": ["Istanbul", "Ankara", "Izmir", "Bursa", "Antalya"],
+        "Egypt": ["Cairo", "Alexandria", "Giza", "Luxor", "Aswan"],
+        "South Africa": ["Johannesburg", "Cape Town", "Durban", "Pretoria"],
+        "Nigeria": ["Lagos", "Abuja", "Kano", "Ibadan", "Port Harcourt"],
+        "Morocco": ["Casablanca", "Rabat", "Fez", "Marrakech", "Tangier"],
+        "Iran": ["Tehran", "Mashhad", "Isfahan", "Shiraz", "Tabriz"],
+        "Iraq": ["Baghdad", "Basra", "Mosul", "Erbil", "Najaf", "Karbala"],
+        "Jordan": ["Amman", "Zarqa", "Irbid", "Aqaba"],
+        "Lebanon": ["Beirut", "Tripoli", "Sidon", "Tyre"],
+        "Syria": ["Damascus", "Aleppo", "Homs", "Latakia"],
+        "Kuwait": ["Kuwait City", "Hawalli", "Salmiya"],
+        "Qatar": ["Doha", "Al Wakrah", "Al Rayyan"],
+        "Bahrain": ["Manama", "Riffa", "Muharraq"],
+        "Oman": ["Muscat", "Salalah", "Sohar"],
+        "Yemen": ["Sanaa", "Aden", "Taiz"],
+        "Afghanistan": ["Kabul", "Kandahar", "Herat", "Mazar-i-Sharif"],
+        "Algeria": ["Algiers", "Oran", "Constantine"],
+        "Tunisia": ["Tunis", "Sfax", "Sousse"],
+        "Libya": ["Tripoli", "Benghazi", "Misrata"],
+        "Sudan": ["Khartoum", "Omdurman", "Port Sudan"],
+        "Somalia": ["Mogadishu", "Hargeisa", "Bosaso"],
+        "Kenya": ["Nairobi", "Mombasa", "Kisumu"],
+        "Tanzania": ["Dar es Salaam", "Dodoma", "Mwanza"],
+        "Senegal": ["Dakar", "Touba", "Pikine"],
+        "Mali": ["Bamako", "Sikasso", "Mopti"],
+        "Niger": ["Niamey", "Zinder", "Maradi"],
+        "Chad": ["N'Djamena", "Moundou", "Sarh"],
+        "Uzbekistan": ["Tashkent", "Samarkand", "Bukhara"],
+        "Kazakhstan": ["Almaty", "Nur-Sultan", "Shymkent"],
+        "Azerbaijan": ["Baku", "Ganja", "Sumqayit"],
+        "Tajikistan": ["Dushanbe", "Khujand", "Kulob"],
+        "Turkmenistan": ["Ashgabat", "Turkmenabat", "Dasoguz"],
+        "Kyrgyzstan": ["Bishkek", "Osh", "Jalal-Abad"],
+        "Singapore": ["Singapore"],
+        "Brunei": ["Bandar Seri Begawan"],
+        "Maldives": ["Male"],
+        "Sri Lanka": ["Colombo", "Kandy", "Galle"],
+        "Thailand": ["Bangkok", "Phuket", "Chiang Mai"],
+        "Philippines": ["Manila", "Quezon City", "Davao"],
+        "China": ["Beijing", "Shanghai", "Guangzhou", "Shenzhen"],
+        "Japan": ["Tokyo", "Osaka", "Kyoto"],
+        "South Korea": ["Seoul", "Busan", "Incheon"],
+        "Germany": ["Berlin", "Munich", "Frankfurt", "Hamburg"],
+        "France": ["Paris", "Marseille", "Lyon", "Toulouse"],
+        "Italy": ["Rome", "Milan", "Naples", "Turin"],
+        "Spain": ["Madrid", "Barcelona", "Valencia", "Seville"],
+        "Netherlands": ["Amsterdam", "Rotterdam", "The Hague"],
+        "Belgium": ["Brussels", "Antwerp", "Ghent"],
+        "Sweden": ["Stockholm", "Gothenburg", "Malmö"],
+        "Norway": ["Oslo", "Bergen", "Trondheim"],
+        "Denmark": ["Copenhagen", "Aarhus", "Odense"],
+        "Russia": ["Moscow", "Saint Petersburg", "Kazan"],
+        "Bosnia": ["Sarajevo", "Banja Luka", "Tuzla"],
+        "Albania": ["Tirana", "Durrës", "Vlorë"],
+        "Kosovo": ["Pristina", "Prizren", "Peja"]
+    };
+
+    // Initialize Country Dropdown
+    function initLocationDropdowns() {
+        const countries = Object.keys(locationData).sort();
+
+        // Populate country dropdown
+        countryInput.innerHTML = '<option value="">Select Country</option>';
+        countries.forEach(country => {
+            const option = document.createElement('option');
+            option.value = country;
+            option.textContent = country;
+            countryInput.appendChild(option);
+        });
+
+        // Set default to India and populate cities
+        countryInput.value = "India";
+        updateCityDropdown("India");
+        cityInput.value = "Hyderabad";
     }
+
+    // Update City Dropdown based on selected country
+    function updateCityDropdown(country) {
+        const cities = locationData[country] || [];
+        cityInput.innerHTML = '<option value="">Select City</option>';
+
+        cities.forEach(city => {
+            const option = document.createElement('option');
+            option.value = city;
+            option.textContent = city;
+            cityInput.appendChild(option);
+        });
+    }
+
+    // Country change listener
+    countryInput?.addEventListener('change', (e) => {
+        const selectedCountry = e.target.value;
+        updateCityDropdown(selectedCountry);
+    });
+
+    // Initialize on page load
+    initLocationDropdowns();
+
+    // --- THEME REMOVED - FORCE HIGH VISIBILITY ---
+    document.body.classList.remove('dark');
+    localStorage.removeItem('theme');
 
 
     // --- NAVIGATION & MODAL LOGIC ---
@@ -81,6 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (targetId === 'view-quran') loadDirectory();
         if (targetId === 'view-duas') renderDuas();
         if (targetId === 'view-ramadan') getRamadanTimes();
+        if (targetId === 'view-nafil') renderPrayerGuide(window.prayerTimesRaw);
 
         // Manage Browser History
         if (updateHistory) {
@@ -215,8 +319,15 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.removeItem('portal_lat');
             localStorage.removeItem('portal_lng');
 
+            // Update UI
             const locLabel = document.getElementById('portal-location-label');
             if (locLabel) locLabel.textContent = `${c}, ${co}`;
+
+            // Update input fields
+            const cityInput = document.getElementById('prayer-city-input');
+            const countryInput = document.getElementById('prayer-country-input');
+            if (cityInput) cityInput.value = c;
+            if (countryInput) countryInput.value = co;
         }
 
         try {
@@ -454,6 +565,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const heroBtn = document.querySelector('#portal-location-label button');
         const icon = heroBtn?.querySelector('i');
 
+        // Helper to reset button state
+        const resetBtn = () => {
+            if (icon) {
+                icon.className = "fas fa-location-arrow group-hover:animate-pulse text-sm";
+                heroBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+        };
+
         // Visual Feedback
         if (icon) {
             icon.className = "fas fa-spinner fa-spin";
@@ -527,10 +646,16 @@ document.addEventListener('DOMContentLoaded', () => {
         window.detectAndSyncLocation('dashboard');
     });
 
-    // Manual Search
+    // Manual Search with Dropdowns
     searchBtn?.addEventListener('click', () => {
-        const val = cityInput.value;
-        if (val) fetchPrayers(null, null, val);
+        const city = cityInput.value;
+        const country = countryInput.value;
+
+        if (city && country) {
+            fetchPrayers(null, null, city, country);
+        } else {
+            alert('Please select both Country and City');
+        }
     });
 
 
@@ -2680,16 +2805,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- BOOTSTRAP ---
     const startPortal = async () => {
-        const sLat = localStorage.getItem('portal_lat');
-        const sLng = localStorage.getItem('portal_lng');
-        const sCity = localStorage.getItem('portal_city');
+        // FORCE DEFAULT TO HYDERABAD (User Request: ignore saved state for now)
+        // const sLat = localStorage.getItem('portal_lat');
+        // const sLng = localStorage.getItem('portal_lng');
+        // const sCity = localStorage.getItem('portal_city');
+        const sLat = null;
+        const sLng = null;
+        const sCity = null;
 
         if (sLat && sLng) {
             await window.fetchPrayers(parseFloat(sLat), parseFloat(sLng));
         } else if (sCity) {
             await window.fetchPrayers(null, null, sCity);
         } else {
-            await window.fetchPrayers(); // Default
+            // Default to Hyderabad, India (User Request)
+            window.globalCity = "Hyderabad";
+            window.globalCountry = "India";
+            await window.fetchPrayers(null, null, "Hyderabad", "India");
         }
 
         // Initialize Ramadan Data for Hyderabad (Default)
@@ -2747,8 +2879,12 @@ window.getRamadanTimes = async function () {
         window.ramadanUseCoords = false;
     }
 
-    // Default to Hyderabad if empty & no coords
-    if (!rawCity && !window.ramadanUseCoords) rawCity = "Hyderabad, IN";
+    // Force Default to Hyderabad, IN if empty
+    if (!rawCity && !window.ramadanUseCoords) {
+        rawCity = "Hyderabad, IN";
+        window.globalCity = "Hyderabad";
+        window.globalCountry = "India";
+    }
 
     let url = '';
 
@@ -2811,13 +2947,13 @@ window.getRamadanTimes = async function () {
             }
 
             startRamadanCountdown(timings.Fajr, timings.Maghrib);
-            updateAshraTracker(hijriDate.day);
+            // updateAshraTracker(hijriDate.day); // Removed - Ashra section no longer in UI
 
-            // Sync Quran Journey
-            if (document.getElementById('juz-num-label')) {
-                document.getElementById('juz-num-label').innerText = `Juz ${hijriDate.day}`;
-            }
-            initQuranProgress();
+            // Sync Quran Journey - Removed since section was deleted
+            // if (document.getElementById('juz-num-label')) {
+            //     document.getElementById('juz-num-label').innerText = `Juz ${hijriDate.day}`;
+            // }
+            // initQuranProgress();
         }
     } catch (e) { console.error("API Error", e); }
 }
@@ -2965,7 +3101,15 @@ window.fetchMonthlyCalendar = async function () {
 
             if (label) label.innerText = `${calendarCurrentDate.toLocaleString('default', { month: 'long', year: 'numeric' })} / ${hijriName} ${yearHijri}`;
 
-            tbody.innerHTML = results.map(day => {
+            // Filter for current date onwards if current month
+            let displayResults = results;
+            const now = new Date();
+            if ((month === now.getMonth() + 1) && (year === now.getFullYear())) {
+                const todayNum = now.getDate();
+                displayResults = results.filter(d => parseInt(d.date.gregorian.day) >= todayNum);
+            }
+
+            tbody.innerHTML = displayResults.map(day => {
                 const isRamadan = day.date.hijri.month.number === 9;
                 return `
                 <tr class="hover:bg-[#064e3b]/5 transition-colors ${isRamadan ? 'bg-[#064e3b]/10' : ''}">

@@ -202,14 +202,21 @@
                 class="sticky top-0 z-20 bg-[#fcfdfd]/80 backdrop-blur-md border-b border-gray-200 px-4 md:px-8 py-4 flex justify-between items-center shadow-sm transition-colors duration-300 dark:bg-gray-900/80 dark:border-gray-800">
                 <div class="flex items-center gap-2 md:gap-4 w-full max-w-2xl">
                     <div class="relative flex-1 flex gap-2">
-                        <div class="relative w-2/3">
-                            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                            <input type="text" id="prayer-city-input" placeholder="City (e.g. Delhi)"
-                                class="w-full pl-10 pr-4 py-2 bg-[#ebe2d5] border-none rounded-full focus:ring-2 focus:ring-[#064e3b]/50 focus:bg-[#fcfdfd] transition-all text-xs md:text-sm outline-none dark:bg-gray-800 dark:text-white">
+                        <div class="relative w-1/2">
+                            <i
+                                class="fas fa-globe absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none z-10"></i>
+                            <select id="prayer-country-input"
+                                class="w-full pl-10 pr-4 py-2 bg-[#ebe2d5] border-none rounded-full focus:ring-2 focus:ring-[#064e3b]/50 focus:bg-[#fcfdfd] transition-all text-xs md:text-sm outline-none dark:bg-gray-800 dark:text-white appearance-none cursor-pointer">
+                                <option value="">Select Country</option>
+                            </select>
                         </div>
-                        <div class="relative w-1/3">
-                            <input type="text" id="prayer-country-input" placeholder="Country"
-                                class="w-full pl-4 pr-4 py-2 bg-[#ebe2d5] border-none rounded-full focus:ring-2 focus:ring-[#064e3b]/50 focus:bg-[#fcfdfd] transition-all text-xs md:text-sm outline-none dark:bg-gray-800 dark:text-white">
+                        <div class="relative w-1/2">
+                            <i
+                                class="fas fa-city absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none z-10"></i>
+                            <select id="prayer-city-input"
+                                class="w-full pl-10 pr-4 py-2 bg-[#ebe2d5] border-none rounded-full focus:ring-2 focus:ring-[#064e3b]/50 focus:bg-[#fcfdfd] transition-all text-xs md:text-sm outline-none dark:bg-gray-800 dark:text-white appearance-none cursor-pointer">
+                                <option value="">Select City</option>
+                            </select>
                         </div>
                     </div>
                     <button id="portal-search-btn"
@@ -219,11 +226,8 @@
                     <!-- Hide Auto button on very small screens if needed, or keep icon only -->
                     <button id="update-location-btn"
                         class="bg-gray-800 text-white px-4 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-bold shadow-lg hover:shadow-gray-800/30 hover:-translate-y-0.5 transition-all dark:bg-gray-700">
-                        <i class="fas fa-location-arrow"></i> <span class="hidden md:inline ml-2">Detect Location</span>
-                    </button>
-                    <button id="theme-toggle"
-                        class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center hover:bg-gray-300 transition-colors dark:bg-gray-700 dark:text-yellow-400 shrink-0">
-                        <i class="fas fa-moon text-xs md:text-base"></i>
+                        <i class="fas fa-location-arrow text-xs"></i> <span class="hidden md:inline ml-2">Detect
+                            Location</span>
                     </button>
                 </div>
                 <div class="text-right hidden lg:block">
@@ -278,9 +282,9 @@
 
                         <div id="portal-location-label" class="mt-6 flex justify-center">
                             <button onclick="detectAndSyncLocation()"
-                                class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-white hover:bg-[#af944d] hover:scale-110 transition-all shadow-lg group"
+                                class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-white hover:bg-[#af944d] hover:scale-110 transition-all shadow-lg group"
                                 title="Detect Location">
-                                <i class="fas fa-location-arrow group-hover:animate-pulse"></i>
+                                <i class="fas fa-location-arrow text-sm group-hover:animate-pulse"></i>
                             </button>
                         </div>
                     </div>
@@ -994,17 +998,40 @@
             </section>
 
             <section id="view-ramadan"
-                class="view-section hidden ramadan-geometric-bg min-h-screen relative overflow-hidden pb-20">
+                class="view-section hidden ramadan-vibrant-bg min-h-screen relative overflow-hidden pb-20">
+
+                <!-- Animated Lanterns -->
+                <div class="lantern-container lantern-container-1">
+                    <div class="lantern-string"></div>
+                    <div class="lantern-body"></div>
+                </div>
+                <div class="lantern-container lantern-container-2">
+                    <div class="lantern-string" style="height: 150px;"></div>
+                    <div class="lantern-body"></div>
+                </div>
+                <div class="lantern-container lantern-container-3">
+                    <div class="lantern-string" style="height: 80px;"></div>
+                    <div class="lantern-body"></div>
+                </div>
+
+                <!-- Twinkling Stars -->
+                <div class="star" style="top: 10%; left: 20%; font-size: 10px;">✦</div>
+                <div class="star" style="top: 15%; left: 80%; font-size: 14px; animation-delay: 1s;">✦</div>
+                <div class="star" style="top: 30%; left: 10%; font-size: 8px; animation-delay: 2s;">✦</div>
+                <div class="star" style="top: 50%; left: 90%; font-size: 12px; animation-delay: 0.5s;">✦</div>
+
                 <div class="max-w-7xl mx-auto px-6 py-12 relative z-10">
 
                     <!-- Apple-Style Header -->
                     <header class="text-center mb-16">
                         <div
-                            class="inline-block px-4 py-1.5 bg-[#064e3b]/5 rounded-full text-[9px] font-black uppercase tracking-[0.4em] text-[#064e3b] mb-4">
+                            class="inline-block px-6 py-2 bg-white/10 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-[0.4em] text-[#ffd700] mb-6 shadow-lg border border-white/20">
                             Serene Ramadan Experience</div>
-                        <h1 class="text-5xl md:text-7xl font-[Cormorant_Garamond] font-bold text-[#064e3b] mb-4">
+                        <h1
+                            class="text-6xl md:text-8xl font-[Cormorant_Garamond] font-bold text-gradient-gold mb-4 drop-shadow-lg">
                             Ramadan Mubarak</h1>
-                        <p class="text-[#af944d] font-serif text-xl italic mb-6">A journey of spiritual
+                        <p class="text-emerald-200 font-serif text-2xl italic mb-8 text-shadow-sm">A journey of
+                            spiritual
                             elevation and
                             deep
                             reflection.</p>
@@ -1012,29 +1039,28 @@
                         <!-- Dynamic Status Bar -->
                         <div class="flex flex-wrap justify-center gap-4 mb-8">
                             <div
-                                class="bg-white/40 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/20 flex items-center gap-3 shadow-sm">
-                                <div class="w-10 h-10 rounded-full bg-[#af944d] text-white flex items-center justify-center font-black"
+                                class="bg-white/10 backdrop-blur-xl px-6 py-3 rounded-2xl border border-white/20 flex items-center gap-4 shadow-lg hover:bg-white/20 transition-all cursor-default">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#ffd700] to-[#af944d] text-[#064e3b] flex items-center justify-center font-black text-lg shadow-md"
                                     id="ramadan-day-status">--</div>
                                 <div class="text-left">
-                                    <p class="text-[9px] font-black uppercase tracking-widest text-[#064e3b]">
+                                    <p class="text-[9px] font-black uppercase tracking-widest text-emerald-300">
                                         Current
                                         Fasting Day</p>
-                                    <p class="text-xs font-bold text-gray-600" id="ramadan-date-status">Loading
+                                    <p class="text-sm font-bold text-white" id="ramadan-date-status">Loading
                                         Date...
                                     </p>
                                 </div>
                             </div>
                             <div
-                                class="bg-white/40 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/20 flex items-center gap-3 shadow-sm">
+                                class="bg-white/10 backdrop-blur-xl px-6 py-3 rounded-2xl border border-white/20 flex items-center gap-4 shadow-lg hover:bg-white/20 transition-all cursor-default">
                                 <div
-                                    class="w-10 h-10 rounded-full bg-[#064e3b] text-white flex items-center justify-center">
+                                    class="w-12 h-12 rounded-full bg-[#064e3b] border border-emerald-500/30 text-emerald-400 flex items-center justify-center text-lg shadow-inner">
                                     <i class="fas fa-clock"></i>
                                 </div>
                                 <div class="text-left">
-                                    <p class="text-[9px] font-black uppercase tracking-widest text-[#064e3b]">
-                                        Default
-                                        Zone</p>
-                                    <p class="text-xs font-bold text-gray-600">Hyderabad, India (IST)</p>
+                                    <p class="text-[9px] font-black uppercase tracking-widest text-emerald-300">
+                                        Location Zone</p>
+                                    <p class="text-sm font-bold text-white">Hyderabad, India (IST)</p>
                                 </div>
                             </div>
                         </div>
@@ -1045,56 +1071,65 @@
                     <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-12">
                         <!-- Suhoor Info -->
                         <div
-                            class="ramadan-pearl-surface p-8 rounded-[40px] text-center hover:-translate-y-1 transition-all flex flex-col justify-center">
-                            <div class="text-[10px] font-black opacity-30 mb-2 uppercase tracking-widest text-gray-500">
+                            class="ramadan-card-vibrant p-8 rounded-[40px] text-center flex flex-col justify-center relative group overflow-hidden">
+                            <div
+                                class="absolute top-0 right-0 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl -mr-10 -mt-10">
+                            </div>
+                            <div
+                                class="text-[10px] font-black opacity-60 mb-2 uppercase tracking-widest text-[#064e3b] dark:text-emerald-400">
                                 Saheri Ends</div>
-                            <div class="text-5xl font-black text-[#064e3b]" id="saheriVal">--:--</div>
+                            <div class="text-5xl font-black text-gradient-emerald" id="saheriVal">--:--</div>
                             <p class="text-[9px] font-bold text-[#af944d] mt-4 uppercase tracking-[0.2em]"
                                 id="ramadan-loc-sync">Hyderabad, India</p>
                         </div>
 
                         <!-- Main Countdown Central -->
                         <div
-                            class="lg:col-span-2 ramadan-pearl-surface p-10 rounded-[50px] flex flex-col items-center justify-center text-center relative group overflow-hidden">
-                            <div class="timer-glowing-ring mb-4 scale-75 md:scale-95">
+                            class="lg:col-span-2 ramadan-card-vibrant p-10 rounded-[50px] flex flex-col items-center justify-center text-center relative group overflow-hidden">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-b from-transparent to-[#064e3b]/5 pointer-events-none">
+                            </div>
+                            <div class="timer-glowing-ring mb-6 scale-90 md:scale-100 ring-offset-4 ring-[#af944d]/30">
                                 <div class="relative z-10">
-                                    <div class="text-7xl font-black text-[#064e3b] tracking-tighter" id="timer">
+                                    <div class="text-7xl md:text-8xl font-black text-[#064e3b] dark:text-white tracking-tighter drop-shadow-sm"
+                                        id="timer">
                                         --:--:--
                                     </div>
-                                    <div class="text-[10px] font-black uppercase tracking-[0.4em] text-[#af944d] mt-2"
+                                    <div class="text-[10px] font-black uppercase tracking-[0.5em] text-[#af944d] mt-4 animate-pulse"
                                         id="ramadan-timer-label">Iftar Countdown</div>
                                 </div>
                             </div>
-                            <div class="text-4xl font-black text-[#af944d]" id="iftarVal">--:--</div>
+                            <div class="text-5xl font-black text-gradient-gold drop-shadow-sm" id="iftarVal">--:--</div>
                         </div>
 
                         <!-- Notification Alarms (Kept Feature) -->
-                        <div class="ramadan-pearl-surface p-8 rounded-[40px] space-y-6 flex flex-col justify-center">
+                        <div class="ramadan-card-vibrant p-8 rounded-[40px] space-y-6 flex flex-col justify-center">
                             <div class="flex items-center justify-between">
-                                <h4 class="text-[10px] font-black text-[#064e3b] uppercase tracking-widest">
+                                <h4
+                                    class="text-[10px] font-black text-[#064e3b] dark:text-emerald-400 uppercase tracking-widest">
                                     Alarms</h4>
-                                <i class="fas fa-bell gold-line-art !text-lg"></i>
+                                <i class="fas fa-bell text-[#af944d] text-xl animate-bounce-slight"></i>
                             </div>
                             <div class="space-y-4">
                                 <div
-                                    class="flex items-center justify-between p-3 bg-gray-50 rounded-2xl border border-gray-100 dark:bg-black/20 dark:border-white/5">
+                                    class="flex items-center justify-between p-4 bg-gray-50/50 rounded-2xl border border-gray-100 dark:bg-black/20 dark:border-white/5 hover:bg-white dark:hover:bg-white/5 transition-colors">
                                     <span
-                                        class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Suhoor</span>
+                                        class="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">Suhoor</span>
                                     <label class="relative inline-flex items-center cursor-pointer">
                                         <input type="checkbox" class="sr-only peer" id="alarm-suhoor">
                                         <div
-                                            class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#10b981]">
+                                            class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#10b981] shadow-inner">
                                         </div>
                                     </label>
                                 </div>
                                 <div
-                                    class="flex items-center justify-between p-3 bg-gray-50 rounded-2xl border border-gray-100 dark:bg-black/20 dark:border-white/5">
+                                    class="flex items-center justify-between p-4 bg-gray-50/50 rounded-2xl border border-gray-100 dark:bg-black/20 dark:border-white/5 hover:bg-white dark:hover:bg-white/5 transition-colors">
                                     <span
-                                        class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Taraweeh</span>
+                                        class="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">Taraweeh</span>
                                     <label class="relative inline-flex items-center cursor-pointer">
                                         <input type="checkbox" class="sr-only peer" id="alarm-taraweeh">
                                         <div
-                                            class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#af944d]">
+                                            class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#af944d] shadow-inner">
                                         </div>
                                     </label>
                                 </div>
@@ -1104,50 +1139,52 @@
 
 
                     <!-- Footer Table - Full Schedule -->
-                    <div class="ramadan-pearl-surface p-10 rounded-[50px]">
-                        <div class="flex justify-between items-center mb-10 overflow-hidden">
+                    <div class="ramadan-card-vibrant p-10 rounded-[50px]">
+                        <div class="flex justify-between items-center mb-10 overflow-hidden flex-wrap gap-4">
                             <div class="flex flex-col md:flex-row md:items-center gap-6">
-                                <h3 class="text-3xl font-black text-[#064e3b] uppercase tracking-tighter"
+                                <h3 class="text-3xl font-black text-[#064e3b] dark:text-emerald-100 uppercase tracking-tighter"
                                     id="calendar-month-label">Full Schedule</h3>
-                                <div class="flex items-center gap-4 bg-[#064e3b]/5 px-6 py-2 rounded-full cursor-pointer hover:bg-[#064e3b]/10 transition-all group"
+                                <div class="flex items-center gap-4 bg-[#064e3b]/5 dark:bg-white/5 px-6 py-2 rounded-full cursor-pointer hover:bg-[#064e3b]/10 dark:hover:bg-white/10 transition-all group border border-transparent hover:border-[#af944d]/30"
                                     onclick="window.detectAndSyncLocation('ramadan')">
-                                    <i class="fas fa-location-crosshairs text-[#af944d]"></i>
-                                    <p class="text-[10px] font-black uppercase tracking-widest text-[#064e3b] max-w-[120px] truncate"
+                                    <i
+                                        class="fas fa-location-crosshairs text-[#af944d] group-hover:rotate-90 transition-transform"></i>
+                                    <p class="text-[10px] font-black uppercase tracking-widest text-[#064e3b] dark:text-emerald-300 max-w-[120px] truncate"
                                         id="cityLabel">Hyderabad</p>
                                 </div>
                             </div>
                             <div class="flex gap-3">
                                 <button onclick="window.printRamadanTable()"
-                                    class="px-6 py-2 bg-[#064e3b] text-white rounded-full text-[9px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg whitespace-nowrap"><i
+                                    class="px-6 py-2 bg-[#064e3b] text-white rounded-full text-[9px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg whitespace-nowrap hover:bg-[#064e3b]/90 ring-2 ring-offset-2 ring-transparent active:ring-[#af944d]"><i
                                         class="fas fa-download mr-2"></i> PDF</button>
 
                                 <!-- Year Navigation -->
                                 <div
-                                    class="flex items-center gap-2 bg-white/50 px-3 py-1.5 rounded-full border border-[#064e3b]/10">
+                                    class="flex items-center gap-2 bg-white/50 dark:bg-black/30 px-3 py-1.5 rounded-full border border-[#064e3b]/10 dark:border-white/10">
                                     <button onclick="changeCalendarYear(-1)"
-                                        class="w-8 h-8 rounded-full flex items-center justify-center text-[#af944d] hover:bg-white/80 transition-all text-xs">
+                                        class="w-8 h-8 rounded-full flex items-center justify-center text-[#af944d] hover:bg-white/80 dark:hover:bg-white/10 transition-all text-xs">
                                         <i class="fas fa-angle-double-left"></i>
                                     </button>
                                     <input type="number" id="calendar-year-input"
-                                        class="w-20 text-center bg-transparent border-none text-sm font-bold text-[#064e3b] outline-none"
+                                        class="w-20 text-center bg-transparent border-none text-sm font-bold text-[#064e3b] dark:text-white outline-none"
                                         onchange="jumpToYear(this.value)" min="1926" max="2126" />
                                     <button onclick="changeCalendarYear(1)"
-                                        class="w-8 h-8 rounded-full flex items-center justify-center text-[#af944d] hover:bg-white/80 transition-all text-xs">
+                                        class="w-8 h-8 rounded-full flex items-center justify-center text-[#af944d] hover:bg-white/80 dark:hover:bg-white/10 transition-all text-xs">
                                         <i class="fas fa-angle-double-right"></i>
                                     </button>
                                 </div>
 
                                 <button onclick="changeCalendarMonth(-1)"
-                                    class="w-12 h-12 rounded-full border border-[#064e3b]/10 flex items-center justify-center text-[#af944d] hover:bg-white transition-all shadow-sm"><i
+                                    class="w-12 h-12 rounded-full border border-[#064e3b]/10 dark:border-white/10 flex items-center justify-center text-[#af944d] hover:bg-white dark:hover:bg-white/10 transition-all shadow-sm"><i
                                         class="fas fa-chevron-left"></i></button>
                                 <button onclick="changeCalendarMonth(1)"
-                                    class="w-12 h-12 rounded-full border border-[#064e3b]/10 flex items-center justify-center text-[#af944d] hover:bg-white transition-all shadow-sm"><i
+                                    class="w-12 h-12 rounded-full border border-[#064e3b]/10 dark:border-white/10 flex items-center justify-center text-[#af944d] hover:bg-white dark:hover:bg-white/10 transition-all shadow-sm"><i
                                         class="fas fa-chevron-right"></i></button>
                             </div>
                         </div>
-                        <div class="overflow-x-auto rounded-3xl overflow-hidden border border-[#064e3b]/5">
+                        <div
+                            class="overflow-x-auto rounded-3xl overflow-hidden border border-[#064e3b]/5 dark:border-white/5 shadow-inner bg-white/30 dark:bg-black/20">
                             <table class="w-full text-left">
-                                <thead class="bg-[#064e3b]/5">
+                                <thead class="bg-[#064e3b]/5 dark:bg-white/5">
                                     <tr class="text-[10px] font-black text-gray-400 uppercase tracking-widest">
                                         <th class="p-6">Holy Date</th>
                                         <th class="p-6">Islamic Orbit</th>
@@ -1155,7 +1192,8 @@
                                         <th class="p-6 text-center">Iftar</th>
                                     </tr>
                                 </thead>
-                                <tbody id="monthly-calendar-body" class="divide-y divide-[#064e3b]/5">
+                                <tbody id="monthly-calendar-body"
+                                    class="divide-y divide-[#064e3b]/5 dark:divide-white/5">
                                     <!-- Populated by JS -->
                                 </tbody>
                             </table>

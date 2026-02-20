@@ -1052,38 +1052,68 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- DAILY VERSE MODAL ---
-    const dailyVerses = [
-        { t: "Indeed, with hardship [will be] ease.", r: "Surah Ash-Sharh 94:6" },
-        { t: "So remember Me; I will remember you.", r: "Surah Al-Baqarah 2:152" },
-        { t: "And He is with you wherever you are.", r: "Surah Al-Hadid 57:4" },
-        { t: "My mercy encompasses all things.", r: "Surah Al-A'raf 7:156" },
-        { t: "Allah does not burden a soul beyond that it can bear.", r: "Surah Al-Baqarah 2:286" },
-        { t: "Unquestionably, by the remembrance of Allah hearts are assured.", r: "Surah Ar-Ra'd 13:28" },
-        { t: "Indeed, my Lord is near and responsive.", r: "Surah Hud 11:61" },
-        { t: "And your Lord is the Most Generous.", r: "Surah Al-'Alaq 96:3" },
-        { t: "He created the heavens and earth in truth.", r: "Surah Az-Zumar 39:5" },
-        { t: "Hold firmly to the rope of Allah all together.", r: "Surah Ali 'Imran 3:103" }
-    ];
-    function showDailyVerse() {
-        const verse = dailyVerses[Math.floor(Math.random() * dailyVerses.length)];
-        const modal = document.createElement('div');
-        modal.className = 'fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm opacity-0 transition-opacity duration-700';
-        modal.innerHTML = `
-            <div class="bg-[#f5f2eb] rounded-[40px] max-w-lg w-full p-10 text-center relative transform scale-90 transition-transform duration-500 shadow-2xl border-4 border-[#af944d]/30 dark:bg-gray-900 border-gray-700">
-                <button onclick="this.closest('.fixed').remove()" class="absolute top-4 right-4 text-gray-400 hover:text-red-500"><i class="fas fa-times text-xl"></i></button>
-                <div class="w-16 h-1 bg-[#af944d] mx-auto mb-6 rounded-full"></div>
-                <h3 class="text-gray-500 uppercase tracking-widest text-xs font-bold mb-4 dark:text-gray-400">Verse of the Moment</h3>
-                <p class="text-3xl font-[Cormorant_Garamond] font-bold text-[#064e3b] mb-6 leading-tight dark:text-white">"${verse.t}"</p>
-                <p class="text-[#af944d] font-semibold font-serif italic">— ${verse.r}</p>
-                <button onclick="this.closest('.fixed').remove()" class="mt-8 px-8 py-3 bg-[#064e3b] text-white rounded-full font-bold hover:bg-[#064e3b] transition-colors shadow-lg">Bismillah</button>
-            </div>
-        `;
-        document.body.appendChild(modal);
-        requestAnimationFrame(() => {
-            modal.classList.remove('opacity-0');
-            modal.querySelector('div').classList.remove('scale-90');
-            modal.querySelector('div').classList.add('scale-100');
-        });
+    async function showDailyVerse() {
+        try {
+            // Fetch a random verse from the full Quran (Arabic + English Translation)
+            const res = await fetch('https://api.aladhan.com/v1/ayah/random/editions/quran-uthmani,en.asad');
+            // Using Aladhan or AlQuran API for consistency
+            // Wait, api.alquran.cloud is standard for ayahs
+            const quranRes = await fetch('https://api.alquran.cloud/v1/ayah/random/editions/quran-uthmani,en.asad');
+            const data = await quranRes.json();
+
+            if (data.code === 200) {
+                const arAyah = data.data[0];
+                const enAyah = data.data[1];
+
+                const modal = document.createElement('div');
+                modal.className = 'fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-md opacity-0 transition-opacity duration-700 p-4';
+                modal.innerHTML = `
+                    <div class="bg-[#fcfdfd] rounded-[40px] max-w-2xl w-full p-8 md:p-12 text-center relative transform scale-90 transition-transform duration-500 shadow-2xl border-2 border-[#af944d]/20 dark:bg-gray-950 dark:border-white/10 overflow-hidden">
+                        <!-- Decorative Background -->
+                        <div class="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]"></div>
+                        
+                        <button onclick="this.closest('.fixed').remove()" class="absolute top-6 right-6 text-gray-400 hover:text-[#af944d] transition-colors"><i class="fas fa-times text-xl"></i></button>
+                        
+                        <div class="relative z-10">
+                            <div class="w-12 h-1 bg-gradient-to-r from-transparent via-[#af944d] to-transparent mx-auto mb-8 rounded-full"></div>
+                            
+                            <h3 class="text-[#af944d] uppercase tracking-[0.4em] text-[10px] font-black mb-8">Verse of the Moment</h3>
+                            
+                            <div class="space-y-8">
+                                <p class="text-3xl md:text-4xl lg:text-5xl font-[Amiri] leading-relaxed text-[#064e3b] dark:text-emerald-100 mb-6 drop-shadow-sm" style="direction:rtl;">
+                                    ${arAyah.text}
+                                </p>
+                                
+                                <div class="w-8 h-px bg-gray-200 mx-auto dark:bg-white/10"></div>
+                                
+                                <p class="text-lg md:text-xl font-serif italic text-gray-700 dark:text-gray-300 leading-relaxed max-w-xl mx-auto">
+                                    "${enAyah.text}"
+                                </p>
+                                
+                                <div class="pt-6">
+                                    <p class="text-[#af944d] font-bold uppercase tracking-widest text-[11px]">
+                                        — Surah ${arAyah.surah.englishName} • Ayah ${arAyah.numberInSurah}
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <button onclick="this.closest('.fixed').remove()" class="mt-12 px-10 py-4 bg-[#064e3b] text-white rounded-full font-black uppercase tracking-widest hover:bg-emerald-800 transition-all shadow-xl hover:-translate-y-1">
+                                SubhanAllah
+                            </button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+
+                requestAnimationFrame(() => {
+                    modal.classList.remove('opacity-0');
+                    modal.querySelector('div').classList.remove('scale-90');
+                    modal.querySelector('div').classList.add('scale-100');
+                });
+            }
+        } catch (e) {
+            console.error("Error fetching random verse:", e);
+        }
     }
 
     // --- OTHER LOGIC (QURAN, NAMES, DUAS) ---
@@ -2805,24 +2835,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- BOOTSTRAP ---
     const startPortal = async () => {
-        // FORCE DEFAULT TO HYDERABAD (User Request: ignore saved state for now)
-        // const sLat = localStorage.getItem('portal_lat');
-        // const sLng = localStorage.getItem('portal_lng');
-        // const sCity = localStorage.getItem('portal_city');
-        const sLat = null;
-        const sLng = null;
-        const sCity = null;
+        // Force Hyderabad, India as the startup default, bypassing geolocation detection cache
+        window.globalCity = "Hyderabad";
+        window.globalCountry = "India";
+        window.ramadanUseCoords = false; // Disable coordinate-based syncing on startup
 
-        if (sLat && sLng) {
-            await window.fetchPrayers(parseFloat(sLat), parseFloat(sLng));
-        } else if (sCity) {
-            await window.fetchPrayers(null, null, sCity);
-        } else {
-            // Default to Hyderabad, India (User Request)
-            window.globalCity = "Hyderabad";
-            window.globalCountry = "India";
-            await window.fetchPrayers(null, null, "Hyderabad", "India");
-        }
+        // Initial Fetch for Namaz (Prayer Times)
+        await window.fetchPrayers(null, null, "Hyderabad", "India");
 
         // Initialize Ramadan Data for Hyderabad (Default)
         if (typeof window.getRamadanTimes === 'function') {
@@ -2889,7 +2908,7 @@ window.getRamadanTimes = async function () {
     let url = '';
 
     if (window.ramadanUseCoords) {
-        url = `https://api.aladhan.com/v1/timings?latitude=${window.ramadanLat}&longitude=${window.ramadanLng}&method=1&school=1`;
+        url = `https://api.aladhan.com/v1/timings?latitude=${window.ramadanLat}&longitude=${window.ramadanLng}&method=1&school=1&adjustment=-1`;
 
         // Use detected global city if available
         if (document.getElementById('cityLabel')) {
@@ -2909,7 +2928,7 @@ window.getRamadanTimes = async function () {
         const cityLabel = document.getElementById('cityLabel');
         if (cityLabel) cityLabel.innerText = window.globalCity;
 
-        url = `https://api.aladhan.com/v1/timingsByCity?city=${window.globalCity}&country=${window.globalCountry}&method=1&school=1`;
+        url = `https://api.aladhan.com/v1/timingsByCity?city=${window.globalCity}&country=${window.globalCountry}&method=1&school=1&adjustment=-1`;
     }
 
     // Reset Calendar to today
@@ -2932,7 +2951,7 @@ window.getRamadanTimes = async function () {
             const dayStatus = document.getElementById('ramadan-day-status');
             const dateStatus = document.getElementById('ramadan-date-status');
 
-            if (dayStatus) dayStatus.innerText = hijriDate.day;
+            if (dayStatus) dayStatus.innerText = parseInt(hijriDate.day) - 1;
             if (dateStatus) dateStatus.innerText = `${data.data.date.gregorian.day} ${data.data.date.gregorian.month.en} • ${hijriDate.month.en} ${hijriDate.year}`;
 
             const locSync = document.getElementById('ramadan-loc-sync');
@@ -2943,7 +2962,7 @@ window.getRamadanTimes = async function () {
             // Update Ramadan Day
             const dayNumEl = document.querySelector('#view-ramadan .text-4xl.font-black.text-gray-800');
             if (dayNumEl && hijriDate.month.number === 9) {
-                dayNumEl.innerText = hijriDate.day;
+                dayNumEl.innerText = parseInt(hijriDate.day) - 1;
             }
 
             startRamadanCountdown(timings.Fajr, timings.Maghrib);
@@ -3085,9 +3104,9 @@ window.fetchMonthlyCalendar = async function () {
 
     let url = '';
     if (window.ramadanUseCoords) {
-        url = `https://api.aladhan.com/v1/calendar?latitude=${window.ramadanLat}&longitude=${window.ramadanLng}&method=1&school=1&month=${month}&year=${year}`;
+        url = `https://api.aladhan.com/v1/calendar?latitude=${window.ramadanLat}&longitude=${window.ramadanLng}&method=1&school=1&month=${month}&year=${year}&adjustment=-1`;
     } else {
-        url = `https://api.aladhan.com/v1/calendarByCity/${year}/${month}?city=${window.globalCity}&country=${window.globalCountry}&method=1&school=1`;
+        url = `https://api.aladhan.com/v1/calendarByCity/${year}/${month}?city=${window.globalCity}&country=${window.globalCountry}&method=1&school=1&adjustment=-1`;
     }
 
     try {
@@ -3110,16 +3129,21 @@ window.fetchMonthlyCalendar = async function () {
             }
 
             tbody.innerHTML = displayResults.map(day => {
-                const isRamadan = day.date.hijri.month.number === 9;
+                const isRamadanMonth = day.date.hijri.month.number === 9;
+                const hijriDayAdjusted = isRamadanMonth ? parseInt(day.date.hijri.day) - 1 : parseInt(day.date.hijri.day);
+
+                // If it's Ramadan month but the adjusted day is 0, it means it's the day before Ramadan start for user
+                if (isRamadanMonth && hijriDayAdjusted <= 0) return '';
+
                 return `
-                <tr class="hover:bg-[#064e3b]/5 transition-colors ${isRamadan ? 'bg-[#064e3b]/10' : ''}">
+                <tr class="hover:bg-[#064e3b]/5 transition-colors ${isRamadanMonth ? 'bg-[#064e3b]/10' : ''}">
                     <td class="px-6 py-5">
                         <span class="font-black text-[#064e3b]">${day.date.gregorian.day}</span>
                         <span class="text-[9px] opacity-40 block uppercase font-bold tracking-widest">${day.date.gregorian.weekday.en}</span>
                     </td>
                     <td class="px-6 py-5">
-                        <span class="text-[#af944d] font-black">${day.date.hijri.day}</span>
-                        <span class="text-[9px] opacity-40 uppercase font-bold ml-1">${day.date.hijri.month.en}</span>
+                        <span class="text-[#af944d] font-black">${hijriDayAdjusted}</span>
+                        <span class="text-[9px] opacity-40 uppercase font-bold ml-1">${isRamadanMonth ? 'Ramadan' : day.date.hijri.month.en}</span>
                     </td>
                     <td class="px-6 py-5 text-center font-mono text-lg font-bold text-gray-700">
                         ${day.timings.Fajr.split(' ')[0]}

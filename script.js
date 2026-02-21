@@ -288,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.fetchPrayers = async function (lat = null, lng = null, city = null, country = null) {
         let url = '';
         if (lat && lng) {
-            url = `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=1`;
+            url = `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=1&tune=0,-8,0,0,0,8,8,0,0`;
             window.coordinates = { lat, lng };
             window.ramadanLat = lat;
             window.ramadanLng = lng;
@@ -312,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             const c = city || "Hyderabad";
             const co = country || "India";
-            url = `https://api.aladhan.com/v1/timingsByCity?city=${c}&country=${co}&method=1`;
+            url = `https://api.aladhan.com/v1/timingsByCity?city=${c}&country=${co}&method=1&tune=0,-8,0,0,0,8,8,0,0`;
 
             // Cache city
             localStorage.setItem('portal_city', c);
@@ -788,67 +788,137 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateNextPrayer() {
         const timings = window.prayerTimesRaw;
         if (!timings || !timings.Fajr) return;
-        const prayers = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
 
+        // Cleanup previous interval
         if (countdownInterval) clearInterval(countdownInterval);
+
         countdownInterval = setInterval(() => {
             const now = new Date();
-            let next = 'Fajr';
-            let nextTimeStr = timings.Fajr;
-            let minDiff = Infinity;
             const curMins = now.getHours() * 60 + now.getMinutes();
-            let found = false;
 
-            for (let p of prayers) {
-                if (!timings[p]) continue;
-                const [hStr, mStr] = timings[p].split(':');
-                const h = parseInt(hStr);
-                const m = parseInt(mStr);
-                const pMins = h * 60 + m;
+            const parseTime = (str) => {
+                const [h, m] = str.split(':').map(Number);
+                return h * 60 + m;
+            };
 
-                if (pMins > curMins) {
-                    next = p;
-                    nextTimeStr = timings[p];
-                    found = true;
-                    break;
+            const prayers = [
+                { name: 'Fajr', start: timings.Fajr, end: timings.Sunrise },
+                { name: 'Dhuhr', start: timings.Dhuhr, end: timings.Asr },
+                { name: 'Asr', start: timings.Asr, end: timings.Maghrib },
+                { name: 'Maghrib', start: timings.Maghrib, end: timings.Isha },
+                { name: 'Isha', start: timings.Isha, end: timings.Fajr, crossMidnight: true }
+            ];
+
+            let active = null;
+            let next = null;
+
+            // 1. Check if we are currently IN a prayer
+            for (let i = 0; i < prayers.length; i++) {
+                const p = prayers[i];
+                const s = parseTime(p.start);
+                const e = parseTime(p.end);
+
+                if (p.crossMidnight) {
+                    // Isha logic: Current time >= Isha start OR current time < Fajr start
+                    if (curMins >= s || curMins < e) {
+                        active = p;
+                        break;
+                    }
+                } else {
+                    if (curMins >= s && curMins < e) {
+                        active = p;
+                        break;
+                    }
                 }
             }
-            if (!found) {
-                next = 'Fajr';
-                nextTimeStr = timings.Fajr;
+
+            // 2. If not in a prayer, find the next one
+            if (!active) {
+                for (let i = 0; i < prayers.length; i++) {
+                    const p = prayers[i];
+                    const s = parseTime(p.start);
+                    if (s > curMins) {
+                        next = p;
+                        break;
+                    }
+                }
+                // If nothing today, it's Fajr tomorrow
+                if (!next) next = prayers[0];
             }
 
-            // Highlight Logic with Premium Polish
+            // UI Update Logic
+            const statusLabel = document.getElementById('prayer-status-label');
+            const nameEl = document.getElementById('next-prayer-name');
+            const intervalEl = document.getElementById('prayer-interval-range');
+            const countdownLabel = document.getElementById('countdown-label');
+            const countdownEl = document.getElementById('countdown');
+
+            let targetTimeStr = "";
+            let displayTitle = "";
+
+            if (active) {
+                displayTitle = active.name;
+                targetTimeStr = active.end;
+                if (statusLabel) {
+                    statusLabel.textContent = "Current Prayer Active";
+                    statusLabel.classList.replace('text-[#af944d]', 'text-emerald-400');
+                    statusLabel.classList.add('animate-pulse');
+                }
+                if (countdownLabel) countdownLabel.textContent = "Time Left to Pray";
+                if (intervalEl) intervalEl.textContent = `${formatTo12Hour(active.start)} — Ends at ${formatTo12Hour(active.end)}`;
+            } else {
+                displayTitle = next.name;
+                targetTimeStr = next.start;
+                if (statusLabel) {
+                    statusLabel.textContent = "Upcoming Prayer";
+                    statusLabel.classList.replace('text-emerald-400', 'text-[#af944d]');
+                    statusLabel.classList.remove('animate-pulse');
+                }
+                if (countdownLabel) countdownLabel.textContent = "Countdown to Start";
+                if (intervalEl) intervalEl.textContent = `Starts at ${formatTo12Hour(next.start)}`;
+            }
+
+            if (nameEl) nameEl.textContent = displayTitle;
+
+            // Highlight in card grid
             document.querySelectorAll('[id^="card-"]').forEach(el => {
-                el.classList.remove('ring-4', 'ring-[#af944d]/30', 'scale-105', 'bg-white/90');
-                if (el.id === `card-${next}`) {
-                    el.classList.add('ring-4', 'ring-[#af944d]/30', 'scale-105', 'bg-white/90');
+                el.classList.remove('ring-4', 'ring-[#af944d]/30', 'scale-105', 'bg-white/95');
+                if (el.id === `card-${displayTitle}`) {
+                    el.classList.add('ring-4', 'ring-[#af944d]/30', 'scale-105', 'bg-white/95');
                 }
             });
 
-            document.getElementById('next-prayer-name').textContent = next;
+            // Countdown Calculation
+            const [thStr, tmStr] = targetTimeStr.split(':');
+            const targetDate = new Date();
+            targetDate.setHours(parseInt(thStr), parseInt(tmStr), 0, 0);
 
-            const [thStr, tmStr] = nextTimeStr.split(':');
-            const target = new Date();
-            target.setHours(parseInt(thStr), parseInt(tmStr), 0, 0);
-            if (!found) target.setDate(target.getDate() + 1);
-            const diff = target - now;
-
-            if (diff > 0) {
-                const hrs = Math.floor(diff / 3600000);
-                const mins = Math.floor((diff % 3600000) / 60000);
-                const secs = Math.floor((diff % 60000) / 1000);
-
-                // Automatic Azaan Trigger
-                if (hrs === 0 && mins === 0 && secs === 0) {
-                    const isEnabled = localStorage.getItem(`azaan_${next}`) === 'true';
-                    if (isEnabled) {
-                        window.playAzaan(next);
-                    }
-                }
-
-                document.getElementById('countdown').textContent = `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            // If it's Isha end (Fajr tomorrow) or Next Fajr tomorrow
+            if ((active && active.crossMidnight && curMins >= parseTime(active.start)) || (!active && next === prayers[0] && curMins >= parseTime(prayers[prayers.length - 1].start))) {
+                if (targetDate <= now) targetDate.setDate(targetDate.getDate() + 1);
+            } else if (!active && next === prayers[0] && curMins > parseTime(prayers[prayers.length - 1].end)) {
+                // Between Isha end and Midnight
+                // already handled by crossMidnight logic mostly
             }
+
+            // Simple robust check: if target is in the past, it's definitely tomorrow
+            if (targetDate <= now) targetDate.setDate(targetDate.getDate() + 1);
+
+            const diff = targetDate - now;
+            const hrs = Math.floor(diff / 3600000);
+            const mins = Math.floor((diff % 3600000) / 60000);
+            const secs = Math.floor((diff % 60000) / 1000);
+
+            if (countdownEl) {
+                countdownEl.textContent = `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            }
+
+            // Azaan Trigger for Next Prayer Start
+            if (!active && hrs === 0 && mins === 0 && secs === 0) {
+                const isEnabled = localStorage.getItem(`azaan_${next.name}`) === 'true';
+                if (isEnabled) window.playAzaan(next.name);
+            }
+
         }, 1000);
     }
 
@@ -2908,7 +2978,7 @@ window.getRamadanTimes = async function () {
     let url = '';
 
     if (window.ramadanUseCoords) {
-        url = `https://api.aladhan.com/v1/timings?latitude=${window.ramadanLat}&longitude=${window.ramadanLng}&method=1&school=1&adjustment=-1`;
+        url = `https://api.aladhan.com/v1/timings?latitude=${window.ramadanLat}&longitude=${window.ramadanLng}&method=1&school=1&adjustment=-1&tune=0,-8,0,0,0,8,8,0,0`;
 
         // Use detected global city if available
         if (document.getElementById('cityLabel')) {
@@ -2928,7 +2998,7 @@ window.getRamadanTimes = async function () {
         const cityLabel = document.getElementById('cityLabel');
         if (cityLabel) cityLabel.innerText = window.globalCity;
 
-        url = `https://api.aladhan.com/v1/timingsByCity?city=${window.globalCity}&country=${window.globalCountry}&method=1&school=1&adjustment=-1`;
+        url = `https://api.aladhan.com/v1/timingsByCity?city=${window.globalCity}&country=${window.globalCountry}&method=1&school=1&adjustment=-1&tune=0,-8,0,0,0,8,8,0,0`;
     }
 
     // Reset Calendar to today
@@ -3104,9 +3174,9 @@ window.fetchMonthlyCalendar = async function () {
 
     let url = '';
     if (window.ramadanUseCoords) {
-        url = `https://api.aladhan.com/v1/calendar?latitude=${window.ramadanLat}&longitude=${window.ramadanLng}&method=1&school=1&month=${month}&year=${year}&adjustment=-1`;
+        url = `https://api.aladhan.com/v1/calendar?latitude=${window.ramadanLat}&longitude=${window.ramadanLng}&method=1&school=1&month=${month}&year=${year}&adjustment=-1&tune=0,-8,0,0,0,8,8,0,0`;
     } else {
-        url = `https://api.aladhan.com/v1/calendarByCity/${year}/${month}?city=${window.globalCity}&country=${window.globalCountry}&method=1&school=1&adjustment=-1`;
+        url = `https://api.aladhan.com/v1/calendarByCity/${year}/${month}?city=${window.globalCity}&country=${window.globalCountry}&method=1&school=1&adjustment=-1&tune=0,-8,0,0,0,8,8,0,0`;
     }
 
     try {

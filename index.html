@@ -260,12 +260,17 @@
 
                     <div class="relative z-10 p-8 space-y-6 max-w-2xl">
                         <div>
-                            <span
+                            <span id="prayer-status-label"
                                 class="inline-block px-4 py-1.5 rounded-full bg-[#fcfdfd]/10 backdrop-blur border border-white/20 text-sm font-medium mb-4 text-[#af944d]">
                                 Upcoming Prayer
                             </span>
                             <h2 class="text-5xl md:text-7xl font-[Cormorant_Garamond] font-bold mb-2 drop-shadow-lg"
                                 id="next-prayer-name">Fajr</h2>
+
+                            <div id="prayer-interval-range" class="text-sm font-black tracking-widest opacity-60 mb-2">
+                                <!-- 05:27 AM — 18:20 PM -->
+                            </div>
+
                             <button onclick="navigateToView('view-ramadan')"
                                 class="mt-4 px-6 py-2 bg-[#af944d] text-white rounded-full text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg animate-pulse">
                                 <i class="fas fa-moon mr-2"></i> Entering Ramadan Portal
@@ -276,7 +281,8 @@
                             class="bg-[#fcfdfd]/20 backdrop-blur-xl rounded-[30px] p-8 border border-white/30 inline-block min-w-[320px] shadow-xl">
                             <div class="text-7xl font-mono font-bold tracking-tight drop-shadow-2xl" id="countdown">
                                 00:00:00</div>
-                            <div class="text-xs uppercase tracking-[0.3em] mt-3 font-semibold opacity-90">Time Remaining
+                            <div class="text-xs uppercase tracking-[0.3em] mt-3 font-semibold opacity-90"
+                                id="countdown-label">Time Remaining
                             </div>
                         </div>
 

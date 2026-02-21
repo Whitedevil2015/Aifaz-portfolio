@@ -830,7 +830,9 @@ select:focus {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-}/* --- FORCE HIGH VISIBILITY (USER REQUEST) --- */
+}
+
+/* --- FORCE HIGH VISIBILITY (USER REQUEST) --- */
 /* Override opacity for better readability */
 .opacity-30 {
     opacity: 0.7 !important;

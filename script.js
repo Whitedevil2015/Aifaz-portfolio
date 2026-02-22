@@ -350,12 +350,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 const gregEl = document.getElementById('hero-greg-date');
                 const hijriEl = document.getElementById('hero-hijri-date');
                 if (gregEl) gregEl.textContent = `${dateInfo.gregorian.day} ${dateInfo.gregorian.month.en} ${dateInfo.gregorian.year}`;
-                if (hijriEl) hijriEl.textContent = `${dateInfo.hijri.day} ${dateInfo.hijri.month.en} ${dateInfo.hijri.year}`;
+
+                // Apply same -1 Hijri adjustment as Ramadan section during Ramadan
+                const isRamadan = dateInfo.hijri.month.number === 9;
+                const hijriDay = isRamadan ? parseInt(dateInfo.hijri.day) - 1 : parseInt(dateInfo.hijri.day);
+                const hijriMonthName = isRamadan ? 'Ramadan' : dateInfo.hijri.month.en;
+
+                if (hijriEl) {
+                    hijriEl.innerHTML = isRamadan
+                        ? `${hijriDay} ${hijriMonthName} ${dateInfo.hijri.year} <span class="block text-sm text-[#af944d] mt-1 font-bold">☪ Day ${hijriDay} of Fasting</span>`
+                        : `${hijriDay} ${hijriMonthName} ${dateInfo.hijri.year}`;
+                }
 
                 // Also update Ramadan Day Status if we are in Ramadan view
                 const ramDayStatus = document.getElementById('ramadan-day-status');
-                if (ramDayStatus && dateInfo.hijri.month.number === 9) {
-                    ramDayStatus.innerText = dateInfo.hijri.day;
+                if (ramDayStatus && isRamadan) {
+                    ramDayStatus.innerText = hijriDay;
                 }
             }
         } catch (e) { console.error("Prayer fetch failed", e); }

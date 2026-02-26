@@ -270,73 +270,146 @@ div {
     -webkit-font-smoothing: antialiased;
 }
 
-/* MUSHAF MODE (Traditional Page Layout) */
+/* MUSHAF MODE (Indo-Pak Traditional Layout) */
 .mushaf-mode {
     display: block !important;
     background: #fffbef url('https://www.transparenttextures.com/patterns/cream-paper.png') !important;
     max-width: 1000px;
     margin: 2rem auto;
-    border: 12px double #af944d;
-    outline: 2px solid #064e3b;
-    outline-offset: -16px;
+    border: 14px solid #064e3b;
+    /* Traditional green border */
+    outline: 4px double #af944d;
+    outline-offset: -22px;
+    /* Inner gold trim */
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     padding: 3rem;
     min-height: 100vh;
 }
 
-.mushaf-mode>div {
-    /* Targeting the Ayah Rows */
-    flex-direction: column !important;
-    border-bottom: 2px dashed rgba(175, 148, 77, 0.3) !important;
-    padding: 2rem 0 !important;
-    background: transparent !important;
-    min-height: auto !important;
+/* Base layout container inside mushaf mode */
+.mushaf-mode .quran-split-layout {
+    display: block !important;
 }
 
-.mushaf-mode .arabic-pane {
+/* Hide Fazail temporarily in pure reading mode to focus on text */
+.mushaf-mode .quran-split-layout>div:first-child {
+    display: block;
+    direction: ltr;
+    /* English text */
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+/* Verse rows as tightly packed blocks */
+.mushaf-mode .group[id^="ayah-row-"] {
+    display: block !important;
+    border: none !important;
     background: transparent !important;
+    padding: 0 !important;
+    margin: 0 0 1.5rem 0 !important;
+    position: relative;
+    width: 100%;
+}
+
+/* Base style for Arabic pane to span full width */
+.mushaf-mode .arabic-pane {
+    display: block !important;
     border: none !important;
     padding: 0 !important;
-    width: 100% !important;
-}
-
-.mushaf-mode .translation-pane {
     background: transparent !important;
-    padding: 1rem 0 !important;
     width: 100% !important;
 }
 
+/* Wrapper inside arabic pane to reverse order for RTL reading */
+.mushaf-mode .arabic-pane>.flex {
+    display: flex !important;
+    flex-direction: row-reverse !important;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: right;
+    width: 100%;
+}
+
+.mushaf-mode .arabic-pane>.flex>.flex-col {
+    display: flex !important;
+    vertical-align: middle;
+    margin-right: 15px;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Arabic Text */
 .mushaf-mode .arabic-text-sharp {
-    text-align: center !important;
-    font-size: 2.8rem !important;
-    /* Slightly smaller for density */
-    line-height: 2 !important;
+    display: block !important;
+    font-size: 3rem !important;
+    /* Authentic large Mushaf size */
+    color: #111 !important;
+    text-align: right !important;
+    line-height: 1.8 !important;
+    text-shadow: none !important;
+    font-weight: 900 !important;
+    flex-grow: 1;
+}
+
+/* Show translation pane for Urdu only (Interlinear) */
+.mushaf-mode .translation-pane {
+    display: block !important;
+    padding: 0 !important;
+    width: 100% !important;
+    margin-top: -5px !important;
 }
 
 .mushaf-mode .translation-block {
-    text-align: center !important;
-    max-width: 85% !important;
-    margin: 0 auto !important;
+    text-align: right !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    direction: rtl;
 }
 
+/* Hide transliteration/english/hindi */
 .mushaf-mode .translation-block div {
-    /* Force Dark Text for Readability on Paper */
-    color: #4b5563 !important;
-    /* Gray-600 */
-    text-shadow: none !important;
+    display: none !important;
 }
 
+/* Show only Urdu text underneath, mimicking interlinear translation */
 .mushaf-mode .translation-block div:nth-child(4) {
-    /* Urdu Text */
-    color: #1f2937 !important;
-    /* Gray-800 */
+    display: block !important;
+    color: #1a1a1a !important;
+    font-size: 1.35rem !important;
+    /* Smaller translation text */
+    line-height: 1.6 !important;
+    margin: 0 3.5rem 0 0 !important;
+    /* Indent slightly to align with text, bypassing verse marker padding */
+    padding: 0 !important;
+    font-family: 'Amiri', serif !important;
+}
+
+/* Inline verse numbering circle */
+.mushaf-mode .arabic-pane .flex-col span.w-10.h-10 {
+    width: 2.6rem !important;
+    height: 2.6rem !important;
+    font-size: 1.1rem !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    background: transparent !important;
+    border: 2px solid #064e3b !important;
+    color: #064e3b !important;
+    border-radius: 50%;
+    margin-bottom: 0 !important;
+}
+
+/* Hide secondary markers for pure reading to prevent breaking flow */
+.mushaf-mode .ruku-marker,
+.mushaf-mode .sajdah-marker {
+    display: none !important;
 }
 
 /* Specific Highlight for Mushaf Mode */
 .mushaf-mode .highlight-active {
-    background: rgba(175, 148, 77, 0.15) !important;
-    border-radius: 12px;
-    border: 1px solid rgba(175, 148, 77, 0.3);
+    background: rgba(6, 78, 59, 0.05) !important;
+    border-radius: 8px;
+    box-shadow: 0 0 0 4px rgba(6, 78, 59, 0.05);
 }
 
 .quran-floating-meta {

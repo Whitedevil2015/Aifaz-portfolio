@@ -27,74 +27,240 @@ document.addEventListener('DOMContentLoaded', () => {
     const quranContentEl = document.getElementById('quran-content');
     const audioPlayer = document.getElementById('quran-audio');
 
-    // --- COUNTRY AND CITY DATA ---
+    // --- COUNTRY AND CITY DATA (All Countries) ---
     const locationData = {
-        "India": ["Mumbai", "Delhi", "Bangalore", "Hyderabad", "Chennai", "Kolkata", "Pune", "Ahmedabad", "Jaipur", "Lucknow"],
-        "Pakistan": ["Karachi", "Lahore", "Islamabad", "Rawalpindi", "Faisalabad", "Multan", "Peshawar", "Quetta"],
-        "Bangladesh": ["Dhaka", "Chittagong", "Khulna", "Rajshahi", "Sylhet"],
-        "Saudi Arabia": ["Mecca", "Medina", "Riyadh", "Jeddah", "Dammam", "Khobar"],
-        "UAE": ["Dubai", "Abu Dhabi", "Sharjah", "Ajman", "Ras Al Khaimah"],
-        "USA": ["New York", "Los Angeles", "Chicago", "Houston", "Phoenix", "Philadelphia", "San Antonio", "Dallas"],
-        "UK": ["London", "Birmingham", "Manchester", "Liverpool", "Leeds", "Sheffield"],
-        "Canada": ["Toronto", "Montreal", "Vancouver", "Calgary", "Edmonton", "Ottawa"],
-        "Australia": ["Sydney", "Melbourne", "Brisbane", "Perth", "Adelaide"],
-        "Malaysia": ["Kuala Lumpur", "George Town", "Ipoh", "Shah Alam", "Johor Bahru"],
-        "Indonesia": ["Jakarta", "Surabaya", "Bandung", "Medan", "Semarang"],
-        "Turkey": ["Istanbul", "Ankara", "Izmir", "Bursa", "Antalya"],
-        "Egypt": ["Cairo", "Alexandria", "Giza", "Luxor", "Aswan"],
-        "South Africa": ["Johannesburg", "Cape Town", "Durban", "Pretoria"],
-        "Nigeria": ["Lagos", "Abuja", "Kano", "Ibadan", "Port Harcourt"],
-        "Morocco": ["Casablanca", "Rabat", "Fez", "Marrakech", "Tangier"],
-        "Iran": ["Tehran", "Mashhad", "Isfahan", "Shiraz", "Tabriz"],
-        "Iraq": ["Baghdad", "Basra", "Mosul", "Erbil", "Najaf", "Karbala"],
-        "Jordan": ["Amman", "Zarqa", "Irbid", "Aqaba"],
-        "Lebanon": ["Beirut", "Tripoli", "Sidon", "Tyre"],
-        "Syria": ["Damascus", "Aleppo", "Homs", "Latakia"],
-        "Kuwait": ["Kuwait City", "Hawalli", "Salmiya"],
-        "Qatar": ["Doha", "Al Wakrah", "Al Rayyan"],
-        "Bahrain": ["Manama", "Riffa", "Muharraq"],
-        "Oman": ["Muscat", "Salalah", "Sohar"],
-        "Yemen": ["Sanaa", "Aden", "Taiz"],
-        "Afghanistan": ["Kabul", "Kandahar", "Herat", "Mazar-i-Sharif"],
-        "Algeria": ["Algiers", "Oran", "Constantine"],
-        "Tunisia": ["Tunis", "Sfax", "Sousse"],
-        "Libya": ["Tripoli", "Benghazi", "Misrata"],
-        "Sudan": ["Khartoum", "Omdurman", "Port Sudan"],
-        "Somalia": ["Mogadishu", "Hargeisa", "Bosaso"],
-        "Kenya": ["Nairobi", "Mombasa", "Kisumu"],
-        "Tanzania": ["Dar es Salaam", "Dodoma", "Mwanza"],
-        "Senegal": ["Dakar", "Touba", "Pikine"],
-        "Mali": ["Bamako", "Sikasso", "Mopti"],
-        "Niger": ["Niamey", "Zinder", "Maradi"],
-        "Chad": ["N'Djamena", "Moundou", "Sarh"],
-        "Uzbekistan": ["Tashkent", "Samarkand", "Bukhara"],
-        "Kazakhstan": ["Almaty", "Nur-Sultan", "Shymkent"],
-        "Azerbaijan": ["Baku", "Ganja", "Sumqayit"],
-        "Tajikistan": ["Dushanbe", "Khujand", "Kulob"],
-        "Turkmenistan": ["Ashgabat", "Turkmenabat", "Dasoguz"],
-        "Kyrgyzstan": ["Bishkek", "Osh", "Jalal-Abad"],
+        // ═══════════ SOUTH ASIA ═══════════
+        "India": ["Mumbai", "Delhi", "Bangalore", "Hyderabad", "Chennai", "Kolkata", "Pune", "Ahmedabad", "Jaipur", "Lucknow", "Surat", "Nagpur", "Bhopal", "Patna", "Indore", "Coimbatore", "Kochi", "Visakhapatnam", "Chandigarh", "Guwahati"],
+        "Pakistan": ["Karachi", "Lahore", "Islamabad", "Rawalpindi", "Faisalabad", "Multan", "Peshawar", "Quetta", "Sialkot", "Hyderabad"],
+        "Bangladesh": ["Dhaka", "Chittagong", "Khulna", "Rajshahi", "Sylhet", "Rangpur", "Comilla"],
+        "Sri Lanka": ["Colombo", "Kandy", "Galle", "Jaffna", "Negombo"],
+        "Nepal": ["Kathmandu", "Pokhara", "Lalitpur", "Biratnagar", "Birgunj"],
+        "Bhutan": ["Thimphu", "Paro", "Punakha"],
+        "Maldives": ["Male", "Addu City", "Fuvahmulah"],
+        "Afghanistan": ["Kabul", "Kandahar", "Herat", "Mazar-i-Sharif", "Jalalabad"],
+
+        // ═══════════ MIDDLE EAST ═══════════
+        "Saudi Arabia": ["Mecca", "Medina", "Riyadh", "Jeddah", "Dammam", "Khobar", "Tabuk", "Abha"],
+        "UAE": ["Dubai", "Abu Dhabi", "Sharjah", "Ajman", "Ras Al Khaimah", "Fujairah", "Al Ain"],
+        "Kuwait": ["Kuwait City", "Hawalli", "Salmiya", "Farwaniya"],
+        "Qatar": ["Doha", "Al Wakrah", "Al Rayyan", "Al Khor"],
+        "Bahrain": ["Manama", "Riffa", "Muharraq", "Hamad Town"],
+        "Oman": ["Muscat", "Salalah", "Sohar", "Nizwa", "Sur"],
+        "Yemen": ["Sanaa", "Aden", "Taiz", "Hodeidah", "Mukalla"],
+        "Iraq": ["Baghdad", "Basra", "Mosul", "Erbil", "Najaf", "Karbala", "Sulaymaniyah"],
+        "Iran": ["Tehran", "Mashhad", "Isfahan", "Shiraz", "Tabriz", "Ahvaz", "Qom"],
+        "Jordan": ["Amman", "Zarqa", "Irbid", "Aqaba", "Madaba"],
+        "Lebanon": ["Beirut", "Tripoli", "Sidon", "Tyre", "Byblos"],
+        "Syria": ["Damascus", "Aleppo", "Homs", "Latakia", "Hama"],
+        "Palestine": ["Gaza", "Ramallah", "Hebron", "Nablus", "Bethlehem", "Jerusalem"],
+        "Israel": ["Jerusalem", "Tel Aviv", "Haifa", "Nazareth", "Beer Sheva"],
+
+        // ═══════════ CENTRAL ASIA ═══════════
+        "Uzbekistan": ["Tashkent", "Samarkand", "Bukhara", "Namangan", "Fergana"],
+        "Kazakhstan": ["Almaty", "Astana", "Shymkent", "Karaganda", "Aktobe"],
+        "Azerbaijan": ["Baku", "Ganja", "Sumqayit", "Lankaran"],
+        "Tajikistan": ["Dushanbe", "Khujand", "Kulob", "Bokhtar"],
+        "Turkmenistan": ["Ashgabat", "Turkmenabat", "Dasoguz", "Mary"],
+        "Kyrgyzstan": ["Bishkek", "Osh", "Jalal-Abad", "Karakol"],
+        "Georgia": ["Tbilisi", "Batumi", "Kutaisi", "Rustavi"],
+        "Armenia": ["Yerevan", "Gyumri", "Vanadzor"],
+        "Mongolia": ["Ulaanbaatar", "Erdenet", "Darkhan"],
+
+        // ═══════════ EAST ASIA ═══════════
+        "China": ["Beijing", "Shanghai", "Guangzhou", "Shenzhen", "Chengdu", "Wuhan", "Hangzhou", "Xi'an", "Nanjing"],
+        "Japan": ["Tokyo", "Osaka", "Kyoto", "Yokohama", "Nagoya", "Sapporo", "Kobe", "Fukuoka"],
+        "South Korea": ["Seoul", "Busan", "Incheon", "Daegu", "Daejeon", "Gwangju"],
+        "North Korea": ["Pyongyang", "Hamhung", "Chongjin"],
+        "Taiwan": ["Taipei", "Kaohsiung", "Taichung", "Tainan"],
+
+        // ═══════════ SOUTHEAST ASIA ═══════════
+        "Indonesia": ["Jakarta", "Surabaya", "Bandung", "Medan", "Semarang", "Makassar", "Yogyakarta", "Palembang"],
+        "Malaysia": ["Kuala Lumpur", "George Town", "Ipoh", "Shah Alam", "Johor Bahru", "Kota Kinabalu", "Kuching"],
+        "Thailand": ["Bangkok", "Phuket", "Chiang Mai", "Pattaya", "Hat Yai", "Nakhon Ratchasima"],
+        "Philippines": ["Manila", "Quezon City", "Davao", "Cebu", "Zamboanga", "Cagayan de Oro"],
+        "Vietnam": ["Hanoi", "Ho Chi Minh City", "Da Nang", "Hai Phong", "Can Tho"],
+        "Myanmar": ["Yangon", "Mandalay", "Naypyidaw", "Mawlamyine"],
+        "Cambodia": ["Phnom Penh", "Siem Reap", "Battambang", "Sihanoukville"],
+        "Laos": ["Vientiane", "Luang Prabang", "Savannakhet"],
         "Singapore": ["Singapore"],
-        "Brunei": ["Bandar Seri Begawan"],
-        "Maldives": ["Male"],
-        "Sri Lanka": ["Colombo", "Kandy", "Galle"],
-        "Thailand": ["Bangkok", "Phuket", "Chiang Mai"],
-        "Philippines": ["Manila", "Quezon City", "Davao"],
-        "China": ["Beijing", "Shanghai", "Guangzhou", "Shenzhen"],
-        "Japan": ["Tokyo", "Osaka", "Kyoto"],
-        "South Korea": ["Seoul", "Busan", "Incheon"],
-        "Germany": ["Berlin", "Munich", "Frankfurt", "Hamburg"],
-        "France": ["Paris", "Marseille", "Lyon", "Toulouse"],
-        "Italy": ["Rome", "Milan", "Naples", "Turin"],
-        "Spain": ["Madrid", "Barcelona", "Valencia", "Seville"],
-        "Netherlands": ["Amsterdam", "Rotterdam", "The Hague"],
-        "Belgium": ["Brussels", "Antwerp", "Ghent"],
-        "Sweden": ["Stockholm", "Gothenburg", "Malmö"],
-        "Norway": ["Oslo", "Bergen", "Trondheim"],
-        "Denmark": ["Copenhagen", "Aarhus", "Odense"],
-        "Russia": ["Moscow", "Saint Petersburg", "Kazan"],
-        "Bosnia": ["Sarajevo", "Banja Luka", "Tuzla"],
-        "Albania": ["Tirana", "Durrës", "Vlorë"],
-        "Kosovo": ["Pristina", "Prizren", "Peja"]
+        "Brunei": ["Bandar Seri Begawan", "Seria", "Tutong"],
+        "Timor-Leste": ["Dili", "Baucau", "Maliana"],
+
+        // ═══════════ NORTH AMERICA ═══════════
+        "USA": ["New York", "Los Angeles", "Chicago", "Houston", "Phoenix", "Philadelphia", "San Antonio", "Dallas", "San Francisco", "Seattle", "Miami", "Atlanta", "Denver", "Boston", "Detroit", "Minneapolis"],
+        "Canada": ["Toronto", "Montreal", "Vancouver", "Calgary", "Edmonton", "Ottawa", "Winnipeg", "Quebec City", "Halifax"],
+        "Mexico": ["Mexico City", "Guadalajara", "Monterrey", "Puebla", "Cancun", "Tijuana", "Merida", "Leon"],
+
+        // ═══════════ CENTRAL AMERICA & CARIBBEAN ═══════════
+        "Guatemala": ["Guatemala City", "Quetzaltenango", "Escuintla"],
+        "Honduras": ["Tegucigalpa", "San Pedro Sula", "Choloma"],
+        "El Salvador": ["San Salvador", "Santa Ana", "San Miguel"],
+        "Nicaragua": ["Managua", "Leon", "Masaya"],
+        "Costa Rica": ["San Jose", "Limon", "Alajuela"],
+        "Panama": ["Panama City", "Colon", "David"],
+        "Belize": ["Belize City", "Belmopan", "San Ignacio"],
+        "Cuba": ["Havana", "Santiago de Cuba", "Camaguey"],
+        "Jamaica": ["Kingston", "Montego Bay", "Spanish Town"],
+        "Haiti": ["Port-au-Prince", "Cap-Haitien", "Gonaives"],
+        "Dominican Republic": ["Santo Domingo", "Santiago", "San Pedro de Macoris"],
+        "Trinidad and Tobago": ["Port of Spain", "San Fernando", "Chaguanas"],
+        "Barbados": ["Bridgetown"],
+        "Bahamas": ["Nassau", "Freeport"],
+        "Grenada": ["St. George's"],
+        "Antigua and Barbuda": ["St. John's"],
+        "Saint Lucia": ["Castries"],
+        "Dominica": ["Roseau"],
+        "Saint Kitts and Nevis": ["Basseterre"],
+        "Saint Vincent and the Grenadines": ["Kingstown"],
+        "Suriname": ["Paramaribo"],
+        "Guyana": ["Georgetown"],
+
+        // ═══════════ SOUTH AMERICA ═══════════
+        "Brazil": ["Sao Paulo", "Rio de Janeiro", "Brasilia", "Salvador", "Fortaleza", "Belo Horizonte", "Manaus", "Curitiba"],
+        "Argentina": ["Buenos Aires", "Cordoba", "Rosario", "Mendoza", "Tucuman"],
+        "Colombia": ["Bogota", "Medellin", "Cali", "Barranquilla", "Cartagena"],
+        "Peru": ["Lima", "Arequipa", "Cusco", "Trujillo", "Chiclayo"],
+        "Venezuela": ["Caracas", "Maracaibo", "Valencia", "Barquisimeto"],
+        "Chile": ["Santiago", "Valparaiso", "Concepcion", "Antofagasta"],
+        "Ecuador": ["Quito", "Guayaquil", "Cuenca", "Manta"],
+        "Bolivia": ["La Paz", "Santa Cruz", "Cochabamba", "Sucre"],
+        "Paraguay": ["Asuncion", "Ciudad del Este", "San Lorenzo"],
+        "Uruguay": ["Montevideo", "Salto", "Paysandu"],
+
+        // ═══════════ WESTERN EUROPE ═══════════
+        "UK": ["London", "Birmingham", "Manchester", "Liverpool", "Leeds", "Sheffield", "Edinburgh", "Glasgow", "Bristol", "Cardiff"],
+        "France": ["Paris", "Marseille", "Lyon", "Toulouse", "Nice", "Nantes", "Strasbourg", "Bordeaux", "Lille"],
+        "Germany": ["Berlin", "Munich", "Frankfurt", "Hamburg", "Cologne", "Stuttgart", "Dusseldorf", "Dortmund", "Essen", "Leipzig"],
+        "Italy": ["Rome", "Milan", "Naples", "Turin", "Florence", "Bologna", "Genoa", "Venice", "Palermo"],
+        "Spain": ["Madrid", "Barcelona", "Valencia", "Seville", "Zaragoza", "Malaga", "Bilbao", "Granada"],
+        "Portugal": ["Lisbon", "Porto", "Braga", "Coimbra", "Faro"],
+        "Netherlands": ["Amsterdam", "Rotterdam", "The Hague", "Utrecht", "Eindhoven"],
+        "Belgium": ["Brussels", "Antwerp", "Ghent", "Bruges", "Liege"],
+        "Luxembourg": ["Luxembourg City", "Esch-sur-Alzette"],
+        "Switzerland": ["Zurich", "Geneva", "Basel", "Bern", "Lausanne"],
+        "Austria": ["Vienna", "Salzburg", "Innsbruck", "Graz", "Linz"],
+        "Ireland": ["Dublin", "Cork", "Galway", "Limerick"],
+        "Iceland": ["Reykjavik", "Akureyri"],
+
+        // ═══════════ NORTHERN EUROPE ═══════════
+        "Sweden": ["Stockholm", "Gothenburg", "Malmo", "Uppsala"],
+        "Norway": ["Oslo", "Bergen", "Trondheim", "Stavanger"],
+        "Denmark": ["Copenhagen", "Aarhus", "Odense", "Aalborg"],
+        "Finland": ["Helsinki", "Espoo", "Tampere", "Turku", "Oulu"],
+        "Estonia": ["Tallinn", "Tartu"],
+        "Latvia": ["Riga", "Daugavpils"],
+        "Lithuania": ["Vilnius", "Kaunas", "Klaipeda"],
+
+        // ═══════════ EASTERN EUROPE ═══════════
+        "Russia": ["Moscow", "Saint Petersburg", "Kazan", "Novosibirsk", "Yekaterinburg", "Chelyabinsk", "Samara", "Ufa", "Grozny"],
+        "Poland": ["Warsaw", "Krakow", "Lodz", "Wroclaw", "Poznan", "Gdansk"],
+        "Ukraine": ["Kyiv", "Kharkiv", "Odesa", "Dnipro", "Lviv"],
+        "Romania": ["Bucharest", "Cluj-Napoca", "Timisoara", "Iasi", "Constanta"],
+        "Czech Republic": ["Prague", "Brno", "Ostrava"],
+        "Hungary": ["Budapest", "Debrecen", "Szeged", "Pecs"],
+        "Slovakia": ["Bratislava", "Kosice", "Presov"],
+        "Bulgaria": ["Sofia", "Plovdiv", "Varna", "Burgas"],
+        "Croatia": ["Zagreb", "Split", "Rijeka", "Dubrovnik"],
+        "Serbia": ["Belgrade", "Novi Sad", "Nis"],
+        "Slovenia": ["Ljubljana", "Maribor"],
+        "Bosnia": ["Sarajevo", "Banja Luka", "Tuzla", "Mostar"],
+        "Montenegro": ["Podgorica", "Budva", "Niksic"],
+        "North Macedonia": ["Skopje", "Bitola", "Ohrid"],
+        "Albania": ["Tirana", "Durres", "Vlore", "Shkoder"],
+        "Kosovo": ["Pristina", "Prizren", "Peja", "Mitrovica"],
+        "Moldova": ["Chisinau", "Tiraspol", "Balti"],
+        "Belarus": ["Minsk", "Gomel", "Mogilev", "Vitebsk"],
+
+        // ═══════════ SOUTHERN EUROPE / MEDITERRANEAN ═══════════
+        "Greece": ["Athens", "Thessaloniki", "Patras", "Heraklion", "Rhodes"],
+        "Cyprus": ["Nicosia", "Limassol", "Larnaca", "Paphos"],
+        "Malta": ["Valletta", "Birkirkara", "Sliema"],
+        "Turkey": ["Istanbul", "Ankara", "Izmir", "Bursa", "Antalya", "Adana", "Gaziantep", "Konya"],
+        "Andorra": ["Andorra la Vella"],
+        "Monaco": ["Monaco"],
+        "San Marino": ["San Marino"],
+        "Vatican City": ["Vatican City"],
+        "Liechtenstein": ["Vaduz"],
+
+        // ═══════════ NORTH AFRICA ═══════════
+        "Egypt": ["Cairo", "Alexandria", "Giza", "Luxor", "Aswan", "Port Said", "Suez", "Hurghada"],
+        "Morocco": ["Casablanca", "Rabat", "Fez", "Marrakech", "Tangier", "Agadir", "Meknes"],
+        "Algeria": ["Algiers", "Oran", "Constantine", "Annaba", "Setif"],
+        "Tunisia": ["Tunis", "Sfax", "Sousse", "Kairouan"],
+        "Libya": ["Tripoli", "Benghazi", "Misrata", "Sabha"],
+        "Sudan": ["Khartoum", "Omdurman", "Port Sudan", "Kassala"],
+        "South Sudan": ["Juba", "Wau", "Malakal"],
+        "Mauritania": ["Nouakchott", "Nouadhibou"],
+
+        // ═══════════ WEST AFRICA ═══════════
+        "Nigeria": ["Lagos", "Abuja", "Kano", "Ibadan", "Port Harcourt", "Kaduna", "Benin City", "Maiduguri"],
+        "Ghana": ["Accra", "Kumasi", "Tamale", "Sekondi-Takoradi"],
+        "Senegal": ["Dakar", "Touba", "Pikine", "Saint-Louis"],
+        "Ivory Coast": ["Abidjan", "Yamoussoukro", "Bouake"],
+        "Mali": ["Bamako", "Sikasso", "Mopti", "Timbuktu"],
+        "Burkina Faso": ["Ouagadougou", "Bobo-Dioulasso"],
+        "Niger": ["Niamey", "Zinder", "Maradi"],
+        "Guinea": ["Conakry", "Nzerekore", "Kankan"],
+        "Sierra Leone": ["Freetown", "Bo", "Kenema"],
+        "Liberia": ["Monrovia", "Gbarnga"],
+        "Togo": ["Lome", "Sokode"],
+        "Benin": ["Cotonou", "Porto-Novo", "Parakou"],
+        "Gambia": ["Banjul", "Serekunda"],
+        "Guinea-Bissau": ["Bissau"],
+        "Cape Verde": ["Praia", "Mindelo"],
+
+        // ═══════════ CENTRAL AFRICA ═══════════
+        "Cameroon": ["Douala", "Yaounde", "Bamenda", "Garoua"],
+        "Chad": ["N'Djamena", "Moundou", "Sarh"],
+        "Central African Republic": ["Bangui"],
+        "Republic of the Congo": ["Brazzaville", "Pointe-Noire"],
+        "DR Congo": ["Kinshasa", "Lubumbashi", "Mbuji-Mayi", "Goma", "Kisangani"],
+        "Gabon": ["Libreville", "Port-Gentil"],
+        "Equatorial Guinea": ["Malabo", "Bata"],
+        "Sao Tome and Principe": ["Sao Tome"],
+
+        // ═══════════ EAST AFRICA ═══════════
+        "Kenya": ["Nairobi", "Mombasa", "Kisumu", "Nakuru", "Eldoret"],
+        "Tanzania": ["Dar es Salaam", "Dodoma", "Mwanza", "Arusha", "Zanzibar"],
+        "Ethiopia": ["Addis Ababa", "Dire Dawa", "Mekelle", "Gondar", "Harar"],
+        "Uganda": ["Kampala", "Entebbe", "Gulu", "Jinja"],
+        "Rwanda": ["Kigali", "Butare", "Gisenyi"],
+        "Burundi": ["Bujumbura", "Gitega"],
+        "Somalia": ["Mogadishu", "Hargeisa", "Bosaso", "Kismayo"],
+        "Djibouti": ["Djibouti City"],
+        "Eritrea": ["Asmara", "Keren", "Massawa"],
+        "Madagascar": ["Antananarivo", "Toamasina", "Antsirabe"],
+        "Mauritius": ["Port Louis", "Curepipe"],
+        "Seychelles": ["Victoria"],
+        "Comoros": ["Moroni"],
+
+        // ═══════════ SOUTHERN AFRICA ═══════════
+        "South Africa": ["Johannesburg", "Cape Town", "Durban", "Pretoria", "Port Elizabeth", "Bloemfontein"],
+        "Mozambique": ["Maputo", "Beira", "Nampula"],
+        "Zimbabwe": ["Harare", "Bulawayo", "Mutare"],
+        "Zambia": ["Lusaka", "Kitwe", "Ndola", "Livingstone"],
+        "Malawi": ["Lilongwe", "Blantyre", "Mzuzu"],
+        "Angola": ["Luanda", "Huambo", "Lobito"],
+        "Namibia": ["Windhoek", "Walvis Bay", "Rundu"],
+        "Botswana": ["Gaborone", "Francistown", "Maun"],
+        "Lesotho": ["Maseru", "Teyateyaneng"],
+        "Eswatini": ["Mbabane", "Manzini"],
+
+        // ═══════════ OCEANIA ═══════════
+        "Australia": ["Sydney", "Melbourne", "Brisbane", "Perth", "Adelaide", "Canberra", "Gold Coast", "Hobart", "Darwin"],
+        "New Zealand": ["Auckland", "Wellington", "Christchurch", "Hamilton", "Dunedin"],
+        "Papua New Guinea": ["Port Moresby", "Lae"],
+        "Fiji": ["Suva", "Nadi", "Lautoka"],
+        "Samoa": ["Apia"],
+        "Tonga": ["Nukualofa"],
+        "Vanuatu": ["Port Vila"],
+        "Solomon Islands": ["Honiara"],
+        "Kiribati": ["Tarawa"],
+        "Micronesia": ["Palikir"],
+        "Marshall Islands": ["Majuro"],
+        "Palau": ["Ngerulmud"],
+        "Nauru": ["Yaren"],
+        "Tuvalu": ["Funafuti"]
     };
 
     // Initialize Country Dropdown
@@ -871,8 +1037,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 targetTimeStr = active.end;
                 if (statusLabel) {
                     statusLabel.textContent = "Current Prayer Active";
-                    statusLabel.classList.replace('text-[#af944d]', 'text-emerald-400');
-                    statusLabel.classList.add('animate-pulse');
+                    statusLabel.classList.remove('text-[#af944d]');
+                    statusLabel.classList.add('text-emerald-400', 'animate-pulse');
                 }
                 if (countdownLabel) countdownLabel.textContent = "Time Left to Pray";
                 if (intervalEl) intervalEl.textContent = `${formatTo12Hour(active.start)} — Ends at ${formatTo12Hour(active.end)}`;
@@ -881,8 +1047,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 targetTimeStr = next.start;
                 if (statusLabel) {
                     statusLabel.textContent = "Upcoming Prayer";
-                    statusLabel.classList.replace('text-emerald-400', 'text-[#af944d]');
-                    statusLabel.classList.remove('animate-pulse');
+                    statusLabel.classList.remove('text-emerald-400', 'animate-pulse');
+                    statusLabel.classList.add('text-[#af944d]');
                 }
                 if (countdownLabel) countdownLabel.textContent = "Countdown to Start";
                 if (intervalEl) intervalEl.textContent = `Starts at ${formatTo12Hour(next.start)}`;
@@ -939,7 +1105,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    // --- LIBRARY & SEARCH ---
     // --- LIBRARY & SEARCH ---
     let fullHadithCache = [];
     let displayedCount = 50;
@@ -1134,11 +1299,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- DAILY VERSE MODAL ---
     async function showDailyVerse() {
         try {
-            // Fetch a random verse from the full Quran (Arabic + English Translation)
-            const res = await fetch('https://api.aladhan.com/v1/ayah/random/editions/quran-uthmani,en.asad');
-            // Using Aladhan or AlQuran API for consistency
-            // Wait, api.alquran.cloud is standard for ayahs
-            const quranRes = await fetch('https://api.alquran.cloud/v1/ayah/random/editions/quran-uthmani,en.asad');
+            // Fetch a random verse from the Quran (Arabic + English Translation)
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 8000);
+            const quranRes = await fetch('https://api.alquran.cloud/v1/ayah/random/editions/quran-uthmani,en.asad', { signal: controller.signal });
+            clearTimeout(timeout);
             const data = await quranRes.json();
 
             if (data.code === 200) {
@@ -2893,6 +3058,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function animate() {
             requestAnimationFrame(animate);
+            // Skip rendering if canvas is not visible (performance)
+            if (!container.offsetParent) return;
             group.rotation.y += 0.003;
             group.rotation.x = Math.sin(Date.now() * 0.001) * 0.05;
             renderer.render(scene, camera);
@@ -2900,15 +3067,21 @@ document.addEventListener('DOMContentLoaded', () => {
         animate();
     }
     function initEffects() {
-        // Soft Matte interactions - remove glowing cursor
+        // Throttled 3D card parallax effect (max 60fps)
+        let ticking = false;
         document.addEventListener('mousemove', (e) => {
-            document.querySelectorAll('.hover-card-3d').forEach(card => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                if (x > 0 && x < rect.width && y > 0 && y < rect.height) {
-                    card.style.transform = `perspective(1000px) rotateX(${((y - rect.height / 2) / (rect.height / 2)) * -2}deg) rotateY(${((x - rect.width / 2) / (rect.width / 2)) * 2}deg) scale(1.01)`;
-                } else card.style.transform = 'perspective(1000px) scale(1)';
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(() => {
+                document.querySelectorAll('.hover-card-3d').forEach(card => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    if (x > 0 && x < rect.width && y > 0 && y < rect.height) {
+                        card.style.transform = `perspective(1000px) rotateX(${((y - rect.height / 2) / (rect.height / 2)) * -2}deg) rotateY(${((x - rect.width / 2) / (rect.width / 2)) * 2}deg) scale(1.01)`;
+                    } else card.style.transform = 'perspective(1000px) scale(1)';
+                });
+                ticking = false;
             });
         });
     }
@@ -2920,21 +3093,22 @@ document.addEventListener('DOMContentLoaded', () => {
         window.globalCountry = "India";
         window.ramadanUseCoords = false; // Disable coordinate-based syncing on startup
 
-        // Initial Fetch for Namaz (Prayer Times)
-        await window.fetchPrayers(null, null, "Hyderabad", "India");
-
-        // Initialize Ramadan Data for Hyderabad (Default)
-        if (typeof window.getRamadanTimes === 'function') {
-            await window.getRamadanTimes();
-        }
+        // Fetch Prayer + Ramadan data in PARALLEL for faster load
+        const prayerPromise = window.fetchPrayers(null, null, "Hyderabad", "India");
+        const ramadanPromise = typeof window.getRamadanTimes === 'function' ? window.getRamadanTimes() : Promise.resolve();
+        await Promise.all([prayerPromise, ramadanPromise]);
 
         updateMasterDates();
-        loadDirectory();
-        loadNames();
         renderDuas();
         if (window.THREE) initThree();
         initEffects();
-        setTimeout(showDailyVerse, 1000);
+
+        // Defer daily verse to avoid blocking interaction
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(() => showDailyVerse(), { timeout: 3000 });
+        } else {
+            setTimeout(showDailyVerse, 2500);
+        }
     };
 
 
@@ -3284,19 +3458,26 @@ function startRamadanCountdown(fajr, maghrib) {
         const getTodayTime = (timeStr) => {
             const [hours, minutes] = timeStr.split(':');
             const d = new Date();
-            d.setHours(hours, minutes, 0);
+            d.setHours(parseInt(hours), parseInt(minutes), 0, 0);
             return d;
         };
 
-        let target = getTodayTime(maghrib);
-        let label = "Time until Iftar";
+        const fajrTime = getTodayTime(fajr);
+        const maghribTime = getTodayTime(maghrib);
+        let target, label;
 
-        if (now > target) {
+        if (now < fajrTime) {
+            // Before Fajr → countdown to Sehri end
+            target = fajrTime;
+            label = "Time until Sehri Ends";
+        } else if (now < maghribTime) {
+            // During fast → countdown to Iftar
+            target = maghribTime;
+            label = "Time until Iftar";
+        } else {
+            // After Iftar → countdown to tomorrow's Sehri
             target = getTodayTime(fajr);
-            target.setDate(target.getDate() + 1); // Tomorrow's Sehri
-            label = "Time until Sehri";
-        } else if (now < getTodayTime(fajr)) {
-            target = getTodayTime(fajr);
+            target.setDate(target.getDate() + 1);
             label = "Time until Sehri";
         }
 
@@ -3525,7 +3706,7 @@ window.addEventListener('load', () => {
         const content = document.getElementById('quran-content');
         const btn = document.getElementById('mushaf-toggle');
         if (content) content.classList.add('mushaf-mode');
-        if (btn) btn.innerText = 'VIEW: PAGE';
+        if (btn) btn.innerText = 'MODE: BOOK';
     }
     startPortal();
 });
@@ -3536,6 +3717,6 @@ window.toggleMushafMode = function () {
     if (!content) return;
 
     const isMushaf = content.classList.toggle('mushaf-mode');
-    if (btn) btn.innerText = isMushaf ? 'VIEW: PAGE' : 'VIEW: CARD';
+    if (btn) btn.innerText = isMushaf ? 'MODE: BOOK' : 'MODE: VERSE';
     localStorage.setItem('mushaf_mode', isMushaf);
 }

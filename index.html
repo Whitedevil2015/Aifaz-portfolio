@@ -5,13 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Noor Islamic Portal - Premium Dashboard</title>
+
+    <!-- DNS Prefetch & Preconnect for faster API calls -->
+    <link rel="dns-prefetch" href="https://api.aladhan.com">
+    <link rel="dns-prefetch" href="https://api.alquran.cloud">
+    <link rel="dns-prefetch" href="https://api.open-meteo.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Amiri:wght@400;700&family=Cormorant+Garamond:wght@600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
     <style>
         /* Custom Scrollbar for Sidebar */
         ::-webkit-scrollbar {
@@ -407,8 +416,8 @@
 
             </section>
 
-            <!-- Qibla View (New) -->
-            </section>
+
+            <!-- Qibla View (Placeholder) -->
 
             <!-- Nafil Prayers View -->
             <section id="view-nafil" class="view-section hidden p-4 md:p-8 space-y-12 animate-fade-in-up">
@@ -1243,7 +1252,7 @@
                     </button>
                     <button onclick="window.toggleMushafMode()" id="mushaf-toggle"
                         class="ml-2 text-xs font-bold tracking-widest text-[#af944d] hover:text-white transition-colors border border-[#af944d]/30 px-3 py-1 rounded-full uppercase">
-                        VIEW: CARD
+                        MODE: VERSE
                     </button>
                     <div class="w-[1px] h-3 bg-white/10"></div>
                     <button onclick="playSurahAudio('ur')"

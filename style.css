@@ -905,6 +905,11 @@ select:focus {
     background-clip: text;
 }
 
+.timer-glowing-ring {
+    position: relative;
+    z-index: 10;
+}
+
 /* --- FORCE HIGH VISIBILITY (USER REQUEST) --- */
 /* Override opacity for better readability */
 .opacity-30 {

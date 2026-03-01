@@ -1299,10 +1299,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- DAILY VERSE MODAL ---
     async function showDailyVerse() {
         try {
-            // Fetch a random verse from the Quran (Arabic + English Translation)
+            // Fetch a random verse explicitly by ID to bypass browser cache
+            const randomVerseId = Math.floor(Math.random() * 6236) + 1;
             const controller = new AbortController();
             const timeout = setTimeout(() => controller.abort(), 8000);
-            const quranRes = await fetch('https://api.alquran.cloud/v1/ayah/random/editions/quran-uthmani,en.asad', { signal: controller.signal });
+            const quranRes = await fetch(`https://api.alquran.cloud/v1/ayah/${randomVerseId}/editions/quran-uthmani,en.asad`, { signal: controller.signal });
             clearTimeout(timeout);
             const data = await quranRes.json();
 
@@ -3602,8 +3603,12 @@ document.getElementById('alarm-taraweeh')?.addEventListener('change', (e) => {
 window.addEventListener('load', () => {
     const s = localStorage.getItem('alarm_suhoor') === 'true';
     const t = localStorage.getItem('alarm_taraweeh') === 'true';
-    if (document.getElementById('alarm-suhoor')) document.getElementById('alarm-suhoor').checked = s;
-    if (document.getElementById('alarm-taraweeh')) document.getElementById('alarm-taraweeh').checked = t;
+
+    // Alarms UI removed for simplicity, safe checking if elements exist
+    const sEl = document.getElementById('alarm-suhoor');
+    if (sEl) sEl.checked = s;
+    const tEl = document.getElementById('alarm-taraweeh');
+    if (tEl) tEl.checked = t;
 });
 
 function performHurfAnalysis(ayahs) {

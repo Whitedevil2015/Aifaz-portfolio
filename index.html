@@ -1037,116 +1037,74 @@
 
                 <div class="max-w-7xl mx-auto px-6 py-12 relative z-10">
 
-                    <!-- Apple-Style Header -->
-                    <header class="text-center mb-16">
-                        <div
-                            class="inline-block px-6 py-2 bg-white/10 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-[0.4em] text-[#ffd700] mb-6 shadow-lg border border-white/20">
-                            Serene Ramadan Experience</div>
+                    <!-- Elegant Header -->
+                    <header class="text-center mb-16 relative">
                         <h1
-                            class="text-6xl md:text-8xl font-[Cormorant_Garamond] font-bold text-gradient-gold mb-4 drop-shadow-lg">
-                            Ramadan Mubarak</h1>
-                        <p class="text-emerald-200 font-serif text-2xl italic mb-8 text-shadow-sm">A journey of
-                            spiritual
-                            elevation and
-                            deep
-                            reflection.</p>
-
-                        <!-- Dynamic Status Bar -->
-                        <div class="flex flex-wrap justify-center gap-4 mb-8">
-                            <div
-                                class="bg-white/10 backdrop-blur-xl px-6 py-3 rounded-2xl border border-white/20 flex items-center gap-4 shadow-lg hover:bg-white/20 transition-all cursor-default">
-                                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#ffd700] to-[#af944d] text-[#064e3b] flex items-center justify-center font-black text-lg shadow-md"
-                                    id="ramadan-day-status">--</div>
-                                <div class="text-left">
-                                    <p class="text-[9px] font-black uppercase tracking-widest text-emerald-300">
-                                        Current
-                                        Fasting Day</p>
-                                    <p class="text-sm font-bold text-white" id="ramadan-date-status">Loading
-                                        Date...
-                                    </p>
-                                </div>
-                            </div>
-                            <div
-                                class="bg-white/10 backdrop-blur-xl px-6 py-3 rounded-2xl border border-white/20 flex items-center gap-4 shadow-lg hover:bg-white/20 transition-all cursor-default">
-                                <div
-                                    class="w-12 h-12 rounded-full bg-[#064e3b] border border-emerald-500/30 text-emerald-400 flex items-center justify-center text-lg shadow-inner">
-                                    <i class="fas fa-clock"></i>
-                                </div>
-                                <div class="text-left">
-                                    <p class="text-[9px] font-black uppercase tracking-widest text-emerald-300">
-                                        Location Zone</p>
-                                    <p class="text-sm font-bold text-white">Hyderabad, India (IST)</p>
-                                </div>
-                            </div>
-                        </div>
+                            class="text-7xl md:text-9xl font-[Cormorant_Garamond] font-bold text-gradient-gold drop-shadow-2xl mb-2">
+                            Ramadan
+                        </h1>
+                        <p class="text-emerald-200 font-[Amiri] text-3xl md:text-4xl italic tracking-wide">
+                            The Month of Mercy
+                        </p>
                     </header>
 
+                    <!-- Simple & Elegant Dashboard Grid -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
 
-                    <!-- Main Dynamic Dashboard Grid -->
-                    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-12">
-                        <!-- Suhoor Info -->
+                        <!-- Left: Saheri / Iftar Times -->
                         <div
-                            class="ramadan-card-vibrant p-8 rounded-[40px] text-center flex flex-col justify-center relative group overflow-hidden">
-                            <div
-                                class="absolute top-0 right-0 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl -mr-10 -mt-10">
+                            class="ramadan-card-vibrant p-10 rounded-[50px] flex flex-col justify-center items-center text-center">
+                            <i class="fas fa-moon text-4xl text-emerald-400 mb-6 opacity-80"></i>
+                            <div class="w-full space-y-8">
+                                <div>
+                                    <p class="text-xs font-black uppercase tracking-[0.3em] text-emerald-500 mb-2">
+                                        Saheri Ends</p>
+                                    <h3 class="text-5xl font-black text-white" id="saheriVal">--:--</h3>
+                                </div>
+                                <div class="w-16 h-px bg-white/10 mx-auto"></div>
+                                <div>
+                                    <p class="text-xs font-black uppercase tracking-[0.3em] text-[#af944d] mb-2">Iftar
+                                        Start</p>
+                                    <h3 class="text-5xl font-black text-gradient-gold" id="iftarVal">--:--</h3>
+                                </div>
                             </div>
-                            <div
-                                class="text-[10px] font-black opacity-60 mb-2 uppercase tracking-widest text-[#064e3b] dark:text-emerald-400">
-                                Saheri Ends</div>
-                            <div class="text-5xl font-black text-gradient-emerald" id="saheriVal">--:--</div>
-                            <p class="text-[9px] font-bold text-[#af944d] mt-4 uppercase tracking-[0.2em]"
-                                id="ramadan-loc-sync">Hyderabad, India</p>
+                            <div class="mt-8 px-6 py-2 bg-black/20 rounded-full border border-white/5 cursor-pointer hover:bg-black/40 transition-colors"
+                                onclick="window.detectAndSyncLocation('ramadan')">
+                                <p class="text-[10px] font-bold text-gray-300 uppercase tracking-widest"><i
+                                        class="fas fa-location-arrow text-[#af944d] mr-2"></i><span
+                                        id="ramadan-loc-sync">Location</span></p>
+                            </div>
                         </div>
 
-                        <!-- Main Countdown Central -->
+                        <!-- Center: Massive Countdown Focus -->
                         <div
-                            class="lg:col-span-2 ramadan-card-vibrant p-10 rounded-[50px] flex flex-col items-center justify-center text-center relative group overflow-hidden">
+                            class="lg:col-span-2 ramadan-card-vibrant p-12 rounded-[50px] flex flex-col items-center justify-center text-center relative overflow-hidden">
                             <div
-                                class="absolute inset-0 bg-gradient-to-b from-transparent to-[#064e3b]/5 pointer-events-none">
+                                class="absolute inset-0 bg-gradient-to-br from-[#064e3b]/20 to-transparent pointer-events-none">
                             </div>
-                            <div class="timer-glowing-ring mb-6 scale-90 md:scale-100 ring-offset-4 ring-[#af944d]/30">
-                                <div class="relative z-10">
-                                    <div class="text-7xl md:text-8xl font-black text-[#064e3b] dark:text-white tracking-tighter drop-shadow-sm"
+
+                            <!-- Date Info at Top -->
+                            <div class="flex items-center gap-4 mb-10 z-10">
+                                <div class="flex items-baseline gap-2">
+                                    <span class="text-4xl font-black text-[#af944d]" id="ramadan-day-status">--</span>
+                                    <span class="text-sm font-bold text-gray-400 uppercase tracking-widest">Day of
+                                        Fasting</span>
+                                </div>
+                                <div class="w-px h-8 bg-white/10"></div>
+                                <div class="text-left">
+                                    <p class="text-emerald-300 text-sm font-bold" id="ramadan-date-status">Loading
+                                        Date...</p>
+                                </div>
+                            </div>
+
+                            <div class="timer-glowing-ring mb-4 scale-95 md:scale-105 z-10">
+                                <div class="relative">
+                                    <div class="text-7xl md:text-[10rem] leading-none font-black text-transparent bg-clip-text bg-gradient-to-b from-[#064e3b] to-emerald-500 dark:from-yellow-100 dark:via-[#ffd700] dark:to-[#af944d] tracking-tighter drop-shadow-2xl pb-4"
                                         id="timer">
                                         --:--:--
                                     </div>
-                                    <div class="text-[10px] font-black uppercase tracking-[0.5em] text-[#af944d] mt-4 animate-pulse"
-                                        id="ramadan-timer-label">Iftar Countdown</div>
-                                </div>
-                            </div>
-                            <div class="text-5xl font-black text-gradient-gold drop-shadow-sm" id="iftarVal">--:--</div>
-                        </div>
-
-                        <!-- Notification Alarms (Kept Feature) -->
-                        <div class="ramadan-card-vibrant p-8 rounded-[40px] space-y-6 flex flex-col justify-center">
-                            <div class="flex items-center justify-between">
-                                <h4
-                                    class="text-[10px] font-black text-[#064e3b] dark:text-emerald-400 uppercase tracking-widest">
-                                    Alarms</h4>
-                                <i class="fas fa-bell text-[#af944d] text-xl animate-bounce-slight"></i>
-                            </div>
-                            <div class="space-y-4">
-                                <div
-                                    class="flex items-center justify-between p-4 bg-gray-50/50 rounded-2xl border border-gray-100 dark:bg-black/20 dark:border-white/5 hover:bg-white dark:hover:bg-white/5 transition-colors">
-                                    <span
-                                        class="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">Suhoor</span>
-                                    <label class="relative inline-flex items-center cursor-pointer">
-                                        <input type="checkbox" class="sr-only peer" id="alarm-suhoor">
-                                        <div
-                                            class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#10b981] shadow-inner">
-                                        </div>
-                                    </label>
-                                </div>
-                                <div
-                                    class="flex items-center justify-between p-4 bg-gray-50/50 rounded-2xl border border-gray-100 dark:bg-black/20 dark:border-white/5 hover:bg-white dark:hover:bg-white/5 transition-colors">
-                                    <span
-                                        class="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">Taraweeh</span>
-                                    <label class="relative inline-flex items-center cursor-pointer">
-                                        <input type="checkbox" class="sr-only peer" id="alarm-taraweeh">
-                                        <div
-                                            class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#af944d] shadow-inner">
-                                        </div>
-                                    </label>
+                                    <div class="text-[12px] font-black uppercase tracking-[0.6em] text-[#af944d] mt-6 animate-pulse"
+                                        id="ramadan-timer-label">Loading Timer</div>
                                 </div>
                             </div>
                         </div>

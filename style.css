@@ -26,6 +26,134 @@
     --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ─── SKELETON LOADING SYSTEM ─── */
+
+/* Shimmer keyframe */
+@keyframes skeleton-shimmer {
+    0% {
+        background-position: -600px 0;
+    }
+
+    100% {
+        background-position: 600px 0;
+    }
+}
+
+/* Base skeleton element */
+.skeleton {
+    background: linear-gradient(90deg,
+            rgba(6, 78, 59, 0.06) 25%,
+            rgba(175, 148, 77, 0.12) 50%,
+            rgba(6, 78, 59, 0.06) 75%);
+    background-size: 600px 100%;
+    animation: skeleton-shimmer 1.6s ease-in-out infinite;
+    border-radius: 14px;
+}
+
+/* Skeleton shapes */
+.skeleton-text {
+    height: 1em;
+    width: 100%;
+    border-radius: 8px;
+}
+
+.skeleton-title {
+    height: 2.5em;
+    width: 60%;
+    border-radius: 8px;
+}
+
+.skeleton-box {
+    border-radius: 24px;
+}
+
+.skeleton-circle {
+    border-radius: 50%;
+}
+
+/* ─── PORTAL SPLASH SCREEN ─── */
+#portal-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    background: linear-gradient(160deg, #064e3b 0%, #042f24 60%, #0b1a16 100%);
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+#portal-loader.fade-out {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Loader emblem pulse */
+#portal-loader .loader-emblem {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(175, 148, 77, 0.1);
+    border: 2px solid rgba(175, 148, 77, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: emblem-pulse 2s ease-in-out infinite;
+}
+
+@keyframes emblem-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(175, 148, 77, 0.4);
+        transform: scale(1);
+    }
+
+    50% {
+        box-shadow: 0 0 0 20px rgba(175, 148, 77, 0);
+        transform: scale(1.05);
+    }
+}
+
+/* Thin progress bar at bottom of loader */
+#portal-loader .loader-bar-track {
+    width: 200px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 99px;
+    overflow: hidden;
+}
+
+#portal-loader .loader-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #064e3b, #af944d, #ffd700);
+    border-radius: 99px;
+    transition: width 0.4s ease;
+}
+
+/* ─── SKELETON GRID (Prayer Times) ─── */
+.prayer-skeleton-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .prayer-skeleton-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .prayer-skeleton-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+}
+
 .font-amiri {
     font-family: 'Amiri', serif;
 }

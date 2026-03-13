@@ -314,43 +314,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.navigateToView = function (targetId, updateHistory = true) {
         if (!targetId) return;
+        const oldView = currentView;
         currentView = targetId;
 
-        // Target Section logic
-        sections.forEach(sec => sec.classList.add('hidden'));
-        const targetSec = document.getElementById(targetId);
-        if (targetSec) targetSec.classList.remove('hidden');
+        const performUpdate = () => {
+            // Target Section logic
+            sections.forEach(sec => sec.classList.add('hidden'));
+            const targetSec = document.getElementById(targetId);
+            if (targetSec) targetSec.classList.remove('hidden');
 
-        // Scroll to top of main area
-        const mainScroll = document.getElementById('main-scroll-area');
-        if (mainScroll) mainScroll.scrollTop = 0;
+            // Scroll to top of main area
+            const mainScroll = document.getElementById('main-scroll-area');
+            if (mainScroll) mainScroll.scrollTop = 0;
 
-        // Close any lingering modals when navigating views
-        closeAllModals(false);
+            // Close any lingering modals when navigating views
+            closeAllModals(false);
 
-        // Update nav links styling for both Desktop Sidebar and Mobile Bottom Nav
-        navLinks.forEach(l => {
-            const linkTarget = l.getAttribute('data-target');
-            const icon = l.querySelector('i');
-            const isMatch = linkTarget === targetId;
+            // Update nav links styling for both Desktop Sidebar and Mobile Bottom Nav
+            navLinks.forEach(l => {
+                const linkTarget = l.getAttribute('data-target');
+                const icon = l.querySelector('i');
+                const isMatch = linkTarget === targetId;
 
-            if (isMatch) {
-                l.classList.add('active', 'scale-105');
-                l.classList.remove('text-white/50', 'text-[#af944d]/80');
-                if (icon) icon.classList.add('text-[#af944d]');
-            } else {
-                l.classList.remove('active', 'scale-105');
-                if (icon) icon.classList.remove('text-[#af944d]');
-            }
-        });
+                if (isMatch) {
+                    l.classList.add('active', 'scale-105');
+                    l.classList.remove('text-white/50', 'text-[#af944d]/80');
+                    if (icon) icon.classList.add('text-[#af944d]');
+                } else {
+                    l.classList.remove('active', 'scale-105');
+                    if (icon) icon.classList.remove('text-[#af944d]');
+                }
+            });
 
-        // Specific view callbacks
-        // if (targetId === 'view-library') loadLibrary();
-        if (targetId === 'view-names') loadNames();
-        if (targetId === 'view-quran') loadDirectory();
-        if (targetId === 'view-duas') renderDuas();
-        if (targetId === 'view-ramadan') getRamadanTimes();
-        if (targetId === 'view-nafil') renderPrayerGuide(window.prayerTimesRaw);
+            // Specific view callbacks
+            if (targetId === 'view-names') loadNames();
+            if (targetId === 'view-quran') loadDirectory();
+            if (targetId === 'view-duas') renderDuas();
+            if (targetId === 'view-ramadan') getRamadanTimes();
+            if (targetId === 'view-nafil') renderPrayerGuide(window.prayerTimesRaw);
+        };
+
+        // Use View Transitions API if supported
+        if (document.startViewTransition) {
+            document.startViewTransition(() => performUpdate());
+        } else {
+            performUpdate();
+        }
 
         // Manage Browser History
         if (updateHistory) {
@@ -3060,7 +3069,7 @@ document.addEventListener('DOMContentLoaded', () => {
         function animate() {
             requestAnimationFrame(animate);
             // Skip rendering if canvas is not visible (performance)
-            if (!container.offsetParent) return;
+            if (!cont || !cont.offsetParent) return;
             group.rotation.y += 0.003;
             group.rotation.x = Math.sin(Date.now() * 0.001) * 0.05;
             renderer.render(scene, camera);
@@ -3089,32 +3098,83 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- BOOTSTRAP ---
     const startPortal = async () => {
-        // Force Hyderabad, India as the startup default, bypassing geolocation detection cache
+        // ── Splash loader helpers ──
+        const loaderBar = document.getElementById('loader-bar');
+        const loaderStatus = document.getElementById('loader-status');
+        const setProgress = (pct, text) => {
+            if (loaderBar) loaderBar.style.width = pct + '%';
+            if (loaderStatus) loaderStatus.textContent = text;
+        };
+
+        // Safety: Force dismiss loader after 5s if anything hangs
+        const safetyTimeout = setTimeout(() => {
+            const loader = document.getElementById('portal-loader');
+            if (loader && !loader.classList.contains('fade-out')) {
+                loader.classList.add('fade-out');
+                console.warn("Portal loader dismissed by safety timeout.");
+            }
+        }, 5000);
+
+        // Stage 1: Locating
+        setProgress(15, 'Locating your position…');
+
+        // Force Hyderabad, India as the startup default
         window.globalCity = "Hyderabad";
         window.globalCountry = "India";
-        window.ramadanUseCoords = false; // Disable coordinate-based syncing on startup
+        window.ramadanUseCoords = false;
 
-        // Fetch Prayer + Ramadan data in PARALLEL for faster load
+        // Stage 2: Fetch Prayer + Ramadan data in PARALLEL
+        setProgress(40, 'Fetching prayer times…');
         const prayerPromise = window.fetchPrayers(null, null, "Hyderabad", "India");
-        const ramadanPromise = typeof window.getRamadanTimes === 'function' ? window.getRamadanTimes() : Promise.resolve();
+        const ramadanPromise = typeof window.getRamadanTimes === 'function'
+            ? window.getRamadanTimes() : Promise.resolve();
         await Promise.all([prayerPromise, ramadanPromise]);
 
+        // Stage 3: Rendering Basic UI
+        setProgress(70, 'Initializing interface…');
         updateMasterDates();
         renderDuas();
-        if (window.THREE) initThree();
-        initEffects();
 
-        // Defer daily verse to avoid blocking interaction
-        if ('requestIdleCallback' in window) {
-            requestIdleCallback(() => showDailyVerse(), { timeout: 3000 });
-        } else {
-            setTimeout(showDailyVerse, 2500);
+        // Stage 4: Done — dismiss loader immediately for best UX
+        setProgress(100, 'Assalamu Alaikum ☪');
+        clearTimeout(safetyTimeout);
+
+        await new Promise(r => setTimeout(r, 400));
+        const loader = document.getElementById('portal-loader');
+        if (loader) loader.classList.add('fade-out');
+
+        // Stage 5: Defer heavy 3D/Effects until AFTER loader is gone
+        setTimeout(() => {
+            try {
+                if (window.THREE) initThree();
+                initEffects();
+                showDailyVerse();
+            } catch (e) {
+                console.error("Secondary initialization failed:", e);
+            }
+        }, 600);
+    };        // Apply persisted translation and view state on loads
+    const hide = localStorage.getItem('hide_translations') === 'true';
+    if (hide) {
+        const content = document.getElementById('quran-content');
+        const btn = document.getElementById('translation-toggle');
+        if (content) content.classList.add('translations-hidden');
+        if (btn) {
+            btn.innerText = 'TRANSLATIONS: OFF';
+            btn.classList.remove('text-emerald-400');
+            btn.classList.add('text-red-400');
         }
-    };
+    }
 
+    const isMushaf = localStorage.getItem('mushaf_mode') === 'true';
+    if (isMushaf) {
+        const content = document.getElementById('quran-content');
+        const btn = document.getElementById('mushaf-toggle');
+        if (content) content.classList.add('mushaf-mode');
+        if (btn) btn.innerText = 'MODE: BOOK';
+    }
 
-
-
+    startPortal();
 });
 
 // --- ZAKAT CALCULATOR ---
@@ -3692,29 +3752,7 @@ window.toggleTranslations = function () {
     }
 }
 
-// Apply persisted translation and view state on loads
-window.addEventListener('load', () => {
-    const hide = localStorage.getItem('hide_translations') === 'true';
-    if (hide) {
-        const content = document.getElementById('quran-content');
-        const btn = document.getElementById('translation-toggle');
-        if (content) content.classList.add('translations-hidden');
-        if (btn) {
-            btn.innerText = 'TRANSLATIONS: OFF';
-            btn.classList.remove('text-emerald-400');
-            btn.classList.add('text-red-400');
-        }
-    }
 
-    const isMushaf = localStorage.getItem('mushaf_mode') === 'true';
-    if (isMushaf) {
-        const content = document.getElementById('quran-content');
-        const btn = document.getElementById('mushaf-toggle');
-        if (content) content.classList.add('mushaf-mode');
-        if (btn) btn.innerText = 'MODE: BOOK';
-    }
-    startPortal();
-});
 
 window.toggleMushafMode = function () {
     const content = document.getElementById('quran-content');

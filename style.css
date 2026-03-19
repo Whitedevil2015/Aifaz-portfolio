@@ -1094,3 +1094,100 @@ textarea {
 .dark-only {
     display: none !important;
 }
+/* --- ANIME / FIGMA HIGH-END ANIMATIONS --- */
+
+.anime-spring {
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+.anime-card {
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.4s ease;
+    will-change: transform, box-shadow;
+    position: relative;
+    overflow: hidden;
+}
+
+.anime-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%; width: 50%; height: 100%;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
+    transform: skewX(-25deg);
+    transition: 0.7s;
+    pointer-events: none;
+    z-index: 20;
+}
+
+.anime-card:hover::before {
+    left: 200%;
+    transition: 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.anime-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 25px 50px -12px rgba(6, 78, 59, 0.3), 0 0 20px rgba(45, 212, 191, 0.2);
+    border-color: rgba(45, 212, 191, 0.5);
+    z-index: 10;
+}
+
+.dark .anime-card:hover {
+    box-shadow: 0 25px 50px -12px rgba(175, 148, 77, 0.4), 0 0 30px rgba(255, 215, 0, 0.15);
+    border-color: rgba(175, 148, 77, 0.6);
+}
+
+.anime-glow-text {
+    animation: anime-glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes anime-glow {
+    0% { text-shadow: 0 0 10px rgba(16, 185, 129, 0.2), 0 0 20px rgba(16, 185, 129, 0.1); }
+    100% { text-shadow: 0 0 20px rgba(16, 185, 129, 0.6), 0 0 30px rgba(16, 185, 129, 0.4); }
+}
+
+.anime-float {
+    animation: float-anime 6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+@keyframes float-anime {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(1deg); }
+}
+
+.anime-entrance {
+    animation: anime-spring-up 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+}
+
+@keyframes anime-spring-up {
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.anime-glow-border {
+    position: relative;
+}
+.anime-glow-border::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(45deg, #064e3b, #10b981, #af944d, #ffd700, #064e3b);
+    background-size: 400%;
+    z-index: -1;
+    border-radius: inherit;
+    animation: border-flow 4s linear infinite;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.anime-glow-border:hover::after {
+    opacity: 1;
+}
+
+@keyframes border-flow {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+}
+

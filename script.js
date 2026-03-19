@@ -856,7 +856,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isFriday && !document.getElementById('friday-banner')) {
             const banner = document.createElement('div');
             banner.id = 'friday-banner';
-            banner.className = 'col-span-full bg-gradient-to-r from-[#064e3b] to-[#0f2b19] p-6 rounded-[40px] shadow-xl border border-[#af944d]/30 mb-6 text-white relative overflow-hidden animate-fade-in-up';
+            banner.className = 'col-span-full bg-gradient-to-r from-[#064e3b] to-[#042f24] p-6 rounded-[40px] shadow-xl border border-[#af944d]/30 mb-6 text-white relative overflow-hidden animate-fade-in-up';
             banner.innerHTML = `
                 <div class="absolute top-0 right-0 w-64 h-64 bg-[#af944d] opacity-10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
                 <div class="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
@@ -870,7 +870,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
                     <div class="text-center shrink-0">
-                         <a href="#" onclick="document.querySelector('[data-target=view-quran]').click(); setTimeout(() => openReader(18, 'Al-Kahf', 'surah'), 500);" class="inline-flex items-center px-6 py-2 bg-[#af944d] text-[#0f2b19] font-bold rounded-full hover:bg-[#f5f2eb] transition-all shadow-lg shadow-[#af944d]/20 transform hover:-translate-y-1">
+                         <a href="#" onclick="document.querySelector('[data-target=view-quran]').click(); setTimeout(() => openReader(18, 'Al-Kahf', 'surah'), 500);" class="inline-flex items-center px-6 py-2 bg-[#af944d] text-[#042f24] font-bold rounded-full hover:bg-[#f5f2eb] transition-all shadow-lg shadow-[#af944d]/20 transform hover:-translate-y-1">
                              <i class="fas fa-quran mr-2"></i> Read Kahf
                          </a>
                     </div>
@@ -898,7 +898,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const hideAzaan = p.id === 'Sunrise'; // No azaan for sunrise
 
             return `
-            <div id="card-${p.id}" class="bg-[#fcfdfd] p-6 rounded-[40px] shadow-sm text-center border-t-4 hover:-translate-y-2 transition-all duration-500 cursor-pointer group dark:bg-gray-800 dark:border-gray-700 relative" 
+            <div id="card-${p.id}" class="anime-card bg-[#fcfdfd] p-6 rounded-[40px] shadow-sm text-center border-t-4 cursor-pointer group dark:bg-gray-800 dark:border-gray-700 relative" 
                 style="border-color:hsl(${hue}, 60%, 40%)" onclick="openFazilat('${p.id}')">
                 
                 <div class="absolute -right-4 -top-4 opacity-[0.03] text-7xl" style="color:hsl(${hue}, 60%, 40%)"><i class="fas ${p.icon}"></i></div>
@@ -3498,10 +3498,10 @@ window.updateAtmosphere = function () {
     // Apply high-end atmospheric gradients
     if (hour >= 17 && hour < 19) {
         // Maghrib/Sunset: Deep Orange to Purple
-        layer.style.background = "linear-gradient(135deg, #f59e0b 0%, #7c3aed 50%, #064e3b 100%)";
+        layer.style.background = "linear-gradient(135deg, #f59e0b 0%, #059669 50%, #064e3b 100%)";
     } else if (hour >= 19 || hour < 4) {
         // Isha/Tahajjud: Midnight Indigo to Emerald
-        layer.style.background = "radial-gradient(circle at 50% 0%, #1e1b4b 0%, #020617 70%, #064e3b 100%)";
+        layer.style.background = "radial-gradient(circle at 50% 0%, #0b1a16 0%, #020617 70%, #064e3b 100%)";
     } else {
         // Fajr/Morning: Dawn Teal to Gold
         layer.style.background = "linear-gradient(to bottom, #064e3b 0%, #042f24 100%)";
@@ -3763,3 +3763,11 @@ window.toggleMushafMode = function () {
     if (btn) btn.innerText = isMushaf ? 'MODE: BOOK' : 'MODE: VERSE';
     localStorage.setItem('mushaf_mode', isMushaf);
 }
+
+// Update Local Time Card
+setInterval(() => {
+    const timeCard = document.getElementById('local-time-card');
+    if(timeCard) {
+        timeCard.innerText = new Date().toLocaleTimeString('en-US', { hour12: false });
+    }
+}, 1000);

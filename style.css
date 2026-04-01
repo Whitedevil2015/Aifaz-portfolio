@@ -1,29 +1,48 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Amiri:wght@400;700&family=Cormorant+Garamond:wght@600;700&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap');
 
 :root {
-    /* Majestic Decency Palette - Restored */
-    --emerald: #064e3b;
-    --emerald-light: #0d7056;
-    --gold-leaf: #af944d;
-    --gold-glow: rgba(175, 148, 77, 0.4);
-    --pearl: #ffffff;
-    /* Brighter white for Day Mode */
-    --pearl-dark: #f0f2f2;
-
-    --primary: var(--emerald);
-    --secondary: #042f24;
-    --gold: var(--gold-leaf);
-    --text-dark: #111827;
-    /* Darker text for Day Mode contrast */
-    --text-muted: #4b5563;
-    /* Darker muted text for Day Mode */
-    --text-light: #f9fafb;
-    /* Brighter text for Night Mode */
-    --input-bg-light: #f3f4f6;
-    --input-bg-dark: #1f2937;
+    /* Cyber-Noor Futuristic Palette */
+    --emerald-neon: #10b981;
+    --emerald-glow: rgba(16, 185, 129, 0.4);
+    --gold-laser: #fbbf24;
+    --gold-glow: rgba(251, 191, 36, 0.4);
+    --cyber-black: #020617;
+    --cyber-slate: #0b1120;
+    --pearl-matte: #f8fafc;
+    
+    --primary: var(--emerald-neon);
+    --secondary: var(--cyber-black);
+    --gold: var(--gold-laser);
+    --text-dark: #0f172a;
+    --text-muted: #64748b;
+    --text-light: #f1f5f9;
+    --input-bg-light: #f1f5f9;
+    --input-bg-dark: #1e293b;
 
     --radius-hyper: 40px;
-    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+@keyframes grid-move {
+    0% { background-position: 0 0; }
+    100% { background-position: 50px 50px; }
+}
+
+@keyframes laser-scan {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100vh); }
+}
+
+@keyframes neon-flicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+        opacity: 1;
+        filter: drop-shadow(0 0 10px var(--emerald-glow));
+    }
+    20%, 24%, 55% {
+        opacity: 0.5;
+        filter: none;
+    }
 }
 
 /* ─── SKELETON LOADING SYSTEM ─── */
@@ -118,21 +137,17 @@
     }
 }
 
-/* Thin progress bar at bottom of loader */
-#portal-loader .loader-bar-track {
-    width: 200px;
-    height: 3px;
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 99px;
-    overflow: hidden;
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px var(--emerald-glow)); }
+    50% { transform: scale(1.02); filter: drop-shadow(0 0 20px var(--emerald-glow)); }
 }
 
-#portal-loader .loader-bar-fill {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, #064e3b, #af944d, #ffd700);
-    border-radius: 99px;
-    transition: width 0.4s ease;
+.tabular-nums {
+    font-variant-numeric: tabular-nums;
+}
+
+#timer {
+    animation: heartbeat 2s ease-in-out infinite;
 }
 
 /* ─── SKELETON GRID (Prayer Times) ─── */
@@ -173,26 +188,84 @@
 body {
     font-family: 'Inter', sans-serif;
     color: var(--text-dark);
-    background-color: var(--pearl);
-    background-image:
-        radial-gradient(at 0% 0%, rgba(255, 255, 255, 0.9) 0px, transparent 50%),
-        radial-gradient(at 100% 0%, rgba(212, 175, 55, 0.08) 0px, transparent 50%),
-        radial-gradient(at 50% 50%, rgba(6, 78, 59, 0.04) 0px, transparent 80%),
+    background-color: var(--pearl-matte);
+    background-image: 
+        linear-gradient(rgba(248, 250, 252, 0.95), rgba(248, 250, 252, 0.95)),
         url('https://www.transparenttextures.com/patterns/arabesque.png');
     background-attachment: fixed;
     min-height: 100vh;
-    line-height: 1.6;
     overflow-x: hidden;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+        linear-gradient(rgba(16, 185, 129, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(16, 185, 129, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    animation: grid-move 5s linear infinite;
+    pointer-events: none;
+    z-index: 0;
 }
 
 body.dark {
-    background-color: #020617;
-    /* Deeper black for Night Mode */
-    background-image:
-        radial-gradient(circle at 50% 0%, #064e3b 0%, transparent 70%),
-        radial-gradient(at 100% 100%, rgba(175, 148, 77, 0.15) 0px, transparent 50%),
+    background-color: var(--cyber-black);
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.15) 0%, transparent 70%),
         url('https://www.transparenttextures.com/patterns/arabesque.png');
     color: var(--text-light);
+}
+
+body.dark::before {
+    background-image: 
+        linear-gradient(rgba(16, 185, 129, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(16, 185, 129, 0.08) 1px, transparent 1px);
+}
+
+/* ─── FUTURISTIC CARDS ─── */
+.anime-card {
+    background: rgba(255, 255, 255, 0.6) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03) !important;
+    transition: var(--transition-smooth) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+body.dark .anime-card {
+    background: rgba(15, 23, 42, 0.6) !important;
+    border: 1px solid rgba(16, 185, 129, 0.1) !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4) !important;
+}
+
+.anime-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.1), transparent);
+    transition: 0.8s ease;
+}
+
+.anime-card:hover::after {
+    left: 100%;
+}
+
+.anime-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    border-color: var(--emerald-neon) !important;
+    box-shadow: 0 20px 60px rgba(16, 185, 129, 0.15) !important;
+}
+
+body.dark .anime-card:hover {
+    box-shadow: 0 0 30px rgba(16, 185, 129, 0.1) !important;
 }
 
 /* Typography Refinement */
@@ -835,18 +908,16 @@ body.weather-snow {
     transition: all 0.3s ease;
     padding: 2px 4px;
     border-radius: 4px;
+    color: #10b981; /* High-visibility Emerald Cyber-Noor style */
+    font-weight: 900;
 }
 
 .quran-word.active-word {
-    color: #c9a959 !important;
-    /* Softer gold - easier on eyes */
-    background: rgba(201, 169, 89, 0.08);
-    /* Reduced opacity */
-    text-shadow: 0 0 8px rgba(201, 169, 89, 0.2);
-    /* Gentle glow only */
-    transform: scale(1.02);
-    /* Minimal scale */
-    box-shadow: 0 0 6px rgba(201, 169, 89, 0.15);
+    color: #fff !important; /* Pure white for current word */
+    background: rgba(16, 185, 129, 0.2); /* Emerald glow */
+    text-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
     /* Subtle shadow */
     animation: wordPulseGentle 0.5s ease-in-out;
     /* Slower animation */
@@ -1094,6 +1165,7 @@ textarea {
 .dark-only {
     display: none !important;
 }
+
 /* --- ANIME / FIGMA HIGH-END ANIMATIONS --- */
 
 .anime-spring {
@@ -1110,8 +1182,11 @@ textarea {
 .anime-card::before {
     content: '';
     position: absolute;
-    top: 0; left: -100%; width: 50%; height: 100%;
-    background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
     transform: skewX(-25deg);
     transition: 0.7s;
     pointer-events: none;
@@ -1140,8 +1215,13 @@ textarea {
 }
 
 @keyframes anime-glow {
-    0% { text-shadow: 0 0 10px rgba(16, 185, 129, 0.2), 0 0 20px rgba(16, 185, 129, 0.1); }
-    100% { text-shadow: 0 0 20px rgba(16, 185, 129, 0.6), 0 0 30px rgba(16, 185, 129, 0.4); }
+    0% {
+        text-shadow: 0 0 10px rgba(16, 185, 129, 0.2), 0 0 20px rgba(16, 185, 129, 0.1);
+    }
+
+    100% {
+        text-shadow: 0 0 20px rgba(16, 185, 129, 0.6), 0 0 30px rgba(16, 185, 129, 0.4);
+    }
 }
 
 .anime-float {
@@ -1149,8 +1229,15 @@ textarea {
 }
 
 @keyframes float-anime {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-15px) rotate(1deg); }
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-15px) rotate(1deg);
+    }
 }
 
 .anime-entrance {
@@ -1169,6 +1256,7 @@ textarea {
 .anime-glow-border {
     position: relative;
 }
+
 .anime-glow-border::after {
     content: '';
     position: absolute;
@@ -1187,7 +1275,11 @@ textarea {
 }
 
 @keyframes border-flow {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 100% 50%; }
-}
+    0% {
+        background-position: 0% 50%;
+    }
 
+    100% {
+        background-position: 100% 50%;
+    }
+}

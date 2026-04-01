@@ -463,7 +463,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.fetchPrayers = async function (lat = null, lng = null, city = null, country = null) {
         let url = '';
         if (lat && lng) {
-            url = `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=1&tune=0,-8,0,0,0,8,8,0,0`;
+            url = `https://api.aladhan.com/v1/timings/10-03-2026?latitude=${lat}&longitude=${lng}&method=1&tune=0,-8,0,0,0,8,8,0,0&adjustment=-1`;
             window.coordinates = { lat, lng };
             window.ramadanLat = lat;
             window.ramadanLng = lng;
@@ -487,7 +487,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             const c = city || "Hyderabad";
             const co = country || "India";
-            url = `https://api.aladhan.com/v1/timingsByCity?city=${c}&country=${co}&method=1&tune=0,-8,0,0,0,8,8,0,0`;
+            url = `https://api.aladhan.com/v1/timingsByCity/10-03-2026?city=${c}&country=${co}&method=1&tune=0,-8,0,0,0,8,8,0,0&adjustment=-1`;
 
             // Cache city
             localStorage.setItem('portal_city', c);
@@ -526,15 +526,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 const hijriEl = document.getElementById('hero-hijri-date');
                 if (gregEl) gregEl.textContent = `${dateInfo.gregorian.day} ${dateInfo.gregorian.month.en} ${dateInfo.gregorian.year}`;
 
-                // Apply same -1 Hijri adjustment as Ramadan section during Ramadan
-                const isRamadan = dateInfo.hijri.month.number === 9;
-                const hijriDay = isRamadan ? parseInt(dateInfo.hijri.day) - 1 : parseInt(dateInfo.hijri.day);
-                const hijriMonthName = isRamadan ? 'Ramadan' : dateInfo.hijri.month.en;
+                const hijriDay = parseInt(dateInfo.hijri.day);
+                const isRamadan = parseInt(dateInfo.hijri.month.number) === 9;
+                const isLastDay = isRamadan && hijriDay === 30;
 
                 if (hijriEl) {
                     hijriEl.innerHTML = isRamadan
-                        ? `${hijriDay} ${hijriMonthName} ${dateInfo.hijri.year} <span class="block text-sm text-[#af944d] mt-1 font-bold">☪ Day ${hijriDay} of Fasting</span>`
-                        : `${hijriDay} ${hijriMonthName} ${dateInfo.hijri.year}`;
+                        ? `${hijriDay} ${dateInfo.hijri.month.en} ${dateInfo.hijri.year} <span class="block text-sm text-[#af944d] mt-1 font-bold">☪ ${isLastDay ? 'LAST DAY OF FASTING' : 'Day ' + hijriDay + ' of Fasting'}</span>`
+                        : `${hijriDay} ${dateInfo.hijri.month.en} ${dateInfo.hijri.year}`;
                 }
 
                 // Also update Ramadan Day Status if we are in Ramadan view
@@ -548,10 +547,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateMasterDates() {
         // Fallback for initial load before API returns
-        const now = new Date();
         const gregEl = document.getElementById('hero-greg-date');
         if (gregEl && gregEl.textContent.trim() === "Loading...") {
-            gregEl.textContent = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+            gregEl.textContent = '10 March 2026';
         }
     }
 
@@ -1376,59 +1374,212 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentPlaylist = [];
     let currentAudioIndex = 0;
 
+    // ─── Islamic Calendar View ───────────────────────────────────────────────
+    const HIJRI_MONTHS = [
+        { num: 1, name: 'Muharram', desc: 'First month, sacred month' },
+        { num: 2, name: 'Safar', desc: 'Second month' },
+        { num: 3, name: "Rabi' al-Awwal", desc: 'Birth of Prophet Muhammad ﷺ' },
+        { num: 4, name: "Rabi' al-Thani", desc: 'Fourth month' },
+        { num: 5, name: 'Jumada al-Awwal', desc: 'Fifth month' },
+        { num: 6, name: 'Jumada al-Thani', desc: 'Sixth month' },
+        { num: 7, name: 'Rajab', desc: 'Sacred month, Night Journey' },
+        { num: 8, name: "Sha'ban", desc: 'Month before Ramadan' },
+        { num: 9, name: 'Ramadan', desc: 'Month of fasting, Revelation of Quran' },
+        { num: 10, name: 'Shawwal', desc: 'Eid al-Fitr' },
+        { num: 11, name: "Dhul-Qi'dah", desc: 'Sacred month' },
+        { num: 12, name: 'Dhul-Hijjah', desc: 'Sacred month, Hajj, Eid al-Adha' },
+    ];
+
+    async function initCalendarView() {
+        const grid = document.getElementById('hijri-months-grid');
+        if (!grid) return;
+
+        // Fetch today's Hijri date
+        let currentHijriMonth = 9; // default Ramadan
+        let hijriDay = '--';
+        let hijriMonthName = 'Ramadan';
+        let hijriYear = '----';
+        let gregorianStr = '';
+
+        try {
+            const today = new Date();
+            const dd = String(today.getDate()).padStart(2, '0');
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const yyyy = today.getFullYear();
+            const res = await fetch(`https://api.aladhan.com/v1/gToH/10-03-2026?adjustment=-1`);
+            const json = await res.json();
+            if (json.code === 200) {
+                const h = json.data.hijri;
+                currentHijriMonth = parseInt(h.month.number);
+                hijriDay = h.day;
+                hijriMonthName = h.month.en;
+                hijriYear = h.year;
+                gregorianStr = `${today.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`;
+            }
+        } catch (_) { }
+
+        // Populate hero
+        const elDayMonth = document.getElementById('cal-hijri-daymonth');
+        const elYear = document.getElementById('cal-hijri-year');
+        const elGreg = document.getElementById('cal-gregorian');
+
+        const isLastDay = currentHijriMonth === 9 && parseInt(hijriDay) === 30;
+
+        if (elDayMonth) {
+            elDayMonth.innerHTML = isLastDay
+                ? `${hijriDay} ${hijriMonthName} <span class="block text-sm md:text-xl font-bold text-amber-300 mt-2 animate-pulse tracking-[0.2em] uppercase">Last Day of Blessed Ramadan</span>`
+                : `${hijriDay} ${hijriMonthName}`;
+        }
+        if (elYear) elYear.textContent = `${hijriYear} AH`;
+        if (elGreg) elGreg.textContent = `Corresponding to ${gregorianStr}`;
+
+        // Populate Fast Timings (Sehri/Iftar)
+        const sehriEl = document.getElementById('cal-sehri-time');
+        const iftarEl = document.getElementById('cal-iftar-time');
+        const fastContainer = document.getElementById('calendar-fast-timings');
+
+        if (window.prayerTimesRaw && window.prayerTimesRaw.Imsak && window.prayerTimesRaw.Maghrib) {
+            if (sehriEl) sehriEl.innerText = window.prayerTimesRaw.Imsak;
+            if (iftarEl) iftarEl.innerText = window.prayerTimesRaw.Maghrib;
+            if (fastContainer) fastContainer.classList.remove('hidden');
+        }
+
+        // Populate months grid
+        grid.innerHTML = HIJRI_MONTHS.map(m => {
+            const isCurrent = m.num === currentHijriMonth;
+            return `
+            <div class="bg-white dark:bg-gray-800 rounded-2xl border ${isCurrent ? 'border-[#10b981]' : 'border-gray-100 dark:border-gray-700'} p-5 flex items-center justify-between cursor-pointer hover:shadow-md transition-all anime-card group ${isCurrent ? 'ring-2 ring-[#10b981]' : ''}">
+                <div class="flex-1 min-w-0 pr-3">
+                    <div class="flex items-center gap-2 mb-0.5">
+                        <p class="font-bold text-gray-800 dark:text-white">${m.name}</p>
+                        ${isCurrent ? '<span class="text-[10px] font-black uppercase tracking-widest bg-[#10b981] text-white px-2 py-0.5 rounded-full">Current</span>' : ''}
+                    </div>
+                    <p class="text-gray-400 text-sm">${m.desc}</p>
+                </div>
+                <div class="w-10 h-10 rounded-xl ${isCurrent ? 'bg-[#10b981]' : 'bg-[#064e3b]'} flex items-center justify-center text-white font-black text-sm flex-shrink-0 group-hover:scale-110 transition-transform shadow-md">
+                    ${m.num}
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    // Hook into navigateToView to init calendar when shown
+    const _origNav = window.navigateToView;
+    window.navigateToView = function (target) {
+        if (_origNav) _origNav(target);
+        if (target === 'view-calendar') setTimeout(initCalendarView, 100);
+    };
+
     // Quran Directory Logic
     let currentDirType = 'surah';
 
     window.switchQuranTab = function (type) {
         currentDirType = type;
-        const btnSurah = document.getElementById('tab-surah-btn');
-        const btnPara = document.getElementById('tab-para-btn');
-        if (btnSurah) btnSurah.className = type === 'surah' ? "text-lg font-bold px-6 py-2 text-[#064e3b] border-b-2 border-[#064e3b] transition-all" : "text-lg font-bold px-6 py-2 text-gray-400 hover:text-[#064e3b] border-b-2 border-transparent hover:border-[#064e3b]/30 transition-all";
-        if (btnPara) btnPara.className = type === 'para' ? "text-lg font-bold px-6 py-2 text-[#064e3b] border-b-2 border-[#064e3b] transition-all" : "text-lg font-bold px-6 py-2 text-gray-400 hover:text-[#064e3b] border-b-2 border-transparent hover:border-[#064e3b]/30 transition-all";
-        loadDirectory(type);
+        const tabs = ['tab-surah-btn', 'tab-para-btn', 'tab-featured-btn'];
+        const activeClass = 'quran-tab px-6 py-2.5 rounded-xl text-sm font-bold bg-white dark:bg-gray-700 text-[#064e3b] dark:text-white shadow-sm transition-all';
+        const inactiveClass = 'quran-tab px-6 py-2.5 rounded-xl text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-[#064e3b] transition-all';
+        tabs.forEach(id => {
+            const btn = document.getElementById(id);
+            if (btn) btn.className = inactiveClass;
+        });
+        const activeId = type === 'surah' ? 'tab-surah-btn' : type === 'para' ? 'tab-para-btn' : 'tab-featured-btn';
+        const activeBtn = document.getElementById(activeId);
+        if (activeBtn) activeBtn.className = activeClass;
+
+        // Show/hide popular surahs
+        const pop = document.getElementById('popular-surahs-section');
+        if (pop) pop.style.display = (type === 'surah') ? '' : 'none';
+
+        if (type === 'featured') {
+            showFeaturedVerses();
+        } else {
+            loadDirectory(type);
+        }
+    }
+
+    window.filterSurahCards = function (query) {
+        const cards = document.querySelectorAll('#surah-index-grid [data-surah-name]');
+        const q = query.toLowerCase();
+        cards.forEach(card => {
+            const name = card.dataset.surahName.toLowerCase();
+            card.style.display = name.includes(q) ? '' : 'none';
+        });
+    }
+
+    function showFeaturedVerses() {
+        const grid = document.getElementById('surah-index-grid');
+        const heading = document.getElementById('surah-grid-heading');
+        if (heading) heading.textContent = 'Featured Verses';
+        if (!grid) return;
+        const featured = [
+            { ref: 'Al-Baqarah 2:255', name: 'Ayat ul-Kursi', arabic: 'اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ', translation: 'Allah - there is no deity except Him, the Ever-Living, the Sustainer of existence.' },
+            { ref: 'Al-Ikhlas 112:1', name: 'Surah Al-Ikhlas', arabic: 'قُلْ هُوَ اللَّهُ أَحَدٌ', translation: 'Say, "He is Allah, [who is] One"' },
+            { ref: 'Al-Fath 48:1', name: 'Inna Fatahna', arabic: 'إِنَّا فَتَحْنَا لَكَ فَتْحًا مُّبِينًا', translation: 'Indeed, We have given you a clear victory.' },
+            { ref: 'Al-Baqarah 2:286', name: 'Laa Yukallif', arabic: 'لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا', translation: 'Allah does not burden a soul beyond that it can bear.' },
+            { ref: 'Al-Inshirah 94:5', name: 'Inna Maal Usri', arabic: 'فَإِنَّ مَعَ الْعُسْرِ يُسْرًا', translation: 'For indeed, with hardship will be ease.' },
+            { ref: 'Al-Duha 93:5', name: 'Wa Lasawfa', arabic: 'وَلَسَوْفَ يُعْطِيكَ رَبُّكَ فَتَرْضَىٰ', translation: 'And your Lord is going to give you, and you will be satisfied.' },
+        ];
+        grid.innerHTML = featured.map(v => `
+            <div class="anime-card bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-6 cursor-pointer hover:shadow-lg transition-all">
+                <p class="text-xs font-black uppercase tracking-widest text-[#10b981] mb-2">${v.ref}</p>
+                <p class="font-bold text-gray-800 dark:text-white text-lg mb-3">${v.name}</p>
+                <p class="text-2xl font-[Amiri] text-right text-gray-700 dark:text-gray-300 mb-3 leading-loose" style="direction:rtl;">${v.arabic}</p>
+                <p class="text-sm italic text-gray-500 dark:text-gray-400">${v.translation}</p>
+            </div>
+        `).join('');
     }
 
     async function loadDirectory(type = 'surah') {
         const grid = document.getElementById('surah-index-grid');
-        const list = document.getElementById('surah-list');
+        const heading = document.getElementById('surah-grid-heading');
         if (!grid) return;
 
-        grid.innerHTML = '<div class="col-span-full text-center py-10"><i class="fas fa-circle-notch fa-spin text-[#af944d] text-2xl"></i></div>';
+        grid.innerHTML = '<div class="col-span-full text-center py-10"><i class="fas fa-circle-notch fa-spin text-[#10b981] text-2xl"></i><p class="mt-3 text-gray-400 text-sm font-medium">Loading...</p></div>';
 
         if (type === 'surah') {
+            if (heading) heading.textContent = 'All Surahs';
             try {
                 const res = await fetch('https://api.alquran.cloud/v1/surah');
                 const data = await res.json();
-                if (list) list.innerHTML = data.data.map(s => `<div class="cursor-pointer p-4 rounded-xl mb-1 hover:bg-[#af944d]/10 text-xs font-bold text-gray-400 hover:text-[#af944d] transition-all border border-transparent hover:border-[#af944d]/20" onclick="openReader(${s.number}, '${s.englishName}', 'surah')">${s.number}. ${s.englishName}</div>`).join('');
+                const surahList = document.getElementById('surah-list');
+                if (surahList) surahList.innerHTML = data.data.map(s => `<div class="cursor-pointer p-4 rounded-xl mb-1 hover:bg-[#af944d]/10 text-xs font-bold text-gray-400 hover:text-[#af944d] transition-all border border-transparent hover:border-[#af944d]/20" onclick="openReader(${s.number}, '${s.englishName}', 'surah')">${s.number}. ${s.englishName}</div>`).join('');
 
-                grid.innerHTML = data.data.map((s, i) => {
-                    const hue = (i * 12) % 360;
+                grid.innerHTML = data.data.map((s) => {
                     return `
-                    <div class="bg-[#fcfdfd] p-6 rounded-[40px] shadow-sm text-center border-t-4 hover:-translate-y-1.5 transition-all cursor-pointer group dark:bg-gray-800 dark:border-gray-700" 
-                        style="border-color:hsl(${hue}, 40%, 50%)" onclick="openReader(${s.number}, '${s.englishName}', 'surah')">
-                         <div class="text-[10px] font-black opacity-30 mb-2">CHAPTER ${s.number}</div>
-                         <h3 class="font-[Amiri] text-4xl mb-2" style="color:hsl(${hue}, 40%, 30%)">${s.name.replace('سُورَةُ ', '')}</h3>
-                         <h4 class="font-black text-lg text-gray-800 dark:text-white uppercase tracking-tighter">${s.englishName}</h4>
-                         <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mt-1">${s.englishNameTranslation}</p>
+                    <div class="anime-card bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5 flex items-center justify-between cursor-pointer hover:shadow-lg transition-all group"
+                        data-surah-name="${s.englishName.toLowerCase()} ${s.englishNameTranslation.toLowerCase()}"
+                        onclick="openReader(${s.number}, '${s.englishName}', 'surah')">
+                        <div class="flex-1 min-w-0 pr-4">
+                            <p class="font-bold text-gray-800 dark:text-white text-base">${s.number}. ${s.englishName}</p>
+                            <p class="text-gray-400 text-sm">${s.englishNameTranslation}</p>
+                            <p class="text-gray-400 text-xs mt-1">${s.numberOfAyahs} verses · ${s.revelationType}</p>
+                        </div>
+                        <div class="flex flex-col items-end gap-2 flex-shrink-0">
+                            <div class="w-11 h-11 rounded-xl bg-[#10b981] flex items-center justify-center text-white font-black text-sm group-hover:scale-110 transition-transform shadow-md shadow-emerald-200 dark:shadow-none">${s.number}</div>
+                            <p class="text-xl font-[Amiri] text-[#064e3b] dark:text-[#af944d]">${s.name.replace('سُورَةُ ', '')}</p>
+                        </div>
                     </div>
                 `}).join('');
-            } catch (e) { grid.innerHTML = 'Error loading.'; }
+            } catch (e) { grid.innerHTML = '<div class="col-span-full text-center py-10 text-red-400 font-bold">Error loading surahs. Please try again.</div>'; }
         } else {
             // PARA / JUZ (1-30)
+            if (heading) heading.textContent = 'Juz (Para)';
             const paras = Array.from({ length: 30 }, (_, i) => i + 1);
             grid.innerHTML = paras.map(p => `
-                 <div class="glass-container p-6 rounded-[40px] cursor-pointer hover:bg-[#f5f2eb]/50 transition-all hover-card-3d border border-transparent hover:border-[#af944d]/30 dark:bg-gray-800 dark:border-gray-700" onclick="openReader(${p}, 'Juz ${p}', 'juz')">
-                      <div class="flex justify-between items-start">
-                         <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#064e3b] to-[#064e3b] text-white flex items-center justify-center font-bold text-sm mb-3 shadow-lg">${p}</div>
-                         <div class="text-right text-[#064e3b] font-serif text-2xl drop-shadow-sm dark:text-[#af944d]">جزء ${p}</div>
-                      </div>
-                      <h3 class="font-bold text-xl text-gray-800 dark:text-white">Juz ${p}</h3>
-                      <p class="text-sm text-gray-500 dark:text-gray-400">Para ${p}</p>
-                 </div>
-             `).join('');
-            // Sidebar List Update for Para? Maybe skip or update.
-            const list = document.getElementById('surah-list');
-            if (list) list.innerHTML = paras.map(p => `<div class="cursor-pointer p-2 hover:bg-[#f5f2eb]/10 text-xs text-gray-300 hover:text-white" onclick="openReader(${p}, 'Juz ${p}', 'juz')">Para ${p}</div>`).join('');
+                <div class="anime-card bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5 flex items-center justify-between cursor-pointer hover:shadow-lg transition-all group" onclick="openReader(${p}, 'Juz ${p}', 'juz')">
+                    <div>
+                        <p class="font-bold text-gray-800 dark:text-white text-lg">Juz ${p}</p>
+                        <p class="text-gray-400 text-sm">Para ${p}</p>
+                        <p class="text-gray-400 text-xs mt-1">~20 pages</p>
+                    </div>
+                    <div class="flex flex-col items-end gap-2">
+                        <div class="w-11 h-11 rounded-xl bg-[#064e3b] flex items-center justify-center text-white font-black text-sm group-hover:scale-110 transition-transform shadow-md shadow-emerald-900/20">${p}</div>
+                        <p class="text-xl font-[Amiri] text-[#064e3b] dark:text-[#af944d]">جزء ${p}</p>
+                    </div>
+                </div>
+            `).join('');
+            const surahList = document.getElementById('surah-list');
+            if (surahList) surahList.innerHTML = paras.map(p => `<div class="cursor-pointer p-2 hover:bg-[#f5f2eb]/10 text-xs text-gray-300 hover:text-white" onclick="openReader(${p}, 'Juz ${p}', 'juz')">Para ${p}</div>`).join('');
         }
     }
 
@@ -1528,7 +1679,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                         ${rukuMarker}
                                         ${sajdahMarker}
                                     </div>
-                                    <div class="arabic-text-sharp flex-1" style="color: #000 !important; font-weight: 900;" data-verse-index="${i}">
+                                    <div class="arabic-text-sharp flex-1" style="color: #fff !important; font-weight: 900;" data-verse-index="${i}">
                                         ${a.text.split(' ').map((word, wordIdx) =>
                     `<span class="quran-word" data-verse="${i}" data-word="${wordIdx}">${word}</span>`
                 ).join(' ')}
@@ -1538,10 +1689,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             <!-- Right: Glassmorphic Translation Pane -->
                             <div class="translation-pane">
                                 <div class="space-y-6 translation-block">
-                                    <div class="text-[#af944d] text-sm italic font-serif opacity-80 border-l-2 border-[#af944d]/30 pl-4">${trData.data.ayahs[i].text}</div>
-                                    <div class="text-gray-100 text-lg font-light leading-relaxed">${enData.data.ayahs[i].text}</div>
-                                    <div class="text-emerald-400 text-lg italic bg-[#042f24] p-4 rounded-xl border border-emerald-500/10">"${hiData.chapter[i]?.text || ''}"</div>
-                                    <div class="text-emerald-50/90 text-2xl font-[Amiri] leading-[2] text-right" style="direction:rtl;">${urData.data.ayahs[i].text}</div>
+                                    <div class="text-[#ffd700] text-sm italic font-black opacity-100 border-l-2 border-[#ffd700]/50 pl-4 uppercase tracking-widest">${trData.data.ayahs[i].text}</div>
+                                    <div class="text-white text-lg font-bold leading-relaxed">${enData.data.ayahs[i].text}</div>
+                                    <div class="text-emerald-300 text-lg italic bg-[#020617]/40 p-5 rounded-2xl border border-emerald-500/20">"${hiData.chapter[i]?.text || ''}"</div>
+                                    <div class="text-emerald-50 text-3xl font-[Amiri] leading-[2.2] text-right" style="direction:rtl;">${urData.data.ayahs[i].text}</div>
                                 </div>
                             </div>
                         </div>
@@ -3223,7 +3374,7 @@ window.getRamadanTimes = async function () {
     let url = '';
 
     if (window.ramadanUseCoords) {
-        url = `https://api.aladhan.com/v1/timings?latitude=${window.ramadanLat}&longitude=${window.ramadanLng}&method=1&school=1&adjustment=-1&tune=0,-8,0,0,0,8,8,0,0`;
+        url = `https://api.aladhan.com/v1/timings/10-03-2026?latitude=${window.ramadanLat}&longitude=${window.ramadanLng}&method=1&school=1&adjustment=-1&tune=0,-8,0,0,0,8,8,0,0`;
 
         // Use detected global city if available
         if (document.getElementById('cityLabel')) {
@@ -3243,7 +3394,7 @@ window.getRamadanTimes = async function () {
         const cityLabel = document.getElementById('cityLabel');
         if (cityLabel) cityLabel.innerText = window.globalCity;
 
-        url = `https://api.aladhan.com/v1/timingsByCity?city=${window.globalCity}&country=${window.globalCountry}&method=1&school=1&adjustment=-1&tune=0,-8,0,0,0,8,8,0,0`;
+        url = `https://api.aladhan.com/v1/timingsByCity/10-03-2026?city=${window.globalCity}&country=${window.globalCountry}&method=1&school=1&adjustment=-1&tune=0,-8,0,0,0,8,8,0,0`;
     }
 
     // Reset Calendar to today
@@ -3766,8 +3917,17 @@ window.toggleMushafMode = function () {
 
 // Update Local Time Card
 setInterval(() => {
-    const timeCard = document.getElementById('local-time-card');
-    if(timeCard) {
+    const timeCard = document.getElementById('hero-local-time');
+    if (timeCard) {
         timeCard.innerText = new Date().toLocaleTimeString('en-US', { hour12: false });
     }
 }, 1000);
+
+// Update Local Time (Cyber-Noor High Precision)
+setInterval(() => {
+    const timeEl = document.getElementById('hero-local-time');
+    if (timeEl) {
+        timeEl.innerText = new Date().toLocaleTimeString('en-US', { hour12: false });
+    }
+}, 1000);
+

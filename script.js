@@ -463,7 +463,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.fetchPrayers = async function (lat = null, lng = null, city = null, country = null) {
         let url = '';
         if (lat && lng) {
-            url = `https://api.aladhan.com/v1/timings/10-03-2026?latitude=${lat}&longitude=${lng}&method=1&tune=0,-8,0,0,0,8,8,0,0&adjustment=-1`;
+            url = `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=1&tune=0,-8,0,0,0,8,8,0,0&adjustment=-1`;
             window.coordinates = { lat, lng };
             window.ramadanLat = lat;
             window.ramadanLng = lng;
@@ -487,7 +487,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             const c = city || "Hyderabad";
             const co = country || "India";
-            url = `https://api.aladhan.com/v1/timingsByCity/10-03-2026?city=${c}&country=${co}&method=1&tune=0,-8,0,0,0,8,8,0,0&adjustment=-1`;
+            url = `https://api.aladhan.com/v1/timingsByCity?city=${c}&country=${co}&method=1&tune=0,-8,0,0,0,8,8,0,0&adjustment=-1`;
 
             // Cache city
             localStorage.setItem('portal_city', c);
@@ -522,19 +522,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateNextPrayer();
 
                 const dateInfo = data.data.date;
-                const gregEl = document.getElementById('hero-greg-date');
-                const hijriEl = document.getElementById('hero-hijri-date');
-                if (gregEl) gregEl.textContent = `${dateInfo.gregorian.day} ${dateInfo.gregorian.month.en} ${dateInfo.gregorian.year}`;
+                document.querySelectorAll('[id="hero-greg-date"]').forEach(gregEl => {
+                    gregEl.textContent = `${dateInfo.gregorian.day} ${dateInfo.gregorian.month.en} ${dateInfo.gregorian.year}`;
+                });
 
                 const hijriDay = parseInt(dateInfo.hijri.day);
                 const isRamadan = parseInt(dateInfo.hijri.month.number) === 9;
                 const isLastDay = isRamadan && hijriDay === 30;
 
-                if (hijriEl) {
+                document.querySelectorAll('[id="hero-hijri-date"]').forEach(hijriEl => {
                     hijriEl.innerHTML = isRamadan
                         ? `${hijriDay} ${dateInfo.hijri.month.en} ${dateInfo.hijri.year} <span class="block text-sm text-[#af944d] mt-1 font-bold">☪ ${isLastDay ? 'LAST DAY OF FASTING' : 'Day ' + hijriDay + ' of Fasting'}</span>`
-                        : `${hijriDay} ${dateInfo.hijri.month.en} ${dateInfo.hijri.year}`;
-                }
+                        : `${hijriDay} ${dateInfo.hijri.month.en} ${dateInfo.hijri.year} AH`;
+                });
 
                 // Also update Ramadan Day Status if we are in Ramadan view
                 const ramDayStatus = document.getElementById('ramadan-day-status');
@@ -547,10 +547,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateMasterDates() {
         // Fallback for initial load before API returns
-        const gregEl = document.getElementById('hero-greg-date');
-        if (gregEl && gregEl.textContent.trim() === "Loading...") {
-            gregEl.textContent = '10 March 2026';
-        }
+        const now = new Date();
+        document.querySelectorAll('[id="hero-greg-date"]').forEach(gregEl => {
+            if (gregEl.textContent.trim() === "Loading..." || gregEl.textContent.trim() === "SYSTEM ONLINE" || gregEl.textContent.trim() === "10 MARCH 2026") {
+                gregEl.textContent = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+            }
+        });
     }
 
     // Nafil Data & Virtue Logic
@@ -1406,7 +1408,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const dd = String(today.getDate()).padStart(2, '0');
             const mm = String(today.getMonth() + 1).padStart(2, '0');
             const yyyy = today.getFullYear();
-            const res = await fetch(`https://api.aladhan.com/v1/gToH/10-03-2026?adjustment=-1`);
+            const res = await fetch(`https://api.aladhan.com/v1/gToH/${dd}-${mm}-${yyyy}?adjustment=-1`);
             const json = await res.json();
             if (json.code === 200) {
                 const h = json.data.hijri;
@@ -1546,17 +1548,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 grid.innerHTML = data.data.map((s) => {
                     return `
-                    <div class="anime-card bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5 flex items-center justify-between cursor-pointer hover:shadow-lg transition-all group"
+                    <div class="anime-card bg-white dark:bg-gray-800 rounded-2xl border border-emerald-500/20 p-5 flex items-center justify-between cursor-pointer hover:shadow-lg transition-all group"
                         data-surah-name="${s.englishName.toLowerCase()} ${s.englishNameTranslation.toLowerCase()}"
                         onclick="openReader(${s.number}, '${s.englishName}', 'surah')">
                         <div class="flex-1 min-w-0 pr-4">
-                            <p class="font-bold text-gray-800 dark:text-white text-base">${s.number}. ${s.englishName}</p>
-                            <p class="text-gray-400 text-sm">${s.englishNameTranslation}</p>
-                            <p class="text-gray-400 text-xs mt-1">${s.numberOfAyahs} verses · ${s.revelationType}</p>
+                            <p class="font-black text-gray-900 dark:text-white text-base group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">${s.number}. ${s.englishName}</p>
+                            <p class="text-emerald-700 dark:text-emerald-400 text-sm font-semibold">${s.englishNameTranslation}</p>
+                            <p class="text-gray-500 dark:text-gray-400 text-xs mt-1">${s.numberOfAyahs} verses · ${s.revelationType}</p>
                         </div>
                         <div class="flex flex-col items-end gap-2 flex-shrink-0">
                             <div class="w-11 h-11 rounded-xl bg-[#10b981] flex items-center justify-center text-white font-black text-sm group-hover:scale-110 transition-transform shadow-md shadow-emerald-200 dark:shadow-none">${s.number}</div>
-                            <p class="text-xl font-[Amiri] text-[#064e3b] dark:text-[#af944d]">${s.name.replace('سُورَةُ ', '')}</p>
+                            <p class="text-2xl font-[Amiri] text-emerald-700 dark:text-[#af944d]">${s.name.replace('سُورَةُ ', '')}</p>
                         </div>
                     </div>
                 `}).join('');
@@ -3374,7 +3376,7 @@ window.getRamadanTimes = async function () {
     let url = '';
 
     if (window.ramadanUseCoords) {
-        url = `https://api.aladhan.com/v1/timings/10-03-2026?latitude=${window.ramadanLat}&longitude=${window.ramadanLng}&method=1&school=1&adjustment=-1&tune=0,-8,0,0,0,8,8,0,0`;
+        url = `https://api.aladhan.com/v1/timings?latitude=${window.ramadanLat}&longitude=${window.ramadanLng}&method=1&school=1&adjustment=-1&tune=0,-8,0,0,0,8,8,0,0`;
 
         // Use detected global city if available
         if (document.getElementById('cityLabel')) {
@@ -3394,7 +3396,7 @@ window.getRamadanTimes = async function () {
         const cityLabel = document.getElementById('cityLabel');
         if (cityLabel) cityLabel.innerText = window.globalCity;
 
-        url = `https://api.aladhan.com/v1/timingsByCity/10-03-2026?city=${window.globalCity}&country=${window.globalCountry}&method=1&school=1&adjustment=-1&tune=0,-8,0,0,0,8,8,0,0`;
+        url = `https://api.aladhan.com/v1/timingsByCity?city=${window.globalCity}&country=${window.globalCountry}&method=1&school=1&adjustment=-1&tune=0,-8,0,0,0,8,8,0,0`;
     }
 
     // Reset Calendar to today

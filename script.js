@@ -304,9 +304,32 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize on page load
     initLocationDropdowns();
 
-    // --- THEME REMOVED - FORCE HIGH VISIBILITY ---
-    document.body.classList.remove('dark');
-    localStorage.removeItem('theme');
+    // --- THEME TOGGLE (Day / Night Mode) ---
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark');
+    } else {
+        document.body.classList.remove('dark');
+    }
+
+    // Sync button icon on initial load
+    function syncThemeButton() {
+        const isDark = document.body.classList.contains('dark');
+        const toggleBtn = document.getElementById('theme-toggle');
+        if (toggleBtn) {
+            toggleBtn.innerHTML = isDark
+                ? '<i class="fas fa-sun text-yellow-400"></i><span class="hidden md:inline ml-2 text-yellow-400 font-bold text-xs">Day</span>'
+                : '<i class="fas fa-moon text-emerald-500"></i><span class="hidden md:inline ml-2 text-emerald-600 font-bold text-xs">Night</span>';
+            toggleBtn.title = isDark ? 'Switch to Day Mode' : 'Switch to Night Mode';
+        }
+    }
+    syncThemeButton();
+
+    window.toggleTheme = function () {
+        const isDark = document.body.classList.toggle('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        syncThemeButton();
+    };
 
 
     // --- NAVIGATION & MODAL LOGIC ---
@@ -1681,7 +1704,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                         ${rukuMarker}
                                         ${sajdahMarker}
                                     </div>
-                                    <div class="arabic-text-sharp flex-1" style="color: #fff !important; font-weight: 900;" data-verse-index="${i}">
+                                    <div class="arabic-text-sharp flex-1 quran-arabic-text" data-verse-index="${i}">
                                         ${a.text.split(' ').map((word, wordIdx) =>
                     `<span class="quran-word" data-verse="${i}" data-word="${wordIdx}">${word}</span>`
                 ).join(' ')}
@@ -1691,10 +1714,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             <!-- Right: Glassmorphic Translation Pane -->
                             <div class="translation-pane">
                                 <div class="space-y-6 translation-block">
-                                    <div class="text-[#ffd700] text-sm italic font-black opacity-100 border-l-2 border-[#ffd700]/50 pl-4 uppercase tracking-widest">${trData.data.ayahs[i].text}</div>
-                                    <div class="text-white text-lg font-bold leading-relaxed">${enData.data.ayahs[i].text}</div>
-                                    <div class="text-emerald-300 text-lg italic bg-[#020617]/40 p-5 rounded-2xl border border-emerald-500/20">"${hiData.chapter[i]?.text || ''}"</div>
-                                    <div class="text-emerald-50 text-3xl font-[Amiri] leading-[2.2] text-right" style="direction:rtl;">${urData.data.ayahs[i].text}</div>
+                                    <div class="quran-transliteration text-sm italic font-black border-l-2 border-[#af944d]/50 pl-4 uppercase tracking-widest">${trData.data.ayahs[i].text}</div>
+                                    <div class="quran-translation text-lg font-bold leading-relaxed">${enData.data.ayahs[i].text}</div>
+                                    <div class="quran-hinglish text-lg italic p-5 rounded-2xl border border-emerald-500/20">"${hiData.chapter[i]?.text || ''}"</div>
+                                    <div class="quran-urdu text-3xl font-[Amiri] leading-[2.2] text-right" style="direction:rtl;">${urData.data.ayahs[i].text}</div>
                                 </div>
                             </div>
                         </div>

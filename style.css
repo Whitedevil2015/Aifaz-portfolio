@@ -24,6 +24,16 @@
     --glass-border: rgba(255, 255, 255, 0.1);
 }
 
+/* Smooth theme transition for ALL elements */
+*, *::before, *::after {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.2s ease, box-shadow 0.3s ease;
+}
+/* Exclude transitions on interactive elements that should feel instant */
+button, a, input, select {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.2s ease,
+                transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, opacity 0.2s ease !important;
+}
+
 @keyframes grid-move {
     0% { background-position: 0 0; }
     100% { background-position: 50px 50px; }
@@ -453,10 +463,13 @@ div {
 }
 
 .translation-pane {
-    background: #0b1a16;
-    color: white;
+    background: #f0f7f4;
+    /* Light mint-green for a clean, readable day surface */
+    color: #111827;
+    /* Near black for maximum readability */
     padding: 3rem;
     overflow-y: auto;
+    border-left: 3px solid rgba(16, 185, 129, 0.15);
 }
 
 .arabic-text-sharp {

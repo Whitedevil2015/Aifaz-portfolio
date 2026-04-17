@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="high-contrast.css">
+    <link rel="stylesheet" href="antigravity.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
     <style>
         /* Custom Scrollbar for Sidebar */
@@ -167,6 +168,13 @@
                         class="fas fa-calendar-alt w-6 text-center text-emerald-500/60 group-hover:text-emerald-400 transition-colors"></i>
                     <span class="ml-3 font-bold text-sm tracking-wide">Islamic Chronos</span>
                 </a>
+                <a href="#"
+                    class="nav-link group relative flex items-center px-6 py-4 hover:bg-emerald-500/5 border-l-4 border-transparent hover:border-emerald-500/40 transition-all text-white/50"
+                    data-target="view-search">
+                    <i class="fas fa-magnifying-glass-dollar w-6 text-center text-violet-400/70 group-hover:text-violet-300 transition-colors"></i>
+                    <span class="ml-3 font-bold text-sm tracking-wide">Islamic Search</span>
+                    <span class="ml-auto text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded bg-violet-500/20 text-violet-300 border border-violet-500/30">AI</span>
+                </a>
             </nav>
 
             <div
@@ -237,6 +245,13 @@
                     <i class="fas fa-calendar-alt w-8 text-emerald-500"></i> <span class="font-bold">Islamic
                         Calendar</span>
                 </a>
+                <a href="#"
+                    class="nav-link flex items-center px-6 py-4 rounded-2xl hover:bg-violet-500/10 transition-all text-white/50 border-l-4 border-transparent"
+                    data-target="view-search" onclick="window.toggleMobileMenu()">
+                    <i class="fas fa-magnifying-glass-dollar w-8 text-violet-400"></i>
+                    <span class="font-bold">Islamic Search</span>
+                    <span class="ml-2 text-[8px] font-black px-1.5 py-0.5 rounded bg-violet-500/20 text-violet-300 border border-violet-500/30">AI</span>
+                </a>
             </nav>
             <div
                 class="p-6 border-t border-white/5 text-[8px] text-emerald-500/40 text-center uppercase font-black tracking-[0.4em]">
@@ -269,6 +284,12 @@
                 data-target="view-calendar">
                 <i class="fas fa-calendar-alt text-xl mb-1"></i>
                 <span class="text-[8px] font-black uppercase tracking-widest">Chronos</span>
+            </a>
+            <a href="#"
+                class="nav-link flex flex-col items-center p-2 text-violet-400/60 hover:text-violet-300 transition-all"
+                data-target="view-search">
+                <i class="fas fa-magnifying-glass-dollar text-xl mb-1"></i>
+                <span class="text-[8px] font-black uppercase tracking-widest">Search</span>
             </a>
         </nav>
 

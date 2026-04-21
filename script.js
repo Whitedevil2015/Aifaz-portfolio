@@ -473,8 +473,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const locLabel = document.getElementById('portal-location-label');
             if (locLabel) {
-                const currentText = locLabel.textContent.split(' • ')[0];
-                locLabel.innerHTML = `${currentText} • <span class="text-sm font-normal">${icon} ${theme.replace('weather-', '').toUpperCase()}</span>`;
+                const locText = locLabel.querySelector('#loc-text') || locLabel;
+                const weatherSpan = locLabel.querySelector('#weather-text');
+                if (weatherSpan) {
+                    weatherSpan.innerHTML = `${icon} ${theme.replace('weather-', '').toUpperCase()}`;
+                } else {
+                    const ws = document.createElement('span');
+                    ws.id = 'weather-text';
+                    ws.className = 'text-xs font-semibold ml-1 opacity-80';
+                    ws.innerHTML = `${icon} ${theme.replace('weather-', '').toUpperCase()}`;
+                    locLabel.querySelector('button')?.after(ws);
+                }
             }
         } catch (e) {
             console.warn("Atmosphere update failed", e);
@@ -921,28 +930,28 @@ document.addEventListener('DOMContentLoaded', () => {
             const hideAzaan = p.id === 'Sunrise'; // No azaan for sunrise
 
             return `
-            <div id="card-${p.id}" class="anime-card bg-[#fcfdfd] p-6 rounded-[40px] shadow-sm text-center border-t-4 cursor-pointer group dark:bg-gray-800 dark:border-gray-700 relative" 
+            <div id="card-${p.id}" class="anime-card bg-[#fcfdfd] p-3 md:p-6 rounded-2xl md:rounded-[40px] shadow-sm text-center border-t-4 cursor-pointer group dark:bg-gray-800 dark:border-gray-700 relative" 
                 style="border-color:hsl(${hue}, 60%, 40%)" onclick="openFazilat('${p.id}')">
                 
-                <div class="absolute -right-4 -top-4 opacity-[0.03] text-7xl" style="color:hsl(${hue}, 60%, 40%)"><i class="fas ${p.icon}"></i></div>
+                <div class="absolute -right-2 -top-2 opacity-[0.03] text-5xl md:text-7xl" style="color:hsl(${hue}, 60%, 40%)"><i class="fas ${p.icon}"></i></div>
                 
-                <div class="w-12 h-12 mx-auto rounded-2xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110 shadow-inner" style="background:hsl(${hue}, 60%, 95%); color:hsl(${hue}, 60%, 40%)">
-                    <i class="fas ${p.icon} text-xl"></i>
+                <div class="w-9 h-9 md:w-12 md:h-12 mx-auto rounded-xl md:rounded-2xl flex items-center justify-center mb-2 md:mb-4 transition-transform group-hover:scale-110 shadow-inner" style="background:hsl(${hue}, 60%, 95%); color:hsl(${hue}, 60%, 40%)">
+                    <i class="fas ${p.icon} text-base md:text-xl"></i>
                 </div>
                 
-                <p class="text-[10px] font-black uppercase tracking-widest mb-1 opacity-40">${p.label || p.id}</p>
-                <p class="text-2xl font-black text-gray-800 dark:text-white" style="color:hsl(${hue}, 60%, 25%)">${window.formatTo12Hour ? window.formatTo12Hour(timings[p.id]) : timings[p.id]}</p>
+                <p class="text-[9px] md:text-[10px] font-black uppercase tracking-widest mb-0.5 md:mb-1 opacity-40">${p.label || p.id}</p>
+                <p class="text-lg md:text-2xl font-black text-gray-800 dark:text-white" style="color:hsl(${hue}, 60%, 25%)">${window.formatTo12Hour ? window.formatTo12Hour(timings[p.id]) : timings[p.id]}</p>
                 
                 ${!hideAzaan ? `
-                <div class="mt-4 flex justify-center items-center gap-2 pt-4 border-t border-gray-50 dark:border-white/5">
+                <div class="mt-2 md:mt-4 flex justify-center items-center gap-1 md:gap-2 pt-2 md:pt-4 border-t border-gray-50 dark:border-white/5">
                     <button onclick="event.stopPropagation(); window.toggleAzaan('${p.id}')" 
                         id="azaan-btn-${p.id}"
-                        class="px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${isEnabled ? 'bg-[#064e3b] text-white shadow-lg' : 'bg-gray-100 text-gray-400 dark:bg-black/20'}">
+                        class="px-2 md:px-4 py-1 md:py-1.5 rounded-full text-[8px] md:text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-1 md:gap-2 ${isEnabled ? 'bg-[#064e3b] text-white shadow-lg' : 'bg-gray-100 text-gray-400 dark:bg-black/20'}">
                         <i class="fas ${isEnabled ? 'fa-volume-up' : 'fa-volume-mute'}"></i>
-                        <span>Azaan ${isEnabled ? 'ON' : 'OFF'}</span>
+                        <span class="hidden sm:inline">Azaan </span>${isEnabled ? 'ON' : 'OFF'}
                     </button>
                 </div>
-                ` : '<div class="mt-4 h-8 invisible"></div>'}
+                ` : '<div class="mt-2 md:mt-4 h-6 md:h-8 invisible"></div>'}
             </div>
         `}).join('');
     }

@@ -168,13 +168,6 @@
                         class="fas fa-calendar-alt w-6 text-center text-emerald-500/60 group-hover:text-emerald-400 transition-colors"></i>
                     <span class="ml-3 font-bold text-sm tracking-wide">Islamic Chronos</span>
                 </a>
-                <a href="#"
-                    class="nav-link group relative flex items-center px-6 py-4 hover:bg-emerald-500/5 border-l-4 border-transparent hover:border-emerald-500/40 transition-all text-white/50"
-                    data-target="view-search">
-                    <i class="fas fa-magnifying-glass-dollar w-6 text-center text-violet-400/70 group-hover:text-violet-300 transition-colors"></i>
-                    <span class="ml-3 font-bold text-sm tracking-wide">Islamic Search</span>
-                    <span class="ml-auto text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded bg-violet-500/20 text-violet-300 border border-violet-500/30">AI</span>
-                </a>
             </nav>
 
             <div
@@ -245,13 +238,6 @@
                     <i class="fas fa-calendar-alt w-8 text-emerald-500"></i> <span class="font-bold">Islamic
                         Calendar</span>
                 </a>
-                <a href="#"
-                    class="nav-link flex items-center px-6 py-4 rounded-2xl hover:bg-violet-500/10 transition-all text-white/50 border-l-4 border-transparent"
-                    data-target="view-search" onclick="window.toggleMobileMenu()">
-                    <i class="fas fa-magnifying-glass-dollar w-8 text-violet-400"></i>
-                    <span class="font-bold">Islamic Search</span>
-                    <span class="ml-2 text-[8px] font-black px-1.5 py-0.5 rounded bg-violet-500/20 text-violet-300 border border-violet-500/30">AI</span>
-                </a>
             </nav>
             <div
                 class="p-6 border-t border-white/5 text-[8px] text-emerald-500/40 text-center uppercase font-black tracking-[0.4em]">
@@ -285,12 +271,6 @@
                 <i class="fas fa-calendar-alt text-xl mb-1"></i>
                 <span class="text-[8px] font-black uppercase tracking-widest">Chronos</span>
             </a>
-            <a href="#"
-                class="nav-link flex flex-col items-center p-2 text-violet-400/60 hover:text-violet-300 transition-all"
-                data-target="view-search">
-                <i class="fas fa-magnifying-glass-dollar text-xl mb-1"></i>
-                <span class="text-[8px] font-black uppercase tracking-widest">Search</span>
-            </a>
         </nav>
 
         <main
@@ -304,67 +284,67 @@
             </div>
             <!-- Top Header (Search & Date) -->
             <header
-                class="sticky top-0 z-20 bg-white/70 backdrop-blur-xl border-b border-gray-100 px-4 md:px-8 py-4 flex justify-between items-center shadow-[0_1px_10px_rgba(0,0,0,0.02)] transition-all duration-300 dark:bg-[#020617]/80 dark:border-emerald-500/10">
-                <div class="flex items-center gap-2 md:gap-4 w-full max-w-2xl">
+                class="sticky top-0 z-20 bg-white/70 backdrop-blur-xl border-b border-gray-100 px-3 md:px-8 py-3 md:py-4 shadow-[0_1px_10px_rgba(0,0,0,0.02)] transition-all duration-300 dark:bg-[#020617]/80 dark:border-emerald-500/10">
+                <!-- Row 1: Menu + Selectors + Theme toggle -->
+                <div class="flex items-center gap-2 w-full">
                     <!-- Mobile Menu Button -->
                     <button id="mobile-menu-btn" onclick="window.toggleMobileMenu()"
-                        class="md:hidden w-10 h-10 rounded-full bg-emerald-50 text-[#10b981] flex items-center justify-center shadow-inner hover:scale-110 active:scale-95 transition-all dark:bg-emerald-900/20">
-                        <i class="fas fa-bars"></i>
+                        class="md:hidden shrink-0 w-9 h-9 rounded-full bg-emerald-50 text-[#10b981] flex items-center justify-center shadow-inner hover:scale-110 active:scale-95 transition-all dark:bg-emerald-900/20">
+                        <i class="fas fa-bars text-sm"></i>
                     </button>
-                    <div class="relative flex-1 flex gap-2">
-                        <div class="relative w-1/2">
-                            <i
-                                class="fas fa-globe absolute left-4 top-1/2 -translate-y-1/2 text-emerald-400 pointer-events-none z-10"></i>
+                    <!-- Country + City selects -->
+                    <div class="relative flex-1 flex gap-1.5 min-w-0">
+                        <div class="relative w-1/2 min-w-0">
+                            <i class="fas fa-globe absolute left-2.5 top-1/2 -translate-y-1/2 text-emerald-400 pointer-events-none z-10 text-xs"></i>
                             <select id="prayer-country-input"
-                                class="w-full pl-10 pr-4 py-2 bg-emerald-50/50 border-none rounded-2xl focus:ring-2 focus:ring-[#10b981]/30 focus:bg-white transition-all text-xs md:text-sm outline-none dark:bg-emerald-900/10 dark:text-emerald-100 appearance-none cursor-pointer">
-                                <option value="">Select Country</option>
+                                class="w-full pl-7 pr-1 py-2 bg-emerald-50/50 border-none rounded-xl focus:ring-2 focus:ring-[#10b981]/30 focus:bg-white transition-all text-[11px] md:text-sm outline-none dark:bg-emerald-900/10 dark:text-emerald-100 appearance-none cursor-pointer truncate">
+                                <option value="">Country</option>
                             </select>
                         </div>
-                        <div class="relative w-1/2">
-                            <i
-                                class="fas fa-city absolute left-4 top-1/2 -translate-y-1/2 text-emerald-400 pointer-events-none z-10"></i>
+                        <div class="relative w-1/2 min-w-0">
+                            <i class="fas fa-city absolute left-2.5 top-1/2 -translate-y-1/2 text-emerald-400 pointer-events-none z-10 text-xs"></i>
                             <select id="prayer-city-input"
-                                class="w-full pl-10 pr-4 py-2 bg-emerald-50/50 border-none rounded-2xl focus:ring-2 focus:ring-[#10b981]/30 focus:bg-white transition-all text-xs md:text-sm outline-none dark:bg-emerald-900/10 dark:text-emerald-100 appearance-none cursor-pointer">
-                                <option value="">Select City</option>
+                                class="w-full pl-7 pr-1 py-2 bg-emerald-50/50 border-none rounded-xl focus:ring-2 focus:ring-[#10b981]/30 focus:bg-white transition-all text-[11px] md:text-sm outline-none dark:bg-emerald-900/10 dark:text-emerald-100 appearance-none cursor-pointer truncate">
+                                <option value="">City</option>
                             </select>
                         </div>
                     </div>
+                    <!-- Sync button -->
                     <button id="portal-search-btn"
-                        class="bg-[#10b981] text-white px-4 md:px-6 py-2 md:py-2.5 rounded-2xl text-xs md:text-sm font-black uppercase tracking-widest shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] hover:-translate-y-0.5 transition-all">
+                        class="shrink-0 bg-[#10b981] text-white px-3 md:px-6 py-2 md:py-2.5 rounded-xl text-xs md:text-sm font-black uppercase tracking-widest shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] hover:-translate-y-0.5 transition-all">
                         Sync
                     </button>
-                    <!-- Hide Auto button on very small screens if needed, or keep icon only -->
+                    <!-- Location button -->
                     <button id="update-location-btn"
-                        class="bg-slate-900 text-white px-4 md:px-6 py-2 md:py-2.5 rounded-2xl text-xs md:text-sm font-bold shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5 transition-all dark:bg-slate-800">
-                        <i class="fas fa-crosshairs text-xs"></i> <span class="hidden md:inline ml-2">Location</span>
+                        class="shrink-0 bg-slate-900 text-white w-9 h-9 rounded-xl text-xs font-bold shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5 transition-all dark:bg-slate-800 flex items-center justify-center">
+                        <i class="fas fa-crosshairs text-xs"></i>
                     </button>
-                </div>
-                <!-- Day / Night Toggle -->
-                <button id="theme-toggle"
-                    onclick="window.toggleTheme()"
-                    title="Switch to Night Mode"
-                    class="flex items-center gap-1.5 px-4 py-2 rounded-2xl bg-emerald-50 dark:bg-slate-800 border border-emerald-200 dark:border-emerald-500/20 hover:scale-105 active:scale-95 transition-all shadow-sm hover:shadow-emerald-200/60 dark:hover:shadow-emerald-500/10 ml-2">
-                    <i class="fas fa-moon text-emerald-500 dark:text-yellow-400"></i>
-                    <span class="hidden md:inline font-bold text-xs text-emerald-600 dark:text-yellow-400">Night</span>
-                </button>
-                <div class="text-right hidden lg:block ml-4">
-                    <div id="hero-local-time"
-                        class="text-2xl font-black text-[#0f172a] dark:text-[#f1f5f9] tracking-tighter leading-none mb-1 tabular-nums">
-                        00:00:00</div>
-                    <div id="hero-greg-date"
-                        class="text-[9px] font-black text-emerald-500 uppercase tracking-[0.2em] opacity-80">
-                        SYSTEM ONLINE</div>
-                </div>
+                    <!-- Day / Night Toggle -->
+                    <button id="theme-toggle"
+                        onclick="window.toggleTheme()"
+                        title="Switch to Night Mode"
+                        class="shrink-0 flex items-center justify-center w-9 h-9 rounded-xl bg-emerald-50 dark:bg-slate-800 border border-emerald-200 dark:border-emerald-500/20 hover:scale-105 active:scale-95 transition-all shadow-sm ml-0.5">
+                        <i class="fas fa-moon text-emerald-500 dark:text-yellow-400 text-sm"></i>
+                    </button>
+                    <!-- Clock (desktop only) -->
+                    <div class="text-right hidden lg:block ml-4 shrink-0">
+                        <div id="hero-local-time"
+                            class="text-2xl font-black text-[#0f172a] dark:text-[#f1f5f9] tracking-tighter leading-none mb-1 tabular-nums">
+                            00:00:00</div>
+                        <div id="hero-greg-date"
+                            class="text-[9px] font-black text-emerald-500 uppercase tracking-[0.2em] opacity-80">
+                            SYSTEM ONLINE</div>
+                    </div><!-- /clock div -->
+                </div><!-- /flex row -->
             </header>
 
             <!-- Dashboard View -->
-            <section id="view-dashboard" class="view-section p-4 md:p-8 space-y-8 animate-fade-in-up">
+            <section id="view-dashboard" class="view-section p-3 md:p-8 space-y-4 md:space-y-8 animate-fade-in-up">
 
-
-                <!-- Hero Section - Anime / Figma Style -->
+                <!-- Hero Section -->
                 <div
-                    class="relative rounded-[40px] overflow-hidden shadow-2xl min-h-[420px] flex items-center justify-center text-center text-white border-4 border-white/20 anime-entrance anime-card anime-glow-border">
-                    <!-- Dynamic Anime Background -->
+                    class="relative rounded-3xl md:rounded-[40px] overflow-hidden shadow-2xl min-h-[340px] md:min-h-[420px] flex items-center justify-center text-center text-white border-2 md:border-4 border-white/20 anime-entrance anime-card anime-glow-border">
+                    <!-- Dynamic Background -->
                     <div class="absolute inset-0 z-0 bg-[#020617]">
                         <div
                             class="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-[#042f24]/80 z-10">
@@ -372,41 +352,40 @@
                         <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1920&q=80"
                             alt="Starry Night Sky"
                             class="absolute inset-0 w-full h-full object-cover mix-blend-screen opacity-40">
-                        <!-- 3D Canvas Placeholder -->
                         <div id="canvas-container"
-                            class="absolute right-0 top-1/2 -translate-y-1/2 w-[400px] h-[400px] opacity-60 mix-blend-screen pointer-events-none anime-float">
+                            class="absolute right-0 top-1/2 -translate-y-1/2 w-[200px] md:w-[400px] h-[200px] md:h-[400px] opacity-60 mix-blend-screen pointer-events-none anime-float">
                         </div>
                     </div>
 
                     <div
-                        class="relative z-20 p-8 space-y-6 max-w-2xl backdrop-blur-sm rounded-[40px] bg-white/5 border border-white/10 shadow-2xl">
+                        class="relative z-20 p-4 md:p-8 space-y-3 md:space-y-6 w-full max-w-lg mx-auto backdrop-blur-sm rounded-2xl md:rounded-[40px] bg-white/5 border border-white/10 shadow-2xl">
                         <div class="anime-spring">
                             <span id="prayer-status-label"
-                                class="inline-block px-4 py-1.5 rounded-full bg-[#fcfdfd]/20 backdrop-blur-md border border-white/30 text-sm font-bold mb-4 text-[#ffd700] tracking-widest shadow-lg uppercase anime-glow-text">
+                                class="inline-block px-3 py-1 rounded-full bg-[#fcfdfd]/20 backdrop-blur-md border border-white/30 text-xs md:text-sm font-bold mb-2 md:mb-4 text-[#ffd700] tracking-widest shadow-lg uppercase anime-glow-text">
                                 Upcoming Prayer
                             </span>
-                            <h2 class="text-6xl md:text-8xl font-[Cormorant_Garamond] font-bold mb-2 drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] anime-glow-text"
+                            <h2 class="text-5xl md:text-8xl font-[Cormorant_Garamond] font-bold mb-1 md:mb-2 drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] anime-glow-text"
                                 id="next-prayer-name">Fajr</h2>
 
                             <div id="prayer-interval-range"
-                                class="text-sm font-black tracking-widest opacity-80 mb-2 font-mono text-emerald-200">
-                                <!-- 05:27 AM — 18:20 PM -->
+                                class="text-xs md:text-sm font-black tracking-widest opacity-80 mb-2 font-mono text-emerald-200">
                             </div>
                         </div>
 
+                        <!-- Countdown timer -->
                         <div
-                            class="bg-gradient-to-b from-[#fcfdfd]/20 to-[#fcfdfd]/5 backdrop-blur-2xl rounded-[30px] p-8 border border-white/40 inline-block min-w-[320px] shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] hover:scale-[1.05] transition-transform duration-500 cubic-bezier(0.34, 1.56, 0.64, 1)">
-                            <div class="text-8xl font-mono font-bold tracking-tight drop-shadow-2xl text-transparent bg-clip-text bg-gradient-to-br from-white via-emerald-100 to-[#10b981]"
+                            class="bg-gradient-to-b from-[#fcfdfd]/20 to-[#fcfdfd]/5 backdrop-blur-2xl rounded-2xl md:rounded-[30px] px-4 py-4 md:p-8 border border-white/40 inline-block w-full shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
+                            <div class="text-4xl sm:text-5xl md:text-8xl font-mono font-bold tracking-tight drop-shadow-2xl text-transparent bg-clip-text bg-gradient-to-br from-white via-emerald-100 to-[#10b981] leading-tight"
                                 id="countdown">00:00:00</div>
-                            <div class="text-[10px] uppercase tracking-[0.4em] mt-4 font-black text-emerald-300"
-                                id="countdown-label">Time Remaining</div>
+                            <div class="text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] mt-2 md:mt-4 font-black text-emerald-300"
+                                id="countdown-label">Time Left To Pray</div>
                         </div>
 
-                        <div id="portal-location-label" class="mt-8 flex justify-center">
+                        <div id="portal-location-label" class="flex justify-center mt-2 md:mt-8">
                             <button onclick="detectAndSyncLocation()"
-                                class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center text-white hover:bg-[#10b981] hover:scale-125 transition-all shadow-[0_0_15px_rgba(255,255,255,0.2)] group"
+                                class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center text-white hover:bg-[#10b981] hover:scale-125 transition-all shadow-[0_0_15px_rgba(255,255,255,0.2)] group"
                                 title="Detect Location">
-                                <i class="fas fa-location-arrow text-base group-hover:animate-pulse"></i>
+                                <i class="fas fa-location-arrow text-sm group-hover:animate-pulse"></i>
                             </button>
                         </div>
                     </div>
@@ -415,8 +394,7 @@
 
 
                 <!-- Prayer Grid -->
-                <!-- Use JS to populate this grid with proper styling -->
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4" id="prayer-times-grid">
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4" id="prayer-times-grid">
                     <!-- Populated by JS -->
                 </div>
 
@@ -429,165 +407,156 @@
                 </div>
 
                 <!-- Dashboard Information Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="grid grid-cols-2 md:grid-cols-2 gap-3 md:gap-6 mb-4 md:mb-8">
                     <div
-                        class="anime-card bg-[#fcfdfd] p-8 rounded-[40px] shadow-sm text-center border-t-4 border-blue-400 hover:-translate-y-1 transition-all dark:bg-gray-800 dark:border-gray-700">
+                        class="anime-card bg-[#fcfdfd] p-4 md:p-8 rounded-2xl md:rounded-[40px] shadow-sm text-center border-t-4 border-blue-400 hover:-translate-y-1 transition-all dark:bg-gray-800 dark:border-gray-700">
                         <div
-                            class="w-12 h-12 mx-auto rounded-full bg-blue-50 flex items-center justify-center text-blue-500 mb-4 shadow-inner">
-                            <i class="fas fa-calendar-alt"></i>
+                            class="w-10 h-10 md:w-12 md:h-12 mx-auto rounded-full bg-blue-50 flex items-center justify-center text-blue-500 mb-2 md:mb-4 shadow-inner">
+                            <i class="fas fa-calendar-alt text-sm md:text-base"></i>
                         </div>
-                        <div class="text-[10px] font-black opacity-30 mb-1 uppercase tracking-widest">Gregorian Date
+                        <div class="text-[8px] md:text-[10px] font-black opacity-30 mb-0.5 md:mb-1 uppercase tracking-widest">Gregorian
                         </div>
-                        <div class="text-2xl font-black text-gray-800 dark:text-white" id="hero-greg-date">Loading...
+                        <div class="text-base md:text-2xl font-black text-gray-800 dark:text-white" id="hero-greg-date">Loading...
                         </div>
                     </div>
                     <div
-                        class="anime-card bg-[#fcfdfd] p-8 rounded-[40px] shadow-sm text-center border-t-4 border-emerald-500 hover:-translate-y-1 transition-all dark:bg-gray-800 dark:border-gray-700">
+                        class="anime-card bg-[#fcfdfd] p-4 md:p-8 rounded-2xl md:rounded-[40px] shadow-sm text-center border-t-4 border-emerald-500 hover:-translate-y-1 transition-all dark:bg-gray-800 dark:border-gray-700">
                         <div
-                            class="w-12 h-12 mx-auto rounded-full bg-emerald-50 flex items-center justify-center text-emerald-500 mb-4 shadow-inner">
-                            <i class="fas fa-moon-stars"></i>
+                            class="w-10 h-10 md:w-12 md:h-12 mx-auto rounded-full bg-emerald-50 flex items-center justify-center text-emerald-500 mb-2 md:mb-4 shadow-inner">
+                            <i class="fas fa-moon-stars text-sm md:text-base"></i>
                         </div>
-                        <div class="text-[10px] font-black opacity-30 mb-1 uppercase tracking-widest">Islamic Calendar
+                        <div class="text-[8px] md:text-[10px] font-black opacity-30 mb-0.5 md:mb-1 uppercase tracking-widest">Islamic Date
                         </div>
-                        <div class="text-2xl font-black text-[#064e3b] dark:text-[#af944d]" id="hero-hijri-date">
+                        <div class="text-base md:text-2xl font-black text-[#064e3b] dark:text-[#af944d]" id="hero-hijri-date">
                             Loading...</div>
                     </div>
                 </div>
 
                 <!-- Features Grid -->
-                <div class="mt-12">
+                <div class="mt-6 md:mt-12">
                     <h3
-                        class="text-xl font-black text-[#0f172a] dark:text-[#f1f5f9] tracking-tighter mb-8 flex items-center gap-3">
+                        class="text-base md:text-xl font-black text-[#0f172a] dark:text-[#f1f5f9] tracking-tighter mb-4 md:mb-8 flex items-center gap-2 md:gap-3">
                         <i class="fas fa-compass text-emerald-500"></i> CORE PILLARS
                     </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div class="anime-card nav-link rounded-[32px] p-8 cursor-pointer group"
+                    <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
+                        <div class="anime-card nav-link rounded-2xl md:rounded-[32px] p-4 md:p-8 cursor-pointer group"
                             data-target="view-quran">
                             <div
-                                class="w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-quran text-3xl text-emerald-500"></i>
+                                class="w-10 h-10 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-3 md:mb-6 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-quran text-xl md:text-3xl text-emerald-500"></i>
                             </div>
-                            <h3 class="text-xl font-black text-[#0f172a] dark:text-white mb-2">Noble Quran</h3>
-                            <p class="text-sm text-slate-500 font-bold dark:text-slate-400">Read and reflect upon the
-                                divine words.</p>
+                            <h3 class="text-sm md:text-xl font-black text-[#0f172a] dark:text-white mb-1 md:mb-2">Noble Quran</h3>
+                            <p class="text-xs text-slate-500 font-bold dark:text-slate-400 hidden sm:block">Read and reflect upon the divine words.</p>
                         </div>
 
-                        <div class="anime-card nav-link rounded-[32px] p-8 cursor-pointer group"
+                        <div class="anime-card nav-link rounded-2xl md:rounded-[32px] p-4 md:p-8 cursor-pointer group"
                             data-target="view-nafil">
                             <div
-                                class="w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-hands-praying text-3xl text-emerald-500"></i>
+                                class="w-10 h-10 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-3 md:mb-6 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-hands-praying text-xl md:text-3xl text-emerald-500"></i>
                             </div>
-                            <h3 class="text-xl font-black text-[#0f172a] dark:text-white mb-2">Salah Guide</h3>
-                            <p class="text-sm text-slate-500 font-bold dark:text-slate-400">Step by step interactive
-                                prayer guide.</p>
+                            <h3 class="text-sm md:text-xl font-black text-[#0f172a] dark:text-white mb-1 md:mb-2">Salah Guide</h3>
+                            <p class="text-xs text-slate-500 font-bold dark:text-slate-400 hidden sm:block">Step by step interactive prayer guide.</p>
                         </div>
 
-                        <div class="anime-card nav-link rounded-[32px] p-8 cursor-pointer group"
+                        <div class="anime-card nav-link rounded-2xl md:rounded-[32px] p-4 md:p-8 cursor-pointer group"
                             data-target="view-punj">
                             <div
-                                class="w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-bolt text-3xl text-emerald-500"></i>
+                                class="w-10 h-10 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-3 md:mb-6 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-bolt text-xl md:text-3xl text-emerald-500"></i>
                             </div>
-                            <h3 class="text-xl font-black text-[#0f172a] dark:text-white mb-2">Panj Surah</h3>
-                            <p class="text-sm text-slate-500 font-bold dark:text-slate-400">Yasin, Rahman, Mulk, and
-                                more.</p>
+                            <h3 class="text-sm md:text-xl font-black text-[#0f172a] dark:text-white mb-1 md:mb-2">Panj Surah</h3>
+                            <p class="text-xs text-slate-500 font-bold dark:text-slate-400 hidden sm:block">Yasin, Rahman, Mulk, and more.</p>
                         </div>
 
-                        <div class="anime-card nav-link rounded-[32px] p-8 cursor-pointer group"
+                        <div class="anime-card nav-link rounded-2xl md:rounded-[32px] p-4 md:p-8 cursor-pointer group"
                             data-target="view-calendar">
                             <div
-                                class="w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-calendar-alt text-3xl text-emerald-500"></i>
+                                class="w-10 h-10 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-3 md:mb-6 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-calendar-alt text-xl md:text-3xl text-emerald-500"></i>
                             </div>
-                            <h3 class="text-xl font-black text-[#0f172a] dark:text-white mb-2">Islamic Calendar</h3>
-                            <p class="text-sm text-slate-500 font-bold dark:text-slate-400">Complete Hijri tracking
-                                system.</p>
+                            <h3 class="text-sm md:text-xl font-black text-[#0f172a] dark:text-white mb-1 md:mb-2">Islamic Calendar</h3>
+                            <p class="text-xs text-slate-500 font-bold dark:text-slate-400 hidden sm:block">Complete Hijri tracking system.</p>
                         </div>
 
-                        <div class="anime-card nav-link rounded-[32px] p-8 cursor-pointer group"
+                        <div class="anime-card nav-link rounded-2xl md:rounded-[32px] p-4 md:p-8 cursor-pointer group"
                             data-target="view-duas">
                             <div
-                                class="w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-heart text-3xl text-emerald-500"></i>
+                                class="w-10 h-10 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-3 md:mb-6 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-heart text-xl md:text-3xl text-emerald-500"></i>
                             </div>
-                            <h3 class="text-xl font-black text-[#0f172a] dark:text-white mb-2">Daily Duas</h3>
-                            <p class="text-sm text-slate-500 font-bold dark:text-slate-400">Essential supplications &
-                                morning azkar.</p>
+                            <h3 class="text-sm md:text-xl font-black text-[#0f172a] dark:text-white mb-1 md:mb-2">Daily Duas</h3>
+                            <p class="text-xs text-slate-500 font-bold dark:text-slate-400 hidden sm:block">Essential supplications &amp; morning azkar.</p>
                         </div>
 
-                        <div class="anime-card nav-link rounded-[32px] p-8 cursor-pointer group"
+                        <div class="anime-card nav-link rounded-2xl md:rounded-[32px] p-4 md:p-8 cursor-pointer group"
                             data-target="view-names">
                             <div
-                                class="w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-star text-3xl text-emerald-500"></i>
+                                class="w-10 h-10 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-3 md:mb-6 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-star text-xl md:text-3xl text-emerald-500"></i>
                             </div>
-                            <h3 class="text-xl font-black text-[#0f172a] dark:text-white mb-2">99 Names</h3>
-                            <p class="text-sm text-slate-500 font-bold dark:text-slate-400">Reflect on the attributes of
-                                Allah.</p>
+                            <h3 class="text-sm md:text-xl font-black text-[#0f172a] dark:text-white mb-1 md:mb-2">99 Names</h3>
+                            <p class="text-xs text-slate-500 font-bold dark:text-slate-400 hidden sm:block">Reflect on the attributes of Allah.</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Daily Reminder -->
                 <div
-                    class="anime-card rounded-[40px] border-l-8 border-amber-400 bg-gradient-to-r from-amber-50 to-orange-50 p-8 md:p-12 shadow-sm dark:bg-gray-800 dark:border-amber-600 dark:from-gray-800 dark:to-gray-800 relative overflow-hidden mt-12">
+                    class="anime-card rounded-2xl md:rounded-[40px] border-l-4 md:border-l-8 border-amber-400 bg-gradient-to-r from-amber-50 to-orange-50 p-5 md:p-12 shadow-sm dark:bg-gray-800 dark:border-amber-600 dark:from-gray-800 dark:to-gray-800 relative overflow-hidden mt-6 md:mt-12">
                     <div class="absolute right-0 top-0 opacity-[0.03] pointer-events-none anime-float"><i
-                            class="fas fa-sun text-[300px] -mt-10 -mr-10"></i></div>
-                    <h3 class="text-4xl font-black mb-8 text-amber-900 dark:text-amber-500 flex items-center gap-4">
+                            class="fas fa-sun text-[200px] md:text-[300px] -mt-10 -mr-10"></i></div>
+                    <h3 class="text-xl md:text-4xl font-black mb-4 md:mb-8 text-amber-900 dark:text-amber-500 flex items-center gap-2 md:gap-4">
                         <i class="fas fa-bell text-[#af944d] anime-glow-text"></i> Daily Reminder
                     </h3>
-                    <div class="space-y-8 relative z-10">
-                        <div class="flex items-start gap-6">
+                    <div class="space-y-4 md:space-y-8 relative z-10">
+                        <div class="flex items-start gap-3 md:gap-6">
                             <div
-                                class="w-14 h-14 rounded-2xl bg-amber-200 dark:bg-amber-900/50 flex flex-shrink-0 items-center justify-center text-amber-700 dark:text-amber-400 text-2xl shadow-sm">
+                                class="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-amber-200 dark:bg-amber-900/50 flex flex-shrink-0 items-center justify-center text-amber-700 dark:text-amber-400 text-lg md:text-2xl shadow-sm">
                                 <i class="fas fa-pray"></i>
                             </div>
                             <div>
-                                <p class="text-2xl font-bold text-amber-900 dark:text-amber-300">Establish Regular
-                                    Prayer</p>
-                                <p class="text-amber-800 font-medium dark:text-gray-400 mt-2 text-lg">Prayer is the
-                                    second pillar of Islam and the key to success in this life and the hereafter.</p>
+                                <p class="text-base md:text-2xl font-bold text-amber-900 dark:text-amber-300">Establish Regular Prayer</p>
+                                <p class="text-amber-800 font-medium dark:text-gray-400 mt-1 md:mt-2 text-sm md:text-lg">Prayer is the second pillar of Islam and the key to success.</p>
                             </div>
                         </div>
-                        <div class="flex items-start gap-6">
+                        <div class="flex items-start gap-3 md:gap-6">
                             <div
-                                class="w-14 h-14 rounded-2xl bg-amber-200 dark:bg-amber-900/50 flex flex-shrink-0 items-center justify-center text-amber-700 dark:text-amber-400 text-2xl shadow-sm">
+                                class="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-amber-200 dark:bg-amber-900/50 flex flex-shrink-0 items-center justify-center text-amber-700 dark:text-amber-400 text-lg md:text-2xl shadow-sm">
                                 <i class="fas fa-quran"></i>
                             </div>
                             <div>
-                                <p class="text-xl font-bold text-amber-900 dark:text-amber-300">Read Quran Daily</p>
-                                <p class="text-amber-800 font-medium dark:text-gray-400 mt-2 text-lg">Even a few verses
-                                    a day can bring immense blessings and guidance into your life.</p>
+                                <p class="text-base md:text-xl font-bold text-amber-900 dark:text-amber-300">Read Quran Daily</p>
+                                <p class="text-amber-800 font-medium dark:text-gray-400 mt-1 md:mt-2 text-sm md:text-lg">Even a few verses a day bring immense blessings.</p>
                             </div>
                         </div>
-                        <div class="flex items-start gap-6">
+                        <div class="flex items-start gap-3 md:gap-6">
                             <div
-                                class="w-14 h-14 rounded-2xl bg-amber-200 dark:bg-amber-900/50 flex flex-shrink-0 items-center justify-center text-amber-700 dark:text-amber-400 text-2xl shadow-sm">
+                                class="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-amber-200 dark:bg-amber-900/50 flex flex-shrink-0 items-center justify-center text-amber-700 dark:text-amber-400 text-lg md:text-2xl shadow-sm">
                                 <i class="fas fa-link"></i>
                             </div>
                             <div>
-                                <p class="text-xl font-bold text-amber-900 dark:text-amber-300">Make Dhikr</p>
-                                <p class="text-amber-800 font-medium dark:text-gray-400 mt-2 text-lg">Remember Allah
-                                    frequently throughout your day for inner peace and tranquility.</p>
+                                <p class="text-base md:text-xl font-bold text-amber-900 dark:text-amber-300">Make Dhikr</p>
+                                <p class="text-amber-800 font-medium dark:text-gray-400 mt-1 md:mt-2 text-sm md:text-lg">Remember Allah frequently for inner peace and tranquility.</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Divine Inspiration -->
                 <div
-                    class="anime-card bg-[#fcfdfd] p-10 rounded-[50px] shadow-2xl border-t-8 border-[#af944d] text-center dark:bg-gray-800 dark:border-gray-700 relative overflow-hidden mt-12 mb-12">
+                    class="anime-card bg-[#fcfdfd] p-6 md:p-10 rounded-3xl md:rounded-[50px] shadow-2xl border-t-4 md:border-t-8 border-[#af944d] text-center dark:bg-gray-800 dark:border-gray-700 relative overflow-hidden mt-6 md:mt-12 mb-6 md:mb-12">
                     <div
                         class="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')] anime-float">
                     </div>
                     <div class="relative z-10">
-                        <p class="text-2xl font-[Amiri] text-[#af944d] mb-4 tracking-wider anime-glow-text">Divine
+                        <p class="text-lg md:text-2xl font-[Amiri] text-[#af944d] mb-2 md:mb-4 tracking-wider anime-glow-text">Divine
                             Inspiration</p>
-                        <h2 class="text-4xl md:text-5xl font-[Amiri] text-gray-800 leading-relaxed mb-6 dark:text-gray-100 mx-auto max-w-4xl"
+                        <h2 class="text-2xl md:text-5xl font-[Amiri] text-gray-800 leading-relaxed mb-3 md:mb-6 dark:text-gray-100 mx-auto max-w-4xl"
                             id="duaArabic" style="direction:rtl;">وَإِذَا سَأَلَكَ عِبَادِي عَنِّي فَإِنِّي قَرِيبٌ</h2>
-                        <p class="text-xl italic text-[#064e3b] font-serif mb-4 dark:text-[#af944d] mx-auto max-w-3xl"
+                        <p class="text-base md:text-xl italic text-[#064e3b] font-serif mb-2 md:mb-4 dark:text-[#af944d] mx-auto max-w-3xl"
                             id="duaTranslation">And when My servants ask you concerning Me - indeed I am near.</p>
-                        <p class="text-sm uppercase font-black tracking-widest opacity-40 text-[#064e3b]"
+                        <p class="text-xs md:text-sm uppercase font-black tracking-widest opacity-40 text-[#064e3b]"
                             id="duaReference">Quran 2:186</p>
                     </div>
                 </div>

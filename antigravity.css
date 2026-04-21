@@ -847,3 +847,196 @@ nav[class*="fixed bottom"] .nav-link.active i {
 .fa-fire-alt {
     color: var(--ag-rose) !important;
 }
+
+/* ════════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE FIXES
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── Header: prevent overflow on tiny screens ────────────────── */
+@media (max-width: 767px) {
+
+    /* Header base */
+    header.sticky,
+    main > header {
+        padding: 10px 12px !important;
+        overflow: visible !important;
+    }
+
+    /* Prevent selects from getting too tiny */
+    #prayer-country-input,
+    #prayer-city-input {
+        font-size: 11px !important;
+        padding-left: 24px !important;
+        padding-right: 4px !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+
+    /* Compact icon buttons */
+    #portal-search-btn {
+        padding: 8px 10px !important;
+        font-size: 10px !important;
+        letter-spacing: 0.05em !important;
+        border-radius: 10px !important;
+        white-space: nowrap !important;
+    }
+
+    #update-location-btn,
+    #theme-toggle {
+        width: 36px !important;
+        height: 36px !important;
+        padding: 0 !important;
+        border-radius: 10px !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* ── Hero card: no horizontal overflow ───────────────────── */
+    #view-dashboard > div:first-of-type {
+        min-height: 320px !important;
+        margin: 0 !important;
+    }
+
+    /* Inner hero content box: full width, no min-width */
+    #view-dashboard .relative.z-20 {
+        width: calc(100% - 24px) !important;
+        max-width: 100% !important;
+        padding: 16px !important;
+        margin: 0 12px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Countdown timer: prevent clipping */
+    #countdown {
+        font-size: clamp(2rem, 11vw, 4rem) !important;
+        line-height: 1.1 !important;
+        word-break: keep-all !important;
+        white-space: nowrap !important;
+        letter-spacing: -0.02em !important;
+    }
+
+    /* Countdown container: full width, no inline-block */
+    #countdown {
+        display: block !important;
+    }
+
+    /* Prayer name: responsive */
+    #next-prayer-name {
+        font-size: clamp(2.5rem, 12vw, 4rem) !important;
+        line-height: 1 !important;
+    }
+
+    /* Status label */
+    #prayer-status-label {
+        font-size: 9px !important;
+        padding: 4px 10px !important;
+    }
+
+    /* Prayer interval */
+    #prayer-interval-range {
+        font-size: 10px !important;
+        letter-spacing: 0.05em !important;
+    }
+
+    /* Location button */
+    #portal-location-label button {
+        width: 38px !important;
+        height: 38px !important;
+    }
+
+    /* ── Prayer cards: 2-col compact layout ─────────────────── */
+    #prayer-times-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+    }
+
+    /* Compact prayer card */
+    #prayer-times-grid [class*="rounded-[40px]"],
+    #prayer-times-grid [id^="card-"],
+    [id^="card-"] {
+        border-radius: 20px !important;
+        padding: 14px 10px !important;
+    }
+
+    /* Prayer time text size */
+    #prayer-times-grid p:last-of-type {
+        font-size: 1.1rem !important;
+    }
+
+    /* Icon container in prayer cards */
+    #prayer-times-grid .w-12.h-12 {
+        width: 36px !important;
+        height: 36px !important;
+        margin-bottom: 8px !important;
+    }
+
+    /* Azaan button smaller */
+    #prayer-times-grid button[id^="azaan-btn-"] {
+        font-size: 8px !important;
+        padding: 4px 8px !important;
+    }
+
+    /* ── Dashboard module grid: single col on mobile ──────── */
+    #view-dashboard .grid.grid-cols-1.md\\:grid-cols-2 {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Date info cards compact */
+    #view-dashboard .anime-card.p-8.rounded-\\[40px\\] {
+        padding: 16px !important;
+        border-radius: 20px !important;
+    }
+
+    /* ── Bottom nav: safe area padding ───────────────────── */
+    nav[class*="fixed bottom"] {
+        padding-bottom: max(12px, env(safe-area-inset-bottom)) !important;
+        border-radius: 20px 20px 0 0 !important;
+    }
+
+    /* Bottom nav items */
+    nav[class*="fixed bottom"] a {
+        font-size: 9px !important;
+        padding: 6px 4px !important;
+    }
+
+    nav[class*="fixed bottom"] i {
+        font-size: 16px !important;
+    }
+
+    /* ── View section padding ─────────────────────────────── */
+    .view-section {
+        padding: 12px !important;
+    }
+
+    /* ── Module feature grid on dashboard ─────────────────── */
+    #view-dashboard .grid.grid-cols-1 {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+
+    /* "View Salah Guide" button */
+    button[data-target="view-nafil"] {
+        font-size: 12px !important;
+        padding: 10px 20px !important;
+    }
+}
+
+/* ── Very small screens (< 380px) ──────────────────────────────── */
+@media (max-width: 380px) {
+    #prayer-times-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+    }
+
+    #countdown {
+        font-size: clamp(1.8rem, 10vw, 2.8rem) !important;
+    }
+
+    #next-prayer-name {
+        font-size: clamp(2rem, 11vw, 3rem) !important;
+    }
+
+    #portal-search-btn {
+        font-size: 9px !important;
+        padding: 7px 8px !important;
+    }
+}

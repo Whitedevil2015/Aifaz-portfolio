@@ -1,1981 +1,639 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sirat-ul Qalb - Premium Islamic Portal</title>
-
-    <!-- DNS Prefetch & Preconnect for faster API calls -->
-    <link rel="dns-prefetch" href="https://api.aladhan.com">
-    <link rel="dns-prefetch" href="https://api.alquran.cloud">
-    <link rel="dns-prefetch" href="https://api.open-meteo.com">
-    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Amiri:wght@400;700&family=Cormorant+Garamond:wght@600;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="high-contrast.css">
-    <link rel="stylesheet" href="antigravity.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
-    <style>
-        /* Custom Scrollbar for Sidebar */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: rgba(197, 160, 89, 0.3);
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(197, 160, 89, 0.8);
-        }
-
-        /* Animation Utils */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px) scale(0.95);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .animate-fade-in-up {
-            animation: fadeInUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-
-        /* Majestic Decency Glassmorphism */
-        .glass-container {
-            background: rgba(252, 253, 253, 0.7);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 40px !important;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
-        }
-
-        .glass-container:hover {
-            background: rgba(255, 255, 255, 0.9);
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(6, 78, 59, 0.08);
-        }
-
-        .name-3d {
-            text-shadow: 0 4px 12px rgba(6, 78, 59, 0.1);
-            background: linear-gradient(135deg, #064e3b, #af944d);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sirat-ul Qalb — Premium Islamic Learning Portal</title>
+<meta name="description" content="A premium Islamic portal for Quran, Hadith, Prayer Times, Duas and Islamic learning.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Amiri:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="style.css">
 </head>
-
-<body
-    class="bg-[url('https://www.transparenttextures.com/patterns/pearl.png')] bg-repeat text-[#064e3b] font-sans overflow-hidden">
-
-    <div class="flex h-screen">
-        <!-- Sidebar (Desktop) -->
-        <aside
-            class="hidden md:flex w-64 bg-gradient-to-b from-[#020617] to-[#0b1120] border-r border-emerald-500/10 text-white flex-col shrink-0 shadow-[10px_0_30px_rgba(0,0,0,0.5)] relative z-10 transition-all duration-300"
-            id="main-sidebar">
-            <div class="p-8 text-center border-b border-white/5 relative overflow-hidden">
-                <div class="absolute inset-0 bg-[#10b981] opacity-[0.03] pointer-events-none"
-                    style="background-image: radial-gradient(circle at 2px 2px, rgba(16,185,129,0.15) 1px, transparent 0); background-size: 15px 15px;">
-                </div>
-                <div class="relative z-10">
-                    <div
-                        class="mx-auto mb-4 w-20 h-20 bg-emerald-500/10 backdrop-blur-xl rounded-2xl flex items-center justify-center border border-emerald-500/20 shadow-[0_0_20px_rgba(16,185,129,0.2)] group-hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] transition-all">
-                        <i class="fas fa-mosque text-3xl text-[#10b981] drop-shadow-lg"></i>
-                    </div>
-                    <h1 class="text-2xl font-black tracking-tighter text-[#10b981] mb-1">Sirat <span
-                            class="text-white/20">al-Qalb</span></h1>
-                    <p class="text-[9px] text-[#fbbf24]/60 font-black uppercase tracking-[0.3em] mt-0">Path of the
-                        Heart</p>
-                </div>
-            </div>
-
-            <nav class="flex-1 py-10 space-y-1 overflow-y-auto">
-                <a href="#"
-                    class="nav-link active group relative flex items-center px-6 py-4 hover:bg-emerald-500/5 border-l-4 border-emerald-500 transition-all"
-                    data-target="view-dashboard">
-                    <i
-                        class="fas fa-clock w-6 text-center text-emerald-500 group-hover:text-emerald-400 transition-colors"></i>
-                    <span class="ml-3 font-bold text-sm tracking-wide">Command Center</span>
-                </a>
-                <a href="#"
-                    class="nav-link group relative flex items-center px-6 py-4 hover:bg-emerald-500/5 border-l-4 border-transparent hover:border-emerald-500/40 transition-all text-white/50"
-                    data-target="view-nafil">
-                    <i
-                        class="fas fa-hands-praying w-6 text-center text-emerald-500/60 group-hover:text-emerald-400 transition-colors"></i>
-                    <span class="ml-3 font-bold text-sm tracking-wide">Salah Tech</span>
-                </a>
-
-                <a href="#"
-                    class="nav-link group relative flex items-center px-6 py-4 hover:bg-emerald-500/5 border-l-4 border-transparent hover:border-emerald-500/40 transition-all text-white/50"
-                    data-target="view-quran">
-                    <i
-                        class="fas fa-quran w-6 text-center text-emerald-500/60 group-hover:text-emerald-400 transition-colors"></i>
-                    <span class="ml-3 font-bold text-sm tracking-wide">Noble Quran</span>
-                </a>
-                <a href="#"
-                    class="nav-link group relative flex items-center px-6 py-4 hover:bg-emerald-500/5 border-l-4 border-transparent hover:border-emerald-500/40 transition-all text-white/50"
-                    data-target="view-punj">
-                    <i
-                        class="fas fa-bolt w-6 text-center text-emerald-500/60 group-hover:text-emerald-400 transition-colors"></i>
-                    <span class="ml-3 font-bold text-sm tracking-wide">High Surahs</span>
-                </a>
-                <a href="#"
-                    class="nav-link group relative flex items-center px-6 py-4 hover:bg-emerald-500/5 border-l-4 border-transparent hover:border-emerald-500/40 transition-all text-white/50"
-                    data-target="view-names">
-                    <i
-                        class="fas fa-star w-6 text-center text-emerald-500/60 group-hover:text-emerald-400 transition-colors"></i>
-                    <span class="ml-3 font-bold text-sm tracking-wide">Core Names</span>
-                </a>
-                <a href="#"
-                    class="nav-link group relative flex items-center px-6 py-4 hover:bg-emerald-500/5 border-l-4 border-transparent hover:border-emerald-500/40 transition-all text-white/50"
-                    data-target="view-duas">
-                    <i
-                        class="fas fa-heart w-6 text-center text-emerald-500/60 group-hover:text-emerald-400 transition-colors"></i>
-                    <span class="ml-3 font-bold text-sm tracking-wide">Daily Uplink</span>
-                </a>
-                <a href="#"
-                    class="nav-link group relative flex items-center px-6 py-4 hover:bg-emerald-500/5 border-l-4 border-transparent hover:border-emerald-500/40 transition-all text-white/50"
-                    data-target="view-library">
-                    <i
-                        class="fas fa-atom w-6 text-center text-emerald-500/60 group-hover:text-emerald-400 transition-colors"></i>
-                    <span class="ml-3 font-bold text-sm tracking-wide">Durood Matrix</span>
-                </a>
-
-                <a href="#"
-                    class="nav-link group relative flex items-center px-6 py-4 hover:bg-emerald-500/5 border-l-4 border-transparent hover:border-emerald-500/40 transition-all text-white/50"
-                    data-target="view-calendar">
-                    <i
-                        class="fas fa-calendar-alt w-6 text-center text-emerald-500/60 group-hover:text-emerald-400 transition-colors"></i>
-                    <span class="ml-3 font-bold text-sm tracking-wide">Islamic Chronos</span>
-                </a>
-            </nav>
-
-            <div
-                class="p-6 border-t border-white/5 text-center text-[8px] font-black uppercase tracking-[0.4em] text-emerald-500/40">
-                SYSTEM VERSION 4.0 // AL-QALB
-            </div>
-        </aside>
-
-        <!-- Mobile Drawer Backdrop -->
-        <div id="mobile-drawer-overlay" onclick="window.toggleMobileMenu()"
-            class="fixed inset-0 bg-black/60 z-[60] hidden backdrop-blur-sm opacity-0 transition-opacity duration-300">
-        </div>
-
-        <!-- Mobile Sidebar Drawer -->
-        <div id="mobile-drawer"
-            class="fixed left-0 top-0 h-full w-4/5 max-w-sm bg-[#042f24] z-[70] translate-x-[-100%] transition-transform duration-500 ease-out flex flex-col shadow-2xl overflow-hidden md:hidden">
-            <div class="p-8 border-b border-white/5 flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center shadow-inner border border-emerald-500/20">
-                        <i class="fas fa-mosque text-emerald-500"></i></div>
-                    <h1 class="text-lg font-black tracking-tighter text-emerald-500 uppercase">Sirat-ul Qalb</h1>
-                </div>
-                <button onclick="window.toggleMobileMenu()"
-                    class="w-10 h-10 rounded-2xl bg-[#10b981]/10 flex items-center justify-center text-[#10b981] shadow-inner border border-[#10b981]/20"><i
-                        class="fas fa-times"></i></button>
-            </div>
-            <nav class="flex-1 px-4 py-8 space-y-2 overflow-y-auto">
-                <a href="#"
-                    class="nav-link flex items-center px-6 py-4 rounded-2xl hover:bg-emerald-500/10 transition-all text-white/50 border-l-4 border-transparent active:border-[#10b981]"
-                    data-target="view-dashboard" onclick="window.toggleMobileMenu()">
-                    <i class="fas fa-home w-8 text-emerald-500"></i> <span class="font-bold">Home</span>
-                </a>
-                <a href="#"
-                    class="nav-link flex items-center px-6 py-4 rounded-2xl hover:bg-emerald-500/10 transition-all text-white/50 border-l-4 border-transparent"
-                    data-target="view-quran" onclick="window.toggleMobileMenu()">
-                    <i class="fas fa-quran w-8 text-emerald-500"></i> <span class="font-bold">Noble Quran</span>
-                </a>
-                <a href="#"
-                    class="nav-link flex items-center px-6 py-4 rounded-2xl hover:bg-emerald-500/10 transition-all text-white/50 border-l-4 border-transparent"
-                    data-target="view-nafil" onclick="window.toggleMobileMenu()">
-                    <i class="fas fa-hands-praying w-8 text-emerald-500"></i> <span class="font-bold">Salah Guide</span>
-                </a>
-                <a href="#"
-                    class="nav-link flex items-center px-6 py-4 rounded-2xl hover:bg-emerald-500/10 transition-all text-white/50 border-l-4 border-transparent"
-                    data-target="view-punj" onclick="window.toggleMobileMenu()">
-                    <i class="fas fa-bolt w-8 text-emerald-500"></i> <span class="font-bold">Panj Surah</span>
-                </a>
-                <a href="#"
-                    class="nav-link flex items-center px-6 py-4 rounded-2xl hover:bg-emerald-500/10 transition-all text-white/50 border-l-4 border-transparent"
-                    data-target="view-names" onclick="window.toggleMobileMenu()">
-                    <i class="fas fa-star w-8 text-emerald-500"></i> <span class="font-bold">99 Names</span>
-                </a>
-                <a href="#"
-                    class="nav-link flex items-center px-6 py-4 rounded-2xl hover:bg-emerald-500/10 transition-all text-white/50 border-l-4 border-transparent"
-                    data-target="view-duas" onclick="window.toggleMobileMenu()">
-                    <i class="fas fa-heart w-8 text-emerald-500"></i> <span class="font-bold">Daily Duas</span>
-                </a>
-                <a href="#"
-                    class="nav-link flex items-center px-6 py-4 rounded-2xl hover:bg-emerald-500/10 transition-all text-white/50 border-l-4 border-transparent"
-                    data-target="view-library" onclick="window.toggleMobileMenu()">
-                    <i class="fas fa-atom w-8 text-emerald-500"></i> <span class="font-bold">Durood Collection</span>
-                </a>
-
-                <a href="#"
-                    class="nav-link flex items-center px-6 py-4 rounded-2xl hover:bg-emerald-500/10 transition-all text-white/50 border-l-4 border-transparent"
-                    data-target="view-calendar" onclick="window.toggleMobileMenu()">
-                    <i class="fas fa-calendar-alt w-8 text-emerald-500"></i> <span class="font-bold">Islamic
-                        Calendar</span>
-                </a>
-            </nav>
-            <div
-                class="p-6 border-t border-white/5 text-[8px] text-emerald-500/40 text-center uppercase font-black tracking-[0.4em]">
-                SIRAT AL-QALB // v4.0</div>
-        </div>
-
-        <!-- Mobile Bottom Navigation -->
-        <nav
-            class="md:hidden fixed bottom-1 left-0 w-full bg-[#020617]/90 backdrop-blur-xl border-t border-emerald-500/10 flex justify-around items-center py-3 z-50 shadow-[0_-10px_40px_rgba(0,0,0,0.6)] rounded-t-[30px] px-2">
-            <a href="#" class="nav-link flex flex-col items-center p-2 text-emerald-500 active scale-110"
-                data-target="view-dashboard">
-                <i class="fas fa-home text-xl mb-1 filter drop-shadow(0 0 5px currentColor)"></i>
-                <span class="text-[8px] font-black uppercase tracking-widest">Home</span>
-            </a>
-            <a href="#"
-                class="nav-link flex flex-col items-center p-2 text-white/40 hover:text-emerald-500 transition-all"
-                data-target="view-quran">
-                <i class="fas fa-quran text-xl mb-1"></i>
-                <span class="text-[8px] font-black uppercase tracking-widest">Quran</span>
-            </a>
-            <a href="#"
-                class="nav-link flex flex-col items-center p-2 text-white/40 hover:text-emerald-500 transition-all"
-                data-target="view-punj">
-                <i class="fas fa-bolt text-xl mb-1"></i>
-                <span class="text-[8px] font-black uppercase tracking-widest">Surah</span>
-            </a>
-
-            <a href="#"
-                class="nav-link flex flex-col items-center p-2 text-white/40 hover:text-emerald-500 transition-all"
-                data-target="view-calendar">
-                <i class="fas fa-calendar-alt text-xl mb-1"></i>
-                <span class="text-[8px] font-black uppercase tracking-widest">Chronos</span>
-            </a>
-        </nav>
-
-        <main
-            class="flex-1 relative overflow-y-auto bg-[#f8fafc] scroll-smooth pb-24 md:pb-0 transition-colors duration-500"
-            id="main-scroll-area">
-
-            <!-- Ambient Effects -->
-            <div class="fixed inset-0 pointer-events-none z-[5] overflow-hidden opacity-10">
-                <!-- Subtle ambient background -->
-                <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#10b981]/20 to-transparent"></div>
-            </div>
-            <!-- Top Header (Search & Date) -->
-            <header
-                class="sticky top-0 z-20 bg-white/70 backdrop-blur-xl border-b border-gray-100 px-3 md:px-8 py-3 md:py-4 shadow-[0_1px_10px_rgba(0,0,0,0.02)] transition-all duration-300 dark:bg-[#020617]/80 dark:border-emerald-500/10">
-                <!-- Row 1: Menu + Selectors + Theme toggle -->
-                <div class="flex items-center gap-2 w-full">
-                    <!-- Mobile Menu Button -->
-                    <button id="mobile-menu-btn" onclick="window.toggleMobileMenu()"
-                        class="md:hidden shrink-0 w-9 h-9 rounded-full bg-emerald-50 text-[#10b981] flex items-center justify-center shadow-inner hover:scale-110 active:scale-95 transition-all dark:bg-emerald-900/20">
-                        <i class="fas fa-bars text-sm"></i>
-                    </button>
-                    <!-- Country + City selects -->
-                    <div class="relative flex-1 flex gap-1.5 min-w-0">
-                        <div class="relative w-1/2 min-w-0">
-                            <i class="fas fa-globe absolute left-2.5 top-1/2 -translate-y-1/2 text-emerald-400 pointer-events-none z-10 text-xs"></i>
-                            <select id="prayer-country-input"
-                                class="w-full pl-7 pr-1 py-2 bg-emerald-50/50 border-none rounded-xl focus:ring-2 focus:ring-[#10b981]/30 focus:bg-white transition-all text-[11px] md:text-sm outline-none dark:bg-emerald-900/10 dark:text-emerald-100 appearance-none cursor-pointer truncate">
-                                <option value="">Country</option>
-                            </select>
-                        </div>
-                        <div class="relative w-1/2 min-w-0">
-                            <i class="fas fa-city absolute left-2.5 top-1/2 -translate-y-1/2 text-emerald-400 pointer-events-none z-10 text-xs"></i>
-                            <select id="prayer-city-input"
-                                class="w-full pl-7 pr-1 py-2 bg-emerald-50/50 border-none rounded-xl focus:ring-2 focus:ring-[#10b981]/30 focus:bg-white transition-all text-[11px] md:text-sm outline-none dark:bg-emerald-900/10 dark:text-emerald-100 appearance-none cursor-pointer truncate">
-                                <option value="">City</option>
-                            </select>
-                        </div>
-                    </div>
-                    <!-- Sync button -->
-                    <button id="portal-search-btn"
-                        class="shrink-0 bg-[#10b981] text-white px-3 md:px-6 py-2 md:py-2.5 rounded-xl text-xs md:text-sm font-black uppercase tracking-widest shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] hover:-translate-y-0.5 transition-all">
-                        Sync
-                    </button>
-                    <!-- Location button -->
-                    <button id="update-location-btn"
-                        class="shrink-0 bg-slate-900 text-white w-9 h-9 rounded-xl text-xs font-bold shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5 transition-all dark:bg-slate-800 flex items-center justify-center">
-                        <i class="fas fa-crosshairs text-xs"></i>
-                    </button>
-                    <!-- Day / Night Toggle -->
-                    <button id="theme-toggle"
-                        onclick="window.toggleTheme()"
-                        title="Switch to Night Mode"
-                        class="shrink-0 flex items-center justify-center w-9 h-9 rounded-xl bg-emerald-50 dark:bg-slate-800 border border-emerald-200 dark:border-emerald-500/20 hover:scale-105 active:scale-95 transition-all shadow-sm ml-0.5">
-                        <i class="fas fa-moon text-emerald-500 dark:text-yellow-400 text-sm"></i>
-                    </button>
-                    <!-- Clock (desktop only) -->
-                    <div class="text-right hidden lg:block ml-4 shrink-0">
-                        <div id="hero-local-time"
-                            class="text-2xl font-black text-[#0f172a] dark:text-[#f1f5f9] tracking-tighter leading-none mb-1 tabular-nums">
-                            00:00:00</div>
-                        <div id="hero-greg-date"
-                            class="text-[9px] font-black text-emerald-500 uppercase tracking-[0.2em] opacity-80">
-                            SYSTEM ONLINE</div>
-                    </div><!-- /clock div -->
-                </div><!-- /flex row -->
-            </header>
-
-            <!-- Dashboard View -->
-            <section id="view-dashboard" class="view-section p-3 md:p-8 space-y-4 md:space-y-8 animate-fade-in-up">
-
-                <!-- Hero Section -->
-                <div
-                    class="relative rounded-3xl md:rounded-[40px] overflow-hidden shadow-2xl min-h-[340px] md:min-h-[420px] flex items-center justify-center text-center text-white border-2 md:border-4 border-white/20 anime-entrance anime-card anime-glow-border">
-                    <!-- Dynamic Background -->
-                    <div class="absolute inset-0 z-0 bg-[#020617]">
-                        <div
-                            class="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-[#042f24]/80 z-10">
-                        </div>
-                        <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1920&q=80"
-                            alt="Starry Night Sky"
-                            class="absolute inset-0 w-full h-full object-cover mix-blend-screen opacity-40">
-                        <div id="canvas-container"
-                            class="absolute right-0 top-1/2 -translate-y-1/2 w-[200px] md:w-[400px] h-[200px] md:h-[400px] opacity-60 mix-blend-screen pointer-events-none anime-float">
-                        </div>
-                    </div>
-
-                    <div
-                        class="relative z-20 p-4 md:p-8 space-y-3 md:space-y-6 w-full max-w-lg mx-auto backdrop-blur-sm rounded-2xl md:rounded-[40px] bg-white/5 border border-white/10 shadow-2xl">
-                        <div class="anime-spring">
-                            <span id="prayer-status-label"
-                                class="inline-block px-3 py-1 rounded-full bg-[#fcfdfd]/20 backdrop-blur-md border border-white/30 text-xs md:text-sm font-bold mb-2 md:mb-4 text-[#ffd700] tracking-widest shadow-lg uppercase anime-glow-text">
-                                Upcoming Prayer
-                            </span>
-                            <h2 class="text-5xl md:text-8xl font-[Cormorant_Garamond] font-bold mb-1 md:mb-2 drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] anime-glow-text"
-                                id="next-prayer-name">Fajr</h2>
-
-                            <div id="prayer-interval-range"
-                                class="text-xs md:text-sm font-black tracking-widest opacity-80 mb-2 font-mono text-emerald-200">
-                            </div>
-                        </div>
-
-                        <!-- Countdown timer -->
-                        <div
-                            class="bg-gradient-to-b from-[#fcfdfd]/20 to-[#fcfdfd]/5 backdrop-blur-2xl rounded-2xl md:rounded-[30px] px-4 py-4 md:p-8 border border-white/40 inline-block w-full shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
-                            <div class="text-4xl sm:text-5xl md:text-8xl font-mono font-bold tracking-tight drop-shadow-2xl text-transparent bg-clip-text bg-gradient-to-br from-white via-emerald-100 to-[#10b981] leading-tight"
-                                id="countdown">00:00:00</div>
-                            <div class="text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] mt-2 md:mt-4 font-black text-emerald-300"
-                                id="countdown-label">Time Left To Pray</div>
-                        </div>
-
-                        <div id="portal-location-label" class="flex justify-center mt-2 md:mt-8">
-                            <button onclick="detectAndSyncLocation()"
-                                class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center text-white hover:bg-[#10b981] hover:scale-125 transition-all shadow-[0_0_15px_rgba(255,255,255,0.2)] group"
-                                title="Detect Location">
-                                <i class="fas fa-location-arrow text-sm group-hover:animate-pulse"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <!-- Prayer Grid -->
-                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4" id="prayer-times-grid">
-                    <!-- Populated by JS -->
-                </div>
-
-                <!-- Expanded Guide Link -->
-                <div class="text-center my-6">
-                    <button data-target="view-nafil"
-                        class="nav-link inline-flex items-center gap-2 px-8 py-3 bg-[#fcfdfd] border border-[#af944d] text-[#064e3b] rounded-full font-bold hover:bg-[#af944d] hover:text-white transition-all transform hover:scale-105 shadow-sm dark:bg-gray-800 dark:text-[#af944d] dark:hover:text-white">
-                        <i class="fas fa-book-reader"></i> View Salah Guide
-                    </button>
-                </div>
-
-                <!-- Dashboard Information Grid -->
-                <div class="grid grid-cols-2 md:grid-cols-2 gap-3 md:gap-6 mb-4 md:mb-8">
-                    <div
-                        class="anime-card bg-[#fcfdfd] p-4 md:p-8 rounded-2xl md:rounded-[40px] shadow-sm text-center border-t-4 border-blue-400 hover:-translate-y-1 transition-all dark:bg-gray-800 dark:border-gray-700">
-                        <div
-                            class="w-10 h-10 md:w-12 md:h-12 mx-auto rounded-full bg-blue-50 flex items-center justify-center text-blue-500 mb-2 md:mb-4 shadow-inner">
-                            <i class="fas fa-calendar-alt text-sm md:text-base"></i>
-                        </div>
-                        <div class="text-[8px] md:text-[10px] font-black opacity-30 mb-0.5 md:mb-1 uppercase tracking-widest">Gregorian
-                        </div>
-                        <div class="text-base md:text-2xl font-black text-gray-800 dark:text-white" id="hero-greg-date">Loading...
-                        </div>
-                    </div>
-                    <div
-                        class="anime-card bg-[#fcfdfd] p-4 md:p-8 rounded-2xl md:rounded-[40px] shadow-sm text-center border-t-4 border-emerald-500 hover:-translate-y-1 transition-all dark:bg-gray-800 dark:border-gray-700">
-                        <div
-                            class="w-10 h-10 md:w-12 md:h-12 mx-auto rounded-full bg-emerald-50 flex items-center justify-center text-emerald-500 mb-2 md:mb-4 shadow-inner">
-                            <i class="fas fa-moon-stars text-sm md:text-base"></i>
-                        </div>
-                        <div class="text-[8px] md:text-[10px] font-black opacity-30 mb-0.5 md:mb-1 uppercase tracking-widest">Islamic Date
-                        </div>
-                        <div class="text-base md:text-2xl font-black text-[#064e3b] dark:text-[#af944d]" id="hero-hijri-date">
-                            Loading...</div>
-                    </div>
-                </div>
-
-                <!-- Features Grid -->
-                <div class="mt-6 md:mt-12">
-                    <h3
-                        class="text-base md:text-xl font-black text-[#0f172a] dark:text-[#f1f5f9] tracking-tighter mb-4 md:mb-8 flex items-center gap-2 md:gap-3">
-                        <i class="fas fa-compass text-emerald-500"></i> CORE PILLARS
-                    </h3>
-                    <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
-                        <div class="anime-card nav-link rounded-2xl md:rounded-[32px] p-4 md:p-8 cursor-pointer group"
-                            data-target="view-quran">
-                            <div
-                                class="w-10 h-10 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-3 md:mb-6 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-quran text-xl md:text-3xl text-emerald-500"></i>
-                            </div>
-                            <h3 class="text-sm md:text-xl font-black text-[#0f172a] dark:text-white mb-1 md:mb-2">Noble Quran</h3>
-                            <p class="text-xs text-slate-500 font-bold dark:text-slate-400 hidden sm:block">Read and reflect upon the divine words.</p>
-                        </div>
-
-                        <div class="anime-card nav-link rounded-2xl md:rounded-[32px] p-4 md:p-8 cursor-pointer group"
-                            data-target="view-nafil">
-                            <div
-                                class="w-10 h-10 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-3 md:mb-6 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-hands-praying text-xl md:text-3xl text-emerald-500"></i>
-                            </div>
-                            <h3 class="text-sm md:text-xl font-black text-[#0f172a] dark:text-white mb-1 md:mb-2">Salah Guide</h3>
-                            <p class="text-xs text-slate-500 font-bold dark:text-slate-400 hidden sm:block">Step by step interactive prayer guide.</p>
-                        </div>
-
-                        <div class="anime-card nav-link rounded-2xl md:rounded-[32px] p-4 md:p-8 cursor-pointer group"
-                            data-target="view-punj">
-                            <div
-                                class="w-10 h-10 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-3 md:mb-6 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-bolt text-xl md:text-3xl text-emerald-500"></i>
-                            </div>
-                            <h3 class="text-sm md:text-xl font-black text-[#0f172a] dark:text-white mb-1 md:mb-2">Panj Surah</h3>
-                            <p class="text-xs text-slate-500 font-bold dark:text-slate-400 hidden sm:block">Yasin, Rahman, Mulk, and more.</p>
-                        </div>
-
-                        <div class="anime-card nav-link rounded-2xl md:rounded-[32px] p-4 md:p-8 cursor-pointer group"
-                            data-target="view-calendar">
-                            <div
-                                class="w-10 h-10 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-3 md:mb-6 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-calendar-alt text-xl md:text-3xl text-emerald-500"></i>
-                            </div>
-                            <h3 class="text-sm md:text-xl font-black text-[#0f172a] dark:text-white mb-1 md:mb-2">Islamic Calendar</h3>
-                            <p class="text-xs text-slate-500 font-bold dark:text-slate-400 hidden sm:block">Complete Hijri tracking system.</p>
-                        </div>
-
-                        <div class="anime-card nav-link rounded-2xl md:rounded-[32px] p-4 md:p-8 cursor-pointer group"
-                            data-target="view-duas">
-                            <div
-                                class="w-10 h-10 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-3 md:mb-6 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-heart text-xl md:text-3xl text-emerald-500"></i>
-                            </div>
-                            <h3 class="text-sm md:text-xl font-black text-[#0f172a] dark:text-white mb-1 md:mb-2">Daily Duas</h3>
-                            <p class="text-xs text-slate-500 font-bold dark:text-slate-400 hidden sm:block">Essential supplications &amp; morning azkar.</p>
-                        </div>
-
-                        <div class="anime-card nav-link rounded-2xl md:rounded-[32px] p-4 md:p-8 cursor-pointer group"
-                            data-target="view-names">
-                            <div
-                                class="w-10 h-10 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-3 md:mb-6 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-star text-xl md:text-3xl text-emerald-500"></i>
-                            </div>
-                            <h3 class="text-sm md:text-xl font-black text-[#0f172a] dark:text-white mb-1 md:mb-2">99 Names</h3>
-                            <p class="text-xs text-slate-500 font-bold dark:text-slate-400 hidden sm:block">Reflect on the attributes of Allah.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Daily Reminder -->
-                <div
-                    class="anime-card rounded-2xl md:rounded-[40px] border-l-4 md:border-l-8 border-amber-400 bg-gradient-to-r from-amber-50 to-orange-50 p-5 md:p-12 shadow-sm dark:bg-gray-800 dark:border-amber-600 dark:from-gray-800 dark:to-gray-800 relative overflow-hidden mt-6 md:mt-12">
-                    <div class="absolute right-0 top-0 opacity-[0.03] pointer-events-none anime-float"><i
-                            class="fas fa-sun text-[200px] md:text-[300px] -mt-10 -mr-10"></i></div>
-                    <h3 class="text-xl md:text-4xl font-black mb-4 md:mb-8 text-amber-900 dark:text-amber-500 flex items-center gap-2 md:gap-4">
-                        <i class="fas fa-bell text-[#af944d] anime-glow-text"></i> Daily Reminder
-                    </h3>
-                    <div class="space-y-4 md:space-y-8 relative z-10">
-                        <div class="flex items-start gap-3 md:gap-6">
-                            <div
-                                class="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-amber-200 dark:bg-amber-900/50 flex flex-shrink-0 items-center justify-center text-amber-700 dark:text-amber-400 text-lg md:text-2xl shadow-sm">
-                                <i class="fas fa-pray"></i>
-                            </div>
-                            <div>
-                                <p class="text-base md:text-2xl font-bold text-amber-900 dark:text-amber-300">Establish Regular Prayer</p>
-                                <p class="text-amber-800 font-medium dark:text-gray-400 mt-1 md:mt-2 text-sm md:text-lg">Prayer is the second pillar of Islam and the key to success.</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-3 md:gap-6">
-                            <div
-                                class="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-amber-200 dark:bg-amber-900/50 flex flex-shrink-0 items-center justify-center text-amber-700 dark:text-amber-400 text-lg md:text-2xl shadow-sm">
-                                <i class="fas fa-quran"></i>
-                            </div>
-                            <div>
-                                <p class="text-base md:text-xl font-bold text-amber-900 dark:text-amber-300">Read Quran Daily</p>
-                                <p class="text-amber-800 font-medium dark:text-gray-400 mt-1 md:mt-2 text-sm md:text-lg">Even a few verses a day bring immense blessings.</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-3 md:gap-6">
-                            <div
-                                class="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-amber-200 dark:bg-amber-900/50 flex flex-shrink-0 items-center justify-center text-amber-700 dark:text-amber-400 text-lg md:text-2xl shadow-sm">
-                                <i class="fas fa-link"></i>
-                            </div>
-                            <div>
-                                <p class="text-base md:text-xl font-bold text-amber-900 dark:text-amber-300">Make Dhikr</p>
-                                <p class="text-amber-800 font-medium dark:text-gray-400 mt-1 md:mt-2 text-sm md:text-lg">Remember Allah frequently for inner peace and tranquility.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Divine Inspiration -->
-                <div
-                    class="anime-card bg-[#fcfdfd] p-6 md:p-10 rounded-3xl md:rounded-[50px] shadow-2xl border-t-4 md:border-t-8 border-[#af944d] text-center dark:bg-gray-800 dark:border-gray-700 relative overflow-hidden mt-6 md:mt-12 mb-6 md:mb-12">
-                    <div
-                        class="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')] anime-float">
-                    </div>
-                    <div class="relative z-10">
-                        <p class="text-lg md:text-2xl font-[Amiri] text-[#af944d] mb-2 md:mb-4 tracking-wider anime-glow-text">Divine
-                            Inspiration</p>
-                        <h2 class="text-2xl md:text-5xl font-[Amiri] text-gray-800 leading-relaxed mb-3 md:mb-6 dark:text-gray-100 mx-auto max-w-4xl"
-                            id="duaArabic" style="direction:rtl;">وَإِذَا سَأَلَكَ عِبَادِي عَنِّي فَإِنِّي قَرِيبٌ</h2>
-                        <p class="text-base md:text-xl italic text-[#064e3b] font-serif mb-2 md:mb-4 dark:text-[#af944d] mx-auto max-w-3xl"
-                            id="duaTranslation">And when My servants ask you concerning Me - indeed I am near.</p>
-                        <p class="text-xs md:text-sm uppercase font-black tracking-widest opacity-40 text-[#064e3b]"
-                            id="duaReference">Quran 2:186</p>
-                    </div>
-                </div>
-
-                <div id="zakat-section"
-                    class="anime-card max-w-4xl mx-auto bg-[#fcfdfd] p-8 rounded-[40px] shadow-sm border-t-4 border-[#af944d] dark:bg-gray-800 dark:border-gray-700 mb-8 mt-8 text-center">
-                    <div class="flex flex-wrap justify-center items-center mb-6 gap-4">
-                        <h3 class="text-2xl font-bold flex items-center gap-2 dark:text-white">
-                            <span>💰</span> Zakat Calculator (2.5%)
-                        </h3>
-                        <select id="zakat-currency" onchange="calculateZakat()"
-                            class="bg-[#ebe2d5] dark:bg-gray-700 border-none rounded-lg px-4 py-2 text-sm font-bold focus:ring-2 focus:ring-[#064e3b] outline-none dark:text-white cursor-pointer shadow-sm">
-                            <option value="INR" selected>INR (₹)</option>
-                            <option value="USD">USD ($)</option>
-                            <option value="EUR">EUR (€)</option>
-                            <option value="GBP">GBP (£)</option>
-                            <option value="AED">AED (د.إ)</option>
-                            <option value="SAR">SAR (﷼)</option>
-                            <option value="PKR">PKR (₨)</option>
-                        </select>
-                    </div>
-
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-semibold mb-1 dark:text-gray-300">Cash &
-                                    Savings</label>
-                                <input type="number" id="zakat-cash" placeholder="0.00" oninput="calculateZakat()"
-                                    class="w-full p-3 rounded-lg border dark:bg-gray-700 dark:border-gray-600 outline-none focus:ring-2 focus:ring-[#064e3b] dark:text-white">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold mb-1 dark:text-gray-300">Gold & Silver (Market
-                                    Value)</label>
-                                <input type="number" id="zakat-gold" placeholder="0.00" oninput="calculateZakat()"
-                                    class="w-full p-3 rounded-lg border dark:bg-gray-700 dark:border-gray-600 outline-none focus:ring-2 focus:ring-[#064e3b] dark:text-white">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold mb-1 dark:text-gray-300">Investments /
-                                    Business Assets</label>
-                                <input type="number" id="zakat-assets" placeholder="0.00" oninput="calculateZakat()"
-                                    class="w-full p-3 rounded-lg border dark:bg-gray-700 dark:border-gray-600 outline-none focus:ring-2 focus:ring-[#064e3b] dark:text-white">
-                            </div>
-                        </div>
-
-                        <div
-                            class="bg-[#064e3b]/10 dark:bg-[#064e3b]/20 rounded-2xl p-8 flex flex-col justify-center text-center">
-                            <p class="text-sm font-bold uppercase tracking-widest opacity-70 mb-2 dark:text-gray-400">
-                                Total Zakat Due</p>
-                            <div id="zakat-total" class="text-5xl font-bold text-[#064e3b] dark:text-[#af944d]">$0.00
-                            </div>
-                            <p class="text-[10px] mt-4 opacity-50 italic dark:text-gray-500">Note: Zakat is only due if
-                                your wealth exceeds the Nisab threshold.</p>
-                        </div>
-                    </div>
-                </div>
-
-            </section>
-
-
-            <!-- Qibla View (Placeholder) -->
-
-            <!-- Nafil Prayers View -->
-            <section id="view-nafil" class="view-section hidden p-4 md:p-8 space-y-12 animate-fade-in-up">
-                <div class="text-center mb-16 relative">
-                    <div class="absolute inset-0 flex items-center justify-center opacity-[0.03] -z-10">
-                        <i class="fas fa-mosque text-[200px]"></i>
-                    </div>
-                    <div
-                        class="inline-block px-6 py-2 bg-[#af944d]/10 rounded-full border border-[#af944d]/20 text-[10px] font-black uppercase tracking-[0.3em] text-[#af944d] mb-6">
-                        Divine Guidelines</div>
-                    <h2
-                        class="text-6xl md:text-7xl font-[Cormorant_Garamond] font-black text-[#064e3b] dark:text-[#fcfdfd] drop-shadow-sm mb-4">
-                        The Prayer Guide</h2>
-                    <p class="text-lg text-gray-500 max-w-2xl mx-auto dark:text-gray-400 font-medium">Detailed timings,
-                        rakats, and sacred virtues for obligatory and voluntary prayers.</p>
-                    <div class="flex justify-center mt-8">
-                        <div
-                            class="w-24 h-1 bg-gradient-to-r from-transparent via-[#af944d] to-transparent rounded-full opacity-50">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Farz Section -->
-                <div class="max-w-6xl mx-auto">
-                    <h3
-                        class="text-2xl font-bold text-[#064e3b] border-b border-[#af944d]/30 pb-2 mb-6 dark:text-white flex items-center gap-2">
-                        <i class="fas fa-mosque text-[#af944d]"></i> Obligatory (Farz) Prayers
-                    </h3>
-                    <div id="farz-guide-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- Populated by JS -->
-                    </div>
-                </div>
-
-                <!-- Nafil Section -->
-                <div class="max-w-6xl mx-auto">
-                    <h3
-                        class="text-2xl font-bold text-[#064e3b] border-b border-[#af944d]/30 pb-2 mb-6 dark:text-white flex items-center gap-2">
-                        <i class="fas fa-praying-hands text-[#af944d]"></i> Voluntary (Nafil) Prayers
-                    </h3>
-                    <div id="nafil-guide-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- Populated by JS -->
-                    </div>
-                </div>
-
-                <div class="mt-8 p-6 bg-[#af944d]/10 rounded-xl border border-[#af944d]/20 max-w-6xl mx-auto">
-                    <h4 class="font-bold text-[#064e3b] mb-2 dark:text-[#af944d]"><i
-                            class="fas fa-info-circle mr-2"></i>Note</h4>
-                    <p class="text-sm text-gray-600 dark:text-gray-300">Timings are calculated based on solar position.
-                        Perform prayers with correct Niyyah and Method.</p>
-                </div>
-            </section>
-
-
-
-            <!-- Quran View -->
-            <section id="view-quran" class="view-section hidden p-4 md:p-8 space-y-8 animate-fade-in-up">
-
-                <!-- Header -->
-                <div class="mb-2">
-                    <p class="text-sm font-black uppercase tracking-widest text-[#10b981] mb-1">Holy Scripture</p>
-                    <h2 class="text-4xl md:text-5xl font-[Cormorant_Garamond] font-bold text-[#064e3b] dark:text-white">
-                        The Noble Quran</h2>
-                    <p class="text-gray-500 mt-2 dark:text-gray-400">Read, listen and reflect upon the divine words of
-                        Allah ﷻ</p>
-                </div>
-
-                <!-- Tab Bar + Search Row -->
-                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                    <!-- Tabs -->
-                    <div class="flex bg-gray-100 dark:bg-gray-800 rounded-2xl p-1 w-fit gap-1" id="quran-tab-bar">
-                        <button id="tab-surah-btn"
-                            class="quran-tab px-6 py-2.5 rounded-xl text-sm font-bold bg-white dark:bg-gray-700 text-[#064e3b] dark:text-white shadow-sm transition-all"
-                            onclick="switchQuranTab('surah')">Surahs</button>
-                        <button id="tab-para-btn"
-                            class="quran-tab px-6 py-2.5 rounded-xl text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-[#064e3b] transition-all"
-                            onclick="switchQuranTab('para')">Juz</button>
-                        <button id="tab-featured-btn"
-                            class="quran-tab px-6 py-2.5 rounded-xl text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-[#064e3b] transition-all"
-                            onclick="switchQuranTab('featured')">Featured Verses</button>
-                    </div>
-                    <!-- Search -->
-                    <div class="relative max-w-xs w-full">
-                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                        <input type="text" id="quran-search-input" placeholder="Search surah name..."
-                            class="w-full pl-10 pr-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm font-medium outline-none focus:border-[#10b981] transition-all dark:text-white"
-                            oninput="filterSurahCards(this.value)">
-                    </div>
-                </div>
-
-                <!-- Popular Surahs -->
-                <div id="popular-surahs-section">
-                    <h3
-                        class="text-xl font-black text-emerald-500 uppercase tracking-widest mb-6 flex items-center gap-3">
-                        <i class="fas fa-fire-alt animate-pulse"></i> Popular Surahs
-                    </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- Al-Fatihah -->
-                        <div onclick="window.openReader(1, 'Al-Fatihah')"
-                            class="anime-card group p-6 rounded-[32px] cursor-pointer relative overflow-hidden border border-emerald-500/20 bg-white dark:bg-gray-800">
-                            <div class="flex items-center justify-between relative z-10">
-                                <div class="flex items-center gap-4">
-                                    <div
-                                        class="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center text-white font-black border border-emerald-500/20 shadow-md">
-                                        01
-                                    </div>
-                                    <div>
-                                        <h4 class="font-black text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                                            Al-Fatihah</h4>
-                                        <p class="text-[10px] text-emerald-600 dark:text-emerald-400 font-black uppercase tracking-widest">
-                                            The Opening</p>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-2xl font-arabic text-emerald-600 dark:text-emerald-400">الفاتحة</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Al-Kahf -->
-                        <div onclick="window.openReader(18, 'Al-Kahf')"
-                            class="anime-card group p-6 rounded-[32px] cursor-pointer relative overflow-hidden border border-emerald-500/20 bg-white dark:bg-gray-800">
-                            <div class="flex items-center justify-between relative z-10">
-                                <div class="flex items-center gap-4">
-                                    <div
-                                        class="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center text-white font-black border border-emerald-500/20 shadow-md">
-                                        18
-                                    </div>
-                                    <div>
-                                        <h4 class="font-black text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                                            Al-Kahf</h4>
-                                        <p class="text-[10px] text-emerald-600 dark:text-emerald-400 font-black uppercase tracking-widest">
-                                            The Cave</p>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-2xl font-arabic text-emerald-600 dark:text-emerald-400">الكهف</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Ar-Rahman -->
-                        <div onclick="window.openReader(55, 'Ar-Rahman')"
-                            class="anime-card group p-6 rounded-[32px] cursor-pointer relative overflow-hidden border border-emerald-500/20 bg-white dark:bg-gray-800">
-                            <div class="flex items-center justify-between relative z-10">
-                                <div class="flex items-center gap-4">
-                                    <div
-                                        class="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center text-white font-black border border-emerald-500/20 shadow-md">
-                                        55
-                                    </div>
-                                    <div>
-                                        <h4 class="font-black text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                                            Ar-Rahman</h4>
-                                        <p class="text-[10px] text-emerald-600 dark:text-emerald-400 font-black uppercase tracking-widest">
-                                            The Beneficent</p>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-2xl font-arabic text-emerald-600 dark:text-emerald-400">الرحمن</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Al-Waqi'ah -->
-                        <div onclick="window.openReader(56, 'Al-Waqi-ah')"
-                            class="anime-card group p-6 rounded-[32px] cursor-pointer relative overflow-hidden border border-emerald-500/20 bg-white dark:bg-gray-800">
-                            <div class="flex items-center justify-between relative z-10">
-                                <div class="flex items-center gap-4">
-                                    <div
-                                        class="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center text-white font-black border border-emerald-500/20 shadow-md">
-                                        56
-                                    </div>
-                                    <div>
-                                        <h4 class="font-black text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                                            Al-Waqi'ah</h4>
-                                        <p class="text-[10px] text-emerald-600 dark:text-emerald-400 font-black uppercase tracking-widest">
-                                            The Inevitable</p>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-2xl font-arabic text-emerald-600 dark:text-emerald-400">الواقعة</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Al-Mulk -->
-                        <div onclick="window.openReader(67, 'Al-Mulk')"
-                            class="anime-card group p-6 rounded-[32px] cursor-pointer relative overflow-hidden border border-emerald-500/20 bg-white dark:bg-gray-800">
-                            <div class="flex items-center justify-between relative z-10">
-                                <div class="flex items-center gap-4">
-                                    <div
-                                        class="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center text-white font-black border border-emerald-500/20 shadow-md">
-                                        67
-                                    </div>
-                                    <div>
-                                        <h4 class="font-black text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                                            Al-Mulk</h4>
-                                        <p class="text-[10px] text-emerald-600 dark:text-emerald-400 font-black uppercase tracking-widest">
-                                            The Sovereignty</p>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-2xl font-arabic text-emerald-600 dark:text-emerald-400">الملك</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Ya-Sin -->
-                        <div onclick="window.openReader(36, 'Ya-Sin')"
-                            class="anime-card group p-6 rounded-[32px] cursor-pointer relative overflow-hidden border border-emerald-500/20 bg-white dark:bg-gray-800">
-                            <div class="flex items-center justify-between relative z-10">
-                                <div class="flex items-center gap-4">
-                                    <div
-                                        class="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center text-white font-black border border-emerald-500/20 shadow-md">
-                                        36
-                                    </div>
-                                    <div>
-                                        <h4 class="font-black text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                                            Ya-Sin</h4>
-                                        <p class="text-[10px] text-emerald-600 dark:text-emerald-400 font-black uppercase tracking-widest">
-                                            Ya-Sin</p>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-2xl font-arabic text-emerald-600 dark:text-emerald-400">يس</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Full Surah Index Grid -->
-                <div>
-                    <h3 class="text-xl font-black text-[#064e3b] dark:text-[#10b981] mb-4" id="surah-grid-heading">All
-                        Surahs</h3>
-                    <div id="surah-index-grid"
-                        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 surah-grid-display">
-                        <!-- Populated by JS -->
-                    </div>
-                </div>
-
-                <!-- Reading Tips -->
-                <div
-                    class="rounded-2xl border border-amber-200 bg-amber-50 dark:bg-amber-900/20 dark:border-amber-800 p-6">
-                    <h4 class="font-black text-amber-800 dark:text-amber-300 mb-4 flex items-center gap-2 text-lg">
-                        <i class="fas fa-lightbulb text-amber-500"></i> Reading Tips
-                    </h4>
-                    <ul class="space-y-3">
-                        <li class="flex items-start gap-3 text-amber-900 dark:text-amber-200 font-medium">
-                            <span class="w-2 h-2 rounded-full bg-amber-400 mt-2 flex-shrink-0"></span>
-                            Begin with "A'udhu billahi min ash-shaytan ir-rajim" and "Bismillah ir-Rahman ir-Rahim"
-                        </li>
-                        <li class="flex items-start gap-3 text-amber-900 dark:text-amber-200 font-medium">
-                            <span class="w-2 h-2 rounded-full bg-amber-400 mt-2 flex-shrink-0"></span>
-                            Try to understand the meaning and context of what you read
-                        </li>
-                        <li class="flex items-start gap-3 text-amber-900 dark:text-amber-200 font-medium">
-                            <span class="w-2 h-2 rounded-full bg-amber-400 mt-2 flex-shrink-0"></span>
-                            Consistency is better than quantity — even one page daily is beneficial
-                        </li>
-                    </ul>
-                </div>
-
-            </section>
-
-            <!-- Names View -->
-            <section id="view-names" class="view-section hidden p-4 md:p-8 space-y-8 animate-fade-in-up">
-                <div class="text-center mb-8">
-                    <h2 class="text-4xl font-[Cormorant_Garamond] font-bold text-[#064e3b]">99 Names of Allah</h2>
-                    <p class="text-gray-500 mt-2">Asma-ul-Husna - The Most Beautiful Names</p>
-                    <button id="view-all-names-btn" class="mt-4 text-[#064e3b] font-bold text-sm hover:underline">View
-                        Full List</button>
-                </div>
-                <div id="asma-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 asma-grid-display">
-                    <!-- Populated by JS -->
-                </div>
-            </section>
-
-            <!-- Duas View -->
-            <section id="view-duas" class="view-section hidden p-4 md:p-8 space-y-8 animate-fade-in-up">
-                <div class="text-center mb-12">
-                    <div
-                        class="inline-block px-4 py-1.5 bg-[#064e3b]/5 rounded-full text-[10px] font-black uppercase tracking-widest text-[#064e3b] mb-4">
-                        Fortress of the Muslim</div>
-                    <h2 class="text-5xl font-[Cormorant_Garamond] font-black text-[#064e3b]">Daily Adhkar</h2>
-                    <p class="text-gray-500 mt-3 font-medium">Authentic supplications for every moment of your life.</p>
-                </div>
-
-                <!-- Real-time Dua Search -->
-                <div class="max-w-2xl mx-auto mb-12 relative group">
-                    <i
-                        class="fas fa-search absolute left-6 top-1/2 -translate-y-1/2 text-[#af944d] group-focus-within:scale-110 transition-transform"></i>
-                    <input type="text" id="dua-keyword-search"
-                        placeholder="Search Duas by keyword (e.g. patience, exam, travel)..."
-                        class="w-full pl-16 pr-6 py-5 bg-white/70 backdrop-blur-xl border-2 border-transparent rounded-[30px] shadow-lg focus:border-[#af944d]/30 focus:bg-white transition-all outline-none text-gray-800 placeholder:text-gray-400 font-medium">
-                </div>
-
-                <div class="flex flex-wrap justify-center gap-2 mb-8" id="dua-categories">
-                    <button
-                        class="dua-cat-btn active px-4 py-2 rounded-full bg-[#fcfdfd] border border-gray-200 text-sm font-medium hover:bg-[#064e3b] hover:text-white transition-all shadow-sm"
-                        data-cat="all">All</button>
-                    <button
-                        class="dua-cat-btn px-4 py-2 rounded-full bg-[#fcfdfd] border border-gray-200 text-sm font-medium hover:bg-[#064e3b] hover:text-white transition-all shadow-sm"
-                        data-cat="morning-evening">Morning & Evening</button>
-                    <button
-                        class="dua-cat-btn px-4 py-2 rounded-full bg-[#fcfdfd] border border-gray-200 text-sm font-medium hover:bg-[#064e3b] hover:text-white transition-all shadow-sm"
-                        data-cat="salah">Salah</button>
-                    <button
-                        class="dua-cat-btn px-4 py-2 rounded-full bg-[#fcfdfd] border border-gray-200 text-sm font-medium hover:bg-[#064e3b] hover:text-white transition-all shadow-sm"
-                        data-cat="family">Family & Parents</button>
-                    <button
-                        class="dua-cat-btn px-4 py-2 rounded-full bg-[#fcfdfd] border border-gray-200 text-sm font-medium hover:bg-[#064e3b] hover:text-white transition-all shadow-sm"
-                        data-cat="health">Health & Difficulties</button>
-                    <button
-                        class="dua-cat-btn px-4 py-2 rounded-full bg-[#fcfdfd] border border-gray-200 text-sm font-medium hover:bg-[#064e3b] hover:text-white transition-all shadow-sm"
-                        data-cat="academic">Academic Success</button>
-                    <button
-                        class="dua-cat-btn px-4 py-2 rounded-full bg-[#fcfdfd] border border-gray-200 text-sm font-medium hover:bg-[#064e3b] hover:text-white transition-all shadow-sm"
-                        data-cat="food-travel">Food & Travel</button>
-                    <button
-                        class="dua-cat-btn px-4 py-2 rounded-full bg-[#fcfdfd] border border-gray-200 text-sm font-medium hover:bg-[#064e3b] hover:text-white transition-all shadow-sm"
-                        data-cat="rabbana">Rabbana Duas</button>
-                </div>
-
-                <div id="duas-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    <!-- Populated by JS -->
-                </div>
-            </section>
-
-            <!-- Library View (Enhanced) -->
-            <section id="view-library" class="view-section hidden p-4 md:p-8 space-y-8 animate-fade-in-up">
-                <div id="library-content">
-
-                    <!-- Durood Sharif Section -->
-                    <div class="mt-16">
-                        <header class="text-center mb-12">
-                            <h2 class="text-4xl font-[Amiri] font-bold text-[#af944d] drop-shadow-lg mb-2">Durood Sharif
-                            </h2>
-                            <p class="text-gray-500 dark:text-gray-200">Blessings Upon the Prophet ﷺ</p>
-                        </header>
-
-                        <div class="space-y-6">
-                            <!-- Durood 1: Ibrahim -->
-                            <div
-                                class="bg-gradient-to-br from-teal-50 to-white dark:from-gray-800 dark:to-gray-900 p-8 rounded-3xl shadow-lg border-l-4 border-teal-600 hover:shadow-xl transition-all">
-                                <div class="flex items-start gap-4">
-                                    <div
-                                        class="w-12 h-12 rounded-full bg-teal-600 flex items-center justify-center text-white font-black text-xl flex-shrink-0">
-                                        1</div>
-                                    <div class="flex-1">
-                                        <h3 class="text-2xl font-bold text-teal-700 dark:text-teal-400 mb-2">
-                                            Durood-e-Ibrahim
-                                        </h3>
-                                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-3 italic">Recited in Daily
-                                            Prayers
-                                            (Salah)</p>
-                                        <p
-                                            class="text-4xl font-[Amiri] text-right leading-loose text-gray-800 dark:text-gray-200 mb-4">
-                                            اَللّٰهُمَّ صَلِّ عَلٰی مُحَمَّدٍ وَّعَلٰٓی اٰلِ مُحَمَّدٍ کَمَا صَلَّیْتَ
-                                            عَلٰٓی
-                                            اِبْرٰاهِیْمَ
-                                            وَعَلٰٓی اٰلِ اِبْرٰاهِیْمَ اِنَّکَ حَمِیْدٌ مَّجِیْدٌ ۝ اَللّٰهُمَّ بَارِکْ
-                                            عَلٰی
-                                            مُحَمَّدٍ
-                                            وَّعَلٰٓی اٰلِ مُحَمَّدٍ کَمَا بَارَکْتَ عَلٰٓی اِبْرٰاهِیْمَ وَعَلٰٓی اٰلِ
-                                            اِبْرٰاهِیْمَ
-                                            اِنَّکَ حَمِیْدٌ مَّجِیْدٌ</p>
-                                        <p class="text-lg italic text-gray-600 dark:text-gray-300 mb-3">Allāhumma ṣalli
-                                            'alā
-                                            Muḥammadin wa
-                                            'alā āli Muḥammad, kamā ṣallayta 'alā Ibrāhīma wa 'alā āli Ibrāhīm, innaka
-                                            Ḥamīdum
-                                            Majīd.
-                                            Allāhumma bārik 'alā Muḥammadin wa 'alā āli Muḥammad, kamā bārakta 'alā
-                                            Ibrāhīma wa
-                                            'alā āli
-                                            Ibrāhīm, innaka Ḥamīdum Majīd</p>
-                                        <p class="text-gray-700 dark:text-gray-400 leading-relaxed">
-                                            <strong>Translation:</strong> O Allah!
-                                            Bestow Your blessings upon Muhammad and his family as You blessed Ibrahim
-                                            and his
-                                            family.
-                                            Indeed, You are Praiseworthy and Glorious. O Allah! Bestow Your favours upon
-                                            Muhammad and his
-                                            family as You blessed Ibrahim and his family. Indeed, You are Praiseworthy
-                                            and
-                                            Glorious.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Durood 2: Tunajjina -->
-                            <div
-                                class="bg-gradient-to-br from-cyan-50 to-white dark:from-gray-800 dark:to-gray-900 p-8 rounded-3xl shadow-lg border-l-4 border-cyan-600 hover:shadow-xl transition-all">
-                                <div class="flex items-start gap-4">
-                                    <div
-                                        class="w-12 h-12 rounded-full bg-cyan-600 flex items-center justify-center text-white font-black text-xl flex-shrink-0">
-                                        2</div>
-                                    <div class="flex-1">
-                                        <h3 class="text-2xl font-bold text-cyan-700 dark:text-cyan-400 mb-2">
-                                            Durood-e-Tunajjina
-                                        </h3>
-                                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-3 italic">For Relief from
-                                            Difficulties &
-                                            Protection</p>
-                                        <p
-                                            class="text-4xl font-[Amiri] text-right leading-loose text-gray-800 dark:text-gray-200 mb-4">
-                                            اَللّٰهُمَّ صَلِّ عَلٰی سَیِّدِنَا مُحَمَّدٍ صَلَاۃً تُنْجِیْنَا بِهَا مِنْ
-                                            جَمِیْعِ
-                                            الْاَهْوَالِ وَالْاٰفَاتِ وَتَقْضِیْ لَنَا بِهَا جَمِیْعَ الْحَاجَاتِ
-                                            وَتُطَهِّرُنَا
-                                            بِهَا مِنْ
-                                            جَمِیْعِ السَّیِّاٰتِ وَتَرْفَعُنَا بِهَا عِنْدَکَ اَعْلَی الدَّرَجَاتِ
-                                            وَتُبَلِّغُنَا بِهَا
-                                            اَقْصَی الْغَایَاتِ مِنْ جَمِیْعِ الْخَیْرَاتِ فِی الْحَیٰوۃِ وَبَعْدَ
-                                            الْمَمَاتِ
-                                        </p>
-                                        <p class="text-lg italic text-gray-600 dark:text-gray-300 mb-3">Allāhumma ṣalli
-                                            'alā
-                                            sayyidinā
-                                            Muḥammadin ṣalātan tunajjīnā bihā min jamī'il ahwāli wal āfāt, wa taqḍī lanā
-                                            bihā
-                                            jamī'al ḥājāt,
-                                            wa tuṭahhirunā bihā min jamī'is sayyi'āt, wa tarfa'unā bihā 'indaka a'lad
-                                            darajāt,
-                                            wa
-                                            tuballighunā bihā aqṣal ghāyāti min jamī'il khayrāti fil ḥayāti wa ba'dal
-                                            mamāt</p>
-                                        <p class="text-gray-700 dark:text-gray-400 leading-relaxed">
-                                            <strong>Translation:</strong> O Allah!
-                                            Send such blessings upon our Master Muhammad that through them You save us
-                                            from all
-                                            terrors and
-                                            calamities, fulfill all our needs, purify us from all evils, raise us to the
-                                            highest
-                                            ranks in
-                                            Your presence, and help us achieve all our aims of goodness in this life and
-                                            after
-                                            death.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Durood 3: Taj -->
-                            <div
-                                class="bg-gradient-to-br from-violet-50 to-white dark:from-gray-800 dark:to-gray-900 p-8 rounded-3xl shadow-lg border-l-4 border-violet-600 hover:shadow-xl transition-all">
-                                <div class="flex items-start gap-4">
-                                    <div
-                                        class="w-12 h-12 rounded-full bg-violet-600 flex items-center justify-center text-white font-black text-xl flex-shrink-0">
-                                        3</div>
-                                    <div class="flex-1">
-                                        <h3 class="text-2xl font-bold text-violet-700 dark:text-violet-400 mb-2">
-                                            Durood-e-Taj
-                                            (The Crown)
-                                        </h3>
-                                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-3 italic">For Spiritual
-                                            Elevation
-                                            & Divine
-                                            Blessings</p>
-                                        <p
-                                            class="text-4xl font-[Amiri] text-right leading-loose text-gray-800 dark:text-gray-200 mb-4">
-                                            اَللّٰهُمَّ صَلِّ عَلٰی سَیِّدِنَا وَمَوْلَانَا مُحَمَّدٍ صَاحِبِ التَّاجِ
-                                            وَالْمِعْرَاجِ
-                                            وَالْبُرَاقِ وَالْعَلَمْ حَامِلِ لِوَآءِ الْحَمْدِ الشَّفِیْعِ الْمُشَفَّعْ
-                                            یَوْمَ
-                                            الْمَحْشَرِ
-                                            الْمَالِکِ لِحَوْضِ الْکَوْثَرْ صَاحِبِ الْمَقَامِ الْمَحْمُوْدِ وَالْحَوْضِ
-                                            الْمَوْرُوْدِ
-                                            اَللّٰهُمَّ صَلِّ عَلَیْهِ صَلَاۃً تَکُوْنُ لَکَ رِضَاءً وَّلَهٗ جَزَاءً
-                                            وَّلَنَا
-                                            شِفَاءً
-                                            وَعَافِیَۃً</p>
-                                        <p class="text-lg italic text-gray-600 dark:text-gray-300 mb-3">Allāhumma ṣalli
-                                            'alā
-                                            sayyidinā wa
-                                            mawlānā Muḥammadin ṣāḥibit tāji wal mi'rāji wal burāqi wal 'alam, ḥāmili
-                                            liwā'il
-                                            ḥamd,
-                                            ash-shafī'il mushaffa'i yawmal maḥshar, al-māliki li ḥawḍil kawthar, ṣāḥibil
-                                            maqāmil
-                                            maḥmūdi wal
-                                            ḥawḍil mawrūd. Allāhumma ṣalli 'alayhi ṣalātan takūnu laka riḍā'an wa lahu
-                                            jazā'an
-                                            wa lanā
-                                            shifā'an wa 'āfiyah</p>
-                                        <p class="text-gray-700 dark:text-gray-400 leading-relaxed">
-                                            <strong>Translation:</strong> O Allah!
-                                            Send blessings upon our Master Muhammad, the owner of the crown, ascension,
-                                            and
-                                            Buraq, the
-                                            bearer of the banner of praise, the intercessor whose intercession is
-                                            accepted on
-                                            the Day of
-                                            Judgment, the master of the Pool of Kawthar and the praiseworthy station. O
-                                            Allah!
-                                            Send upon him
-                                            such blessings that become Your pleasure, his reward, and for us healing and
-                                            wellbeing.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Durood 4: Lakhi (100,000 Times Reward) -->
-                            <div
-                                class="bg-gradient-to-br from-orange-50 to-white dark:from-gray-800 dark:to-gray-900 p-8 rounded-3xl shadow-lg border-l-4 border-orange-600 hover:shadow-xl transition-all">
-                                <div class="flex items-start gap-4">
-                                    <div
-                                        class="w-12 h-12 rounded-full bg-orange-600 flex items-center justify-center text-white font-black text-xl flex-shrink-0">
-                                        4</div>
-                                    <div class="flex-1">
-                                        <h3 class="text-2xl font-bold text-orange-700 dark:text-orange-400 mb-2">
-                                            Durood-e-Lakhi
-                                        </h3>
-                                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-3 italic">Reward of
-                                            100,000
-                                            Salawat in One
-                                            Recitation</p>
-                                        <p
-                                            class="text-4xl font-[Amiri] text-right leading-loose text-gray-800 dark:text-gray-200 mb-4">
-                                            اَللّٰهُمَّ صَلِّ عَلٰی سَیِّدِنَا مُحَمَّدٍ عَدَدَ مَا فِیْ عِلْمِ اللہِ
-                                            صَلَاۃً
-                                            دَآئِمَۃًۢ
-                                            بِدَوَامِ مُلْکِ اللہِ</p>
-                                        <p class="text-lg italic text-gray-600 dark:text-gray-300 mb-3">Allāhumma ṣalli
-                                            'alā
-                                            sayyidinā
-                                            Muḥammadin 'adada mā fī 'ilmillāhi ṣalātan dā'imatan bidawāmi mulkillāh</p>
-                                        <p class="text-gray-700 dark:text-gray-400 leading-relaxed">
-                                            <strong>Translation:</strong> O Allah!
-                                            Send blessings upon our Master Muhammad as numerous as what is in Allah's
-                                            knowledge,
-                                            blessings
-                                            that are everlasting with the everlastingness of Allah's kingdom.
-                                        </p>
-                                        <p class="text-sm text-emerald-600 dark:text-emerald-400 mt-3 font-semibold">✦
-                                            Virtue:
-                                            One
-                                            recitation equals 100,000 times Durood</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Durood 5: Nariya -->
-                            <div
-                                class="bg-gradient-to-br from-red-50 to-white dark:from-gray-800 dark:to-gray-900 p-8 rounded-3xl shadow-lg border-l-4 border-red-600 hover:shadow-xl transition-all">
-                                <div class="flex items-start gap-4">
-                                    <div
-                                        class="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center text-white font-black text-xl flex-shrink-0">
-                                        5</div>
-                                    <div class="flex-1">
-                                        <h3 class="text-2xl font-bold text-red-700 dark:text-red-400 mb-2">
-                                            Durood-e-Nariya</h3>
-                                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-3 italic">For Urgent Needs
-                                            &
-                                            Removal of
-                                            Difficulties (4444 times)</p>
-                                        <p
-                                            class="text-4xl font-[Amiri] text-right leading-loose text-gray-800 dark:text-gray-200 mb-4">
-                                            اَللّٰهُمَّ صَلِّ صَلَاۃً کَامِلَۃً وَّسَلِّمْ سَلَامًا تَامًّا عَلٰی
-                                            سَیِّدِنَا
-                                            مُحَمَّدِ نِ
-                                            الَّذِیْ تَنْحَلُّ بِهِ الْعُقَدُ وَتَنْفَرِجُ بِهِ الْکُرَبُ وَتُقْضٰی بِهِ
-                                            الْحَوَآئِجُ
-                                            وَتُنَالُ بِهِ الرَّغَآئِبُ وَحُسْنُ الْخَوَاتِمِ وَیُسْتَسْقَی الْغَمَامُ
-                                            بِوَجْهِهِ
-                                            الْکَرِیْمِ وَعَلٰٓی اٰلِهٖ وَصَحْبِهٖ فِیْ کُلِّ لَمْحَۃٍ وَّنَفَسٍۢ
-                                            بِعَدَدِ کُلِّ
-                                            مَعْلُوْمٍ
-                                            لَّکَ</p>
-                                        <p class="text-lg italic text-gray-600 dark:text-gray-300 mb-3">Allāhumma ṣalli
-                                            ṣalātan
-                                            kāmilatan wa
-                                            sallim salāman tāmman 'alā sayyidinā Muḥammadinin-ladhī tanḥallu bihil
-                                            'uqad, wa
-                                            tanfariju bihil
-                                            kurab, wa tuqḍā bihil ḥawā'ij, wa tunālu bihir raghā'ib, wa ḥusnul khawātim,
-                                            wa
-                                            yustasqal
-                                            ghamāmu biwajhihil karīm, wa 'alā ālihī wa ṣaḥbihī fī kulli lamḥatin wa
-                                            nafasin
-                                            bi'adadi kulli
-                                            ma'lūmin lak</p>
-                                        <p class="text-gray-700 dark:text-gray-400 leading-relaxed">
-                                            <strong>Translation:</strong> O Allah!
-                                            Send complete blessings and perfect peace upon our Master Muhammad through
-                                            whom
-                                            difficulties are
-                                            solved, sorrows are removed, needs are fulfilled, desires are attained, good
-                                            endings
-                                            are
-                                            received, and clouds are sought for rain through his noble countenance. And
-                                            upon his
-                                            family and
-                                            companions in every glance and breath, as many as the number of all things
-                                            known to
-                                            You.
-                                        </p>
-                                        <p class="text-sm text-red-600 dark:text-red-400 mt-3 font-semibold">✦ Recite
-                                            4444 times
-                                            for urgent
-                                            needs (or 41 times daily)</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Durood 6: Akbar -->
-                            <div
-                                class="bg-gradient-to-br from-fuchsia-50 to-white dark:from-gray-800 dark:to-gray-900 p-8 rounded-3xl shadow-lg border-l-4 border-fuchsia-600 hover:shadow-xl transition-all">
-                                <div class="flex items-start gap-4">
-                                    <div
-                                        class="w-12 h-12 rounded-full bg-fuchsia-600 flex items-center justify-center text-white font-black text-xl flex-shrink-0">
-                                        6</div>
-                                    <div class="flex-1">
-                                        <h3 class="text-2xl font-bold text-fuchsia-700 dark:text-fuchsia-400 mb-2">
-                                            Durood-e-Akbar (The
-                                            Greatest)</h3>
-                                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-3 italic">Most
-                                            Comprehensive
-                                            Salutation</p>
-                                        <p
-                                            class="text-4xl font-[Amiri] text-right leading-loose text-gray-800 dark:text-gray-200 mb-4">
-                                            اَللّٰهُمَّ صَلِّ عَلٰی سَیِّدِنَا مُحَمَّدٍ فِی الْاَوَّلِیْنَ وَصَلِّ
-                                            عَلٰی
-                                            سَیِّدِنَا
-                                            مُحَمَّدٍ فِی الْاٰخِرِیْنَ وَصَلِّ عَلٰی سَیِّدِنَا مُحَمَّدٍ فِی الْمَلَإِ
-                                            الْاَعْلٰی اِلٰی
-                                            یَوْمِ الدِّیْنِ وَصَلِّ عَلٰی سَیِّدِنَا مُحَمَّدٍ وَّعَلٰی جَمِیْعِ
-                                            الْاَنْبِیَآءِ
-                                            وَالْمُرْسَلِیْنَ وَعَلٰی اٰلِهِمْ وَاَصْحَابِهِمْ اَجْمَعِیْنَ</p>
-                                        <p class="text-lg italic text-gray-600 dark:text-gray-300 mb-3">Allāhumma ṣalli
-                                            'alā
-                                            sayyidinā
-                                            Muḥammadin fil-awwalīn, wa ṣalli 'alā sayyidinā Muḥammadin fil-ākhirīn, wa
-                                            ṣalli
-                                            'alā sayyidinā
-                                            Muḥammadin fil-mala'il a'lā ilā yawmid dīn, wa ṣalli 'alā sayyidinā
-                                            Muḥammadin wa
-                                            'alā jamī'il
-                                            ambiyā'i wal mursalīn, wa 'alā ālihim wa aṣḥābihim ajma'īn</p>
-                                        <p class="text-gray-700 dark:text-gray-400 leading-relaxed">
-                                            <strong>Translation:</strong> O Allah!
-                                            Send blessings upon our Master Muhammad among the first ones, and send
-                                            blessings
-                                            upon our Master
-                                            Muhammad among the last ones, and send blessings upon our Master Muhammad in
-                                            the
-                                            highest
-                                            assembly until the Day of Judgment, and send blessings upon our Master
-                                            Muhammad and
-                                            upon all the
-                                            Prophets and Messengers, and upon all their families and companions.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Durood 7: Simple Blessed Form -->
-                            <div
-                                class="bg-gradient-to-br from-lime-50 to-white dark:from-gray-800 dark:to-gray-900 p-8 rounded-3xl shadow-lg border-l-4 border-lime-600 hover:shadow-xl transition-all">
-                                <div class="flex items-start gap-4">
-                                    <div
-                                        class="w-12 h-12 rounded-full bg-lime-600 flex items-center justify-center text-white font-black text-xl flex-shrink-0">
-                                        7</div>
-                                    <div class="flex-1">
-                                        <h3 class="text-2xl font-bold text-lime-700 dark:text-lime-400 mb-2">Durood
-                                            Sharif
-                                            (Simple Form)
-                                        </h3>
-                                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-3 italic">Quick & Blessed
-                                            Salutation - Say
-                                            Anytime</p>
-                                        <p
-                                            class="text-4xl font-[Amiri] text-right leading-loose text-gray-800 dark:text-gray-200 mb-4">
-                                            صَلَّی اللہُ عَلَیْہِ وَسَلَّمَ</p>
-                                        <p class="text-lg italic text-gray-600 dark:text-gray-300 mb-3">Ṣallallāhu
-                                            'alayhi wa
-                                            sallam</p>
-                                        <p class="text-gray-700 dark:text-gray-400 leading-relaxed">
-                                            <strong>Translation:</strong> May
-                                            Allah's peace and blessings be upon him.
-                                        </p>
-                                        <p class="text-sm text-lime-600 dark:text-lime-400 mt-3 font-semibold">✦ Recite
-                                            abundantly -
-                                            especially on Fridays</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Panj Surah View -->
-            <section id="view-punj" class="view-section hidden p-4 md:p-8 animate-fade-in-up">
-                <div class="max-w-6xl mx-auto">
-                    <header class="text-center mb-12">
-                        <h2 class="text-4xl font-[Amiri] font-bold text-[#af944d] drop-shadow-lg mb-2">Panj Surah
-                            Collection</h2>
-                        <p class="text-gray-500 dark:text-gray-200">The Heart of the Quran</p>
-                    </header>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- Yaseen -->
-                        <div class="bg-[#fcfdfd] p-8 rounded-[40px] shadow-sm text-center border-t-4 border-[#064e3b] hover:-translate-y-1.5 transition-all cursor-pointer group dark:bg-gray-800 dark:border-gray-700"
-                            onclick="openReader(36, 'Ya Sin')">
-                            <div class="text-[10px] font-black opacity-30 mb-2 uppercase tracking-widest">Heart of Quran
-                            </div>
-                            <h3
-                                class="text-4xl font-[Amiri] text-[#064e3b] mb-2 group-hover:scale-105 transition-transform dark:text-[#af944d]">
-                                يس</h3>
-                            <h4
-                                class="font-black text-xl text-gray-800 dark:text-white mb-1 uppercase tracking-tighter">
-                                Surah Yaseen</h4>
-                            <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mt-1">Ya Sin — Ch. 36
-                            </p>
-                        </div>
-
-                        <!-- Rahman -->
-                        <div class="bg-[#fcfdfd] p-8 rounded-[40px] shadow-sm text-center border-t-4 border-[#af944d] hover:-translate-y-1.5 transition-all cursor-pointer group dark:bg-gray-800 dark:border-gray-700"
-                            onclick="openReader(55, 'Ar-Rahman')">
-                            <div class="text-[10px] font-black opacity-30 mb-2 uppercase tracking-widest">The Beneficent
-                            </div>
-                            <h3
-                                class="text-4xl font-[Amiri] text-[#af944d] mb-2 group-hover:scale-105 transition-transform">
-                                الرحمن</h3>
-                            <h4
-                                class="font-black text-xl text-gray-800 dark:text-white mb-1 uppercase tracking-tighter">
-                                Surah Rahman</h4>
-                            <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mt-1">Ar-Rahman — Ch.
-                                55</p>
-                        </div>
-
-                        <!-- Waqiah -->
-                        <div class="bg-[#fcfdfd] p-8 rounded-[40px] shadow-sm text-center border-t-4 border-[#3b82f6] hover:-translate-y-1.5 transition-all cursor-pointer group dark:bg-gray-800 dark:border-gray-700"
-                            onclick="openReader(56, 'Al-Waqi a')">
-                            <div class="text-[10px] font-black opacity-30 mb-2 uppercase tracking-widest">The Great
-                                Event</div>
-                            <h3
-                                class="text-4xl font-[Amiri] text-[#3b82f6] mb-2 group-hover:scale-105 transition-transform">
-                                الواقعة</h3>
-                            <h4
-                                class="font-black text-xl text-gray-800 dark:text-white mb-1 uppercase tracking-tighter">
-                                Surah Waqiah</h4>
-                            <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mt-1">Al-Waqi'a — Ch.
-                                56</p>
-                        </div>
-
-                        <!-- Mulk -->
-                        <div class="bg-[#fcfdfd] p-8 rounded-[40px] shadow-sm text-center border-t-4 border-[#a855f7] hover:-translate-y-1.5 transition-all cursor-pointer group dark:bg-gray-800 dark:border-gray-700"
-                            onclick="openReader(67, 'Al-Mulk')">
-                            <div class="text-[10px] font-black opacity-30 mb-2 uppercase tracking-widest">The
-                                Sovereignty</div>
-                            <h3
-                                class="text-4xl font-[Amiri] text-[#a855f7] mb-2 group-hover:scale-105 transition-transform">
-                                الملك</h3>
-                            <h4
-                                class="font-black text-xl text-gray-800 dark:text-white mb-1 uppercase tracking-tighter">
-                                Surah Mulk</h4>
-                            <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mt-1">Al-Mulk — Ch. 67
-                            </p>
-                        </div>
-
-                        <!-- Kahf -->
-                        <div class="bg-[#fcfdfd] p-8 rounded-[40px] shadow-sm text-center border-t-4 border-[#10b981] hover:-translate-y-1.5 transition-all cursor-pointer group dark:bg-gray-800 dark:border-gray-700"
-                            onclick="openReader(18, 'Al-Kahf')">
-                            <div class="text-[10px] font-black opacity-30 mb-2 uppercase tracking-widest">The Cave</div>
-                            <h3
-                                class="text-4xl font-[Amiri] text-[#10b981] mb-2 group-hover:scale-105 transition-transform">
-                                الكهف</h3>
-                            <h4
-                                class="font-black text-xl text-gray-800 dark:text-white mb-1 uppercase tracking-tighter">
-                                Surah Kahf</h4>
-                            <p class="text-[10px] font-bold opacity-40 uppercase tracking-widest mt-1">Al-Kahf — Ch. 18
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="view-ramadan"
-                class="view-section hidden ramadan-vibrant-bg min-h-screen relative overflow-hidden pb-20">
-
-                <!-- Animated Lanterns -->
-                <div class="lantern-container lantern-container-1">
-                    <div class="lantern-string"></div>
-                    <div class="lantern-body"></div>
-                </div>
-                <div class="lantern-container lantern-container-2">
-                    <div class="lantern-string" style="height: 150px;"></div>
-                    <div class="lantern-body"></div>
-                </div>
-                <div class="lantern-container lantern-container-3">
-                    <div class="lantern-string" style="height: 80px;"></div>
-                    <div class="lantern-body"></div>
-                </div>
-
-                <!-- Twinkling Stars -->
-                <div class="star" style="top: 10%; left: 20%; font-size: 10px;">✦</div>
-                <div class="star" style="top: 15%; left: 80%; font-size: 14px; animation-delay: 1s;">✦</div>
-                <div class="star" style="top: 30%; left: 10%; font-size: 8px; animation-delay: 2s;">✦</div>
-                <div class="star" style="top: 50%; left: 90%; font-size: 12px; animation-delay: 0.5s;">✦</div>
-
-                <div class="max-w-7xl mx-auto px-6 py-12 relative z-10">
-
-                    <!-- Elegant Header -->
-                    <header class="text-center mb-16 relative">
-                        <h1
-                            class="text-7xl md:text-9xl font-[Cormorant_Garamond] font-bold text-gradient-gold drop-shadow-2xl mb-2">
-                            Ramadan
-                        </h1>
-                        <p class="text-emerald-200 font-[Amiri] text-3xl md:text-4xl italic tracking-wide">
-                            The Month of Mercy
-                        </p>
-                    </header>
-
-                    <!-- Simple & Elegant Dashboard Grid -->
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-
-                        <!-- Left: Saheri / Iftar Times -->
-                        <div
-                            class="ramadan-card-vibrant p-10 rounded-[50px] flex flex-col justify-center items-center text-center">
-                            <i class="fas fa-moon text-4xl text-emerald-400 mb-6 opacity-80"></i>
-                            <div class="w-full space-y-8">
-                                <div>
-                                    <p class="text-xs font-black uppercase tracking-[0.3em] text-emerald-500 mb-2">
-                                        Saheri Ends</p>
-                                    <h3 class="text-5xl font-black text-white" id="saheriVal">--:--</h3>
-                                </div>
-                                <div class="w-16 h-px bg-white/10 mx-auto"></div>
-                                <div>
-                                    <p class="text-xs font-black uppercase tracking-[0.3em] text-[#af944d] mb-2">Iftar
-                                        Start</p>
-                                    <h3 class="text-5xl font-black text-gradient-gold" id="iftarVal">--:--</h3>
-                                </div>
-                            </div>
-                            <div class="mt-8 px-6 py-2 bg-black/20 rounded-full border border-white/5 cursor-pointer hover:bg-black/40 transition-colors"
-                                onclick="window.detectAndSyncLocation('ramadan')">
-                                <p class="text-[10px] font-bold text-gray-300 uppercase tracking-widest"><i
-                                        class="fas fa-location-arrow text-[#af944d] mr-2"></i><span
-                                        id="ramadan-loc-sync">Location</span></p>
-                            </div>
-                        </div>
-
-                        <!-- Center: Massive Countdown Focus -->
-                        <div
-                            class="lg:col-span-2 ramadan-card-vibrant p-12 rounded-[50px] flex flex-col items-center justify-center text-center relative overflow-hidden">
-                            <div
-                                class="absolute inset-0 bg-gradient-to-br from-[#064e3b]/20 to-transparent pointer-events-none">
-                            </div>
-
-                            <!-- Date Info at Top -->
-                            <div class="flex items-center gap-4 mb-10 z-10">
-                                <div class="flex items-baseline gap-2">
-                                    <span class="text-4xl font-black text-[#af944d]" id="ramadan-day-status">--</span>
-                                    <span class="text-sm font-bold text-gray-400 uppercase tracking-widest">Day of
-                                        Fasting</span>
-                                </div>
-                                <div class="w-px h-8 bg-white/10"></div>
-                                <div class="text-left">
-                                    <p class="text-emerald-300 text-sm font-bold" id="ramadan-date-status">Loading
-                                        Date...</p>
-                                </div>
-                            </div>
-
-                            <div class="timer-glowing-ring mb-4 scale-95 md:scale-105 z-10">
-                                <div class="relative">
-                                    <div class="text-7xl md:text-[10rem] leading-none font-black text-transparent bg-clip-text bg-gradient-to-b from-[#064e3b] to-emerald-500 dark:from-yellow-100 dark:via-[#ffd700] dark:to-[#af944d] tracking-tighter drop-shadow-2xl pb-4"
-                                        id="timer">
-                                        --:--:--
-                                    </div>
-                                    <div class="text-[12px] font-black uppercase tracking-[0.6em] text-[#af944d] mt-6 animate-pulse"
-                                        id="ramadan-timer-label">Loading Timer</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <!-- Footer Table - Full Schedule -->
-                    <div class="ramadan-card-vibrant p-10 rounded-[50px]">
-                        <div class="flex justify-between items-center mb-10 overflow-hidden flex-wrap gap-4">
-                            <div class="flex flex-col md:flex-row md:items-center gap-6">
-                                <h3 class="text-3xl font-black text-[#064e3b] dark:text-emerald-100 uppercase tracking-tighter"
-                                    id="calendar-month-label">Full Schedule</h3>
-                                <div class="flex items-center gap-4 bg-[#064e3b]/5 dark:bg-white/5 px-6 py-2 rounded-full cursor-pointer hover:bg-[#064e3b]/10 dark:hover:bg-white/10 transition-all group border border-transparent hover:border-[#af944d]/30"
-                                    onclick="window.detectAndSyncLocation('ramadan')">
-                                    <i
-                                        class="fas fa-location-crosshairs text-[#af944d] group-hover:rotate-90 transition-transform"></i>
-                                    <p class="text-[10px] font-black uppercase tracking-widest text-[#064e3b] dark:text-emerald-300 max-w-[120px] truncate"
-                                        id="cityLabel">Hyderabad</p>
-                                </div>
-                            </div>
-                            <div class="flex gap-3">
-                                <button onclick="window.printRamadanTable()"
-                                    class="px-6 py-2 bg-[#064e3b] text-white rounded-full text-[9px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg whitespace-nowrap hover:bg-[#064e3b]/90 ring-2 ring-offset-2 ring-transparent active:ring-[#af944d]"><i
-                                        class="fas fa-download mr-2"></i> PDF</button>
-
-                                <!-- Year Navigation -->
-                                <div
-                                    class="flex items-center gap-2 bg-white/50 dark:bg-black/30 px-3 py-1.5 rounded-full border border-[#064e3b]/10 dark:border-white/10">
-                                    <button onclick="changeCalendarYear(-1)"
-                                        class="w-8 h-8 rounded-full flex items-center justify-center text-[#af944d] hover:bg-white/80 dark:hover:bg-white/10 transition-all text-xs">
-                                        <i class="fas fa-angle-double-left"></i>
-                                    </button>
-                                    <input type="number" id="calendar-year-input"
-                                        class="w-20 text-center bg-transparent border-none text-sm font-bold text-[#064e3b] dark:text-white outline-none"
-                                        onchange="jumpToYear(this.value)" min="1926" max="2126" />
-                                    <button onclick="changeCalendarYear(1)"
-                                        class="w-8 h-8 rounded-full flex items-center justify-center text-[#af944d] hover:bg-white/80 dark:hover:bg-white/10 transition-all text-xs">
-                                        <i class="fas fa-angle-double-right"></i>
-                                    </button>
-                                </div>
-
-                                <button onclick="changeCalendarMonth(-1)"
-                                    class="w-12 h-12 rounded-full border border-[#064e3b]/10 dark:border-white/10 flex items-center justify-center text-[#af944d] hover:bg-white dark:hover:bg-white/10 transition-all shadow-sm"><i
-                                        class="fas fa-chevron-left"></i></button>
-                                <button onclick="changeCalendarMonth(1)"
-                                    class="w-12 h-12 rounded-full border border-[#064e3b]/10 dark:border-white/10 flex items-center justify-center text-[#af944d] hover:bg-white dark:hover:bg-white/10 transition-all shadow-sm"><i
-                                        class="fas fa-chevron-right"></i></button>
-                            </div>
-                        </div>
-                        <div
-                            class="overflow-x-auto rounded-3xl overflow-hidden border border-[#064e3b]/5 dark:border-white/5 shadow-inner bg-white/30 dark:bg-black/20">
-                            <table class="w-full text-left">
-                                <thead class="bg-[#064e3b]/5 dark:bg-white/5">
-                                    <tr class="text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                                        <th class="p-6">Holy Date</th>
-                                        <th class="p-6">Islamic Orbit</th>
-                                        <th class="p-6 text-center">Sehri</th>
-                                        <th class="p-6 text-center">Iftar</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="monthly-calendar-body"
-                                    class="divide-y divide-[#064e3b]/5 dark:divide-white/5">
-                                    <!-- Populated by JS -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ═══════════════════════════════════════════ -->
-            <!-- ISLAMIC CALENDAR VIEW                       -->
-            <!-- ═══════════════════════════════════════════ -->
-            <section id="view-calendar" class="view-section hidden p-4 md:p-8 space-y-8 animate-fade-in-up">
-
-                <!-- Hero Banner -->
-                <div
-                    class="bg-gradient-to-br from-[#064e3b] to-[#10b981] rounded-2xl p-8 md:p-12 text-center text-white shadow-xl relative overflow-hidden">
-                    <div class="absolute inset-0 opacity-5 pointer-events-none"
-                        style="background-image: url('https://www.transparenttextures.com/patterns/arabesque.png');">
-                    </div>
-                    <p class="text-sm font-semibold text-emerald-200 mb-3 flex items-center justify-center gap-2">
-                        <i class="fas fa-moon"></i> Today's Hijri Date
-                    </p>
-                    <h1 class="text-5xl md:text-7xl font-black mb-3" id="cal-hijri-daymonth">-- ------</h1>
-                    <p class="text-2xl md:text-3xl font-bold text-emerald-100 mb-2" id="cal-hijri-year">---- AH</p>
-                    <p class="text-sm text-emerald-200 mb-6" id="cal-gregorian">Corresponding to ----</p>
-
-                    <!-- Fast Timings (Added as per user request) -->
-                    <div id="calendar-fast-timings"
-                        class="hidden grid grid-cols-2 gap-4 max-w-sm mx-auto mt-4 pt-6 border-t border-white/10">
-                        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20">
-                            <p class="text-[10px] font-black uppercase tracking-widest text-emerald-300 mb-1">Sehri End
-                            </p>
-                            <p id="cal-sehri-time" class="text-2xl font-black text-white">--:--</p>
-                        </div>
-                        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20">
-                            <p class="text-[10px] font-black uppercase tracking-widest text-amber-300 mb-1">
-                                Iftar/Maghrib</p>
-                            <p id="cal-iftar-time" class="text-2xl font-black text-white">--:--</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Hijri Months Grid -->
-                <div>
-                    <h2 class="text-2xl font-black text-gray-800 dark:text-white mb-5">Hijri Months</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3" id="hijri-months-grid">
-                        <!-- Populated by JS -->
-                    </div>
-                </div>
-
-                <!-- Important Islamic Dates -->
-                <div>
-                    <h2 class="text-2xl font-black text-gray-800 dark:text-white mb-5 flex items-center gap-2">
-                        <i class="fas fa-star text-amber-500"></i> Important Islamic Dates
-                    </h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-                        <!-- Muharram -->
-                        <div
-                            class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 border-l-4 border-l-purple-500 p-5 flex items-start gap-4 shadow-sm anime-card">
-                            <div
-                                class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center text-white flex-shrink-0">
-                                <i class="fas fa-star text-sm"></i>
-                            </div>
-                            <div>
-                                <p class="font-bold text-gray-800 dark:text-white">Islamic New Year</p>
-                                <p class="text-xs text-purple-500 font-bold mb-1">1 Muharram</p>
-                                <p class="text-sm text-gray-400">Beginning of the new Hijri year</p>
-                            </div>
-                        </div>
-
-                        <div
-                            class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 border-l-4 border-l-blue-500 p-5 flex items-start gap-4 shadow-sm anime-card">
-                            <div
-                                class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center text-white flex-shrink-0">
-                                <i class="fas fa-star text-sm"></i>
-                            </div>
-                            <div>
-                                <p class="font-bold text-gray-800 dark:text-white">Day of Ashura</p>
-                                <p class="text-xs text-blue-500 font-bold mb-1">10 Muharram</p>
-                                <p class="text-sm text-gray-400">Day of fasting commemorating various historical events
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Rabi' al-Awwal -->
-                        <div
-                            class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 border-l-4 border-l-green-500 p-5 flex items-start gap-4 shadow-sm anime-card">
-                            <div
-                                class="w-10 h-10 rounded-xl bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center text-white flex-shrink-0">
-                                <i class="fas fa-moon text-sm"></i>
-                            </div>
-                            <div>
-                                <p class="font-bold text-gray-800 dark:text-white">Mawlid an-Nabi ﷺ</p>
-                                <p class="text-xs text-green-500 font-bold mb-1">12 Rabi' al-Awwal</p>
-                                <p class="text-sm text-gray-400">Birth of the Prophet Muhammad ﷺ</p>
-                            </div>
-                        </div>
-
-                        <!-- Rajab -->
-                        <div
-                            class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 border-l-4 border-l-violet-500 p-5 flex items-start gap-4 shadow-sm anime-card">
-                            <div
-                                class="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-400 to-purple-500 flex items-center justify-center text-white flex-shrink-0">
-                                <i class="fas fa-star-and-crescent text-sm"></i>
-                            </div>
-                            <div>
-                                <p class="font-bold text-gray-800 dark:text-white">Laylat al-Mi'raj</p>
-                                <p class="text-xs text-violet-500 font-bold mb-1">27 Rajab</p>
-                                <p class="text-sm text-gray-400">Night Journey and Ascension of the Prophet ﷺ</p>
-                            </div>
-                        </div>
-
-                        <!-- Sha'ban -->
-                        <div
-                            class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 border-l-4 border-l-sky-500 p-5 flex items-start gap-4 shadow-sm anime-card">
-                            <div
-                                class="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-400 to-blue-500 flex items-center justify-center text-white flex-shrink-0">
-                                <i class="fas fa-cloud-moon text-sm"></i>
-                            </div>
-                            <div>
-                                <p class="font-bold text-gray-800 dark:text-white">Laylat al-Bara'ah</p>
-                                <p class="text-xs text-sky-500 font-bold mb-1">15 Sha'ban</p>
-                                <p class="text-sm text-gray-400">Night of Forgiveness and Records</p>
-                            </div>
-                        </div>
-
-                        <!-- Ramadan -->
-                        <div
-                            class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 border-l-4 border-l-amber-500 p-5 flex items-start gap-4 shadow-sm anime-card">
-                            <div
-                                class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white flex-shrink-0">
-                                <i class="fas fa-sun text-sm"></i>
-                            </div>
-                            <div>
-                                <p class="font-bold text-gray-800 dark:text-white">Laylat al-Qadr</p>
-                                <p class="text-xs text-amber-500 font-bold mb-1">27 Ramadan (estimated)</p>
-                                <p class="text-sm text-gray-400">Night of Power — better than 1,000 months</p>
-                            </div>
-                        </div>
-
-                        <!-- Shawwal -->
-                        <div
-                            class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 border-l-4 border-l-rose-500 p-5 flex items-start gap-4 shadow-sm anime-card">
-                            <div
-                                class="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-400 to-pink-500 flex items-center justify-center text-white flex-shrink-0">
-                                <i class="fas fa-gift text-sm"></i>
-                            </div>
-                            <div>
-                                <p class="font-bold text-gray-800 dark:text-white">Eid ul-Fitr</p>
-                                <p class="text-xs text-rose-500 font-bold mb-1">1 Shawwal</p>
-                                <p class="text-sm text-gray-400">Celebration marking end of Ramadan fast</p>
-                            </div>
-                        </div>
-
-                        <!-- Dhul-Hijjah -->
-                        <div
-                            class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 border-l-4 border-l-teal-500 p-5 flex items-start gap-4 shadow-sm anime-card">
-                            <div
-                                class="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center text-white flex-shrink-0">
-                                <i class="fas fa-compass text-sm"></i>
-                            </div>
-                            <div>
-                                <p class="font-bold text-gray-800 dark:text-white">Hajj Days</p>
-                                <p class="text-xs text-teal-600 font-bold mb-1">8-13 Dhul-Hijjah</p>
-                                <p class="text-sm text-gray-400">The sacred pilgrimage and journey to Arafah</p>
-                            </div>
-                        </div>
-
-                        <div
-                            class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 border-l-4 border-l-emerald-500 p-5 flex items-start gap-4 shadow-sm anime-card">
-                            <div
-                                class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white flex-shrink-0">
-                                <i class="fas fa-kaaba text-sm"></i>
-                            </div>
-                            <div>
-                                <p class="font-bold text-gray-800 dark:text-white">Day of Arafah</p>
-                                <p class="text-xs text-emerald-600 font-bold mb-1">9 Dhul-Hijjah</p>
-                                <p class="text-sm text-gray-400">The pinnacle of Hajj and day of intense prayer</p>
-                            </div>
-                        </div>
-
-                        <div
-                            class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 border-l-4 border-l-indigo-500 p-5 flex items-start gap-4 shadow-sm anime-card">
-                            <div
-                                class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-400 to-blue-600 flex items-center justify-center text-white flex-shrink-0">
-                                <i class="fas fa-star text-sm"></i>
-                            </div>
-                            <div>
-                                <p class="font-bold text-gray-800 dark:text-white">Eid ul-Adha</p>
-                                <p class="text-xs text-indigo-500 font-bold mb-1">10 Dhul-Hijjah</p>
-                                <p class="text-sm text-gray-400">Festival of Sacrifice, commemorating Prophet Ibrahim ﷺ
-                                </p>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-            </section>
-
-        </main>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     SPLASH SCREEN
+════════════════════════════════════════════════ -->
+<div id="splash" class="splash">
+  <div class="splash-inner">
+    <div class="splash-emblem">
+      <i class="fas fa-mosque"></i>
+    </div>
+    <h1 class="splash-title">Sirat-ul Qalb</h1>
+    <p class="splash-subtitle">Path of the Heart</p>
+    <div class="splash-loader">
+      <div class="splash-bar"></div>
+    </div>
+    <p class="splash-quote">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     APP SHELL
+════════════════════════════════════════════════ -->
+<div id="app" class="app-shell hidden">
+
+  <!-- SIDEBAR (Desktop) -->
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon"><i class="fas fa-mosque"></i></div>
+      <div class="brand-text">
+        <span class="brand-name">Sirat-ul Qalb</span>
+        <span class="brand-tagline">Path of the Heart</span>
+      </div>
     </div>
 
-    <!-- QURAN READER MODAL (Overlay) -->
-    <div id="quran-modal"
-        class="fixed inset-0 z-50 bg-[#0b1a16] text-white hidden flex-col transition-all duration-500 overflow-hidden">
-        <!-- Reader Header: High-Tech Premium -->
-        <div
-            class="flex items-center justify-between p-4 md:px-8 border-b border-white/5 bg-[#042f24]/80 backdrop-blur-xl relative z-10">
-            <div class="flex items-center gap-4">
-                <button onclick="window.closePortalModal()"
-                    class="md:hidden w-10 h-10 rounded-full flex items-center justify-center bg-white/5">
-                    <i class="fas fa-chevron-left text-[#af944d]"></i>
-                </button>
-                <div class="text-left">
-                    <h3 id="reader-title"
-                        class="text-xl md:text-3xl font-[Cormorant_Garamond] font-black text-[#10b981] drop-shadow-[0_0_15px_rgba(16,185,129,0.4)]">
-                        Surah
-                        Al-Fatiha</h3>
-                    <p id="surah-info"
-                        class="text-[10px] md:text-xs uppercase tracking-widest text-emerald-400/60 font-bold">7
-                        Ayahs |
-                        Meccan</p>
-                </div>
-            </div>
+    <nav class="sidebar-nav" role="navigation" aria-label="Main navigation">
+      <div class="nav-group">
+        <span class="nav-group-label">Main</span>
+        <a href="#" class="nav-link active" data-view="dashboard" aria-label="Dashboard">
+          <i class="fas fa-th-large"></i><span>Dashboard</span>
+          <span class="nav-badge" id="streak-badge">0🔥</span>
+        </a>
+        <a href="#" class="nav-link" data-view="quran" aria-label="Quran">
+          <i class="fas fa-quran"></i><span>Noble Quran</span>
+        </a>
+        <a href="#" class="nav-link" data-view="names" aria-label="99 Names">
+          <i class="fas fa-star-and-crescent"></i><span>99 Names</span>
+        </a>
+      </div>
+      <div class="nav-group">
+        <span class="nav-group-label">Daily Practice</span>
+        <a href="#" class="nav-link" data-view="prayer" aria-label="Prayer Times">
+          <i class="fas fa-clock"></i><span>Prayer Times</span>
+          <span class="nav-dot" id="prayer-dot"></span>
+        </a>
+        <a href="#" class="nav-link" data-view="hadith" aria-label="Hadith">
+          <i class="fas fa-scroll"></i><span>Hadith</span>
+        </a>
+        <a href="#" class="nav-link" data-view="duas" aria-label="Duas">
+          <i class="fas fa-hands-praying"></i><span>Duas & Azkar</span>
+        </a>
+      </div>
+      <div class="nav-group">
+        <span class="nav-group-label">Learning</span>
+        <a href="#" class="nav-link" data-view="quiz" aria-label="Islamic Quiz">
+          <i class="fas fa-brain"></i><span>Islamic Quiz</span>
+        </a>
+        <a href="#" class="nav-link" data-view="prophets" aria-label="Prophets">
+          <i class="fas fa-book-open"></i><span>Prophets</span>
+        </a>
+      </div>
+    </nav>
 
-            <div class="flex items-center gap-3">
-                <!-- Audio Center -->
-                <div
-                    class="hidden sm:flex items-center gap-2 bg-black/40 px-4 py-1.5 rounded-full border border-white/5">
-                    <button onclick="window.toggleTranslations()" id="translation-toggle"
-                        class="text-xs font-bold tracking-widest text-emerald-400 hover:text-[#af944d] transition-colors border border-emerald-400/30 px-3 py-1 rounded-full uppercase">
-                        TRANSLATIONS: ON
-                    </button>
-                    <button onclick="window.toggleMushafMode()" id="mushaf-toggle"
-                        class="ml-2 text-xs font-bold tracking-widest text-[#af944d] hover:text-white transition-colors border border-[#af944d]/30 px-3 py-1 rounded-full uppercase">
-                        MODE: VERSE
-                    </button>
-                    <div class="w-[1px] h-3 bg-white/10"></div>
-                    <button onclick="playSurahAudio('ur')"
-                        class="text-[10px] font-bold text-gray-400 hover:text-[#af944d]">URDU</button>
-                    <div class="w-[1px] h-3 bg-white/10"></div>
-                    <button onclick="playSurahAudio('en')"
-                        class="text-[10px] font-bold text-gray-400 hover:text-[#af944d]">ENG</button>
-                    <button id="play-pause-btn"
-                        class="w-8 h-8 flex items-center justify-center rounded-full bg-[#af944d] text-black shadow-lg shadow-[#af944d]/20 transition-all active:scale-90">
-                        <i class="fas fa-play text-xs" id="play-icon"></i>
-                    </button>
-                    <audio id="quran-audio"></audio>
-                </div>
+    <div class="sidebar-footer">
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle light/dark mode">
+        <i class="fas fa-moon" id="theme-icon"></i>
+        <span>Toggle Theme</span>
+      </button>
+    </div>
+  </aside>
 
-                <button id="close-quran-btn" onclick="window.closePortalModal()"
-                    class="w-10 h-10 rounded-full bg-red-500/10 hover:bg-red-500 text-white flex items-center justify-center transition-all group">
-                    <i class="fas fa-times group-hover:rotate-90 transition-transform"></i>
-                </button>
+  <!-- MOBILE OVERLAY -->
+  <div id="sidebar-overlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+  <!-- MAIN CONTENT AREA -->
+  <div class="main-wrapper">
+
+    <!-- TOP HEADER -->
+    <header class="top-header">
+      <div class="header-left">
+        <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Open menu" onclick="toggleSidebar()">
+          <i class="fas fa-bars"></i>
+        </button>
+        <h2 class="page-title" id="page-title">Dashboard</h2>
+      </div>
+      <div class="header-right">
+        <div class="header-search">
+          <i class="fas fa-search"></i>
+          <input type="text" id="global-search" placeholder="Search anything..." aria-label="Global search">
+        </div>
+        <div class="header-location" id="header-location">
+          <i class="fas fa-location-dot"></i>
+          <span id="city-name">Locating…</span>
+        </div>
+        <button id="header-theme-toggle" class="icon-btn" aria-label="Toggle theme">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- VIEWS CONTAINER -->
+    <main class="views-container" id="views-container">
+
+      <!-- ─────────────────────────────────────────
+           VIEW: DASHBOARD
+      ───────────────────────────────────────── -->
+      <section id="view-dashboard" class="view active" aria-label="Dashboard">
+        <!-- Hero Prayer Widget -->
+        <div class="dashboard-hero">
+          <div class="hero-left">
+            <div class="hero-label">Next Prayer</div>
+            <div class="hero-prayer-name" id="d-next-name">Fajr</div>
+            <div class="hero-time" id="d-next-time">04:30</div>
+            <div class="hero-countdown" id="d-countdown" aria-live="polite">--:--:--</div>
+            <div class="hero-dates">
+              <span id="d-gregorian"></span>
+              <span class="date-sep">•</span>
+              <span id="d-hijri"></span>
             </div>
+          </div>
+          <div class="hero-right">
+            <div class="prayer-mini-list" id="d-prayer-list">
+              <!-- Injected by JS -->
+            </div>
+          </div>
         </div>
 
-        <!-- Mobile Audio Control (Always visible on mobile bottom or here?) Let's put it in a subheader for mobile -->
-        <div class="sm:hidden flex items-center justify-between px-6 py-3 bg-[#064e3b]/30 border-b border-white/5">
-            <div class="flex gap-4">
-                <button onclick="playSurahAudio('ur')" class="text-[10px] font-black text-[#af944d]">ROMAN
-                    URDU</button>
-                <button onclick="playSurahAudio('en')" class="text-[10px] font-black text-gray-400">ENGLISH</button>
+        <!-- Stats Row -->
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-fire"></i></div>
+            <div class="stat-info">
+              <div class="stat-value" id="stat-streak">0</div>
+              <div class="stat-label">Day Streak</div>
             </div>
-            <button id="play-pause-btn-mob"
-                class="w-10 h-10 rounded-full bg-[#af944d] text-black flex items-center justify-center shadow-lg">
-                <i class="fas fa-play"></i>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-quran"></i></div>
+            <div class="stat-info">
+              <div class="stat-value" id="stat-verses">0</div>
+              <div class="stat-label">Verses Read</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-star"></i></div>
+            <div class="stat-info">
+              <div class="stat-value" id="stat-bookmarks">0</div>
+              <div class="stat-label">Bookmarks</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+            <div class="stat-info">
+              <div class="stat-value" id="stat-quiz">0%</div>
+              <div class="stat-label">Quiz Score</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Daily Verse -->
+        <div class="section-heading"><h3>Verse of the Day</h3></div>
+        <div class="daily-verse-card" id="d-daily-verse">
+          <div class="verse-arabic" id="d-verse-arabic">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+          <div class="verse-translation" id="d-verse-translation">In the name of Allah, the Most Gracious, the Most Merciful</div>
+          <div class="verse-ref" id="d-verse-ref">Surah Al-Fatiha 1:1</div>
+          <div class="verse-actions">
+            <button class="action-btn" onclick="copyVerse()" aria-label="Copy verse"><i class="fas fa-copy"></i></button>
+            <button class="action-btn" onclick="shareVerse()" aria-label="Share verse"><i class="fas fa-share-alt"></i></button>
+            <button class="action-btn" id="d-refresh-verse" aria-label="New verse"><i class="fas fa-rotate-right"></i></button>
+          </div>
+        </div>
+
+        <!-- Progress Modules -->
+        <div class="section-heading"><h3>Your Progress</h3></div>
+        <div class="progress-grid">
+          <div class="progress-card" onclick="navigateTo('quran')">
+            <div class="progress-icon"><i class="fas fa-quran"></i></div>
+            <div class="progress-info">
+              <div class="progress-name">Quran Reading</div>
+              <div class="progress-bar-wrap">
+                <div class="progress-bar" id="prog-quran" style="width:0%"></div>
+              </div>
+              <div class="progress-pct" id="prog-quran-pct">0%</div>
+            </div>
+          </div>
+          <div class="progress-card" onclick="navigateTo('names')">
+            <div class="progress-icon"><i class="fas fa-star-and-crescent"></i></div>
+            <div class="progress-info">
+              <div class="progress-name">Names of Allah</div>
+              <div class="progress-bar-wrap">
+                <div class="progress-bar gold" id="prog-names" style="width:0%"></div>
+              </div>
+              <div class="progress-pct" id="prog-names-pct">0%</div>
+            </div>
+          </div>
+          <div class="progress-card" onclick="navigateTo('quiz')">
+            <div class="progress-icon"><i class="fas fa-brain"></i></div>
+            <div class="progress-info">
+              <div class="progress-name">Quiz Mastery</div>
+              <div class="progress-bar-wrap">
+                <div class="progress-bar ruby" id="prog-quiz" style="width:0%"></div>
+              </div>
+              <div class="progress-pct" id="prog-quiz-pct">0%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Access -->
+        <div class="section-heading"><h3>Quick Access</h3></div>
+        <div class="quick-grid">
+          <div class="quick-card" onclick="navigateTo('duas')">
+            <i class="fas fa-hands-praying"></i><span>Morning Azkar</span>
+          </div>
+          <div class="quick-card" onclick="navigateTo('hadith')">
+            <i class="fas fa-scroll"></i><span>Daily Hadith</span>
+          </div>
+          <div class="quick-card" onclick="navigateTo('prophets')">
+            <i class="fas fa-book-open"></i><span>Prophet Stories</span>
+          </div>
+          <div class="quick-card" onclick="navigateTo('prayer')">
+            <i class="fas fa-clock"></i><span>Prayer Times</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────
+           VIEW: QURAN
+      ───────────────────────────────────────── -->
+      <section id="view-quran" class="view" aria-label="Noble Quran">
+        <div class="view-header quran-header">
+          <h2>Noble Quran</h2>
+          
+          <!-- Navigation Modes Tab -->
+          <div class="quran-nav-tabs">
+            <button class="quran-tab active" data-tab="surah">Surah</button>
+            <button class="quran-tab" data-tab="juz">Juz / Para</button>
+          </div>
+
+          <div class="view-controls">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" id="quran-search" placeholder="Search Surahs..." aria-label="Search Quran">
+            </div>
+            <button class="btn-secondary" onclick="openQuranSettings()" aria-label="Reading Settings">
+              <i class="fas fa-cog"></i> Settings
             </button>
+          </div>
         </div>
 
-        <div class="flex flex-1 overflow-hidden relative">
-            <!-- Floating Meta Information (Subtle UI Enhancement) -->
-            <button id="quran-info-toggle"
-                onclick="document.getElementById('quran-meta-panel').classList.toggle('active')"
-                class="fixed bottom-10 right-10 w-16 h-16 bg-[#af944d] text-black rounded-full flex items-center justify-center shadow-2xl z-[110] hover:scale-110 active:scale-95 transition-all">
-                <i class="fas fa-info-circle text-2xl"></i>
+        <!-- Browse Layout (Surah / Juz Lists) -->
+        <div class="quran-browse-layout" id="quran-browse-layout">
+          <!-- Surah List Container -->
+          <div class="quran-grid-container active" id="surah-grid-container">
+            <div class="quran-filters">
+              <button class="q-filter active" data-filter="all">All</button>
+              <button class="q-filter" data-filter="makki">Makki</button>
+              <button class="q-filter" data-filter="madani">Madani</button>
+            </div>
+            <div class="surah-grid" id="surah-grid">
+              <!-- Injected by JS -->
+            </div>
+          </div>
+          
+          <!-- Juz List Container -->
+          <div class="quran-grid-container" id="juz-grid-container">
+            <div class="juz-grid" id="juz-grid">
+              <!-- Injected by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Surah Reader -->
+        <div class="surah-reader-panel hidden" id="surah-reader-panel">
+          <div class="reader-header-advanced">
+            <button class="icon-btn" onclick="closeReader()" aria-label="Back to Browse">
+              <i class="fas fa-arrow-left"></i>
             </button>
-
-            <div id="quran-meta-panel" class="quran-floating-meta">
-                <div class="flex justify-between items-center mb-6">
-                    <h4 class="text-xs font-black uppercase tracking-widest text-[#af944d]">Sacred Insights</h4>
-                    <button onclick="document.getElementById('quran-meta-panel').classList.remove('active')"
-                        class="text-gray-500 hover:text-white"><i class="fas fa-times"></i></button>
-                </div>
-
-                <div class="space-y-6">
-                    <!-- Milestones -->
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-white/5 p-4 rounded-2xl border border-white/5">
-                            <p class="text-[8px] font-bold text-gray-500 uppercase tracking-widest mb-1">Current Juz
-                            </p>
-                            <p class="text-xl font-black text-white" id="meta-juz">--</p>
-                        </div>
-                        <div class="bg-white/5 p-4 rounded-2xl border border-white/5">
-                            <p class="text-[8px] font-bold text-gray-500 uppercase tracking-widest mb-1">Current
-                                Manzil
-                            </p>
-                            <p class="text-xl font-black text-white" id="meta-manzil">--</p>
-                        </div>
-                    </div>
-
-                    <!-- Letters Analysis -->
-                    <div>
-                        <p class="text-[8px] font-bold text-[#af944d] uppercase tracking-widest mb-3">Linguistic
-                            Composition (Hurf)</p>
-                        <div id="meta-hurf-list" class="flex flex-wrap gap-1">
-                            <!-- Populated by JS -->
-                        </div>
-                    </div>
-                </div>
+            <div class="reader-title">
+              <h3 id="reader-surah-name">Al-Fatiha</h3>
+              <span id="reader-surah-info">Meccan • 7 Verses</span>
+            </div>
+            
+            <div class="reader-display-modes">
+              <button class="rd-mode" data-mode="arabic" title="Arabic Only">ع</button>
+              <button class="rd-mode" data-mode="arabic-roman" title="Arabic + Roman">A/ع</button>
+              <button class="rd-mode" data-mode="arabic-translation" title="Arabic + Translation">ع/En</button>
+              <button class="rd-mode active" data-mode="full" title="Full Mode">All</button>
             </div>
 
-            <!-- Sidebar List: Desktop Only with Premium Scroll -->
-            <div class="w-80 border-r border-white/5 bg-black/40 overflow-y-auto hidden lg:block"
-                id="surah-list-container">
-                <div class="p-6 border-b border-white/5 uppercase tracking-widest text-[10px] font-black text-gray-500">
-                    Sacred Chapters
-                </div>
-                <div id="surah-list" class="space-y-1 p-4">
-                    <!-- List with JS -->
-                </div>
-            </div>
-
-            <!-- Content Area: Beautiful Typography -->
-            <div class="flex-1 overflow-y-auto p-4 md:p-12 relative bg-[#0b1a16]" id="quran-content"
-                style="scroll-behavior: smooth;">
-                <!-- Verses go here -->
-                <div class="text-center mt-32">
-                    <i class="fas fa-circle-notch fa-spin text-5xl text-[#af944d]"></i>
-                    <p class="mt-4 text-emerald-400 font-bold uppercase tracking-widest animate-pulse">Summoning
-                        Wisdom...</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Audio Elements -->
-    <audio id="quran-audio"></audio>
-    <div id="global-player"></div>
-
-    <!-- Music Player Style Quran Bar -->
-    <div id="quran-player-bar"
-        class="fixed bottom-0 left-0 w-full bg-[#064e3b] backdrop-blur-xl border-t border-white/10 px-6 py-4 text-white z-[100] transform translate-y-full transition-transform duration-500 shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
-        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-            <!-- Info -->
-            <div class="flex items-center gap-4 w-full md:w-auto">
-                <div class="w-12 h-12 bg-[#af944d] rounded-xl flex items-center justify-center text-xl shadow-lg">
-                    <i class="fas fa-quran"></i>
-                </div>
-                <div>
-                    <h4 id="player-title" class="font-bold text-sm tracking-wide">Select a Surah</h4>
-                    <p id="player-sub" class="text-xs text-white/50 uppercase tracking-widest">Quran Player</p>
-                </div>
-            </div>
-
-            <!-- Controls -->
-            <div class="flex items-center gap-6 order-first md:order-none">
-                <button onclick="toggleRepeat()" id="player-repeat-btn"
-                    class="text-white/40 hover:text-[#af944d] transition-colors text-sm" title="Repeat Mode">
-                    <i class="fas fa-repeat"></i>
+            <div class="reader-controls">
+              <!-- Audio Player Mini -->
+              <div class="audio-mini-player">
+                <select id="reciter-select" class="select-input mini-select" aria-label="Select Reciter">
+                  <option value="ar.alafasy">Mishary Alafasy</option>
+                  <option value="ar.sudais">Abdul Rahman Al-Sudais</option>
+                  <option value="ar.husary">Mahmoud Khalil Al-Husary</option>
+                </select>
+                <button class="icon-btn" id="reader-audio-btn" onclick="toggleFullAudio()" aria-label="Play audio">
+                  <i class="fas fa-play"></i>
                 </button>
-                <div class="flex items-center gap-6">
-                    <button onclick="changeTrack(-1)"
-                        class="text-white/60 hover:text-[#af944d] transition-colors text-xl"><i
-                            class="fas fa-step-backward"></i></button>
-                    <button id="player-play-btn" onclick="togglePlay()"
-                        class="w-14 h-14 bg-white text-[#064e3b] rounded-full flex items-center justify-center hover:scale-105 transition-transform shadow-xl text-xl">
-                        <i class="fas fa-play pl-1"></i>
-                    </button>
-                    <button onclick="changeTrack(1)"
-                        class="text-white/60 hover:text-[#af944d] transition-colors text-xl"><i
-                            class="fas fa-step-forward"></i></button>
-                </div>
+              </div>
             </div>
-
-            <!-- Progress -->
-            <div class="flex items-center gap-3 w-full md:w-auto md:min-w-[300px]">
-                <span id="time-current" class="text-[10px] tabular-nums text-white/60">0:00</span>
-                <input type="range"
-                    class="flex-1 h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer accent-[#af944d] hover:h-2 transition-all"
-                    value="0" id="player-seek" oninput="seekAudio(this.value)">
-                <span id="time-total" class="text-[10px] tabular-nums text-white/60">--:--</span>
+          </div>
+          
+          <div class="bismillah" id="bismillah-header">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+          
+          <!-- Content Container -->
+          <div class="verses-container quran-font-uthmani" id="verses-container">
+            <div class="reader-placeholder">
+              <i class="fas fa-circle-notch fa-spin"></i>
+              <p>Loading...</p>
             </div>
+          </div>
+          <audio id="quran-audio" hidden></audio>
         </div>
-    </div>
 
-    <!-- Fazilat Modal -->
-    <div id="fazilat-modal"
-        class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4"
-        onclick="if(event.target===this){this.classList.add('hidden');this.classList.remove('flex');}">
-        <div
-            class="bg-[#fcfdfd] dark:bg-gray-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl transform scale-100 transition-all relative border-t-4 border-[#af944d]">
-            <button class="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors"
-                onclick="window.closePortalModal()">
-                <i class="fas fa-times text-xl"></i>
+        <!-- Advanced Reading Settings Modal -->
+        <div id="quran-settings-modal" class="modal hidden" role="dialog" aria-modal="true">
+          <div class="modal-overlay" onclick="closeQuranSettings()"></div>
+          <div class="modal-content settings-modal-content">
+            <button class="modal-close" onclick="closeQuranSettings()" aria-label="Close"><i class="fas fa-times"></i></button>
+            <div class="modal-header">
+              <h2>Reading Settings</h2>
+            </div>
+            <div class="modal-body">
+              <div class="settings-group">
+                <h4>Arabic Font Size</h4>
+                <div class="slider-wrap">
+                  <span style="font-size: 16px;">A</span>
+                  <input type="range" id="ar-font-size" min="20" max="64" value="35" class="range-slider">
+                  <span style="font-size: 24px;">A</span>
+                </div>
+              </div>
+              <div class="settings-group">
+                <h4>Translation Font Size</h4>
+                <div class="slider-wrap">
+                  <span style="font-size: 12px;">A</span>
+                  <input type="range" id="en-font-size" min="12" max="32" value="16" class="range-slider">
+                  <span style="font-size: 18px;">A</span>
+                </div>
+              </div>
+              <div class="settings-group">
+                <h4>Reading Theme</h4>
+                <div class="theme-options">
+                  <button class="theme-btn" data-rtheme="dark">Dark</button>
+                  <button class="theme-btn" data-rtheme="light">Light</button>
+                  <button class="theme-btn" data-rtheme="sepia">Sepia</button>
+                </div>
+              </div>
+              <div class="settings-group">
+                <h4>Show Transliteration</h4>
+                <label class="switch">
+                  <input type="checkbox" id="translit-toggle" checked>
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ─────────────────────────────────────────
+           VIEW: 99 NAMES
+      ───────────────────────────────────────── -->
+      <section id="view-names" class="view" aria-label="99 Names of Allah">
+        <div class="view-header">
+          <h2>99 Names of Allah</h2>
+          <div class="view-controls">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" id="names-search" placeholder="Search names…" aria-label="Search names">
+            </div>
+          </div>
+        </div>
+        <div class="daily-name-banner" id="daily-name-banner">
+          <!-- Injected by JS -->
+        </div>
+        <div class="names-grid" id="names-grid">
+          <!-- Injected by JS -->
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────
+           VIEW: PRAYER TIMES
+      ───────────────────────────────────────── -->
+      <section id="view-prayer" class="view" aria-label="Prayer Times">
+        <div class="view-header">
+          <h2>Prayer Times</h2>
+          <div class="view-controls">
+            <input type="text" id="prayer-city" class="city-input" placeholder="City name…" value="Mecca" aria-label="Enter city name">
+            <button class="btn-primary" onclick="loadPrayers()" aria-label="Update location">
+              <i class="fas fa-location-dot"></i> Update
             </button>
-            <div class="text-center mb-6">
-                <div
-                    class="w-16 h-16 mx-auto bg-[#af944d]/10 rounded-full flex items-center justify-center text-[#af944d] text-3xl mb-4 shadow-sm">
-                    <i class="fas fa-star" id="fazilat-icon"></i>
-                </div>
-                <h3 class="text-3xl font-[Cormorant_Garamond] font-bold text-[#064e3b] dark:text-[#af944d] mb-1"
-                    id="fazilat-title">Title</h3>
-                <p class="text-xs font-bold text-[#af944d] tracking-[0.2em] uppercase">Virtue of Prayer</p>
-            </div>
-
-            <div
-                class="bg-gradient-to-br from-[#af944d]/5 to-transparent p-6 rounded-xl border border-[#af944d]/20 relative">
-                <i class="fas fa-quote-left text-[#af944d]/20 text-4xl absolute top-2 left-2"></i>
-                <p class="text-lg text-gray-700 italic text-center font-serif leading-relaxed dark:text-gray-300 relative z-10"
-                    id="fazilat-text">
-                    Loading virtue details...
-                </p>
-                <div class="text-right mt-4 text-xs font-bold text-[#064e3b] dark:text-[#af944d] opacity-80"
-                    id="fazilat-ref">— Reference</div>
-            </div>
+          </div>
         </div>
-    </div>
 
-    <script src="script.js"></script>
+        <!-- Countdown hero -->
+        <div class="prayer-hero-card">
+          <div class="phc-left">
+            <div class="phc-label">Next Prayer</div>
+            <div class="phc-name" id="p-next-name">—</div>
+            <div class="phc-countdown" id="p-countdown" aria-live="polite">--:--:--</div>
+          </div>
+          <div class="phc-right">
+            <div class="phc-city" id="p-city">—</div>
+            <div class="phc-hijri" id="p-hijri">—</div>
+          </div>
+        </div>
+
+        <!-- Prayer Cards -->
+        <div class="prayer-cards-grid" id="prayer-cards-grid">
+          <!-- Injected by JS -->
+        </div>
+
+        <!-- Qibla -->
+        <div class="section-heading"><h3>Qibla Direction</h3></div>
+        <div class="qibla-card">
+          <div class="qibla-compass" id="qibla-compass">
+            <div class="compass-needle" id="compass-needle">
+              <i class="fas fa-location-arrow"></i>
+            </div>
+            <div class="compass-labels">
+              <span class="c-n">N</span><span class="c-e">E</span>
+              <span class="c-s">S</span><span class="c-w">W</span>
+            </div>
+          </div>
+          <div class="qibla-info">
+            <p id="qibla-degrees">Loading Qibla direction…</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────
+           VIEW: HADITH
+      ───────────────────────────────────────── -->
+      <section id="view-hadith" class="view" aria-label="Hadith Collection">
+        <div class="view-header">
+          <h2>Hadith of the Day</h2>
+          <div class="view-controls">
+            <select id="hadith-category" class="select-input" aria-label="Filter by category">
+              <option value="all">All Categories</option>
+              <option value="faith">Faith & Belief</option>
+              <option value="prayer">Prayer & Worship</option>
+              <option value="charity">Charity & Zakat</option>
+              <option value="character">Character & Morals</option>
+              <option value="knowledge">Knowledge & Learning</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="hadith-featured" id="hadith-featured">
+          <!-- Injected by JS -->
+        </div>
+
+        <div class="section-heading"><h3>More Hadiths</h3></div>
+        <div class="hadith-list" id="hadith-list">
+          <!-- Injected by JS -->
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────
+           VIEW: DUAS
+      ───────────────────────────────────────── -->
+      <section id="view-duas" class="view" aria-label="Duas and Azkar">
+        <div class="view-header">
+          <h2>Duas & Azkar</h2>
+          <div class="view-controls">
+            <div class="tab-pills" id="duas-tabs">
+              <button class="tab-pill active" data-tab="morning">Morning</button>
+              <button class="tab-pill" data-tab="evening">Evening</button>
+              <button class="tab-pill" data-tab="occasions">Occasions</button>
+              <button class="tab-pill" data-tab="favorites">Favorites</button>
+            </div>
+          </div>
+        </div>
+        <div class="duas-container" id="duas-container">
+          <!-- Injected by JS -->
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────
+           VIEW: QUIZ
+      ───────────────────────────────────────── -->
+      <section id="view-quiz" class="view" aria-label="Islamic Quiz">
+        <div class="view-header">
+          <h2>Islamic Quiz</h2>
+        </div>
+
+        <!-- Quiz Setup -->
+        <div id="quiz-setup" class="quiz-panel">
+          <div class="quiz-setup-card">
+            <h3>Choose Your Level</h3>
+            <div class="level-grid">
+              <button class="level-card" data-level="beginner" onclick="selectLevel('beginner')">
+                <i class="fas fa-seedling"></i>
+                <span>Beginner</span>
+                <small>Basic Islamic knowledge</small>
+              </button>
+              <button class="level-card" data-level="intermediate" onclick="selectLevel('intermediate')">
+                <i class="fas fa-star-half-stroke"></i>
+                <span>Intermediate</span>
+                <small>Deeper understanding</small>
+              </button>
+              <button class="level-card" data-level="advanced" onclick="selectLevel('advanced')">
+                <i class="fas fa-crown"></i>
+                <span>Advanced</span>
+                <small>Scholar level questions</small>
+              </button>
+            </div>
+            <div class="topic-grid" id="topic-grid">
+              <button class="topic-pill active" data-topic="all">All Topics</button>
+              <button class="topic-pill" data-topic="quran">Quran</button>
+              <button class="topic-pill" data-topic="hadith">Hadith</button>
+              <button class="topic-pill" data-topic="fiqh">Fiqh</button>
+              <button class="topic-pill" data-topic="history">History</button>
+              <button class="topic-pill" data-topic="prophets">Prophets</button>
+            </div>
+            <button class="btn-primary btn-lg" id="start-quiz-btn" onclick="startQuiz()">
+              <i class="fas fa-play"></i> Start Quiz
+            </button>
+          </div>
+
+          <!-- Leaderboard -->
+          <div class="leaderboard-card">
+            <h3><i class="fas fa-trophy"></i> Your Scores</h3>
+            <div id="score-history"></div>
+          </div>
+        </div>
+
+        <!-- Quiz Active -->
+        <div id="quiz-active" class="quiz-panel hidden">
+          <div class="quiz-progress-header">
+            <div class="quiz-stat">Question <span id="q-current">1</span>/<span id="q-total">10</span></div>
+            <div class="quiz-progress-bar-wrap">
+              <div class="quiz-progress-bar" id="quiz-progress-bar"></div>
+            </div>
+            <div class="quiz-stat">Score: <span id="q-score">0</span></div>
+          </div>
+          <div class="question-card" id="question-card">
+            <div class="question-text" id="q-text"></div>
+            <div class="options-grid" id="q-options"></div>
+          </div>
+        </div>
+
+        <!-- Quiz Results -->
+        <div id="quiz-results" class="quiz-panel hidden">
+          <div class="results-card">
+            <div class="results-emoji" id="results-emoji">🎉</div>
+            <h2 id="results-title">Quiz Complete!</h2>
+            <div class="results-score" id="results-score">0/10</div>
+            <div class="results-pct" id="results-pct">0%</div>
+            <div class="results-msg" id="results-msg"></div>
+            <div class="results-actions">
+              <button class="btn-primary" onclick="restartQuiz()"><i class="fas fa-rotate-right"></i> Try Again</button>
+              <button class="btn-secondary" onclick="navigateTo('dashboard')"><i class="fas fa-home"></i> Dashboard</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────
+           VIEW: PROPHETS
+      ───────────────────────────────────────── -->
+      <section id="view-prophets" class="view" aria-label="Stories of the Prophets">
+        <div class="view-header">
+          <h2>Stories of the Prophets</h2>
+        </div>
+        <div class="prophets-grid" id="prophets-grid">
+          <!-- Injected by JS -->
+        </div>
+
+        <!-- Prophet Detail Modal -->
+        <div id="prophet-modal" class="modal hidden" role="dialog" aria-modal="true">
+          <div class="modal-overlay" onclick="closeProphetModal()"></div>
+          <div class="modal-content">
+            <button class="modal-close" onclick="closeProphetModal()" aria-label="Close"><i class="fas fa-times"></i></button>
+            <div class="modal-header">
+              <div class="prophet-arabic" id="pm-arabic"></div>
+              <h2 id="pm-name"></h2>
+              <span id="pm-title" class="prophet-title"></span>
+            </div>
+            <div class="modal-body" id="pm-body"></div>
+          </div>
+        </div>
+      </section>
+
+    </main><!-- /views-container -->
+
+    <!-- MOBILE BOTTOM NAV -->
+    <nav class="mobile-nav" aria-label="Mobile navigation">
+      <a href="#" class="mn-item active" data-view="dashboard" aria-label="Dashboard">
+        <i class="fas fa-th-large"></i><span>Home</span>
+      </a>
+      <a href="#" class="mn-item" data-view="quran" aria-label="Quran">
+        <i class="fas fa-quran"></i><span>Quran</span>
+      </a>
+      <a href="#" class="mn-item" data-view="prayer" aria-label="Prayer">
+        <i class="fas fa-clock"></i><span>Prayer</span>
+      </a>
+      <a href="#" class="mn-item" data-view="duas" aria-label="Duas">
+        <i class="fas fa-hands-praying"></i><span>Duas</span>
+      </a>
+      <a href="#" class="mn-item" data-view="quiz" aria-label="Quiz">
+        <i class="fas fa-brain"></i><span>Quiz</span>
+      </a>
+    </nav>
+
+  </div><!-- /main-wrapper -->
+</div><!-- /app -->
+
+<!-- TOAST -->
+<div id="toast" class="toast" role="alert" aria-live="assertive"></div>
+
+<script src="script.js"></script>
 </body>
-
 </html>

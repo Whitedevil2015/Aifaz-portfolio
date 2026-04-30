@@ -1,639 +1,675 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sirat-ul Qalb — Premium Islamic Learning Portal</title>
-<meta name="description" content="A premium Islamic portal for Quran, Hadith, Prayer Times, Duas and Islamic learning.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Amiri:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sirat-ul Qalb — Premium Islamic Learning Portal</title>
+    <meta name="description"
+        content="A premium Islamic portal for Quran, Hadith, Prayer Times, Duas and Islamic learning.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Amiri:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<!-- ═══════════════════════════════════════════════
+    <!-- ═══════════════════════════════════════════════
      SPLASH SCREEN
 ════════════════════════════════════════════════ -->
-<div id="splash" class="splash">
-  <div class="splash-inner">
-    <div class="splash-emblem">
-      <i class="fas fa-mosque"></i>
+    <div id="splash" class="splash">
+        <div class="splash-inner">
+            <div class="splash-emblem">
+                <i class="fas fa-mosque"></i>
+            </div>
+            <h1 class="splash-title">Sirat-ul Qalb</h1>
+            <p class="splash-subtitle">Path of the Heart</p>
+            <div class="splash-loader">
+                <div class="splash-bar"></div>
+            </div>
+            <p class="splash-quote">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</p>
+        </div>
     </div>
-    <h1 class="splash-title">Sirat-ul Qalb</h1>
-    <p class="splash-subtitle">Path of the Heart</p>
-    <div class="splash-loader">
-      <div class="splash-bar"></div>
-    </div>
-    <p class="splash-quote">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</p>
-  </div>
-</div>
 
-<!-- ═══════════════════════════════════════════════
+    <!-- ═══════════════════════════════════════════════
      APP SHELL
 ════════════════════════════════════════════════ -->
-<div id="app" class="app-shell hidden">
+    <div id="app" class="app-shell hidden">
 
-  <!-- SIDEBAR (Desktop) -->
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-brand">
-      <div class="brand-icon"><i class="fas fa-mosque"></i></div>
-      <div class="brand-text">
-        <span class="brand-name">Sirat-ul Qalb</span>
-        <span class="brand-tagline">Path of the Heart</span>
-      </div>
-    </div>
+        <!-- SIDEBAR (Desktop) -->
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-icon"><i class="fas fa-mosque"></i></div>
+                <div class="brand-text">
+                    <span class="brand-name">Sirat-ul Qalb</span>
+                    <span class="brand-tagline">Path of the Heart</span>
+                </div>
+            </div>
 
-    <nav class="sidebar-nav" role="navigation" aria-label="Main navigation">
-      <div class="nav-group">
-        <span class="nav-group-label">Main</span>
-        <a href="#" class="nav-link active" data-view="dashboard" aria-label="Dashboard">
-          <i class="fas fa-th-large"></i><span>Dashboard</span>
-          <span class="nav-badge" id="streak-badge">0🔥</span>
-        </a>
-        <a href="#" class="nav-link" data-view="quran" aria-label="Quran">
-          <i class="fas fa-quran"></i><span>Noble Quran</span>
-        </a>
-        <a href="#" class="nav-link" data-view="names" aria-label="99 Names">
-          <i class="fas fa-star-and-crescent"></i><span>99 Names</span>
-        </a>
-      </div>
-      <div class="nav-group">
-        <span class="nav-group-label">Daily Practice</span>
-        <a href="#" class="nav-link" data-view="prayer" aria-label="Prayer Times">
-          <i class="fas fa-clock"></i><span>Prayer Times</span>
-          <span class="nav-dot" id="prayer-dot"></span>
-        </a>
-        <a href="#" class="nav-link" data-view="hadith" aria-label="Hadith">
-          <i class="fas fa-scroll"></i><span>Hadith</span>
-        </a>
-        <a href="#" class="nav-link" data-view="duas" aria-label="Duas">
-          <i class="fas fa-hands-praying"></i><span>Duas & Azkar</span>
-        </a>
-      </div>
-      <div class="nav-group">
-        <span class="nav-group-label">Learning</span>
-        <a href="#" class="nav-link" data-view="quiz" aria-label="Islamic Quiz">
-          <i class="fas fa-brain"></i><span>Islamic Quiz</span>
-        </a>
-        <a href="#" class="nav-link" data-view="prophets" aria-label="Prophets">
-          <i class="fas fa-book-open"></i><span>Prophets</span>
-        </a>
-      </div>
-    </nav>
+            <nav class="sidebar-nav" role="navigation" aria-label="Main navigation">
+                <div class="nav-group">
+                    <span class="nav-group-label">Main</span>
+                    <a href="#" class="nav-link active" data-view="dashboard" aria-label="Dashboard">
+                        <i class="fas fa-th-large"></i><span>Dashboard</span>
+                        <span class="nav-badge" id="streak-badge">0🔥</span>
+                    </a>
+                    <a href="#" class="nav-link" data-view="quran" aria-label="Quran">
+                        <i class="fas fa-quran"></i><span>Noble Quran</span>
+                    </a>
+                    <a href="#" class="nav-link" data-view="names" aria-label="99 Names">
+                        <i class="fas fa-star-and-crescent"></i><span>99 Names</span>
+                    </a>
+                </div>
+                <div class="nav-group">
+                    <span class="nav-group-label">Daily Practice</span>
+                    <a href="#" class="nav-link" data-view="prayer" aria-label="Prayer Times">
+                        <i class="fas fa-clock"></i><span>Prayer Times</span>
+                        <span class="nav-dot" id="prayer-dot"></span>
+                    </a>
+                    <a href="#" class="nav-link" data-view="hadith" aria-label="Hadith">
+                        <i class="fas fa-scroll"></i><span>Hadith</span>
+                    </a>
+                    <a href="#" class="nav-link" data-view="duas" aria-label="Duas">
+                        <i class="fas fa-hands-praying"></i><span>Duas & Azkar</span>
+                    </a>
+                </div>
+                <div class="nav-group">
+                    <span class="nav-group-label">Learning</span>
+                    <a href="#" class="nav-link" data-view="quiz" aria-label="Islamic Quiz">
+                        <i class="fas fa-brain"></i><span>Islamic Quiz</span>
+                    </a>
+                    <a href="#" class="nav-link" data-view="prophets" aria-label="Prophets">
+                        <i class="fas fa-book-open"></i><span>Prophets</span>
+                    </a>
+                </div>
+            </nav>
 
-    <div class="sidebar-footer">
-      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle light/dark mode">
-        <i class="fas fa-moon" id="theme-icon"></i>
-        <span>Toggle Theme</span>
-      </button>
-    </div>
-  </aside>
+            <div class="sidebar-footer">
+                <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle light/dark mode">
+                    <i class="fas fa-moon" id="theme-icon"></i>
+                    <span>Toggle Theme</span>
+                </button>
+            </div>
+        </aside>
 
-  <!-- MOBILE OVERLAY -->
-  <div id="sidebar-overlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
+        <!-- MOBILE OVERLAY -->
+        <div id="sidebar-overlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
 
-  <!-- MAIN CONTENT AREA -->
-  <div class="main-wrapper">
+        <!-- MAIN CONTENT AREA -->
+        <div class="main-wrapper">
 
-    <!-- TOP HEADER -->
-    <header class="top-header">
-      <div class="header-left">
-        <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Open menu" onclick="toggleSidebar()">
-          <i class="fas fa-bars"></i>
-        </button>
-        <h2 class="page-title" id="page-title">Dashboard</h2>
-      </div>
-      <div class="header-right">
-        <div class="header-search">
-          <i class="fas fa-search"></i>
-          <input type="text" id="global-search" placeholder="Search anything..." aria-label="Global search">
-        </div>
-        <div class="header-location" id="header-location">
-          <i class="fas fa-location-dot"></i>
-          <span id="city-name">Locating…</span>
-        </div>
-        <button id="header-theme-toggle" class="icon-btn" aria-label="Toggle theme">
-          <i class="fas fa-moon"></i>
-        </button>
-      </div>
-    </header>
+            <!-- TOP HEADER -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Open menu"
+                        onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h2 class="page-title" id="page-title">Dashboard</h2>
+                </div>
+                <div class="header-right">
+                    <div class="header-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="global-search" placeholder="Search anything..."
+                            aria-label="Global search">
+                    </div>
+                    <div class="header-location" id="header-location">
+                        <i class="fas fa-location-dot"></i>
+                        <span id="city-name">Locating…</span>
+                    </div>
+                    <button id="header-theme-toggle" class="icon-btn" aria-label="Toggle theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </header>
 
-    <!-- VIEWS CONTAINER -->
-    <main class="views-container" id="views-container">
+            <!-- VIEWS CONTAINER -->
+            <main class="views-container" id="views-container">
 
-      <!-- ─────────────────────────────────────────
+                <!-- ─────────────────────────────────────────
            VIEW: DASHBOARD
       ───────────────────────────────────────── -->
-      <section id="view-dashboard" class="view active" aria-label="Dashboard">
-        <!-- Hero Prayer Widget -->
-        <div class="dashboard-hero">
-          <div class="hero-left">
-            <div class="hero-label">Next Prayer</div>
-            <div class="hero-prayer-name" id="d-next-name">Fajr</div>
-            <div class="hero-time" id="d-next-time">04:30</div>
-            <div class="hero-countdown" id="d-countdown" aria-live="polite">--:--:--</div>
-            <div class="hero-dates">
-              <span id="d-gregorian"></span>
-              <span class="date-sep">•</span>
-              <span id="d-hijri"></span>
-            </div>
-          </div>
-          <div class="hero-right">
-            <div class="prayer-mini-list" id="d-prayer-list">
-              <!-- Injected by JS -->
-            </div>
-          </div>
-        </div>
+                <section id="view-dashboard" class="view active" aria-label="Dashboard">
+                    <!-- Hero Prayer Widget -->
+                    <div class="dashboard-hero">
+                        <div class="hero-left">
+                            <div class="hero-label">Next Prayer</div>
+                            <div class="hero-prayer-name" id="d-next-name">Fajr</div>
+                            <div class="hero-time" id="d-next-time">04:30</div>
+                            <div class="hero-countdown" id="d-countdown" aria-live="polite">--:--:--</div>
+                            <div class="hero-dates">
+                                <span id="d-gregorian"></span>
+                                <span class="date-sep">•</span>
+                                <span id="d-hijri"></span>
+                            </div>
+                        </div>
+                        <div class="hero-right">
+                            <div class="prayer-mini-list" id="d-prayer-list">
+                                <!-- Injected by JS -->
+                            </div>
+                        </div>
+                    </div>
 
-        <!-- Stats Row -->
-        <div class="stats-row">
-          <div class="stat-card">
-            <div class="stat-icon"><i class="fas fa-fire"></i></div>
-            <div class="stat-info">
-              <div class="stat-value" id="stat-streak">0</div>
-              <div class="stat-label">Day Streak</div>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon"><i class="fas fa-quran"></i></div>
-            <div class="stat-info">
-              <div class="stat-value" id="stat-verses">0</div>
-              <div class="stat-label">Verses Read</div>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon"><i class="fas fa-star"></i></div>
-            <div class="stat-info">
-              <div class="stat-value" id="stat-bookmarks">0</div>
-              <div class="stat-label">Bookmarks</div>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon"><i class="fas fa-trophy"></i></div>
-            <div class="stat-info">
-              <div class="stat-value" id="stat-quiz">0%</div>
-              <div class="stat-label">Quiz Score</div>
-            </div>
-          </div>
-        </div>
+                    <!-- Stats Row -->
+                    <div class="stats-row">
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-fire"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="stat-streak">0</div>
+                                <div class="stat-label">Day Streak</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-quran"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="stat-verses">0</div>
+                                <div class="stat-label">Verses Read</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-star"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="stat-bookmarks">0</div>
+                                <div class="stat-label">Bookmarks</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="stat-quiz">0%</div>
+                                <div class="stat-label">Quiz Score</div>
+                            </div>
+                        </div>
+                    </div>
 
-        <!-- Daily Verse -->
-        <div class="section-heading"><h3>Verse of the Day</h3></div>
-        <div class="daily-verse-card" id="d-daily-verse">
-          <div class="verse-arabic" id="d-verse-arabic">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
-          <div class="verse-translation" id="d-verse-translation">In the name of Allah, the Most Gracious, the Most Merciful</div>
-          <div class="verse-ref" id="d-verse-ref">Surah Al-Fatiha 1:1</div>
-          <div class="verse-actions">
-            <button class="action-btn" onclick="copyVerse()" aria-label="Copy verse"><i class="fas fa-copy"></i></button>
-            <button class="action-btn" onclick="shareVerse()" aria-label="Share verse"><i class="fas fa-share-alt"></i></button>
-            <button class="action-btn" id="d-refresh-verse" aria-label="New verse"><i class="fas fa-rotate-right"></i></button>
-          </div>
-        </div>
+                    <!-- Daily Verse -->
+                    <div class="section-heading">
+                        <h3>Verse of the Day</h3>
+                    </div>
+                    <div class="daily-verse-card" id="d-daily-verse">
+                        <div class="verse-arabic" id="d-verse-arabic">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+                        <div class="verse-translation" id="d-verse-translation">In the name of Allah, the Most Gracious,
+                            the Most Merciful</div>
+                        <div class="verse-ref" id="d-verse-ref">Surah Al-Fatiha 1:1</div>
+                        <div class="verse-actions">
+                            <button class="action-btn" onclick="copyVerse()" aria-label="Copy verse"><i
+                                    class="fas fa-copy"></i></button>
+                            <button class="action-btn" onclick="shareVerse()" aria-label="Share verse"><i
+                                    class="fas fa-share-alt"></i></button>
+                            <button class="action-btn" id="d-refresh-verse" aria-label="New verse"><i
+                                    class="fas fa-rotate-right"></i></button>
+                        </div>
+                    </div>
 
-        <!-- Progress Modules -->
-        <div class="section-heading"><h3>Your Progress</h3></div>
-        <div class="progress-grid">
-          <div class="progress-card" onclick="navigateTo('quran')">
-            <div class="progress-icon"><i class="fas fa-quran"></i></div>
-            <div class="progress-info">
-              <div class="progress-name">Quran Reading</div>
-              <div class="progress-bar-wrap">
-                <div class="progress-bar" id="prog-quran" style="width:0%"></div>
-              </div>
-              <div class="progress-pct" id="prog-quran-pct">0%</div>
-            </div>
-          </div>
-          <div class="progress-card" onclick="navigateTo('names')">
-            <div class="progress-icon"><i class="fas fa-star-and-crescent"></i></div>
-            <div class="progress-info">
-              <div class="progress-name">Names of Allah</div>
-              <div class="progress-bar-wrap">
-                <div class="progress-bar gold" id="prog-names" style="width:0%"></div>
-              </div>
-              <div class="progress-pct" id="prog-names-pct">0%</div>
-            </div>
-          </div>
-          <div class="progress-card" onclick="navigateTo('quiz')">
-            <div class="progress-icon"><i class="fas fa-brain"></i></div>
-            <div class="progress-info">
-              <div class="progress-name">Quiz Mastery</div>
-              <div class="progress-bar-wrap">
-                <div class="progress-bar ruby" id="prog-quiz" style="width:0%"></div>
-              </div>
-              <div class="progress-pct" id="prog-quiz-pct">0%</div>
-            </div>
-          </div>
-        </div>
+                    <!-- Progress Modules -->
+                    <div class="section-heading">
+                        <h3>Your Progress</h3>
+                    </div>
+                    <div class="progress-grid">
+                        <div class="progress-card" onclick="navigateTo('quran')">
+                            <div class="progress-icon"><i class="fas fa-quran"></i></div>
+                            <div class="progress-info">
+                                <div class="progress-name">Quran Reading</div>
+                                <div class="progress-bar-wrap">
+                                    <div class="progress-bar" id="prog-quran" style="width:0%"></div>
+                                </div>
+                                <div class="progress-pct" id="prog-quran-pct">0%</div>
+                            </div>
+                        </div>
+                        <div class="progress-card" onclick="navigateTo('names')">
+                            <div class="progress-icon"><i class="fas fa-star-and-crescent"></i></div>
+                            <div class="progress-info">
+                                <div class="progress-name">Names of Allah</div>
+                                <div class="progress-bar-wrap">
+                                    <div class="progress-bar gold" id="prog-names" style="width:0%"></div>
+                                </div>
+                                <div class="progress-pct" id="prog-names-pct">0%</div>
+                            </div>
+                        </div>
+                        <div class="progress-card" onclick="navigateTo('quiz')">
+                            <div class="progress-icon"><i class="fas fa-brain"></i></div>
+                            <div class="progress-info">
+                                <div class="progress-name">Quiz Mastery</div>
+                                <div class="progress-bar-wrap">
+                                    <div class="progress-bar ruby" id="prog-quiz" style="width:0%"></div>
+                                </div>
+                                <div class="progress-pct" id="prog-quiz-pct">0%</div>
+                            </div>
+                        </div>
+                    </div>
 
-        <!-- Quick Access -->
-        <div class="section-heading"><h3>Quick Access</h3></div>
-        <div class="quick-grid">
-          <div class="quick-card" onclick="navigateTo('duas')">
-            <i class="fas fa-hands-praying"></i><span>Morning Azkar</span>
-          </div>
-          <div class="quick-card" onclick="navigateTo('hadith')">
-            <i class="fas fa-scroll"></i><span>Daily Hadith</span>
-          </div>
-          <div class="quick-card" onclick="navigateTo('prophets')">
-            <i class="fas fa-book-open"></i><span>Prophet Stories</span>
-          </div>
-          <div class="quick-card" onclick="navigateTo('prayer')">
-            <i class="fas fa-clock"></i><span>Prayer Times</span>
-          </div>
-        </div>
-      </section>
+                    <!-- Quick Access -->
+                    <div class="section-heading">
+                        <h3>Quick Access</h3>
+                    </div>
+                    <div class="quick-grid">
+                        <div class="quick-card" onclick="navigateTo('duas')">
+                            <i class="fas fa-hands-praying"></i><span>Morning Azkar</span>
+                        </div>
+                        <div class="quick-card" onclick="navigateTo('hadith')">
+                            <i class="fas fa-scroll"></i><span>Daily Hadith</span>
+                        </div>
+                        <div class="quick-card" onclick="navigateTo('prophets')">
+                            <i class="fas fa-book-open"></i><span>Prophet Stories</span>
+                        </div>
+                        <div class="quick-card" onclick="navigateTo('prayer')">
+                            <i class="fas fa-clock"></i><span>Prayer Times</span>
+                        </div>
+                    </div>
+                </section>
 
-      <!-- ─────────────────────────────────────────
+                <!-- ─────────────────────────────────────────
            VIEW: QURAN
       ───────────────────────────────────────── -->
-      <section id="view-quran" class="view" aria-label="Noble Quran">
-        <div class="view-header quran-header">
-          <h2>Noble Quran</h2>
-          
-          <!-- Navigation Modes Tab -->
-          <div class="quran-nav-tabs">
-            <button class="quran-tab active" data-tab="surah">Surah</button>
-            <button class="quran-tab" data-tab="juz">Juz / Para</button>
-          </div>
+                <section id="view-quran" class="view" aria-label="Noble Quran">
+                    <div class="view-header quran-header">
+                        <h2>Noble Quran</h2>
 
-          <div class="view-controls">
-            <div class="search-box">
-              <i class="fas fa-search"></i>
-              <input type="text" id="quran-search" placeholder="Search Surahs..." aria-label="Search Quran">
-            </div>
-            <button class="btn-secondary" onclick="openQuranSettings()" aria-label="Reading Settings">
-              <i class="fas fa-cog"></i> Settings
-            </button>
-          </div>
-        </div>
+                        <!-- Navigation Modes Tab -->
+                        <div class="quran-nav-tabs">
+                            <button class="quran-tab active" data-tab="surah">Surah</button>
+                            <button class="quran-tab" data-tab="juz">Juz / Para</button>
+                        </div>
 
-        <!-- Browse Layout (Surah / Juz Lists) -->
-        <div class="quran-browse-layout" id="quran-browse-layout">
-          <!-- Surah List Container -->
-          <div class="quran-grid-container active" id="surah-grid-container">
-            <div class="quran-filters">
-              <button class="q-filter active" data-filter="all">All</button>
-              <button class="q-filter" data-filter="makki">Makki</button>
-              <button class="q-filter" data-filter="madani">Madani</button>
-            </div>
-            <div class="surah-grid" id="surah-grid">
-              <!-- Injected by JS -->
-            </div>
-          </div>
-          
-          <!-- Juz List Container -->
-          <div class="quran-grid-container" id="juz-grid-container">
-            <div class="juz-grid" id="juz-grid">
-              <!-- Injected by JS -->
-            </div>
-          </div>
-        </div>
+                        <div class="view-controls">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="quran-search" placeholder="Search Surahs..."
+                                    aria-label="Search Quran">
+                            </div>
+                            <button class="btn-secondary" onclick="openQuranSettings()" aria-label="Reading Settings">
+                                <i class="fas fa-cog"></i> Settings
+                            </button>
+                        </div>
+                    </div>
 
-        <!-- Surah Reader -->
-        <div class="surah-reader-panel hidden" id="surah-reader-panel">
-          <div class="reader-header-advanced">
-            <button class="icon-btn" onclick="closeReader()" aria-label="Back to Browse">
-              <i class="fas fa-arrow-left"></i>
-            </button>
-            <div class="reader-title">
-              <h3 id="reader-surah-name">Al-Fatiha</h3>
-              <span id="reader-surah-info">Meccan • 7 Verses</span>
-            </div>
-            
-            <div class="reader-display-modes">
-              <button class="rd-mode" data-mode="arabic" title="Arabic Only">ع</button>
-              <button class="rd-mode" data-mode="arabic-roman" title="Arabic + Roman">A/ع</button>
-              <button class="rd-mode" data-mode="arabic-translation" title="Arabic + Translation">ع/En</button>
-              <button class="rd-mode active" data-mode="full" title="Full Mode">All</button>
-            </div>
+                    <!-- Browse Layout (Surah / Juz Lists) -->
+                    <div class="quran-browse-layout" id="quran-browse-layout">
+                        <!-- Surah List Container -->
+                        <div class="quran-grid-container active" id="surah-grid-container">
+                            <div class="quran-filters">
+                                <button class="q-filter active" data-filter="all">All</button>
+                                <button class="q-filter" data-filter="makki">Makki</button>
+                                <button class="q-filter" data-filter="madani">Madani</button>
+                            </div>
+                            <div class="surah-grid" id="surah-grid">
+                                <!-- Injected by JS -->
+                            </div>
+                        </div>
 
-            <div class="reader-controls">
-              <!-- Audio Player Mini -->
-              <div class="audio-mini-player">
-                <select id="reciter-select" class="select-input mini-select" aria-label="Select Reciter">
-                  <option value="ar.alafasy">Mishary Alafasy</option>
-                  <option value="ar.sudais">Abdul Rahman Al-Sudais</option>
-                  <option value="ar.husary">Mahmoud Khalil Al-Husary</option>
-                </select>
-                <button class="icon-btn" id="reader-audio-btn" onclick="toggleFullAudio()" aria-label="Play audio">
-                  <i class="fas fa-play"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-          
-          <div class="bismillah" id="bismillah-header">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
-          
-          <!-- Content Container -->
-          <div class="verses-container quran-font-uthmani" id="verses-container">
-            <div class="reader-placeholder">
-              <i class="fas fa-circle-notch fa-spin"></i>
-              <p>Loading...</p>
-            </div>
-          </div>
-          <audio id="quran-audio" hidden></audio>
-        </div>
+                        <!-- Juz List Container -->
+                        <div class="quran-grid-container" id="juz-grid-container">
+                            <div class="juz-grid" id="juz-grid">
+                                <!-- Injected by JS -->
+                            </div>
+                        </div>
+                    </div>
 
-        <!-- Advanced Reading Settings Modal -->
-        <div id="quran-settings-modal" class="modal hidden" role="dialog" aria-modal="true">
-          <div class="modal-overlay" onclick="closeQuranSettings()"></div>
-          <div class="modal-content settings-modal-content">
-            <button class="modal-close" onclick="closeQuranSettings()" aria-label="Close"><i class="fas fa-times"></i></button>
-            <div class="modal-header">
-              <h2>Reading Settings</h2>
-            </div>
-            <div class="modal-body">
-              <div class="settings-group">
-                <h4>Arabic Font Size</h4>
-                <div class="slider-wrap">
-                  <span style="font-size: 16px;">A</span>
-                  <input type="range" id="ar-font-size" min="20" max="64" value="35" class="range-slider">
-                  <span style="font-size: 24px;">A</span>
-                </div>
-              </div>
-              <div class="settings-group">
-                <h4>Translation Font Size</h4>
-                <div class="slider-wrap">
-                  <span style="font-size: 12px;">A</span>
-                  <input type="range" id="en-font-size" min="12" max="32" value="16" class="range-slider">
-                  <span style="font-size: 18px;">A</span>
-                </div>
-              </div>
-              <div class="settings-group">
-                <h4>Reading Theme</h4>
-                <div class="theme-options">
-                  <button class="theme-btn" data-rtheme="dark">Dark</button>
-                  <button class="theme-btn" data-rtheme="light">Light</button>
-                  <button class="theme-btn" data-rtheme="sepia">Sepia</button>
-                </div>
-              </div>
-              <div class="settings-group">
-                <h4>Show Transliteration</h4>
-                <label class="switch">
-                  <input type="checkbox" id="translit-toggle" checked>
-                  <span class="slider round"></span>
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
+                    <!-- Surah Reader -->
+                    <div class="surah-reader-panel hidden" id="surah-reader-panel">
+                        <div class="reader-header-advanced">
+                            <button class="icon-btn" onclick="closeReader()" aria-label="Back to Browse">
+                                <i class="fas fa-arrow-left"></i>
+                            </button>
+                            <div class="reader-title">
+                                <h3 id="reader-surah-name">Al-Fatiha</h3>
+                                <span id="reader-surah-info">Meccan • 7 Verses</span>
+                            </div>
 
-      </section>
+                            <div class="reader-display-modes">
+                                <button class="rd-mode" data-mode="arabic" title="Arabic Only">ع</button>
+                                <button class="rd-mode" data-mode="arabic-roman" title="Arabic + Roman">A/ع</button>
+                                <button class="rd-mode" data-mode="arabic-translation"
+                                    title="Arabic + Translation">ع/En</button>
+                                <button class="rd-mode active" data-mode="full" title="Full Mode">All</button>
+                            </div>
 
-      <!-- ─────────────────────────────────────────
+                            <div class="reader-controls">
+                                <!-- Audio Player Mini -->
+                                <div class="audio-mini-player">
+                                    <select id="reciter-select" class="select-input mini-select"
+                                        aria-label="Select Reciter">
+                                        <option value="ar.alafasy">Mishary Alafasy</option>
+                                        <option value="ar.sudais">Abdul Rahman Al-Sudais</option>
+                                        <option value="ar.husary">Mahmoud Khalil Al-Husary</option>
+                                    </select>
+                                    <button class="icon-btn" id="reader-audio-btn" onclick="toggleFullAudio()"
+                                        aria-label="Play audio">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bismillah" id="bismillah-header">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+
+                        <!-- Content Container -->
+                        <div class="verses-container quran-font-uthmani" id="verses-container">
+                            <div class="reader-placeholder">
+                                <i class="fas fa-circle-notch fa-spin"></i>
+                                <p>Loading...</p>
+                            </div>
+                        </div>
+                        <audio id="quran-audio" hidden></audio>
+                    </div>
+
+                    <!-- Advanced Reading Settings Modal -->
+                    <div id="quran-settings-modal" class="modal hidden" role="dialog" aria-modal="true">
+                        <div class="modal-overlay" onclick="closeQuranSettings()"></div>
+                        <div class="modal-content settings-modal-content">
+                            <button class="modal-close" onclick="closeQuranSettings()" aria-label="Close"><i
+                                    class="fas fa-times"></i></button>
+                            <div class="modal-header">
+                                <h2>Reading Settings</h2>
+                            </div>
+                            <div class="modal-body">
+                                <div class="settings-group">
+                                    <h4>Arabic Font Size</h4>
+                                    <div class="slider-wrap">
+                                        <span style="font-size: 16px;">A</span>
+                                        <input type="range" id="ar-font-size" min="20" max="64" value="35"
+                                            class="range-slider">
+                                        <span style="font-size: 24px;">A</span>
+                                    </div>
+                                </div>
+                                <div class="settings-group">
+                                    <h4>Translation Font Size</h4>
+                                    <div class="slider-wrap">
+                                        <span style="font-size: 12px;">A</span>
+                                        <input type="range" id="en-font-size" min="12" max="32" value="16"
+                                            class="range-slider">
+                                        <span style="font-size: 18px;">A</span>
+                                    </div>
+                                </div>
+                                <div class="settings-group">
+                                    <h4>Reading Theme</h4>
+                                    <div class="theme-options">
+                                        <button class="theme-btn" data-rtheme="dark">Dark</button>
+                                        <button class="theme-btn" data-rtheme="light">Light</button>
+                                        <button class="theme-btn" data-rtheme="sepia">Sepia</button>
+                                    </div>
+                                </div>
+                                <div class="settings-group">
+                                    <h4>Show Transliteration</h4>
+                                    <label class="switch">
+                                        <input type="checkbox" id="translit-toggle" checked>
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+
+                <!-- ─────────────────────────────────────────
            VIEW: 99 NAMES
       ───────────────────────────────────────── -->
-      <section id="view-names" class="view" aria-label="99 Names of Allah">
-        <div class="view-header">
-          <h2>99 Names of Allah</h2>
-          <div class="view-controls">
-            <div class="search-box">
-              <i class="fas fa-search"></i>
-              <input type="text" id="names-search" placeholder="Search names…" aria-label="Search names">
-            </div>
-          </div>
-        </div>
-        <div class="daily-name-banner" id="daily-name-banner">
-          <!-- Injected by JS -->
-        </div>
-        <div class="names-grid" id="names-grid">
-          <!-- Injected by JS -->
-        </div>
-      </section>
+                <section id="view-names" class="view" aria-label="99 Names of Allah">
+                    <div class="view-header">
+                        <h2>99 Names of Allah</h2>
+                        <div class="view-controls">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="names-search" placeholder="Search names…"
+                                    aria-label="Search names">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="daily-name-banner" id="daily-name-banner">
+                        <!-- Injected by JS -->
+                    </div>
+                    <div class="names-grid" id="names-grid">
+                        <!-- Injected by JS -->
+                    </div>
+                </section>
 
-      <!-- ─────────────────────────────────────────
+                <!-- ─────────────────────────────────────────
            VIEW: PRAYER TIMES
       ───────────────────────────────────────── -->
-      <section id="view-prayer" class="view" aria-label="Prayer Times">
-        <div class="view-header">
-          <h2>Prayer Times</h2>
-          <div class="view-controls">
-            <input type="text" id="prayer-city" class="city-input" placeholder="City name…" value="Mecca" aria-label="Enter city name">
-            <button class="btn-primary" onclick="loadPrayers()" aria-label="Update location">
-              <i class="fas fa-location-dot"></i> Update
-            </button>
-          </div>
-        </div>
+                <section id="view-prayer" class="view" aria-label="Prayer Times">
+                    <div class="view-header">
+                        <h2>Prayer Times</h2>
+                        <div class="view-controls">
+                            <input type="text" id="prayer-city" class="city-input" placeholder="City name…"
+                                value="Mecca" aria-label="Enter city name">
+                            <button class="btn-primary" onclick="loadPrayers()" aria-label="Update location">
+                                <i class="fas fa-location-dot"></i> Update
+                            </button>
+                        </div>
+                    </div>
 
-        <!-- Countdown hero -->
-        <div class="prayer-hero-card">
-          <div class="phc-left">
-            <div class="phc-label">Next Prayer</div>
-            <div class="phc-name" id="p-next-name">—</div>
-            <div class="phc-countdown" id="p-countdown" aria-live="polite">--:--:--</div>
-          </div>
-          <div class="phc-right">
-            <div class="phc-city" id="p-city">—</div>
-            <div class="phc-hijri" id="p-hijri">—</div>
-          </div>
-        </div>
+                    <!-- Countdown hero -->
+                    <div class="prayer-hero-card">
+                        <div class="phc-left">
+                            <div class="phc-label">Next Prayer</div>
+                            <div class="phc-name" id="p-next-name">—</div>
+                            <div class="phc-countdown" id="p-countdown" aria-live="polite">--:--:--</div>
+                        </div>
+                        <div class="phc-right">
+                            <div class="phc-city" id="p-city">—</div>
+                            <div class="phc-hijri" id="p-hijri">—</div>
+                        </div>
+                    </div>
 
-        <!-- Prayer Cards -->
-        <div class="prayer-cards-grid" id="prayer-cards-grid">
-          <!-- Injected by JS -->
-        </div>
+                    <!-- Prayer Cards -->
+                    <div class="prayer-cards-grid" id="prayer-cards-grid">
+                        <!-- Injected by JS -->
+                    </div>
 
-        <!-- Qibla -->
-        <div class="section-heading"><h3>Qibla Direction</h3></div>
-        <div class="qibla-card">
-          <div class="qibla-compass" id="qibla-compass">
-            <div class="compass-needle" id="compass-needle">
-              <i class="fas fa-location-arrow"></i>
-            </div>
-            <div class="compass-labels">
-              <span class="c-n">N</span><span class="c-e">E</span>
-              <span class="c-s">S</span><span class="c-w">W</span>
-            </div>
-          </div>
-          <div class="qibla-info">
-            <p id="qibla-degrees">Loading Qibla direction…</p>
-          </div>
-        </div>
-      </section>
+                    <!-- Qibla -->
+                    <div class="section-heading">
+                        <h3>Qibla Direction</h3>
+                    </div>
+                    <div class="qibla-card">
+                        <div class="qibla-compass" id="qibla-compass">
+                            <div class="compass-needle" id="compass-needle">
+                                <i class="fas fa-location-arrow"></i>
+                            </div>
+                            <div class="compass-labels">
+                                <span class="c-n">N</span><span class="c-e">E</span>
+                                <span class="c-s">S</span><span class="c-w">W</span>
+                            </div>
+                        </div>
+                        <div class="qibla-info">
+                            <p id="qibla-degrees">Loading Qibla direction…</p>
+                        </div>
+                    </div>
+                </section>
 
-      <!-- ─────────────────────────────────────────
+                <!-- ─────────────────────────────────────────
            VIEW: HADITH
       ───────────────────────────────────────── -->
-      <section id="view-hadith" class="view" aria-label="Hadith Collection">
-        <div class="view-header">
-          <h2>Hadith of the Day</h2>
-          <div class="view-controls">
-            <select id="hadith-category" class="select-input" aria-label="Filter by category">
-              <option value="all">All Categories</option>
-              <option value="faith">Faith & Belief</option>
-              <option value="prayer">Prayer & Worship</option>
-              <option value="charity">Charity & Zakat</option>
-              <option value="character">Character & Morals</option>
-              <option value="knowledge">Knowledge & Learning</option>
-            </select>
-          </div>
-        </div>
+                <section id="view-hadith" class="view" aria-label="Hadith Collection">
+                    <div class="view-header">
+                        <h2>Hadith of the Day</h2>
+                        <div class="view-controls">
+                            <select id="hadith-category" class="select-input" aria-label="Filter by category">
+                                <option value="all">All Categories</option>
+                                <option value="faith">Faith & Belief</option>
+                                <option value="prayer">Prayer & Worship</option>
+                                <option value="charity">Charity & Zakat</option>
+                                <option value="character">Character & Morals</option>
+                                <option value="knowledge">Knowledge & Learning</option>
+                            </select>
+                        </div>
+                    </div>
 
-        <div class="hadith-featured" id="hadith-featured">
-          <!-- Injected by JS -->
-        </div>
+                    <div class="hadith-featured" id="hadith-featured">
+                        <!-- Injected by JS -->
+                    </div>
 
-        <div class="section-heading"><h3>More Hadiths</h3></div>
-        <div class="hadith-list" id="hadith-list">
-          <!-- Injected by JS -->
-        </div>
-      </section>
+                    <div class="section-heading">
+                        <h3>More Hadiths</h3>
+                    </div>
+                    <div class="hadith-list" id="hadith-list">
+                        <!-- Injected by JS -->
+                    </div>
+                </section>
 
-      <!-- ─────────────────────────────────────────
+                <!-- ─────────────────────────────────────────
            VIEW: DUAS
       ───────────────────────────────────────── -->
-      <section id="view-duas" class="view" aria-label="Duas and Azkar">
-        <div class="view-header">
-          <h2>Duas & Azkar</h2>
-          <div class="view-controls">
-            <div class="tab-pills" id="duas-tabs">
-              <button class="tab-pill active" data-tab="morning">Morning</button>
-              <button class="tab-pill" data-tab="evening">Evening</button>
-              <button class="tab-pill" data-tab="occasions">Occasions</button>
-              <button class="tab-pill" data-tab="favorites">Favorites</button>
-            </div>
-          </div>
-        </div>
-        <div class="duas-container" id="duas-container">
-          <!-- Injected by JS -->
-        </div>
-      </section>
+                <section id="view-duas" class="view" aria-label="Duas and Azkar">
+                    <div class="view-header">
+                        <h2>Duas & Azkar</h2>
+                        <div class="view-controls">
+                            <div class="tab-pills" id="duas-tabs">
+                                <button class="tab-pill active" data-tab="morning">Morning</button>
+                                <button class="tab-pill" data-tab="evening">Evening</button>
+                                <button class="tab-pill" data-tab="occasions">Occasions</button>
+                                <button class="tab-pill" data-tab="favorites">Favorites</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="duas-container" id="duas-container">
+                        <!-- Injected by JS -->
+                    </div>
+                </section>
 
-      <!-- ─────────────────────────────────────────
+                <!-- ─────────────────────────────────────────
            VIEW: QUIZ
       ───────────────────────────────────────── -->
-      <section id="view-quiz" class="view" aria-label="Islamic Quiz">
-        <div class="view-header">
-          <h2>Islamic Quiz</h2>
-        </div>
+                <section id="view-quiz" class="view" aria-label="Islamic Quiz">
+                    <div class="view-header">
+                        <h2>Islamic Quiz</h2>
+                    </div>
 
-        <!-- Quiz Setup -->
-        <div id="quiz-setup" class="quiz-panel">
-          <div class="quiz-setup-card">
-            <h3>Choose Your Level</h3>
-            <div class="level-grid">
-              <button class="level-card" data-level="beginner" onclick="selectLevel('beginner')">
-                <i class="fas fa-seedling"></i>
-                <span>Beginner</span>
-                <small>Basic Islamic knowledge</small>
-              </button>
-              <button class="level-card" data-level="intermediate" onclick="selectLevel('intermediate')">
-                <i class="fas fa-star-half-stroke"></i>
-                <span>Intermediate</span>
-                <small>Deeper understanding</small>
-              </button>
-              <button class="level-card" data-level="advanced" onclick="selectLevel('advanced')">
-                <i class="fas fa-crown"></i>
-                <span>Advanced</span>
-                <small>Scholar level questions</small>
-              </button>
-            </div>
-            <div class="topic-grid" id="topic-grid">
-              <button class="topic-pill active" data-topic="all">All Topics</button>
-              <button class="topic-pill" data-topic="quran">Quran</button>
-              <button class="topic-pill" data-topic="hadith">Hadith</button>
-              <button class="topic-pill" data-topic="fiqh">Fiqh</button>
-              <button class="topic-pill" data-topic="history">History</button>
-              <button class="topic-pill" data-topic="prophets">Prophets</button>
-            </div>
-            <button class="btn-primary btn-lg" id="start-quiz-btn" onclick="startQuiz()">
-              <i class="fas fa-play"></i> Start Quiz
-            </button>
-          </div>
+                    <!-- Quiz Setup -->
+                    <div id="quiz-setup" class="quiz-panel">
+                        <div class="quiz-setup-card">
+                            <h3>Choose Your Level</h3>
+                            <div class="level-grid">
+                                <button class="level-card" data-level="beginner" onclick="selectLevel('beginner')">
+                                    <i class="fas fa-seedling"></i>
+                                    <span>Beginner</span>
+                                    <small>Basic Islamic knowledge</small>
+                                </button>
+                                <button class="level-card" data-level="intermediate"
+                                    onclick="selectLevel('intermediate')">
+                                    <i class="fas fa-star-half-stroke"></i>
+                                    <span>Intermediate</span>
+                                    <small>Deeper understanding</small>
+                                </button>
+                                <button class="level-card" data-level="advanced" onclick="selectLevel('advanced')">
+                                    <i class="fas fa-crown"></i>
+                                    <span>Advanced</span>
+                                    <small>Scholar level questions</small>
+                                </button>
+                            </div>
+                            <div class="topic-grid" id="topic-grid">
+                                <button class="topic-pill active" data-topic="all">All Topics</button>
+                                <button class="topic-pill" data-topic="quran">Quran</button>
+                                <button class="topic-pill" data-topic="hadith">Hadith</button>
+                                <button class="topic-pill" data-topic="fiqh">Fiqh</button>
+                                <button class="topic-pill" data-topic="history">History</button>
+                                <button class="topic-pill" data-topic="prophets">Prophets</button>
+                            </div>
+                            <button class="btn-primary btn-lg" id="start-quiz-btn" onclick="startQuiz()">
+                                <i class="fas fa-play"></i> Start Quiz
+                            </button>
+                        </div>
 
-          <!-- Leaderboard -->
-          <div class="leaderboard-card">
-            <h3><i class="fas fa-trophy"></i> Your Scores</h3>
-            <div id="score-history"></div>
-          </div>
-        </div>
+                        <!-- Leaderboard -->
+                        <div class="leaderboard-card">
+                            <h3><i class="fas fa-trophy"></i> Your Scores</h3>
+                            <div id="score-history"></div>
+                        </div>
+                    </div>
 
-        <!-- Quiz Active -->
-        <div id="quiz-active" class="quiz-panel hidden">
-          <div class="quiz-progress-header">
-            <div class="quiz-stat">Question <span id="q-current">1</span>/<span id="q-total">10</span></div>
-            <div class="quiz-progress-bar-wrap">
-              <div class="quiz-progress-bar" id="quiz-progress-bar"></div>
-            </div>
-            <div class="quiz-stat">Score: <span id="q-score">0</span></div>
-          </div>
-          <div class="question-card" id="question-card">
-            <div class="question-text" id="q-text"></div>
-            <div class="options-grid" id="q-options"></div>
-          </div>
-        </div>
+                    <!-- Quiz Active -->
+                    <div id="quiz-active" class="quiz-panel hidden">
+                        <div class="quiz-progress-header">
+                            <div class="quiz-stat">Question <span id="q-current">1</span>/<span id="q-total">10</span>
+                            </div>
+                            <div class="quiz-progress-bar-wrap">
+                                <div class="quiz-progress-bar" id="quiz-progress-bar"></div>
+                            </div>
+                            <div class="quiz-stat">Score: <span id="q-score">0</span></div>
+                        </div>
+                        <div class="question-card" id="question-card">
+                            <div class="question-text" id="q-text"></div>
+                            <div class="options-grid" id="q-options"></div>
+                        </div>
+                    </div>
 
-        <!-- Quiz Results -->
-        <div id="quiz-results" class="quiz-panel hidden">
-          <div class="results-card">
-            <div class="results-emoji" id="results-emoji">🎉</div>
-            <h2 id="results-title">Quiz Complete!</h2>
-            <div class="results-score" id="results-score">0/10</div>
-            <div class="results-pct" id="results-pct">0%</div>
-            <div class="results-msg" id="results-msg"></div>
-            <div class="results-actions">
-              <button class="btn-primary" onclick="restartQuiz()"><i class="fas fa-rotate-right"></i> Try Again</button>
-              <button class="btn-secondary" onclick="navigateTo('dashboard')"><i class="fas fa-home"></i> Dashboard</button>
-            </div>
-          </div>
-        </div>
-      </section>
+                    <!-- Quiz Results -->
+                    <div id="quiz-results" class="quiz-panel hidden">
+                        <div class="results-card">
+                            <div class="results-emoji" id="results-emoji">🎉</div>
+                            <h2 id="results-title">Quiz Complete!</h2>
+                            <div class="results-score" id="results-score">0/10</div>
+                            <div class="results-pct" id="results-pct">0%</div>
+                            <div class="results-msg" id="results-msg"></div>
+                            <div class="results-actions">
+                                <button class="btn-primary" onclick="restartQuiz()"><i class="fas fa-rotate-right"></i>
+                                    Try Again</button>
+                                <button class="btn-secondary" onclick="navigateTo('dashboard')"><i
+                                        class="fas fa-home"></i> Dashboard</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-      <!-- ─────────────────────────────────────────
+                <!-- ─────────────────────────────────────────
            VIEW: PROPHETS
       ───────────────────────────────────────── -->
-      <section id="view-prophets" class="view" aria-label="Stories of the Prophets">
-        <div class="view-header">
-          <h2>Stories of the Prophets</h2>
-        </div>
-        <div class="prophets-grid" id="prophets-grid">
-          <!-- Injected by JS -->
-        </div>
+                <section id="view-prophets" class="view" aria-label="Stories of the Prophets">
+                    <div class="view-header">
+                        <h2>Stories of the Prophets</h2>
+                    </div>
+                    <div class="prophets-grid" id="prophets-grid">
+                        <!-- Injected by JS -->
+                    </div>
 
-        <!-- Prophet Detail Modal -->
-        <div id="prophet-modal" class="modal hidden" role="dialog" aria-modal="true">
-          <div class="modal-overlay" onclick="closeProphetModal()"></div>
-          <div class="modal-content">
-            <button class="modal-close" onclick="closeProphetModal()" aria-label="Close"><i class="fas fa-times"></i></button>
-            <div class="modal-header">
-              <div class="prophet-arabic" id="pm-arabic"></div>
-              <h2 id="pm-name"></h2>
-              <span id="pm-title" class="prophet-title"></span>
-            </div>
-            <div class="modal-body" id="pm-body"></div>
-          </div>
-        </div>
-      </section>
+                    <!-- Prophet Detail Modal -->
+                    <div id="prophet-modal" class="modal hidden" role="dialog" aria-modal="true">
+                        <div class="modal-overlay" onclick="closeProphetModal()"></div>
+                        <div class="modal-content">
+                            <button class="modal-close" onclick="closeProphetModal()" aria-label="Close"><i
+                                    class="fas fa-times"></i></button>
+                            <div class="modal-header">
+                                <div class="prophet-arabic" id="pm-arabic"></div>
+                                <h2 id="pm-name"></h2>
+                                <span id="pm-title" class="prophet-title"></span>
+                            </div>
+                            <div class="modal-body" id="pm-body"></div>
+                        </div>
+                    </div>
+                </section>
 
-    </main><!-- /views-container -->
+            </main><!-- /views-container -->
 
-    <!-- MOBILE BOTTOM NAV -->
-    <nav class="mobile-nav" aria-label="Mobile navigation">
-      <a href="#" class="mn-item active" data-view="dashboard" aria-label="Dashboard">
-        <i class="fas fa-th-large"></i><span>Home</span>
-      </a>
-      <a href="#" class="mn-item" data-view="quran" aria-label="Quran">
-        <i class="fas fa-quran"></i><span>Quran</span>
-      </a>
-      <a href="#" class="mn-item" data-view="prayer" aria-label="Prayer">
-        <i class="fas fa-clock"></i><span>Prayer</span>
-      </a>
-      <a href="#" class="mn-item" data-view="duas" aria-label="Duas">
-        <i class="fas fa-hands-praying"></i><span>Duas</span>
-      </a>
-      <a href="#" class="mn-item" data-view="quiz" aria-label="Quiz">
-        <i class="fas fa-brain"></i><span>Quiz</span>
-      </a>
-    </nav>
+            <!-- MOBILE BOTTOM NAV -->
+            <nav class="mobile-nav" aria-label="Mobile navigation">
+                <a href="#" class="mn-item active" data-view="dashboard" aria-label="Dashboard">
+                    <i class="fas fa-th-large"></i><span>Home</span>
+                </a>
+                <a href="#" class="mn-item" data-view="quran" aria-label="Quran">
+                    <i class="fas fa-quran"></i><span>Quran</span>
+                </a>
+                <a href="#" class="mn-item" data-view="prayer" aria-label="Prayer">
+                    <i class="fas fa-clock"></i><span>Prayer</span>
+                </a>
+                <a href="#" class="mn-item" data-view="duas" aria-label="Duas">
+                    <i class="fas fa-hands-praying"></i><span>Duas</span>
+                </a>
+                <a href="#" class="mn-item" data-view="quiz" aria-label="Quiz">
+                    <i class="fas fa-brain"></i><span>Quiz</span>
+                </a>
+            </nav>
 
-  </div><!-- /main-wrapper -->
-</div><!-- /app -->
+        </div><!-- /main-wrapper -->
+    </div><!-- /app -->
 
-<!-- TOAST -->
-<div id="toast" class="toast" role="alert" aria-live="assertive"></div>
+    <!-- TOAST -->
+    <div id="toast" class="toast" role="alert" aria-live="assertive"></div>
 
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
+
 </html>

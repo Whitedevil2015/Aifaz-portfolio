@@ -415,7 +415,7 @@ function renderJuzGrid() {
 
   for (let i = 1; i <= 30; i++) {
     html += `
-        <div class="juz-card" onclick="openJuzReader(${i})">
+        <div class="juz-card" onclick="showToast('Juz Mode coming soon in next update!')">
           <div class="jc-header">
             <div class="jc-num">Juz ${i}</div>
             <div class="jc-ar">الجزء ${i}</div>
@@ -531,14 +531,7 @@ function closeQuranSettings() { document.getElementById('quran-settings-modal').
 function closeReader() {
   document.getElementById('surah-reader-panel').classList.add('hidden');
   document.getElementById('quran-browse-layout').classList.remove('hidden');
-  document.getElementById('quran-player-bar').classList.remove('active');
-  
-  const audioAr = document.getElementById('quran-audio-arabic');
-  const audioEn = document.getElementById('quran-audio-translation');
-  if (audioAr) audioAr.pause();
-  if (audioEn) audioEn.pause();
-  state.audioPlaying = false;
-  document.getElementById('qp-play-btn').innerHTML = '<i class="fas fa-play"></i>';
+  if (audioPlayer) { audioPlayer.pause(); state.audioPlaying = false; document.getElementById('reader-audio-btn').innerHTML = '<i class="fas fa-play"></i>'; }
 }
 
 async function openReader(number, enName, type, ayahsCount) {
@@ -550,9 +543,6 @@ async function openReader(number, enName, type, ayahsCount) {
 
   document.getElementById('reader-surah-name').textContent = enName;
   document.getElementById('reader-surah-info').textContent = `${type} • ${ayahsCount} Verses`;
-  
-  document.getElementById('qp-surah-name').textContent = enName;
-  document.getElementById('qp-verse-info').textContent = `Verse 1/${ayahsCount}`;
 
   if (number === 1 || number === 9) {
     document.getElementById('bismillah-header').style.display = 'none';
@@ -564,11 +554,11 @@ async function openReader(number, enName, type, ayahsCount) {
   container.innerHTML = '<div class="reader-placeholder"><i class="fas fa-circle-notch fa-spin"></i><p>Loading verses...</p></div>';
 
   try {
-    const reciter = document.getElementById('reciter-select') ? document.getElementById('reciter-select').value : 'ar.alafasy';
+    const reciter = document.getElementById('reciter-select').value || 'ar.alafasy';
 
     const [arRes, enRes, romanRes] = await Promise.all([
       fetch(`https://api.alquran.cloud/v1/surah/${number}/${reciter}`),
-      fetch(`https://api.alquran.cloud/v1/surah/${number}/en.walk`),
+      fetch(`https://api.alquran.cloud/v1/surah/${number}/en.sahih`),
       fetch(`https://api.alquran.cloud/v1/surah/${number}/en.transliteration`)
     ]);
 
@@ -581,9 +571,6 @@ async function openReader(number, enName, type, ayahsCount) {
       const enVerses = enData.data.ayahs;
       const romanVerses = romanData.data.ayahs;
 
-      state.audioQueue = [];
-      state.currentVersePlayingIndex = -1;
-
       let html = '';
       arVerses.forEach((v, i) => {
         let text = v.text;
@@ -591,24 +578,17 @@ async function openReader(number, enName, type, ayahsCount) {
           text = text.replace('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ', '');
         }
 
-        state.audioQueue.push({
-          arabicUrl: v.audio,
-          transUrl: enVerses[i].audio || null,
-          number: v.number, // absolute number
-          text: enVerses[i].text
-        });
-
         html += `
-            <div class="verse-row" id="v-${v.number}" onclick="playVerseIndex(${i})">
+            <div class="verse-row" id="v-${v.numberInSurah}">
               <div class="v-arabic">${text} ۝</div>
               <div class="v-translit">${romanVerses[i].text}</div>
               <div class="v-translation">${enVerses[i].text}</div>
               <div class="v-controls">
                 <div class="v-num">${v.numberInSurah}</div>
-                <div class="v-play-btn" onclick="event.stopPropagation(); playVerseIndex(${i})">
+                <div class="v-play-btn" onclick="playAyah('${v.audio}', ${v.numberInSurah})">
                   <i class="fas fa-play"></i>
                 </div>
-                <button class="action-btn" style="width:30px;height:30px;font-size:0.8rem;" onclick="event.stopPropagation(); copySpecificVerse('${text}', '${enVerses[i].text}')">
+                <button class="action-btn" style="width:30px;height:30px;font-size:0.8rem;" onclick="copySpecificVerse('${text}', '${enVerses[i].text}')">
                   <i class="fas fa-copy"></i>
                 </button>
               </div>
@@ -620,301 +600,44 @@ async function openReader(number, enName, type, ayahsCount) {
       container.scrollTop = 0;
       applyDisplayMode();
 
-      setTimeout(() => document.getElementById('quran-player-bar').classList.add('active'), 100);
-
       state.versesRead += ayahsCount;
       localStorage.setItem('versesRead', state.versesRead);
       if (document.getElementById('stat-verses')) document.getElementById('stat-verses').textContent = state.versesRead;
-      
-      initAudioListeners();
     }
   } catch (e) {
     container.innerHTML = '<div class="reader-placeholder"><p>Error loading verses.</p></div>';
   }
 }
 
-async function openJuzReader(juzNumber) {
-  document.getElementById('quran-browse-layout').classList.add('hidden');
-  document.getElementById('surah-reader-panel').classList.remove('hidden');
+function playAyah(audioUrl, num) {
+  document.querySelectorAll('.verse-row').forEach(el => el.classList.remove('playing'));
+  document.getElementById(`v-${num}`).classList.add('playing');
+  document.getElementById(`v-${num}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-  document.getElementById('reader-surah-name').textContent = `Juz ${juzNumber}`;
-  document.getElementById('reader-surah-info').textContent = `الجزء ${juzNumber}`;
-  document.getElementById('qp-surah-name').textContent = `Juz ${juzNumber}`;
-  document.getElementById('bismillah-header').style.display = 'none';
-
-  const container = document.getElementById('verses-container');
-  container.innerHTML = '<div class="reader-placeholder"><i class="fas fa-circle-notch fa-spin"></i><p>Loading Juz...</p></div>';
-
-  try {
-    const reciter = document.getElementById('reciter-select') ? document.getElementById('reciter-select').value : 'ar.alafasy';
-
-    const [arRes, enRes, romanRes] = await Promise.all([
-      fetch(`https://api.alquran.cloud/v1/juz/${juzNumber}/${reciter}`),
-      fetch(`https://api.alquran.cloud/v1/juz/${juzNumber}/en.walk`),
-      fetch(`https://api.alquran.cloud/v1/juz/${juzNumber}/en.transliteration`)
-    ]);
-
-    const arData = await arRes.json();
-    const enData = await enRes.json();
-    const romanData = await romanRes.json();
-
-    if (arData.code === 200) {
-      const arVerses = arData.data.ayahs;
-      const enVerses = enData.data.ayahs;
-      const romanVerses = romanData.data.ayahs;
-
-      document.getElementById('qp-verse-info').textContent = `Verse 1/${arVerses.length}`;
-
-      state.audioQueue = [];
-      state.currentVersePlayingIndex = -1;
-
-      let html = '';
-      arVerses.forEach((v, i) => {
-        let text = v.text;
-
-        state.audioQueue.push({
-          arabicUrl: v.audio,
-          transUrl: enVerses[i].audio || null,
-          number: v.number,
-          text: enVerses[i].text
-        });
-
-        if (v.numberInSurah === 1) {
-          html += `<div style="text-align:center; padding:1.5rem; margin-top:2rem; background:rgba(0,0,0,0.2); border-radius:12px;">
-                      <h4 style="color:var(--primary-glow); font-size:1.5rem;">Surah ${v.surah.englishName}</h4>
-                   </div>`;
-          if (v.surah.number !== 1 && v.surah.number !== 9 && text.startsWith('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ')) {
-            text = text.replace('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ', '');
-            html += `<div class="bismillah" style="margin:1rem 0;">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>`;
-          }
-        }
-
-        html += `
-            <div class="verse-row" id="v-${v.number}" onclick="playVerseIndex(${i})">
-              <div class="v-arabic">${text} ۝</div>
-              <div class="v-translit">${romanVerses[i].text}</div>
-              <div class="v-translation">${enVerses[i].text}</div>
-              <div class="v-controls">
-                <div class="v-num" style="font-size:0.75rem">${v.surah.englishName} ${v.numberInSurah}</div>
-                <div class="v-play-btn" onclick="event.stopPropagation(); playVerseIndex(${i})">
-                  <i class="fas fa-play"></i>
-                </div>
-                <button class="action-btn" style="width:30px;height:30px;font-size:0.8rem;" onclick="event.stopPropagation(); copySpecificVerse('${text}', '${enVerses[i].text}')">
-                  <i class="fas fa-copy"></i>
-                </button>
-              </div>
-            </div>
-          `;
-      });
-
-      container.innerHTML = html;
-      container.scrollTop = 0;
-      applyDisplayMode();
-
-      setTimeout(() => document.getElementById('quran-player-bar').classList.add('active'), 100);
-
-      state.versesRead += arVerses.length;
-      localStorage.setItem('versesRead', state.versesRead);
-      if (document.getElementById('stat-verses')) document.getElementById('stat-verses').textContent = state.versesRead;
-      
-      initAudioListeners();
-    }
-  } catch (e) {
-    container.innerHTML = '<div class="reader-placeholder"><p>Error loading Juz.</p></div>';
-  }
-}
-
-let audioListenersAdded = false;
-function initAudioListeners() {
-  if(audioListenersAdded) return;
-  const audioAr = document.getElementById('quran-audio-arabic');
-  const audioEn = document.getElementById('quran-audio-translation');
-  
-  if (!audioAr || !audioEn) return;
-  
-  audioAr.onended = () => {
-    if (state.quranDisplayMode === 'arabic-translation' || state.quranDisplayMode === 'full') {
-      setTimeout(() => playTranslationPhase(), 500);
-    } else {
-      setTimeout(() => advanceToNextVerse(), 500);
-    }
-  };
-  
-  audioEn.onended = () => {
-    setTimeout(() => advanceToNextVerse(), 500);
-  };
-  
-  audioAr.addEventListener('timeupdate', updateProgressBar);
-  audioEn.addEventListener('timeupdate', updateProgressBar);
-  
-  audioListenersAdded = true;
-}
-
-function playVerseIndex(index) {
-  if (index < 0 || index >= state.audioQueue.length) return;
-  
-  document.querySelectorAll('.verse-row').forEach(el => {
-    el.classList.remove('playing-arabic', 'playing-translation');
-  });
-  
-  if (state.currentVersePlayingIndex !== -1 && state.currentVersePlayingIndex < index) {
-    const prevId = `v-${state.audioQueue[state.currentVersePlayingIndex].number}`;
-    const prevEl = document.getElementById(prevId);
-    if (prevEl) prevEl.classList.add('completed');
-  }
-
-  state.currentVersePlayingIndex = index;
-  const verseData = state.audioQueue[index];
-  const verseEl = document.getElementById(`v-${verseData.number}`);
-  
-  document.getElementById('qp-verse-info').textContent = `Verse ${index + 1}/${state.audioQueue.length}`;
-  document.getElementById('qp-play-btn').innerHTML = '<i class="fas fa-pause"></i>';
+  audioPlayer.src = audioUrl;
+  audioPlayer.play();
   state.audioPlaying = true;
-  
-  if (verseEl) {
-    verseEl.scrollIntoView({behavior: 'smooth', block: 'center'});
-  }
-  
-  playArabicPhase();
-}
+  document.getElementById('reader-audio-btn').innerHTML = '<i class="fas fa-pause"></i>';
 
-function playArabicPhase() {
-  state.audioPlayingPhase = 'arabic';
-  const verseData = state.audioQueue[state.currentVersePlayingIndex];
-  const verseEl = document.getElementById(`v-${verseData.number}`);
-  const audioAr = document.getElementById('quran-audio-arabic');
-  const audioEn = document.getElementById('quran-audio-translation');
-  
-  if(verseEl) {
-    verseEl.classList.remove('playing-translation');
-    verseEl.classList.add('playing-arabic');
-  }
-  
-  if (audioEn) audioEn.pause();
-  if (audioAr) {
-    audioAr.src = verseData.arabicUrl;
-    audioAr.play();
-  }
-}
-
-function playTranslationPhase() {
-  const verseData = state.audioQueue[state.currentVersePlayingIndex];
-  if (!verseData.transUrl || state.quranDisplayMode === 'arabic' || state.quranDisplayMode === 'arabic-roman') {
-    advanceToNextVerse();
-    return;
-  }
-  
-  state.audioPlayingPhase = 'translation';
-  const verseEl = document.getElementById(`v-${verseData.number}`);
-  const audioAr = document.getElementById('quran-audio-arabic');
-  const audioEn = document.getElementById('quran-audio-translation');
-  
-  if(verseEl) {
-    verseEl.classList.remove('playing-arabic');
-    verseEl.classList.add('playing-translation');
-  }
-  
-  if (audioAr) audioAr.pause();
-  if (audioEn) {
-    audioEn.src = verseData.transUrl;
-    audioEn.play();
-  }
-}
-
-function advanceToNextVerse() {
-  const verseData = state.audioQueue[state.currentVersePlayingIndex];
-  const verseEl = document.getElementById(`v-${verseData.number}`);
-  if (verseEl) {
-    verseEl.classList.remove('playing-arabic', 'playing-translation');
-    verseEl.classList.add('completed');
-  }
-  
-  if (state.repeatMode === 'verse') {
-    playVerseIndex(state.currentVersePlayingIndex);
-  } else if (state.currentVersePlayingIndex + 1 < state.audioQueue.length) {
-    playVerseIndex(state.currentVersePlayingIndex + 1);
-  } else {
-    if (state.repeatMode === 'surah') {
-      playVerseIndex(0);
-    } else {
-      document.getElementById('qp-play-btn').innerHTML = '<i class="fas fa-play"></i>';
-      state.audioPlaying = false;
-      state.audioPlayingPhase = 'none';
-      showToast('Completed. MashaAllah!');
-    }
-  }
-}
-
-function toggleAdvancedAudio() {
-  const audioAr = document.getElementById('quran-audio-arabic');
-  const audioEn = document.getElementById('quran-audio-translation');
-  
-  if (!state.audioPlaying) {
-    if (state.currentVersePlayingIndex === -1 && state.audioQueue.length > 0) {
-      playVerseIndex(0);
-    } else {
-      state.audioPlaying = true;
-      document.getElementById('qp-play-btn').innerHTML = '<i class="fas fa-pause"></i>';
-      if (state.audioPlayingPhase === 'arabic' && audioAr) audioAr.play();
-      else if (state.audioPlayingPhase === 'translation' && audioEn) audioEn.play();
-      else if (audioAr && audioAr.src) audioAr.play();
-    }
-  } else {
+  audioPlayer.onended = () => {
+    document.getElementById(`v-${num}`).classList.remove('playing');
     state.audioPlaying = false;
-    document.getElementById('qp-play-btn').innerHTML = '<i class="fas fa-play"></i>';
-    if (audioAr) audioAr.pause();
-    if (audioEn) audioEn.pause();
-  }
-}
-
-function playNextVerse() {
-  if (state.currentVersePlayingIndex + 1 < state.audioQueue.length) {
-    playVerseIndex(state.currentVersePlayingIndex + 1);
-  }
-}
-function playPrevVerse() {
-  if (state.currentVersePlayingIndex > 0) {
-    playVerseIndex(state.currentVersePlayingIndex - 1);
-  }
-}
-function playFirstVerse() {
-  if (state.audioQueue.length > 0) playVerseIndex(0);
-}
-function playLastVerse() {
-  if (state.audioQueue.length > 0) playVerseIndex(state.audioQueue.length - 1);
-}
-
-function toggleRepeatMode() {
-  const btn = document.getElementById('qp-repeat-btn');
-  if (state.repeatMode === 'none') {
-    state.repeatMode = 'verse';
-    btn.style.color = 'var(--primary-color)';
-    showToast('Repeat Mode: Verse');
-  } else if (state.repeatMode === 'verse') {
-    state.repeatMode = 'surah';
-    btn.style.color = '#3b82f6';
-    showToast('Repeat Mode: Surah/Juz');
-  } else {
-    state.repeatMode = 'none';
-    btn.style.color = 'white';
-    showToast('Repeat Mode: Off');
-  }
-}
-
-function updateProgressBar(e) {
-  const audio = e.target;
-  if (!audio.duration) return;
-  const pct = (audio.currentTime / audio.duration) * 100;
-  document.getElementById('qp-progress-fill').style.width = `${pct}%`;
-  
-  const formatTime = (time) => {
-    const min = Math.floor(time / 60);
-    const sec = Math.floor(time % 60).toString().padStart(2, '0');
-    return `${min}:${sec}`;
+    document.getElementById('reader-audio-btn').innerHTML = '<i class="fas fa-play"></i>';
   };
-  
-  document.getElementById('qp-time-current').textContent = formatTime(audio.currentTime);
-  document.getElementById('qp-time-total').textContent = formatTime(audio.duration);
+}
+
+function toggleFullAudio() {
+  if (state.audioPlaying) {
+    audioPlayer.pause();
+    state.audioPlaying = false;
+    document.getElementById('reader-audio-btn').innerHTML = '<i class="fas fa-play"></i>';
+  } else if (audioPlayer.src) {
+    audioPlayer.play();
+    state.audioPlaying = true;
+    document.getElementById('reader-audio-btn').innerHTML = '<i class="fas fa-pause"></i>';
+  } else {
+    showToast('Select a verse to play first');
+  }
 }
 
 function copyVerse() {
